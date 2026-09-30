@@ -1,0 +1,16 @@
+node_modules/
+.vitepress/dist/
+.vitepress/cache/
+
+# Synced from geml-spec/geml at build time (npm run sync) — edit them there.
+reference/
+guide/
+public/illustrated/
+public/docs/
+
+# Built from a geml checkout at build time (npm run playground / codemap).
+public/playground/playground.js
+public/playground/fonts/
+public/playground/codemap/
+
+.DS_Store

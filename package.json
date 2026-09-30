@@ -1,0 +1,21 @@
+{
+  "name": "geml-site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "geml-spec.github.io — the GEML website: home, reference, playground, demos, blog",
+  "scripts": {
+    "sync": "node scripts/sync-geml.mjs",
+    "playground": "node scripts/build-playground.mjs",
+    "codemap": "node scripts/build-codemap.mjs",
+    "check": "node scripts/check-demos.mjs",
+    "prepare:all": "npm run sync && npm run playground && npm run codemap",
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "markdown-it-footnote": "^4.0.0",
+    "vitepress": "1.6.4"
+  }
+}

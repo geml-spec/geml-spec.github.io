@@ -1,0 +1,26 @@
+/* GEML's mark is red; the rest of the palette is VitePress's own, in both schemes. */
+:root {
+  --vp-c-brand-1: #e00a1e;
+  --vp-c-brand-2: #c40919;
+  --vp-c-brand-3: #a80815;
+  --vp-c-brand-soft: rgba(224, 10, 30, 0.14);
+  --vp-home-hero-name-color: var(--vp-c-text-1);
+}
+.dark {
+  --vp-c-brand-1: #ff4d5f;
+  --vp-c-brand-2: #ff6272;
+  --vp-c-brand-3: #e00a1e;
+  --vp-c-brand-soft: rgba(255, 77, 95, 0.16);
+}
+
+/* Hero: the name is the wordmark, the text line is the one-sentence definition. */
+.VPHero .name { font-weight: 800; letter-spacing: -0.02em; }
+.VPHero .text { font-weight: 600; }
+.VPHero .image-src { max-width: 180px; }
+
+/* The construct → syntax table on the home page and the cheat sheet. */
+.vp-doc table code { white-space: nowrap; }
+.vp-doc th:first-child, .vp-doc td:first-child { white-space: nowrap; }
+
+/* Console transcripts: keep the prompt lines readable. */
+.vp-doc div[class*='language-console'] code { line-height: 1.55; }
