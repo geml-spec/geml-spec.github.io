@@ -65,7 +65,7 @@ const siteSidebar = [
       { text: 'Capability matrix', link: '/compare/matrix' },
       { text: 'GEML vs CommonMark', link: '/compare/commonmark' },
       { text: 'GEML vs XML and JSON', link: '/compare/xml-and-json' },
-      { text: 'Markdown 变体与工具（中文）', link: '/illustrated/geml-vs-markdown-variants_CN.html', target: '_blank' },
+      { text: 'Markdown variants and tools', link: '/illustrated/geml-vs-markdown-variants.html', target: '_blank' },
     ],
   },
   {

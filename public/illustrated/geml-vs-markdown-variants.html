@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Markdown Variants Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F4F6F9; --surface: #FFFFFF; --surface-2: #EBEFF4;
+    --ink: #1B2430; --ink-2: #47535F; --ink-3: #7B8794;
+    --line: #D5DCE4; --line-2: #C3CCD6;
+    --accent: #1F6F8B; --accent-soft: #DCEDF3;
+    --amber: #9A5F0A; --amber-soft: #FAEED3;
+    --red: #B0403B; --red-soft: #F8E2E0;
+    --green: #2E7A50; --green-soft: #DDF0E4;
+    --on-solid: #FFFFFF;
+    --shadow: 0 1px 2px rgba(27, 36, 48, .06), 0 6px 18px rgba(27, 36, 48, .05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11161C; --surface: #191F27; --surface-2: #202832;
+      --ink: #E6EBF0; --ink-2: #B3BDC8; --ink-3: #7F8B98;
+      --line: #2C3642; --line-2: #3A4552;
+      --accent: #63B5D1; --accent-soft: #14323D;
+      --amber: #E2AC45; --amber-soft: #382B10;
+      --red: #E27F79; --red-soft: #3E1F1E;
+      --green: #6CC08E; --green-soft: #173124;
+      --on-solid: #0F141A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 6px 18px rgba(0, 0, 0, .25);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #11161C; --surface: #191F27; --surface-2: #202832;
+    --ink: #E6EBF0; --ink-2: #B3BDC8; --ink-3: #7F8B98;
+    --line: #2C3642; --line-2: #3A4552;
+    --accent: #63B5D1; --accent-soft: #14323D;
+    --amber: #E2AC45; --amber-soft: #382B10;
+    --red: #E27F79; --red-soft: #3E1F1E;
+    --green: #6CC08E; --green-soft: #173124;
+    --on-solid: #0F141A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 6px 18px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.7 "IBM Plex Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 48px 28px 96px; }
+  @media (max-width: 560px) { .wrap { padding: 32px 16px 72px; } }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  code, pre, .mono { font-family: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace; }
+  code { font-size: .92em; background: var(--surface-2); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+  .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  header h1 { font-size: 34px; line-height: 1.2; font-weight: 600; margin-top: 10px; letter-spacing: -.01em; }
+  header .lede { max-width: 66ch; color: var(--ink-2); margin-top: 16px; font-size: 16px; }
+  .toc { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px; font-size: 14px; }
+  .toc a { text-decoration: none; border-bottom: 1px solid var(--line-2); padding-bottom: 1px; }
+  .toc a:hover, .toc a:focus-visible { border-color: var(--accent); }
+  .verdict { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 6px; padding: 16px 20px; display: grid; gap: 8px; max-width: 86ch; box-shadow: var(--shadow); }
+  .verdict b { font-weight: 600; }
+  section { margin-top: 72px; }
+  .sec-head { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: baseline; border-top: 1px solid var(--line-2); padding-top: 22px; }
+  .sec-num { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; padding-top: 6px; }
+  .sec-head h2 { font-size: 24px; font-weight: 600; letter-spacing: -.005em; }
+  .sec-head .sub { color: var(--ink-2); margin-top: 6px; max-width: 70ch; }
+  .sec-body { margin-left: 80px; margin-top: 28px; display: grid; gap: 40px; }
+  @media (max-width: 860px) { .sec-head { grid-template-columns: 1fr; gap: 6px; } .sec-body { margin-left: 0; } }
+  .st { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; letter-spacing: .04em; padding: 2px 8px; border-radius: 3px; font-weight: 600; white-space: nowrap; color: var(--on-solid); vertical-align: middle; }
+  .st-hi { background: var(--red); } .st-part { background: var(--amber); } .st-diff { background: var(--ink-3); } .st-learn { background: var(--green); } .st-self { background: var(--accent); } .st-ink { background: var(--ink); color: var(--bg); }
+  .board { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: var(--shadow); }
+  table.b { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 760px; }
+  table.b th, table.b td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.b tr:last-child td { border-bottom: 0; }
+  table.b th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  table.b td.n { color: var(--ink-3); font-variant-numeric: tabular-nums; width: 32px; }
+  table.b td.name { font-weight: 600; white-space: nowrap; }
+  table.b td.name small { display: block; font-weight: 400; color: var(--ink-3); font-size: 12px; }
+  table.b tr.grp td { background: var(--surface-2); font-weight: 600; font-size: 13px; letter-spacing: .04em; color: var(--ink-2); }
+  .tally { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-bottom: 14px; font-size: 14px; color: var(--ink-2); align-items: center; }
+  .tally b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  figure { margin: 0; display: grid; gap: 18px; }
+  figure > figcaption { font-size: 17px; font-weight: 600; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+  figure > figcaption small { flex-basis: 100%; font-size: 14px; font-weight: 400; color: var(--ink-2); }
+  .panes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  @media (max-width: 980px) { .panes { grid-template-columns: 1fr; } }
+  .pane-h { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; margin-bottom: 8px; }
+  .stack { display: grid; gap: 14px; }
+  pre.geml { margin: 0; background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; font-size: 13px; line-height: 1.6; overflow-x: auto; color: var(--ink); }
+  pre.geml .f { color: var(--accent); font-weight: 500; } pre.geml .a { color: var(--ink-2); } pre.geml .c { color: var(--ink-3); font-style: italic; }
+  pre.geml .hl { background: var(--amber-soft); color: var(--amber); border-radius: 2px; padding: 0 2px; }
+  pre.geml .bad { background: var(--red-soft); color: var(--red); border-radius: 2px; padding: 0 2px; }
+  .term { background: var(--ink); color: #E6EBF0; border-radius: 6px; padding: 12px 14px; font-size: 12.5px; line-height: 1.6; overflow-x: auto; margin: 0; }
+  :root[data-theme="dark"] .term { background: #0B0F14; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .term { background: #0B0F14; } }
+  .term .ok { color: #7ED4A0; } .term .er { color: #F09A94; } .term .wn { color: #F0C060; } .term .dim { color: #8A96A3; } .term .cmd { color: #9CC7FF; }
+  .cap { font-size: 12.5px; color: var(--ink-3); }
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; font-weight: 500; white-space: nowrap; }
+  .b-err { background: var(--red-soft); color: var(--red); } .b-warn { background: var(--amber-soft); color: var(--amber); } .b-ok { background: var(--green-soft); color: var(--green); } .b-mute { background: var(--surface-2); color: var(--ink-3); }
+  .decision { display: grid; grid-template-columns: 72px 1fr; gap: 6px 16px; font-size: 14.5px; border-top: 1px dashed var(--line-2); padding-top: 14px; margin: 0; }
+  .decision dt { color: var(--ink-3); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 500; padding-top: 4px; }
+  .decision dd { margin: 0; color: var(--ink); }
+  @media (max-width: 560px) { .decision { grid-template-columns: 1fr; gap: 2px; } .decision dd { margin-bottom: 8px; } }
+  table.t { border-collapse: collapse; width: 100%; font-size: 14px; }
+  table.t th, table.t td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.t tr:last-child td { border-bottom: 0; }
+  table.t th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+  table.t td.mono { font-size: 13px; }
+  table.t td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+  .tablewrap table.t { min-width: 640px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; }
+  .card h3 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card p { color: var(--ink-2); font-size: 14.5px; }
+  footer { margin-top: 80px; border-top: 1px solid var(--line-2); padding-top: 18px; font-size: 13.5px; color: var(--ink-3); display: grid; gap: 6px; }
+  footer code { background: transparent; padding: 0; color: var(--ink-2); }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+<meta name="description" content="The projects on the awesome-markdown list that patch or replace Markdown, one by one: what each does, where it meets GEML and where it goes another way.">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/geml-vs-markdown-variants.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/geml-vs-markdown-variants.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/geml-vs-markdown-variants_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="The Markdown Variants Map">
+<meta property="og:description" content="The projects on the awesome-markdown list that patch or replace Markdown, one by one: what each does, where it meets GEML and where it goes another way.">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/geml-vs-markdown-variants.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">GEML survey, illustrated · the awesome-markdown list · 2026-09-30 · <a href="geml-vs-markdown-variants_CN.html">中文</a> · <a href="/illustrated/">all illustrated pages</a> · <a href="/">GEML home</a></div>
+  <h1>The Markdown Variants Map</h1>
+  <p class="lede"><a href="https://github.com/mundimark/awesome-markdown">mundimark/awesome-markdown</a> collects projects that set out to patch or replace Markdown, and GEML itself is in its "Beyond Markdown" section. This page looks at them one by one: what each does, where it collides with GEML, and where it goes another way. A few projects off the list are closer to GEML; they are included too, marked separately.</p>
+  <nav class="toc" aria-label="On this page">
+    <a href="#board">Board</a>
+    <a href="#containers">Generic blocks</a>
+    <a href="#refs">ids and reference checks</a>
+    <a href="#query">Query and rewrite</a>
+    <a href="#reuse">Embedding and sync</a>
+    <a href="#extend">Components and extension points</a>
+    <a href="#agents">For agents</a>
+    <a href="#review">Revision marks</a>
+    <a href="#takeaways">Takeaways</a>
+    <a href="#evidence">Evidence</a>
+  </nav>
+  <div class="verdict">
+    <p><b>Verdict.</b> No project does all three of GEML's things at once: one typed block, an addressable id on every block, and references checked at build time and before every write, with an error stopping the write.</p>
+    <p>Taken one at a time, each has been done earlier or deeper than in GEML. Generic blocks with attributes are common ground for Djot, Pandoc, MyST and Markdoc; validation with rule ids exists in Markdoc, mystmd and Carve; and querying and rewriting Markdown by selector is more of a language in mq than in <code>geml get</code>. Where GEML differs is binding the three together, and adding a command line that writes by block, MCP, and per-block history.</p>
+    <p><b>Closest in features is Carve, but its reach is still small.</b> It sits in the same section of the list as GEML, was created only this May, and already has lint, a JSON AST, patch-based editing, an MCP server and an agent skill — it is moving fast; but it has only 32 stars and no outside users could be found. Weighed by reach, it is a project worth tracking, not the main rival for now. It differs from GEML in three ways: its addresses are heading ids and AST paths, writes go through confirmed patches, and it is not Markdown-compatible.</p>
+  </div>
+</header>
+
+<!-- ============ BOARD ============ -->
+<section id="board">
+  <div class="sec-head">
+    <div class="sec-num">Board</div>
+    <div>
+      <h2>25 projects, and where each stands to GEML</h2>
+      <p class="sub"><span class="st st-hi">Head-on</span> the same problem, a similar answer. <span class="st st-part">Partial overlap</span> on the same road for one thing. <span class="st st-learn">Worth borrowing</span> has something GEML lacks. <span class="st st-diff">Different path</span> a different goal or layer, or GEML's foundation. The first four groups come from the list; the last was added from beyond it.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <div>
+      <div class="tally">
+        <span><span class="st st-hi">Head-on</span> <b>2</b></span>
+        <span><span class="st st-part">Partial overlap</span> <b>9</b></span>
+        <span><span class="st st-learn">Worth borrowing</span> <b>3</b></span>
+        <span><span class="st st-diff">Different path</span> <b>11</b></span>
+      </div>
+      <div class="board">
+        <table class="b">
+          <thead><tr><th></th><th>Project</th><th>What it is</th><th>Where it stands to GEML</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr class="grp"><td colspan="5">A new generation of lightweight markup · the list's "Beyond Markdown" section</td></tr>
+            <tr><td class="n">1</td><td class="name">Carve<small>2026-05 · 32 stars</small></td><td>A "post-Markdown" built on Djot. It has an EBNF grammar, 2,200 test cases and three implementations (JS, Rust, PHP), plus lint, a JSON AST, patch-based editing, an MCP server and an agent skill.</td><td>The most overlap in its section: it checks broken references and lets agents select and edit. Addresses are heading ids or AST paths, not ids an author writes on any block; cross-references can only point at headings and numbered captions.</td><td><span class="st st-hi">Head-on</span></td></tr>
+            <tr><td class="n">2</td><td class="name">Djot<small>2022 · 2,046 stars</small></td><td>John MacFarlane's fix for CommonMark's hard parsing cases, adding attributes, generic containers and inline containers. Pandoc reads and writes it since 3.1.12.</td><td>On the same road with "a generic block plus attributes". No block addressing, <code>#id</code> references are not checked, no embed syntax, and extending it means writing AST filters.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">3</td><td class="name">VersaDok<small>2025 · 17 stars</small></td><td>A new language from kramdown's author: <code>&lt;&lt;&lt; &gt;&gt;&gt;</code> generic blocks, and <code>::name:</code> extension blocks that can take over the raw body. The author calls it alpha.</td><td>Its extension blocks are the only one of the four close to "the type decides how the body is read". No checks, no addressing.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">4</td><td class="name">Texti<small>2017 · 9 stars</small></td><td>A proposal merging Markdown, wiki markup and LaTeX; headings become <code>== Title ==</code>.</td><td>A 2017 draft whose parser is an empty module, untouched since.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr class="grp"><td colspan="5">Long-standing syntax extensions · the list's "Markdown Syntax Extensions" and "Libraries"</td></tr>
+            <tr><td class="n">5</td><td class="name">MultiMarkdown</td><td>Adds metadata, tables, footnotes, cross-references and whole-file transclusion <code>{{file}}</code>. Version 7 is in pre-release.</td><td>Its feature list overlaps GEML's, but every feature is a special-case syntax.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr><td class="n">6</td><td class="name">Markdown Extra</td><td>PHP Markdown's extensions: heading <code>{#id}</code>, fenced code, tables, definition lists, abbreviations.</td><td>The <code>{#id}</code> on GEML headings comes from this line.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr><td class="n">7</td><td class="name">Markdown Extended</td><td>A PHP parser meant to merge Extra and MultiMarkdown into one spec. No updates since 2024.</td><td>As above.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr><td class="n">8</td><td class="name">CriticMarkup</td><td>Revisions written in the text: additions, deletions, substitutions, comments, highlights.</td><td>GEML has revision history but cannot express "a suggestion not yet accepted".</td><td><span class="st st-learn">Worth borrowing</span></td></tr>
+            <tr><td class="n">9</td><td class="name">kramdown · Pandoc</td><td>kramdown's attribute lists <code>{: #id}</code>; Pandoc's fenced divs, JSON AST and filters.</td><td>Forerunners of the generic block, and of "the document becomes an AST first".</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr class="grp"><td colspan="5">Specified dialects · the list's CommonMark, GFM and VFMD sections</td></tr>
+            <tr><td class="n">10</td><td class="name">CommonMark</td><td>An unambiguous Markdown spec and test suite.</td><td>GEML's prose inherits from it: a foundation, not a rival.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr><td class="n">11</td><td class="name">GFM</td><td>CommonMark plus tables, task lists, strikethrough and autolinks.</td><td>When GEML reads a <code>.md</code> directly, it follows Markdown's rules where the two syntaxes disagree, and GitHub's heading anchors work as link targets.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr><td class="n">12</td><td class="name">VFMD</td><td>Another unambiguous spec.</td><td>Not updated since 2016.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr class="grp"><td colspan="5">Tools · across the list</td></tr>
+            <tr><td class="n">13</td><td class="name">mq<small>2025 · 1,040 stars</small></td><td>Queries and rewrites Markdown with a jq-like syntax, with an MCP server.</td><td>Does the same job as <code>geml get/find/list</code>. Addresses are derived from selectors and heading text, and its MCP is read-only by design.</td><td><span class="st st-hi">Head-on</span></td></tr>
+            <tr><td class="n">14</td><td class="name">darnlink<small>2026-07 · 19 stars</small></td><td>Anchors files with UUIDs and fixes links after a file moves; usable as a CI gate.</td><td>File-level reference checking and repair. GEML notices that a cross-document reference broke, but does not repair it.</td><td><span class="st st-learn">Worth borrowing</span></td></tr>
+            <tr><td class="n">15</td><td class="name">mdcode<small>2024 · 28 stars</small></td><td>Two-way sync between code blocks and source files, taking snippets by region.</td><td>The same job as <code>code {src=}</code>, and it can push changes back to the source file.</td><td><span class="st st-learn">Worth borrowing</span></td></tr>
+            <tr><td class="n">16</td><td class="name">markedpp</td><td>A Markdown preprocessor: table of contents, heading numbers, <code>!include</code>.</td><td>A coarse-grained embed; a missing file is left as written, with no error.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr><td class="n">17</td><td class="name">Slidev<small>48,891 stars</small></td><td>Vue components in Markdown slides. Since 2026-07 it ships an MCP that reads and writes by slide.</td><td>On the same road with an MCP that reads and writes by unit. The unit is a slide and the address its number, which shifts once a slide is inserted.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">18</td><td class="name">demarkus<small>2026-02 · 16 stars</small></td><td>A QUIC-based Markdown protocol and server, as versioned memory for agents.</td><td>On the same road with agent reads and writes and version history. It reads a section by heading slug, but writes only whole documents.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">19</td><td class="name">MarkWay</td><td>A convention for websites to return Markdown instead of HTML to agents.</td><td>Only the premise "Markdown is the format for agents" is shared. No code.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr><td class="n">20</td><td class="name">mk-notes</td><td>One-way sync from Markdown to Notion.</td><td>Hardly any overlap; untouched since 2025-12.</td><td><span class="st st-diff">Different path</span></td></tr>
+            <tr class="grp"><td colspan="5">Beyond the list · a few closer to GEML</td></tr>
+            <tr><td class="n">21</td><td class="name">Markdoc<small>Stripe · 8,494 stars</small></td><td>Documents hold only tags and attributes; their meaning is defined by the host's schema and validated item by item, and errors have stable ids.</td><td>Closest to GEML in design: declarative, closed, checkable. No block addressing and no write commands.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">22</td><td class="name">MyST</td><td>Jupyter Book's Markdown: a directive registry and labelled cross-references.</td><td>On the same road with generic blocks and rule ids; a broken reference only warns.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">23</td><td class="name">Quarto</td><td>A Pandoc-based scientific publishing system with executable code blocks and cross-referenced figures.</td><td>Computational documents; GEML has only computed columns and summary rows in tables.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">24</td><td class="name">AsciiDoc</td><td>Blocks with attributes, <code>include::</code>, <code>&lt;&lt;xref&gt;&gt;</code>: a complete document language.</td><td>On the same road with blocks and embeds; a broken reference is hidden by default.</td><td><span class="st st-part">Partial overlap</span></td></tr>
+            <tr><td class="n">25</td><td class="name">MDX<small>19,809 stars</small></td><td>JSX components written in Markdown.</td><td>The document is a program: a different road from GEML's closed vocabulary.</td><td><span class="st st-diff">Different path</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTAINERS ============ -->
+<section id="containers">
+  <div class="sec-head">
+    <div class="sec-num">Blocks</div>
+    <div>
+      <h2>Everyone arrived at "one generic block plus attributes"</h2>
+      <p class="sub">Markdown's blocks are special cases, one by one: code, quotes, lists and tables each have rules of their own. Nearly every successor converged on the same fix: one generic container, told apart by attributes. Where they differ is whether the set of types is open or closed, whether ids have rules, and how the body inside a block is parsed.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <figure>
+      <figcaption>The same "warning box", five ways <span class="st st-hi">Head-on</span>
+        <small>The four on the left are Djot, Pandoc, MyST and Markdoc; GEML is on the right.</small>
+      </figcaption>
+      <div class="panes">
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>Djot</span><span class="cap">generic div + attributes</span></div>
+<pre class="geml"><span class="a">{#warn .warning}</span>
+<span class="f">:::</span> warning
+Don't run this command on the production database.
+<span class="f">:::</span></pre>
+          </div>
+          <div>
+            <div class="pane-h"><span>Pandoc Markdown</span><span class="cap">fenced div</span></div>
+<pre class="geml"><span class="f">:::</span> <span class="a">{#warn .warning}</span>
+Don't run this command on the production database.
+<span class="f">:::</span></pre>
+          </div>
+          <div>
+            <div class="pane-h"><span>MyST</span><span class="cap">directive, beyond the list</span></div>
+<pre class="geml"><span class="f">```{warning}</span>
+<span class="a">:name: warn</span>
+Don't run this command on the production database.
+<span class="f">```</span></pre>
+          </div>
+          <div>
+            <div class="pane-h"><span>Markdoc</span><span class="cap">tag, beyond the list</span></div>
+<pre class="geml"><span class="f">{% callout</span> <span class="a">type="warning" #warn</span> <span class="f">%}</span>
+Don't run this command on the production database.
+<span class="f">{% /callout %}</span></pre>
+          </div>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>GEML</span><span class="cap">one typed block</span></div>
+<pre class="geml"><span class="f">=== note</span> <span class="a">{#warn}</span>
+Don't run this command on the production database.
+<span class="f">===</span>
+
+<span class="f">=== table</span> <span class="a">{#cost format=csv header=1}</span>
+Item,Cost
+Hosting,120
+<span class="f">===</span>
+
+<span class="f">=== data</span> <span class="a">{#vars format=json}</span>
+{"owner": "docs"}
+<span class="f">===</span></pre>
+          </div>
+          <table class="t" aria-label="How the five differ">
+            <thead><tr><th></th><th>Types</th><th>id</th><th>Body</th></tr></thead>
+            <tbody>
+              <tr><td>Djot</td><td>Open; any class</td><td>Attribute <code>#id</code>, optional</td><td>Always parsed as Djot</td></tr>
+              <tr><td>Carve</td><td>Fixed names for admonitions; the rest become divs</td><td>Attribute <code>#id</code> or heading slug</td><td>Always parsed as Carve</td></tr>
+              <tr><td>VersaDok</td><td><code>::name:</code> extension blocks, defined by the processor</td><td>Attribute <code>#id</code></td><td>An extension can take over the raw lines</td></tr>
+              <tr><td>Pandoc</td><td>Open; left to filters</td><td>Attribute <code>#id</code>, optional</td><td>Always parsed as Markdown</td></tr>
+              <tr><td>MyST</td><td>A registry; an unknown directive warns</td><td><code>:name:</code> or <code>(label)=</code></td><td>Each directive decides</td></tr>
+              <tr><td>Markdoc</td><td>Declared in a schema; an unknown tag is an error</td><td>Attribute <code>#id</code></td><td>Parsed as Markdoc</td></tr>
+              <tr><td>GEML</td><td>Listed in the spec, extended by profiles; an unknown type warns</td><td><code>{#id}</code>; a duplicate is an error</td><td>By type: code, tables and data are raw text, a note is prose</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <dl class="decision">
+        <dt>Overlap</dt><dd>"One block syntax for every special case" is not GEML's idea alone. Djot's author, John MacFarlane, also wrote CommonMark and Pandoc, and the direction he set out in "Beyond Markdown" is almost exactly where GEML starts.</dd>
+        <dt>Difference</dt><dd>In GEML <strong>a block's type decides how its body is read</strong>: the body of a table or a data block is raw text, handed to its own parser and never read as Markdown. A div in Djot, Carve or Pandoc is only a container, always holding markup; only VersaDok's extension blocks can take over raw lines. That is what lets GEML compute columns in a table and pick values out of data by coordinate. None of the four new languages has one block syntax covering code, tables, math and data alike: tables and math keep their own special syntax.</dd>
+        <dt>Takeaway</dt><dd>Djot, Carve and VersaDok hang attributes on any element, inline ones included. GEML hangs them only on blocks and headings, and inline elements have no id. Whether inline content should be addressable deserves a place among the open questions.</dd>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ REFS ============ -->
+<section id="refs">
+  <div class="sec-head">
+    <div class="sec-num">References</div>
+    <div>
+      <h2>Everyone has ids; few treat a broken reference as an error</h2>
+      <p class="sub">Nearly every variant can give a block an id and link to it. Where they part is what the tool says when a link points at an id that does not exist.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <figure>
+      <figcaption>A reference to a target that does not exist <span class="st st-part">Partial overlap</span>
+        <small>The same mistake, as seven toolchains treat it. Messages are quoted from each project's source and docs.</small>
+      </figcaption>
+      <div class="panes">
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>How each writes it</span></div>
+<pre class="geml"><span class="c">Djot / Pandoc:</span> See [Budget](<span class="bad">#budjet</span>)
+<span class="c">MyST:</span> See {ref}`<span class="bad">budjet</span>`
+<span class="c">Quarto:</span> See @<span class="bad">fig-budjet</span>
+<span class="c">AsciiDoc:</span> See &lt;&lt;<span class="bad">budjet</span>&gt;&gt;</pre>
+          </div>
+          <div class="tablewrap">
+            <table class="t">
+              <thead><tr><th>Tool</th><th>When the target is missing</th></tr></thead>
+              <tbody>
+                <tr><td>Djot</td><td><span class="badge b-mute">#id not checked</span> djot.js warns only about reference-style links it cannot find</td></tr>
+                <tr><td>Pandoc</td><td><span class="badge b-mute">not checked</span> Outputs a broken link as usual</td></tr>
+                <tr><td>Carve</td><td><span class="badge b-warn">lint</span> <code>carve lint</code> reports <code>broken-crossref</code> and exits non-zero; cross-references can only point at headings and numbered captions</td></tr>
+                <tr><td>mystmd</td><td><span class="badge b-warn">warning</span> Rule id <code>referenceTargetResolves</code></td></tr>
+                <tr><td>Quarto</td><td><span class="badge b-warn">warning</span> <code>Unable to resolve crossref</code></td></tr>
+                <tr><td>Asciidoctor</td><td><span class="badge b-mute">info</span> <code>possible invalid reference</code>, hidden by default</td></tr>
+                <tr><td>Markdoc</td><td><span class="badge b-mute">links not checked</span> Validates only tags, attributes and variables; errors have stable ids such as <code>attribute-undefined</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>GEML</span></div>
+<pre class="geml"># Budget {#budget}
+
+Hosting is 120 a month.
+
+# Appendix {#appendix}
+
+See [[<span class="bad">#budjet</span>]].</pre>
+          </div>
+<pre class="term"><span class="cmd">$ geml check refs.geml</span>
+<span class="er">error:</span> unresolved reference `#budjet` (line 7)
+<span class="dim">1 error(s)</span>                                     <span class="dim">exit 1</span>
+
+<span class="cmd">$ geml set refs.geml '#budget' --in new.geml</span>
+<span class="er">error:</span> refused by an error the document ALREADY had, which
+this edit did not cause: unresolved reference `#budjet` …;
+not written — repair it first</pre>
+          <p class="cap">The edit is to the <code>#budget</code> section and the broken reference is in <code>#appendix</code>, yet the write is still refused. The diagnostic <code>unresolved-reference</code> is in the spec's Appendix A, at severity error. A writer does not keep stacking changes on a document that is already broken.</p>
+        </div>
+      </div>
+      <dl class="decision">
+        <dt>Overlap</dt><dd>Giving an error a stable rule id is something Markdoc (<code>tag-placement-invalid</code> and the like), mystmd (<code>referenceTargetResolves</code>) and Carve (<code>broken-crossref</code>) all do, the same idea as the diagnostic catalogue in GEML's Appendix A. Carve's lint also exits non-zero and can serve as a CI gate, as <code>geml check</code> does.</dd>
+        <dt>Difference</dt><dd>Most tools treat a broken reference as a <strong>reminder</strong>; GEML treats it as an <strong>error</strong>. The bigger difference is where: elsewhere the check is a separate command, while GEML puts it on the write path and rechecks the whole document before every write. For a person that is a little stricter; for an agent changing one block at a time, it is how it confirms it broke nothing elsewhere.</dd>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ QUERY ============ -->
+<section id="query">
+  <div class="sec-head">
+    <div class="sec-num">Query</div>
+    <div>
+      <h2>Query and rewrite: by selector, or by id</h2>
+      <p class="sub">Taking or changing one part instead of writing the whole file is the core of GEML's command line. Two tools on the list do neighbouring things: mq queries and rewrites Markdown with a jq-like syntax, and darnlink anchors links with UUIDs, so they can be fixed after a file moves.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <figure>
+      <figcaption>Take the "Install" section, then change it <span class="st st-hi">Head-on</span>
+        <small>mq's examples come from its README and cookbook; the GEML side is real output.</small>
+      </figcaption>
+      <div class="panes">
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>mq</span><span class="cap">Rust · 1,040 stars</span></div>
+<pre class="term"><span class="cmd">$ mq '.h(2)' README.md</span>                     <span class="dim"># every level-2 heading</span>
+<span class="cmd">$ mq '.code("rust")' README.md</span>              <span class="dim"># every rust code block</span>
+<span class="cmd">$ mq 'section::section("Installation")' README.md</span>
+<span class="cmd">$ mq -U '…' README.md</span>                     <span class="dim"># rewrites, printing the whole file to stdout</span></pre>
+          </div>
+          <dl class="decision">
+            <dt>Address</dt><dd>Node types, content predicates, heading text. No stable id: rename the heading, and <code>section("Installation")</code> finds nothing.</dd>
+            <dt>Write-back</dt><dd><code>-U</code> prints to stdout only; writing back to the file takes the companion mq-mount with <code>--write</code>, or mq-db with <code>--write-back</code>. Nothing is checked before writing.</dd>
+            <dt>Agents</dt><dd>There is mq-mcp, and the README lists "LLM workflows" first. Its MCP <strong>deliberately allows no writes</strong>, on the grounds that an agent's tool calls may run unattended.</dd>
+          </dl>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>GEML</span><span class="cap">real run</span></div>
+<pre class="term"><span class="cmd">$ geml list doc.geml</span>
+#install                 heading  h1    L1-8   Install
+#install-before-upgrade  prose          L3-3
+#upgrade                 heading  h2    L5-8   Upgrade
+#usage                   heading  h1    L9-12  Usage
+
+<span class="cmd">$ geml find Upgrade .</span>
+doc.geml	#upgrade
+
+<span class="cmd">$ geml get doc.geml '#install' --head</span>
+# Install {#install}
+
+<span class="cmd">$ geml rename doc.geml '#install' '#setup'</span>
+# Install {#setup}
+See [[#setup]].                  <span class="dim"># references change with it</span>
+
+<span class="cmd">$ geml list doc.geml --within '#install'</span>
+#install-before-upgrade  prose          L3-3
+#upgrade                 heading  h2    L5-8  Upgrade
+
+<span class="cmd">$ geml get complex-form.geml '=== form-field {type=date}'</span>
+<span class="dim">4 `form-field` blocks (L48-49 #founded · L99-101 #iso-expiry · …)</span></pre>
+          </div>
+          <p class="cap">The address is the <code>#id</code> the author wrote, untouched when the heading is renamed; a paragraph without an id still gets an address derived from its position, such as <code>#install-before-upgrade</code>. Selectors can also filter by attribute and narrow to one section with <code>--within</code>; the last command is run on the repository's GEP-0008 form example. Every write rechecks the whole document first.</p>
+        </div>
+      </div>
+      <dl class="decision">
+        <dt>Overlap</dt><dd>mq is the tool on the list closest to <code>geml get/find/list</code>, and likewise has both a command line and an MCP. GEML's selectors filter by type, attribute and content address, such as <code>=== code {lang=rust}</code> or <code>{.warn}</code>, and narrow to one section with <code>--within</code>; what mq has besides is pipes and map, and selecting by heading level as in <code>.h(1..3)</code>.</dd>
+        <dt>Difference</dt><dd>mq queries "any Markdown", so its addresses can only be derived from content. GEML has the author write ids, which is what makes addresses stable and writes checkable. mq-mcp allows no writes; GEML allows them but puts every one through the check, with per-block history as the fallback. These are two answers to "may an agent write on its own".</dd>
+      </dl>
+    </figure>
+
+    <figure>
+      <figcaption>A link's target moved <span class="st st-learn">Worth borrowing</span>
+        <small>darnlink puts identity on files, GEML on blocks. Each covers half.</small>
+      </figcaption>
+      <div class="panes">
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>darnlink</span><span class="cap">Python · created 2026-07</span></div>
+<pre class="geml"><span class="c">&lt;!-- the target file's frontmatter --&gt;</span>
+---
+<span class="a">uuid: 7f3a1e2c-…</span>
+---
+
+<span class="c">&lt;!-- the referring side --&gt;</span>
+[Design doc](docs/design.md) <span class="hl">&lt;!-- uuid: 7f3a1e2c-… --&gt;</span></pre>
+          </div>
+<pre class="term"><span class="cmd">$ darnlink check .</span>      <span class="dim"># 0 clean · 2 integrity problems · 3 unanchored links</span>
+<span class="cmd">$ darnlink . --write</span>    <span class="dim"># after a file moves, rewrites its path by UUID</span></pre>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>GEML</span></div>
+<pre class="geml">See [[design.geml#arch]].</pre>
+          </div>
+          <div class="tablewrap">
+            <table class="t">
+              <thead><tr><th>What happened</th><th>GEML</th><th>darnlink</th></tr></thead>
+              <tbody>
+                <tr><td>A block's id was renamed</td><td><code>geml rename</code> updates every reference</td><td>Does not deal with blocks</td></tr>
+                <tr><td>The target file moved</td><td><span class="badge b-err">error</span> Reported, but not repaired</td><td>Finds the new path by UUID and rewrites it</td></tr>
+                <tr><td>As a CI gate</td><td><code>geml check</code> exits non-zero</td><td><code>darnlink check</code> exits non-zero, with a pre-commit hook</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <dl class="decision">
+        <dt>Takeaway</dt><dd>GEML notices that a cross-document reference broke, but after a file moves the path can only be fixed by hand. darnlink gives a file an identity that does not change with its path. GEML could borrow the idea: a document id in the meta, which <code>geml</code> uses to find a moved file under the root. Nothing in GEML has a place for this today; it belongs on the to-do list.</dd>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ REUSE ============ -->
+<section id="reuse">
+  <div class="sec-head">
+    <div class="sec-num">Embedding</div>
+    <div>
+      <h2>Embedding and sync: pull in, or push back</h2>
+      <p class="sub">Putting content from elsewhere into a document is the most common extension people ask for. On the list, mdcode, Slidev, markedpp and MultiMarkdown each have a syntax for it, and AsciiDoc, beyond the list, has one too. They part in two places: whether they refer by line number or by name, and whether a miss is an error.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <figure>
+      <figcaption>Take a piece of code from a source file, and a section from another document <span class="st st-part">Partial overlap</span></figcaption>
+      <div class="panes">
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>mdcode</span><span class="cap">two-way sync</span></div>
+<pre class="geml"><span class="f">```go</span> <span class="a">file=main_test.go region=example</span>
+…
+<span class="f">```</span></pre>
+            <p class="cap" style="margin-top:6px">A <code>#region example</code> comment marks a piece of the source file. <code>mdcode update</code> pulls the source into the document; <code>mdcode extract</code> pushes changes in the document back to the source file.</p>
+          </div>
+          <div>
+            <div class="pane-h"><span>Slidev</span></div>
+<pre class="geml"><span class="f">&lt;&lt;&lt;</span> <span class="a">@/snippets/demo.ts#region-name {2,3|5}</span>
+---
+<span class="a">src: ./other.md#2,5-7</span>      <span class="c">slides from another deck, by number</span>
+---</pre>
+          </div>
+          <div>
+            <div class="pane-h"><span>markedpp · MultiMarkdown · AsciiDoc</span></div>
+<pre class="geml">!include (test.js lang=javascript)   <span class="c">markedpp: left as written if missing</span>
+{{chapter2.md}}                      <span class="c">MultiMarkdown: the whole file</span>
+include::part.adoc[tag=intro]        <span class="c">AsciiDoc: one piece, by tag</span></pre>
+          </div>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>GEML</span></div>
+<pre class="geml"><span class="f">=== code</span> <span class="a">{#add lang=js src=src/math.js#L1-3}</span>
+<span class="f">===</span>
+
+<span class="f">=== code</span> <span class="a">{#gone lang=js src=<span class="bad">src/math.js#L40-45</span>}</span>
+<span class="f">===</span>
+
+<span class="f">=== embed</span> <span class="a">{src=guide.geml#install part=intro}</span>
+<span class="f">===</span></pre>
+          </div>
+<pre class="term"><span class="cmd">$ geml check code.geml</span>
+<span class="er">error:</span> code source `src/math.js#L40-45`: the file has 7 line(s),
+so lines 40-45 no longer exist — the range is stale (line 6)
+<span class="dim">1 error(s)</span></pre>
+          <p class="cap"><code>embed</code> takes a section of another document by id, and <code>part=</code> picks the whole section, its heading, its intro or its body. The embedded document is first parsed on its own rules, and its references are checked too.</p>
+        </div>
+      </div>
+      <dl class="decision">
+        <dt>Overlap</dt><dd>All four take code from a source file, and taking a piece by name (mdcode's and Slidev's regions, AsciiDoc's tags) resists drift better than GEML's line numbers.</dd>
+        <dt>Difference</dt><dd>GEML reports an error when line numbers drift; markedpp silently keeps the original text when nothing is found. GEML's embed takes content by block id; Slidev takes it by slide number, MultiMarkdown by whole file.</dd>
+        <dt>Takeaway</dt><dd>Two things to learn. One: refer to a piece of source by name rather than by line numbers, for instance by recognising region comments in the source, so a few added lines do not shift it. Two: mdcode's reverse sync, which writes a change to example code in the document back to the source file.</dd>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ EXTEND ============ -->
+<section id="extend">
+  <div class="sec-head">
+    <div class="sec-num">Extensions</div>
+    <div>
+      <h2>Components and extension points: code into the document, or vocabulary into the document</h2>
+      <p class="sub">There are two ways to put a chart, a form or something interactive into Markdown. One lets the document contain component code; the other has the document write only declarations, which a renderer interprets against a vocabulary.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <figure>
+      <figcaption>Put a chart in a document <span class="st st-diff">Different path</span>
+        <small>MDX and Slidev let a document import components; GEML has the document declare a type whose attributes and meaning a profile defines.</small>
+      </figcaption>
+      <div class="panes">
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>MDX</span><span class="cap">beyond the list</span></div>
+<pre class="geml"><span class="f">import</span> { Chart } <span class="f">from</span> './Chart.jsx'
+
+# Quarterly revenue
+
+<span class="f">&lt;Chart</span> <span class="a">data={rows} type="bar"</span> <span class="f">/&gt;</span></pre>
+          </div>
+          <div>
+            <div class="pane-h"><span>Slidev</span><span class="cap">on the list</span></div>
+<pre class="geml">---
+<span class="a">layout: two-cols</span>
+---
+# Quarterly revenue
+<span class="f">&lt;BarChart</span> <span class="a">:data="rows"</span> <span class="f">/&gt;</span></pre>
+          </div>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="pane-h"><span>GEML</span></div>
+<pre class="geml"><span class="f">=== table</span> <span class="a">{#q format=csv header=1}</span>
+Quarter,Revenue
+Q1,120
+Q2,180
+<span class="f">===</span>
+
+<span class="f">=== diagram</span> <span class="a">{#rev format=geml-chart data=#q type=bar x=Quarter y=Revenue}</span>
+<span class="f">===</span></pre>
+          </div>
+          <p class="cap">The chart's data is a table in the same document, referred to as <code>#q</code>, and the reference is checked. There is no executable code: section 1 of the spec says "There is no raw-HTML escape hatch".</p>
+        </div>
+      </div>
+      <dl class="decision">
+        <dt>Difference</dt><dd>MDX and Slidev have no ceiling on expressiveness, at the price that the document is a program: it needs a runtime and a bundler, and trust in the author's code. GEML chooses closure: types and attributes are written in the spec or a profile, an unknown type warns, and the document itself can always be parsed, checked and handed to an agent safely.</dd>
+        <dt>Overlap</dt><dd>Markdoc takes GEML's road: a document holds only tags and attributes, and a tag's meaning is defined by the host's schema and validated. It is the project beyond the list closest to GEML's design, only without block addressing and write commands.</dd>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ AGENTS ============ -->
+<section id="agents">
+  <div class="sec-head">
+    <div class="sec-num">Agents</div>
+    <div>
+      <h2>For agents: in 2026 everyone shipped an MCP</h2>
+      <p class="sub">"Let an agent read and write one part instead of rewriting the whole" became common ground this year. Slidev added an MCP in July, Carve's MCP was created in September, and mq and demarkus each have one. They differ in three places: whether the address is stable, whether a write is checked first, and whether a bad change can be rolled back.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <figure>
+      <figcaption>Five MCP servers, one set of questions <span class="st st-hi">Head-on</span>
+        <small>From each project's README and MCP source, as of 2026-09-30.</small>
+      </figcaption>
+      <div class="tablewrap">
+        <table class="t">
+          <thead><tr><th>Server</th><th>Reads by</th><th>How it writes</th><th>Address</th><th>Before a write</th><th>History</th></tr></thead>
+          <tbody>
+            <tr><td>Carve<br><span class="cap">carve-mcp, 14 tools</span></td><td>Heading, footnote, a kind of node, AST path</td><td>Makes a revertible patch carrying a source hash; never writes the file itself</td><td>Heading id or AST path</td><td>Lint on request; a patch is void once the source changes</td><td>Patch reverts</td></tr>
+            <tr><td>Slidev<br><span class="cap">built in, 2026-07</span></td><td>One slide</td><td>Edits, inserts, deletes or moves a slide, written back to the <code>.md</code></td><td>Slide number; inserting a slide shifts every one after it</td><td>None</td><td>None</td></tr>
+            <tr><td>demarkus<br><span class="cap">15 tools</span></td><td>A whole document, or a section by heading slug; an outline first for large ones</td><td>Publishes or appends a whole document with an expected version; offers merge candidates on conflict</td><td>Path, content hash, heading slug</td><td>Version-conflict detection</td><td>Whole documents, a server-side hash chain</td></tr>
+            <tr><td>mq<br><span class="cap">mq-mcp</span></td><td>A section, or a kind of node</td><td><strong>No writes</strong></td><td>Selector, heading text</td><td>n/a</td><td>None</td></tr>
+            <tr><td>GEML<br><span class="cap">11 tools</span></td><td>A block, a section, a coordinate</td><td>Writes the file directly, by block or by section</td><td>The <code>#id</code> the author wrote</td><td>Rechecks the whole document and refuses a broken one; with a content address in the selector, a block whose content changed is not written</td><td>Per block, <code>.gemlhistory</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <dl class="decision">
+        <dt>Overlap</dt><dd>GEML's "read and write by block, over MCP" is no longer a selling point of its own. The weightiest evidence is Slidev, with nearly 50,000 stars, which already ships an MCP that reads and writes by slide; Carve even has an agent skill, though its community is still small.</dd>
+        <dt>Difference</dt><dd>Only GEML's address is an id the author writes, independent of position and heading text, and only GEML checks the whole document at the moment of writing. Carve takes a different kind of safety: it does not write, it hands over a hashed patch for a person or a program to confirm.</dd>
+        <dt>Takeaway</dt><dd>Carve's source hash and demarkus's expected version guard against an agent reading a block, someone else changing it, and the agent writing back over the change. GEML's selector <code>=== note@&lt;hex&gt; {#id}</code> does the same check: once the content changes it no longer matches, and nothing is written. What is missing is <code>get --json</code> and the MCP handing that hash straight to the caller.</dd>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ REVIEW ============ -->
+<section id="review">
+  <div class="sec-head">
+    <div class="sec-num">Revisions</div>
+    <div>
+      <h2>Record a change in the text, or beside it</h2>
+      <p class="sub">CriticMarkup is the only project in the list's syntax-extensions section that deals with revisions.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <figure>
+      <figcaption>A suggested change <span class="st st-learn">Worth borrowing</span></figcaption>
+      <div class="panes">
+        <div>
+          <div class="pane-h"><span>CriticMarkup</span></div>
+<pre class="geml">Hosting is {~~<span class="bad">120</span>~&gt;<span class="hl">150</span>~~} a month.
+{&gt;&gt;revised to the new quote<span class="f">&lt;&lt;</span>}
+{++Backups included.++}</pre>
+          <p class="cap" style="margin-top:8px">Insert <code>{++ ++}</code>, delete <code>{-- --}</code>, substitute <code>{~~ ~&gt; ~~}</code>, comment <code>{&gt;&gt; &lt;&lt;}</code>, highlight <code>{== ==}</code>. The marks stay in the text and go only once the change is accepted or rejected.</p>
+        </div>
+        <div>
+          <div class="pane-h"><span>GEML</span></div>
+<pre class="term"><span class="cmd">$ geml history save doc.geml -m "revised to the new quote"</span>
+<span class="cmd">$ geml history get doc.geml --json</span>
+<span class="dim">[ { "id": "20260930T…", "summary": "revised to the new quote", "offset": 0, "current": true }, … ]</span>
+<span class="cmd">$ geml revert doc.geml '#cost' --rev 20260930T…</span></pre>
+          <p class="cap" style="margin-top:8px">History lives in the <code>.gemlhistory</code> sidecar and rolls back by block. The text stays clean, but GEML cannot express the state "a suggestion not yet accepted".</p>
+        </div>
+      </div>
+      <dl class="decision">
+        <dt>Takeaway</dt><dd>GEML has revision history but no <strong>pending suggestions</strong>. An agent that proposes a change and waits for a person to confirm it can today only write it in and roll it back. CriticMarkup's "proposed" state could be a candidate for a profile: a suggestion hangs on a block id, and accepting it is an ordinary write.</dd>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ TAKEAWAYS ============ -->
+<section id="takeaways">
+  <div class="sec-head">
+    <div class="sec-num">Takeaways</div>
+    <div>
+      <h2>What it means for GEML</h2>
+      <p class="sub">Four things: what is really unique, which rival to face squarely, what is worth borrowing, and what is no cause for worry.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <div class="cards">
+      <div class="card">
+        <h3><span class="st st-self">Unique</span> Three things bound together</h3>
+        <p>Typed blocks, stable ids the author writes, and a whole-document check before every write: each has been done on its own, but only GEML puts them together. Add a command line and an MCP that write by block, per-block history, and reading existing <code>.md</code> directly: Carve and Djot both need the document converted first, and GEML does not.</p>
+      </div>
+      <div class="card">
+        <h3><span class="st st-hi">Closest</span> Carve: close in features, small in reach</h3>
+        <p>Same section, same story: lint, a JSON AST, patch-based editing, MCP, an agent skill. Created only this May, it already has 64 repositories, 2,200 test cases and three implementations, with dozens of commits a day at the end of September; but it has only 32 stars, and no outside users could be found. Weighed by reach, it is a project to track, not today's main rival. It differs from GEML in a stable address on any block, a check on every write, and compatibility with existing Markdown; whenever GEML is presented, those three should come before the syntax.</p>
+      </div>
+      <div class="card">
+        <h3><span class="st st-ink">Reach</span> Weighed by reach</h3>
+        <p>The two head-on projects are both small: Carve has 32 stars, mq 1,040. The big ones are Slidev (48,891), Pandoc (46,456), MDX (19,809) and Markdoc (8,494). Judge the effect on GEML by the latter: Slidev shows that an MCP reading and writing by unit is already in a mainstream tool, and Markdoc is the best frame of reference for presenting GEML.</p>
+      </div>
+      <div class="card">
+        <h3><span class="st st-learn">Worth borrowing</span> Six things GEML does not have yet</h3>
+        <p>Attributes and ids on inline elements (Djot, Carve); referring to a source snippet by name (mdcode's and Slidev's regions, AsciiDoc's tags); pushing code changes in a document back to the source file (mdcode); repairing cross-document references after a file moves (darnlink); pending suggested changes (CriticMarkup); handing the content hash to the caller for a check before writing (Carve, demarkus).</p>
+      </div>
+      <div class="card">
+        <h3><span class="st st-diff">No cause for worry</span> The foundation, and another layer</h3>
+        <p>CommonMark, GFM and VFMD are where GEML's prose comes from; old extensions like MultiMarkdown and Markdown Extra are collections of special-case syntax, which GEML has folded into one kind of block. MDX is the other road, "the document is a program". MarkWay and mk-notes sit at the layer of protocols and sync, not of document formats.</p>
+      </div>
+    </div>
+    <dl class="decision">
+      <dt>Proposal</dt><dd>By the project's rules, each of the six "worth borrowing" items should have a name and a phase in a design document. Two are the smallest and closest to what exists: have <code>get --json</code> and the MCP return the content hash, for a check before writing with the content address in a selector; and refer to source by region, added to <code>code {src=}</code>.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ============ EVIDENCE ============ -->
+<section id="evidence">
+  <div class="sec-head">
+    <div class="sec-num">Evidence</div>
+    <div>
+      <h2>Repository data and probes</h2>
+      <p class="sub">Repository data comes from the GitHub API, on 2026-09-30. "Last push" is the date of the repository's last push, not necessarily its last feature commit.</p>
+    </div>
+  </div>
+  <div class="sec-body">
+    <div class="tablewrap">
+      <table class="t">
+        <thead><tr><th>Project</th><th>Repository</th><th>Stars</th><th>Created</th><th>Last push</th><th>License</th></tr></thead>
+        <tbody>
+          <tr><td>Carve</td><td class="mono"><a href="https://github.com/markup-carve/carve">markup-carve/carve</a></td><td class="num">32</td><td class="num">2026-05-13</td><td class="num">2026-09-30</td><td>MIT</td></tr>
+          <tr><td>Djot</td><td class="mono"><a href="https://github.com/jgm/djot">jgm/djot</a></td><td class="num">2,046</td><td class="num">2022-07-11</td><td class="num">2026-07-01</td><td>MIT</td></tr>
+          <tr><td>VersaDok</td><td class="mono"><a href="https://github.com/gettalong/versadok">gettalong/versadok</a></td><td class="num">17</td><td class="num">2025-01-09</td><td class="num">2026-07-05</td><td>MIT</td></tr>
+          <tr><td>Texti</td><td class="mono"><a href="https://github.com/texti/texti.github.io">texti/texti.github.io</a></td><td class="num">9</td><td class="num">2017-07-14</td><td class="num">2018-08-04</td><td>CC0</td></tr>
+          <tr><td>MultiMarkdown 6 / 7</td><td class="mono"><a href="https://github.com/fletcher/MultiMarkdown-7">fletcher/MultiMarkdown-7</a></td><td class="num">678 / 56</td><td class="num">2017-01-19</td><td class="num">2026-09-22</td><td>See repo</td></tr>
+          <tr><td>Markdown Extra</td><td class="mono"><a href="https://github.com/michelf/php-markdown">michelf/php-markdown</a></td><td class="num">3,462</td><td class="num">2010-06-06</td><td class="num">2025-06-17</td><td>See repo</td></tr>
+          <tr><td>Markdown Extended</td><td class="mono"><a href="https://github.com/e-picas/markdown-extended">e-picas/markdown-extended</a></td><td class="num">38</td><td class="num">2013-06-02</td><td class="num">2024-03-02</td><td>See repo</td></tr>
+          <tr><td>CriticMarkup</td><td class="mono"><a href="https://github.com/CriticMarkup/CriticMarkup-toolkit">CriticMarkup/CriticMarkup-toolkit</a></td><td class="num">849</td><td class="num">2013-01-10</td><td class="num">2021-03-04</td><td>See repo</td></tr>
+          <tr><td>kramdown</td><td class="mono"><a href="https://github.com/gettalong/kramdown">gettalong/kramdown</a></td><td class="num">1,782</td><td class="num">2008-11-30</td><td class="num">2026-01-31</td><td>See repo</td></tr>
+          <tr><td>Pandoc</td><td class="mono"><a href="https://github.com/jgm/pandoc">jgm/pandoc</a></td><td class="num">46,456</td><td class="num">2010-03-20</td><td class="num">2026-09-29</td><td>GPL-2.0</td></tr>
+          <tr><td>CommonMark</td><td class="mono"><a href="https://github.com/commonmark/commonmark-spec">commonmark/commonmark-spec</a></td><td class="num">5,149</td><td class="num">2014-08-14</td><td class="num">2026-04-27</td><td>See repo</td></tr>
+          <tr><td>GFM</td><td class="mono"><a href="https://github.com/github/cmark-gfm">github/cmark-gfm</a></td><td class="num">1,133</td><td class="num">2016-12-01</td><td class="num">2026-09-28</td><td>See repo</td></tr>
+          <tr><td>VFMD</td><td class="mono"><a href="https://github.com/vfmd/vfmd-spec">vfmd/vfmd-spec</a></td><td class="num">32</td><td class="num">2013-09-01</td><td class="num">2016-10-29</td><td>None stated</td></tr>
+          <tr><td>mq</td><td class="mono"><a href="https://github.com/harehare/mq">harehare/mq</a></td><td class="num">1,040</td><td class="num">2025-02-24</td><td class="num">2026-09-30</td><td>MIT</td></tr>
+          <tr><td>darnlink</td><td class="mono"><a href="https://github.com/txemi/darnlink">txemi/darnlink</a></td><td class="num">19</td><td class="num">2026-07-11</td><td class="num">2026-09-27</td><td>GPL-3.0</td></tr>
+          <tr><td>mdcode</td><td class="mono"><a href="https://github.com/szkiba/mdcode">szkiba/mdcode</a></td><td class="num">28</td><td class="num">2024-01-08</td><td class="num">2026-02-23</td><td>MIT</td></tr>
+          <tr><td>markedpp</td><td class="mono"><a href="https://github.com/commenthol/markedpp">commenthol/markedpp</a></td><td class="num">39</td><td class="num">2014-09-01</td><td class="num">2025-08-18</td><td>MIT</td></tr>
+          <tr><td>Slidev</td><td class="mono"><a href="https://github.com/slidevjs/slidev">slidevjs/slidev</a></td><td class="num">48,891</td><td class="num">2021-04-24</td><td class="num">2026-09-16</td><td>MIT</td></tr>
+          <tr><td>demarkus</td><td class="mono"><a href="https://github.com/latebit-io/demarkus">latebit-io/demarkus</a></td><td class="num">16</td><td class="num">2026-02-14</td><td class="num">2026-09-30</td><td>AGPL-3.0 per README</td></tr>
+          <tr><td>MarkWay</td><td class="mono"><a href="https://github.com/RaysunKR/MarkWay">RaysunKR/MarkWay</a></td><td class="num">2</td><td class="num">2026-03-31</td><td class="num">2026-06-03</td><td>MIT</td></tr>
+          <tr><td>mk-notes</td><td class="mono"><a href="https://github.com/Myastr0/mk-notes">Myastr0/mk-notes</a></td><td class="num">125</td><td class="num">2025-01-29</td><td class="num">2025-12-23</td><td>MIT</td></tr>
+          <tr><td>Markdoc</td><td class="mono"><a href="https://github.com/markdoc/markdoc">markdoc/markdoc</a></td><td class="num">8,494</td><td class="num">2022-05-09</td><td class="num">2026-09-16</td><td>MIT</td></tr>
+          <tr><td>MyST</td><td class="mono"><a href="https://github.com/jupyter-book/mystmd">jupyter-book/mystmd</a></td><td class="num">525</td><td class="num">2020-07-21</td><td class="num">2026-09-28</td><td>MIT</td></tr>
+          <tr><td>Quarto</td><td class="mono"><a href="https://github.com/quarto-dev/quarto-cli">quarto-dev/quarto-cli</a></td><td class="num">6,033</td><td class="num">2020-09-25</td><td class="num">2026-09-30</td><td>See repo</td></tr>
+          <tr><td>AsciiDoc</td><td class="mono"><a href="https://github.com/asciidoctor/asciidoctor">asciidoctor/asciidoctor</a></td><td class="num">5,218</td><td class="num">2012-06-01</td><td class="num">2026-09-01</td><td>See repo</td></tr>
+          <tr><td>MDX</td><td class="mono"><a href="https://github.com/mdx-js/mdx">mdx-js/mdx</a></td><td class="num">19,809</td><td class="num">2017-12-24</td><td class="num">2026-09-29</td><td>MIT</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tablewrap">
+      <table class="t">
+        <thead><tr><th>GEML probe</th><th>Covers</th><th>Result</th><th>Where on this page</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">refs.geml · new.geml</td><td>A broken reference in another section, an edit to this one</td><td><span class="badge b-err">1 error</span> Write refused</td><td>ids and reference checks</td></tr>
+          <tr><td class="mono">code.geml · src/math.js</td><td>Code taken by line range, the range stale</td><td><span class="badge b-err">1 error</span> Stale range</td><td>Embedding and sync</td></tr>
+          <tr><td class="mono">doc.geml · complex-form.geml</td><td>list, list --within, find, get --head, rename; attribute filters</td><td><span class="badge b-ok">0 diagnostics</span></td><td>Query and rewrite</td></tr>
+          <tr><td class="mono">samples.geml</td><td>How note, table, data and geml-chart are written</td><td><span class="badge b-ok">0 diagnostics</span></td><td>Generic blocks · Components and extension points</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>This page in Chinese: <a href="geml-vs-markdown-variants_CN.html">中文</a>. See also <a href="/compare/commonmark">GEML vs CommonMark</a>, <a href="/compare/xml-and-json">GEML vs XML and JSON</a> and the <a href="/compare/matrix">capability matrix of seven formats</a>.</div>
+  <div>Data as of 2026-09-30: star counts and last commits from the GitHub API, quoted messages from each project's source. Projects beyond the list are marked as such.</div>
+  <div>The GEML side was run with the repository's current build, <code>node geml-parser/dist/geml.js</code>.</div>
+</footer>
+</div>
+</body>
+</html>
