@@ -47,6 +47,12 @@ Google processes the data under
 block cookies for this site or install
 [Google's opt-out add-on](https://tools.google.com/dlpage/gaoptout).
 
+The home page shows three badges, and your browser loads their images from
+**mcptoplist.com** and **awesome.re**; the illustrated pages load
+their typefaces from **Google Fonts**. Those hosts see your IP address and
+browser, as any request for a file does. The badges are requested without a
+referrer, so their hosts are not told which page you were on.
+
 There are no ad scripts and nothing else that tracks you. GitHub operates the
 hosting and may log requests under
 [its own privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).

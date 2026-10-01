@@ -16,7 +16,6 @@
 /* Hero: the name is the wordmark, the text line is the one-sentence definition. */
 .VPHero .name { font-weight: 800; letter-spacing: -0.02em; }
 .VPHero .text { font-weight: 600; }
-.VPHero .image-src { max-width: 180px; }
 
 /* The construct → syntax table on the home page and the cheat sheet. */
 .vp-doc table code { white-space: nowrap; }
@@ -37,3 +36,27 @@
 .demo-video { display: block; max-width: 100%; max-height: 78vh; margin: 0 auto; border-radius: 8px; background: #000; }
 /* A long source scrolls inside its tab rather than stretching the page. */
 .demo-page .vp-code-group div[class*='language-'] pre { max-height: 70vh; overflow: auto; }
+
+/* The nav logo is the wordmark (geml-logo-*), drawn inside a quarter of padding
+   on every side: size it so the letters are 24px tall and let the padding overhang. */
+.VPNavBarTitle .logo { height: 48px; margin: -12px 0 -12px -12px; }
+
+/* Hero image: the wordmark, light or dark with the theme (index.md), rising in
+   once as the page opens. Reduced motion shows it still. The box sits at left:
+   50%, so its width is set outright: an auto width would stop at half the column. */
+.VPHero .image-src { width: 280px; max-width: 100%; height: auto; max-height: none; animation: hero-wordmark-in 0.9s ease-out both; }
+@keyframes hero-wordmark-in {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 14px)); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+@media (prefers-reduced-motion: reduce) { .VPHero .image-src { animation: none; } }
+/* Below 960px the image stacks right over the GEML heading, with the nav's
+   wordmark just above: one wordmark is enough there. */
+@media (max-width: 959px) { .VPHero .image { display: none; } }
+@media (min-width: 640px) { .VPHero .image-src { width: 360px; } }
+@media (min-width: 960px) { .VPHero .image-src { width: 440px; } }
+
+/* README's badges under the hero buttons (theme/index.ts). */
+.hero-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
+.hero-badges img { display: block; height: 20px; }
+@media (min-width: 960px) { .hero-badges { justify-content: flex-start; } }

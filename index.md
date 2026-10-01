@@ -12,7 +12,8 @@ hero:
   text: A lightweight, Agent-Native markup language
   tagline: Plain text people read. Blocks with names that agents get, set, add and delete — and a write that would break the document is refused. Works on the Markdown you already have.
   image:
-    src: /logo/geml-mark.svg
+    light: /logo/geml-logo-light.svg
+    dark: /logo/geml-logo-dark.svg
     alt: GEML
   actions:
     - theme: brand

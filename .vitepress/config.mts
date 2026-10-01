@@ -157,8 +157,9 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    logo: '/logo/geml-mark.svg',
-    siteTitle: 'GEML',
+    // The wordmark is the logo: its red G is the first letter, so no title beside it.
+    logo: { light: '/logo/geml-logo-light.svg', dark: '/logo/geml-logo-dark.svg', alt: 'GEML' },
+    siteTitle: false,
     nav: [
       { text: 'Get Started', link: '/get-started' },
       { text: 'Playground', link: '/playground/', target: '_blank' },
