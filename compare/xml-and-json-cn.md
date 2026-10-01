@@ -1,3 +1,7 @@
+---
+description: "让机器能精确寻址的结构化文档，是 XML 在 1998 年的承诺。它兑现了什么、丢掉了哪两块地盘，GEML 又在哪里不同。"
+---
+
 # GEML 与 XML / JSON —— 对照，以及一次失败的复盘
 
 *[English](./xml-and-json.md) | 中文*

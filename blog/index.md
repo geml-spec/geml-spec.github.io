@@ -1,5 +1,6 @@
 ---
 title: Blog
+description: "Essays on text formats for documents that people and AI agents write together, from the authors of GEML."
 ---
 
 # Blog

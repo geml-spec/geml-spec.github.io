@@ -1,3 +1,8 @@
+---
+title: "GEML vs XML and JSON: a comparison and a post-mortem"
+description: "Structured documents a machine can address precisely were XML's promise in 1998. What it delivered, the two territories it lost, and where GEML differs."
+---
+
 # GEML vs XML / JSON — a comparison, and a post-mortem
 
 *English | [中文](./xml-and-json-cn.md)*

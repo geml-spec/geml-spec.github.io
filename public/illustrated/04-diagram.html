@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML Blocks Illustrated · diagram</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,10 +123,22 @@
   footer { margin-top: 80px; border-top: 1px solid var(--line-2); padding-top: 18px; font-size: 13.5px; color: var(--ink-3); display: grid; gap: 6px; }
   footer code { background: transparent; padding: 0; color: var(--ink-2); }
 </style>
-
+<meta name="description" content="GEML's diagram block two ways: an external DSL passed through verbatim, and the built-in geml-chart bound to a table, where a wrong column fails the build.">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/04-diagram.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/04-diagram.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/04-diagram_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML Blocks Illustrated · diagram">
+<meta property="og:description" content="GEML's diagram block two ways: an external DSL passed through verbatim, and the built-in geml-chart bound to a table, where a wrong column fails the build.">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/04-diagram.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML block types, illustrated · page 4 of 5 · spec 1.0 · <a href="04-diagram_CN.html">中文</a></div>
+  <div class="eyebrow">GEML block types, illustrated · spec 1.0 · <a href="04-diagram_CN.html">中文</a> · <a href="/demos#illustrated-syntax">all illustrated pages</a> · <a href="/">GEML home</a></div>
   <h1>GEML Blocks Illustrated · diagram</h1>
   <p class="lede"><code>diagram</code> is used two ways. One hosts an external DSL: the body goes verbatim to the renderer <code>format=</code> selects, and the processor's only duty is not to interpret it. The other is the built-in <code>geml-chart</code>: the chart is described entirely in attributes and bound to a table or a record array, so the processor can check it piece by piece and a mistyped column name is a build error. A third, <code>geml-code-graph</code>, is interpreted too but takes the opposite stance: the embed carries one attribute and nothing else. All three are measured here; the chart's fifteen checks match A.4 row for row.</p>
   <nav class="toc">
@@ -442,6 +459,8 @@ Hardware,88.1,84.6
 </section>
 
 <footer>
-  <div>This page: <code>docs/illustrated/04-diagram.html</code> · 中文 <code>04-diagram_CN.html</code>. Five pages in the series: the simple four · code and data · table and view · diagram · embed.</div>
+  <div>This page: <code>docs/illustrated/04-diagram.html</code> · 中文 <code>04-diagram_CN.html</code>.</div>
 </footer>
 </div>
+</body>
+</html>

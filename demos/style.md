@@ -1,5 +1,6 @@
 ---
-title: A page laid out from a document
+title: "geml-style demo: a web page laid out from a document"
+description: "A GitHub file page rebuilt from one GEML document and one stylesheet: every string comes from the document, every colour and length from geml-style/v1."
 pageClass: demo-page
 aside: false
 ---

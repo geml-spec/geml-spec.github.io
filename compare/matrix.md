@@ -1,3 +1,8 @@
+---
+title: "GEML vs Markdown, HTML, AsciiDoc, Org-mode and Pandoc"
+description: "A feature-by-feature matrix of GEML against Markdown, HTML, CommonMark, AsciiDoc, Org-mode and Pandoc, and the three things only GEML offers together."
+---
+
 # GEML vs. other markup formats
 
 *English | [中文](./matrix-cn.md)*

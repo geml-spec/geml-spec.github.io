@@ -1,9 +1,13 @@
+---
+description: "Doc-as-a-Base：一份写给人与 AI agent 共同编写文档的设计宣言。每个块都有名字，一套标准动词，一个事实来源。"
+---
+
 # The GEML Manifesto: Doc-as-a-Base
 
 > **文档即真相之源 (Doc-as-a-Base)**  
 > 一份关于人机共写时代文档协议的设计宣言
 
-*[English](https://github.com/geml-spec/geml/blob/main/docs/MANIFESTO.md) | 中文*
+*[English](/manifesto) | 中文*
 
 ---
 

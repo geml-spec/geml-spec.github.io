@@ -1,5 +1,6 @@
 ---
-title: A cut built from one document
+title: "geml-media demo: a video whose timeline is a document"
+description: "A 10-second cut, two shots, a voice line and its subtitle, whose timeline is one GEML document. The browser player and ffmpeg read the same timeline."
 pageClass: demo-page
 aside: false
 ---

@@ -1,5 +1,6 @@
 ---
 title: "为什么大模型时代需要一种全新的文本格式？"
+description: "我们已经有 Markdown、AsciiDoc、JSON 和 XML，为什么还要一种新格式？因为人和 AI agent 现在共同编写同一份文档，而现有格式都不是为此设计的。"
 date: 2026-08-03
 lang: zh
 categories: [architecture, ai-agents]
@@ -8,6 +9,10 @@ lang_links:
   - label: English
     url: /blog/2026/08/03/why-do-we-need-a-new-text-format-in-the-era-of-llms
 excerpt: "我们已经有了 Markdown、AsciiDoc，也有 JSON、XML，为什么还需要发明一种新的格式？因为读者变了——人和 Agent 第一次同时坐在同一份文本的两端，而旧的格式从未为此设计。"
+head:
+  - - script
+    - type: application/ld+json
+    - "{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":\"为什么大模型时代需要一种全新的文本格式？\",\"datePublished\":\"2026-08-03\",\"inLanguage\":\"zh-Hans\",\"author\":{\"@type\":\"Organization\",\"name\":\"GEML\",\"url\":\"https://geml-spec.github.io/\"},\"url\":\"https://geml-spec.github.io/blog/2026/08/03/why-do-we-need-a-new-text-format-in-the-era-of-llms_cn\"}"
 ---
 
 # 为什么大模型时代需要一种全新的文本格式？

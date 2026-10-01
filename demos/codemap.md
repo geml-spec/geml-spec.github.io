@@ -1,5 +1,6 @@
 ---
-title: The parser's own code graph
+title: "geml-codemap demo: a call graph as documents"
+description: "The call graph of the @geml/geml parser and viewer as GEML documents: one per source file, every function a block with an id, every call kept both ways."
 pageClass: demo-page
 aside: false
 ---

@@ -1,5 +1,6 @@
 ---
-title: One document, charts and all
+title: "Tables, charts, Mermaid and math in one file"
+description: "One .geml file: a table, a sortable computed view, four charts drawn from it by id, a Mermaid flow and math. No number is copied into a chart."
 pageClass: demo-page
 aside: false
 ---

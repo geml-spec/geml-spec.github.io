@@ -1,3 +1,7 @@
+---
+description: "按规范顺序逐条列出 CommonMark 0.31.2 的每个构造在 GEML 里怎么处理，再列出 GEML 多出、CommonMark 没有对应物的部分。"
+---
+
 # GEML 与 CommonMark —— 逐构造对照
 
 *[English](./commonmark.md) | 中文*

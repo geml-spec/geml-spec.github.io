@@ -1,5 +1,6 @@
 ---
-title: Cheat sheet
+title: "Syntax cheat sheet: blocks, references, CLI verbs"
+description: "Every GEML construct on one page: blocks, ids and references, tables, views and coordinates, data and charts, embeds, meta, CLI selectors, verbs, MCP tools."
 outline: [2, 3]
 ---
 

@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML Illustrated · geml-style</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,10 +69,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml-style/v1: a stylesheet is an ordinary .geml that selects into a document without touching it. No scripts, ambiguity fails the build; 13 diagnostics run.">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/10-profile-style.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/10-profile-style.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/10-profile-style_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML Illustrated · geml-style">
+<meta property="og:description" content="geml-style/v1: a stylesheet is an ordinary .geml that selects into a document without touching it. No scripts, ambiguity fails the build; 13 diagnostics run.">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/10-profile-style.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML Illustrated · profile · geml-style/v1 (landed 2026-08-30, EXPERIMENTAL) · <a href="10-profile-style_CN.html">中文</a></div>
+  <div class="eyebrow">GEML Illustrated · profile · geml-style/v1 (landed 2026-08-30, EXPERIMENTAL) · <a href="10-profile-style_CN.html">中文</a> · <a href="/demos#illustrated-syntax">all illustrated pages</a> · <a href="/">GEML home</a></div>
   <h1>GEML Illustrated · geml-style</h1>
   <p class="lede">A stylesheet is an ordinary <code>.geml</code>: it declares <code>profile = "geml-style/v1"</code>, holds three kinds of empty-bodied blocks, <strong>selects into</strong> a content document with CSS-flavoured selectors without touching it, and binds blocks to component names the host registers. No scripts, ambiguity is a build error, nothing depends on source order. Its conformance surface is the view model that <code>geml style check --json</code> emits. This page runs one clean sheet and one deliberately broken sheet and walks through the 13 diagnostics.</p>
   <nav class="toc">
@@ -469,3 +486,5 @@ title = "codemap graph style"
   <div>This page: <code>docs/illustrated/10-profile-style.html</code>; Chinese version <code>10-profile-style_CN.html</code>. Profile document: <code>spec/profiles/geml-style/geml-style-profile.md</code>.</div>
 </footer>
 </div>
+</body>
+</html>

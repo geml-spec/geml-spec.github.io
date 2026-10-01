@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML 图解 · geml-codemap</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,10 +67,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml-codemap/v1：把代码库的调用图写成一组 GEML 文档，方法是 code 块，边是 CSV 表，用解析器自己的代码图举例。">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/09-profile-codemap_CN.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/09-profile-codemap.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/09-profile-codemap_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML 图解 · geml-codemap">
+<meta property="og:description" content="geml-codemap/v1：把代码库的调用图写成一组 GEML 文档，方法是 code 块，边是 CSV 表，用解析器自己的代码图举例。">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/09-profile-codemap_CN.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 图解 · profile · geml-codemap/v1（2026-07-03 定稿） · <a href="09-profile-codemap.html">English</a></div>
+  <div class="eyebrow">GEML 图解 · profile · geml-codemap/v1（2026-07-03 定稿） · <a href="09-profile-codemap.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEML 图解 · geml-codemap</h1>
   <p class="lede">codemap 把一个代码库的调用图写成一组 GEML 文档：每个容器一份，方法是空体 <code>code</code> 块，边是 CSV 表，入口写在 meta 里。它是应用层 profile：核心规范一字未动，只靠声明 <code>profile = "geml-codemap/v1"</code> 放行 <code>code</code> 上的三个属性键。这一页用 <code>playground/codemap/</code> 里真实生成的文档做例子，把文件布局、meta 键、方法块、边表、校验分工和 agent 的消费方式逐条对到 profile 文档上。</p>
   <nav class="toc">
@@ -322,3 +339,5 @@ from,                                    to,          kind, site
   <div>本页：<code>docs/illustrated/09-profile-codemap_CN.html</code>，英文版 <code>09-profile-codemap.html</code>。profile 文档：<code>spec/profiles/geml-codemap/geml-codemap-profile.md</code>；图的渲染格式见第 4 页，版本见第 8 页。</div>
 </footer>
 </div>
+</body>
+</html>

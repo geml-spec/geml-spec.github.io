@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML Illustrated · geml-codemap</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,10 +66,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml-codemap/v1: a codebase's call graph as GEML documents, one per container, methods as code blocks, edges as CSV tables, shown on the parser's own code map.">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/09-profile-codemap.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/09-profile-codemap.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/09-profile-codemap_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML Illustrated · geml-codemap">
+<meta property="og:description" content="geml-codemap/v1: a codebase's call graph as GEML documents, one per container, methods as code blocks, edges as CSV tables, shown on the parser's own code map.">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/09-profile-codemap.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML Illustrated · profile · geml-codemap/v1 (final, 2026-07-03) · <a href="09-profile-codemap_CN.html">中文</a></div>
+  <div class="eyebrow">GEML Illustrated · profile · geml-codemap/v1 (final, 2026-07-03) · <a href="09-profile-codemap_CN.html">中文</a> · <a href="/demos#illustrated-syntax">all illustrated pages</a> · <a href="/">GEML home</a></div>
   <h1>GEML Illustrated · geml-codemap</h1>
   <p class="lede">A codemap writes a codebase's call graph as a set of GEML documents: one per container, methods as empty-bodied <code>code</code> blocks, edges as CSV tables, entry points in the meta. It is an application-layer profile: the core specification is untouched, and declaring <code>profile = "geml-codemap/v1"</code> admits three attribute keys on <code>code</code>. This page uses the generated documents in <code>playground/codemap/</code> to line up the directory layout, the meta keys, the method block, the edge tables, the split of validation duties and the agent's consumption path against the profile document.</p>
   <nav class="toc">
@@ -321,3 +338,5 @@ from,                                    to,          kind, site
   <div>This page: <code>docs/illustrated/09-profile-codemap.html</code>; Chinese version <code>09-profile-codemap_CN.html</code>. Profile document: <code>spec/profiles/geml-codemap/geml-codemap-profile.md</code>; the graph's rendering format is on page 4, versioning on page 8.</div>
 </footer>
 </div>
+</body>
+</html>

@@ -2,6 +2,10 @@
 layout: home
 title: GEML
 titleTemplate: A lightweight, Agent-Native markup language
+head:
+  - - script
+    - type: application/ld+json
+    - '{"@context":"https://schema.org","@type":"WebSite","name":"GEML","alternateName":"General Expressive Markup Language","url":"https://geml-spec.github.io/"}'
 
 hero:
   name: GEML
@@ -25,7 +29,7 @@ hero:
 features:
   - title: Specified
     details: A 1.0 specification, a conformance suite of 197 cases, and CI that checks the specification — itself a GEML document — on every push.
-    link: /reference/spec
+    link: https://github.com/geml-spec/geml/blob/main/spec/GEML-spec.md
     linkText: Read the spec
   - title: Verbs, not rewrites
     details: list, find, get, set, add, delete, revert. The same names as MCP tools, so a terminal and an agent speak one vocabulary.
@@ -33,13 +37,13 @@ features:
     linkText: Get started
   - title: Extensible by vocabulary
     details: One block shape, frozen. New domains — history, code graphs, styling, media — are profiles, each with its own conformance file.
-    link: /reference/profiles/
+    link: https://github.com/geml-spec/geml/tree/main/spec/profiles
     linkText: See the profiles
 ---
 
 ## Syntax at a glance
 
-Every kind of content is one block shape: `=== type {attributes}`, a body, `===`. Headings are blocks too, and every block has a name.
+In GEML — the General Expressive Markup Language — every kind of content is one block shape: `=== type {attributes}`, a body, `===`. Headings are blocks too, and every block has a name.
 
 ```
 === meta

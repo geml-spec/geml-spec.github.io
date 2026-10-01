@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML 块图解 · code 与 data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,10 +140,22 @@
   footer { margin-top: 80px; border-top: 1px solid var(--line-2); padding-top: 18px; font-size: 13.5px; color: var(--ink-3); display: grid; gap: 6px; }
   footer code { background: transparent; padding: 0; color: var(--ink-2); }
 </style>
-
+<meta name="description" content="GEML 的 code 与 data 块：code 装处理器不解释的文本，data 装必须解析通过的值，两者共用一套 src= 路由语法，全部实测。">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/02-code-data_CN.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/02-code-data.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/02-code-data_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML 块图解 · code 与 data">
+<meta property="og:description" content="GEML 的 code 与 data 块：code 装处理器不解释的文本，data 装必须解析通过的值，两者共用一套 src= 路由语法，全部实测。">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/02-code-data_CN.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 块类型图解 · 第 2 页 / 5 · 规范 1.0</div>
+  <div class="eyebrow">GEML 块类型图解 · 规范 1.0 · <a href="02-code-data.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEML 块图解 · code 与 data</h1>
   <p class="lede">这一页是 <code>code</code> 和 <code>data</code>。两者放一起，因为它们是一对镜像：<code>code</code> 装处理器<strong>永不解释</strong>的文本，<code>data</code> 装<strong>必须解析通过</strong>的值；两者共用一套 <code>src=</code> 路由语法，却对「解析不到」给出相反的轻重。每条规则标出处，右边是 <code>geml check</code>、<code>geml get</code> 和 <code>--to html</code> 的实测输出。</p>
   <nav class="toc">
@@ -361,6 +378,8 @@ a,b
 </section>
 
 <footer>
-  <div>本页：<code>docs/illustrated/02-code-data.html</code>。系列共五页：简单四型 · code 与 data · table 与 view · diagram 与 embed。</div>
+  <div>本页：<code>docs/illustrated/02-code-data.html</code>。</div>
 </footer>
 </div>
+</body>
+</html>

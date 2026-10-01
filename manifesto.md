@@ -1,9 +1,13 @@
+---
+description: "Doc-as-a-Base: a design manifesto for documents people and AI agents write together. Every block a name, a standard set of verbs, one source of truth."
+---
+
 # The GEML Manifesto: Doc-as-a-Base
 
 > **Doc-as-a-Base**
 > A design manifesto for the document protocol of the human–AI co-writing era.
 
-*English | [中文](https://github.com/geml-spec/geml/blob/main/docs/MANIFESTO_CN.md)*
+*English | [中文](/manifesto-cn)*
 
 ---
 

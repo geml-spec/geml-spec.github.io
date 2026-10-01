@@ -1,5 +1,6 @@
 ---
-title: Demos
+title: "Live demos: layout, charts, code graphs, translation"
+description: "Six demos that render in your browser with nothing to install: a page laid out from a document, bound charts, a call graph, a translation, two videos."
 outline: [2, 3]
 ---
 

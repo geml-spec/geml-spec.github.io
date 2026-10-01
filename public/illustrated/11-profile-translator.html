@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML Illustrated · geml-translator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,10 +71,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml-translator/v1: a translation is an embed-only projection of its source, translate-to= on each block, so it cannot drift from the source it translates.">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/11-profile-translator.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/11-profile-translator.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/11-profile-translator_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML Illustrated · geml-translator">
+<meta property="og:description" content="geml-translator/v1: a translation is an embed-only projection of its source, translate-to= on each block, so it cannot drift from the source it translates.">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/11-profile-translator.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML Illustrated · profile · geml-translator/v1 (GEP-0010, draft; registered) · <a href="11-profile-translator_CN.html">中文</a></div>
+  <div class="eyebrow">GEML Illustrated · profile · geml-translator/v1 (GEP-0010, draft; registered) · <a href="11-profile-translator_CN.html">中文</a> · <a href="/demos#illustrated-syntax">all illustrated pages</a> · <a href="/">GEML home</a></div>
   <h1>GEML Illustrated · geml-translator</h1>
   <p class="lede">A translation is the source document projected along the <strong>language axis</strong>, the same shape as a <code>.md</code> projected along the format axis: the translated file holds only <code>embed</code> blocks, each saying with <code>translate-to=</code> which language it wants, the processor projects the source's prose across, and every other byte stays as it was. Ids, order and non-prose content have one home, so drift is not detected but impossible. This page lays out GEP-0010's rules, the one key the profile admits, what a translator must preserve, and how far the reference implementation goes today.</p>
   <nav class="toc">
@@ -362,3 +379,5 @@ source       = "MANIFESTO.geml"
   <div>This page: <code>docs/illustrated/11-profile-translator.html</code>; Chinese version <code>11-profile-translator_CN.html</code>. Source: <code>spec/proposals/0010-language-projections.md</code>; embed itself is on page 5.</div>
 </footer>
 </div>
+</body>
+</html>

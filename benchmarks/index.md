@@ -1,8 +1,16 @@
+---
+title: "Benchmarks: what block addressing saves an AI agent"
+description: "Two reproducible benchmarks of agent document editing: the cost of saying where one edit goes, and a real day of edits replayed with GEML's verbs."
+---
+
 # Benchmarks
 
-The instruments live here because they need this repository — the corpus they
-measure and the CLI they measure it with. The write-ups they produce live with
-the rest of the outreach material.
+Two reproducible benchmarks of what an AI agent spends editing documents. The
+[addressing benchmark](./addressing-cost): on the same documents and the same 47
+edits, saying where an edit goes costs 13,109 bytes in Markdown and 611 in GEML,
+21.45× less. The [mixed-toolchain benchmark](./mixed-toolchain): giving each of a
+real day's 14 edits to the GEML verb built for it cut the reading by 3.65× and
+the bytes spent saying where by 7×.
 
 | script | what it measures |
 |---|---|

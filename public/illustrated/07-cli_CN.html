@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML 图解 · CLI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,10 +66,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml 命令行的每个动词用一份小文档实跑：格式转换、按块读写、校验，以及各自接受的地址形式和退出码。">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/07-cli_CN.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/07-cli.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/07-cli_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML 图解 · CLI">
+<meta property="og:description" content="geml 命令行的每个动词用一份小文档实跑：格式转换、按块读写、校验，以及各自接受的地址形式和退出码。">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/07-cli_CN.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 图解 · geml CLI · <a href="07-cli.html">English</a></div>
+  <div class="eyebrow">GEML 图解 · geml CLI · <a href="07-cli.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEML 图解 · CLI</h1>
   <p class="lede"><code>geml</code> 命令行做三类事：<strong>转换</strong>一份文档（json、html、md、geml 之间），<strong>按块读写</strong>（list、find、get、set、add、delete、rename、revert），<strong>校验</strong>（check，以及 profile 各自的 style check、history verify、codemap verify）。核心动词从不带 profile 名。写操作有一道守卫：结果解析不过就拒绝写入。这一页把每个动词、它接受的地址形式、退出码，用一份小文档实跑一遍。</p>
   <nav class="toc">
@@ -368,3 +385,5 @@ some md</pre>
   <div>本页：<code>docs/illustrated/07-cli_CN.html</code>，英文版 <code>07-cli.html</code>。出处：<code>geml --help</code>，<code>geml-parser/src/cli.ts</code>。</div>
 </footer>
 </div>
+</body>
+</html>

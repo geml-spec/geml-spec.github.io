@@ -1,3 +1,8 @@
+---
+title: "Mixed-toolchain benchmark: a real day of agent edits"
+description: "14 edits from one real day, each given to the GEML verb built for it: 3.65× less reading and 7× fewer bytes spent saying where. None had to leave GEML."
+---
+
 # A real day of editing: the mixed-toolchain benchmark
 
 > **The headline: giving each of the day's 14 edits to the GEML verb built for

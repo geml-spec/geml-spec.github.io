@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML 图解 · geml-style</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,10 +70,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml-style/v1：样式表就是一份普通的 .geml，选进内容文档而不改它；没有脚本，歧义是构建错误，13 条诊断逐条实跑。">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/10-profile-style_CN.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/10-profile-style.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/10-profile-style_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML 图解 · geml-style">
+<meta property="og:description" content="geml-style/v1：样式表就是一份普通的 .geml，选进内容文档而不改它；没有脚本，歧义是构建错误，13 条诊断逐条实跑。">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/10-profile-style_CN.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 图解 · profile · geml-style/v1（2026-08-30 落地，EXPERIMENTAL） · <a href="10-profile-style.html">English</a></div>
+  <div class="eyebrow">GEML 图解 · profile · geml-style/v1（2026-08-30 落地，EXPERIMENTAL） · <a href="10-profile-style.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEML 图解 · geml-style</h1>
   <p class="lede">样式表是一份普通的 <code>.geml</code>：声明 <code>profile = "geml-style/v1"</code>，装三种全空体的块，用 CSS 味的选择器<strong>选进</strong>内容文档而不改它，把块绑到宿主注册的组件名上。没有脚本，歧义是构建错误，不靠源顺序。它的一致性面是 <code>geml style check --json</code> 吐出的视图模型。这一页用一份干净的样式表和一份故意写坏的样式表，把 13 条诊断逐条跑出来。</p>
   <nav class="toc">
@@ -470,3 +487,5 @@ title = "codemap graph style"
   <div>本页：<code>docs/illustrated/10-profile-style_CN.html</code>，英文版 <code>10-profile-style.html</code>。profile 文档：<code>spec/profiles/geml-style/geml-style-profile.md</code>。</div>
 </footer>
 </div>
+</body>
+</html>

@@ -1,3 +1,8 @@
+---
+title: "Addressing benchmark: what one edit costs an agent"
+description: "Same documents, same 47 edits: pointing at the place costs 13,109 bytes in Markdown and 611 in GEML, 21.45× less. One command reproduces it."
+---
+
 # What one edit costs: the addressing benchmark
 
 > **The headline: saying WHERE a change goes costs 21× more in Markdown.**

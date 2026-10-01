@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML 块图解 · form</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -235,10 +240,22 @@
   footer { margin-top: 80px; border-top: 1px solid var(--line-2); padding-top: 18px; font-size: 13.5px; color: var(--ink-3); display: grid; gap: 6px; }
   footer code { background: transparent; padding: 0; color: var(--ink-2); }
 </style>
-
+<meta name="description" content="GEML 表单提案（GEP-0008，草案）与 geml-form/v1 profile：15 项设计决定，每项左边是 GEML，右边是宿主会画出的控件。">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/06-form_CN.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/06-form.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/06-form_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML 块图解 · form">
+<meta property="og:description" content="GEML 表单提案（GEP-0008，草案）与 geml-form/v1 profile：15 项设计决定，每项左边是 GEML，右边是宿主会画出的控件。">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/06-form_CN.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 块类型图解 · form 提案（GEP-0008，草案）与 geml-form/v1 profile · 评审图解第 5 版</div>
+  <div class="eyebrow">GEML 块类型图解 · form 提案（GEP-0008，草案）与 geml-form/v1 profile · 评审图解第 5 版 · <a href="06-form.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEP-0008 表单图解</h1>
   <p class="lede">这一版按你提的 <code>form-*</code> 家族重画：<code>form-field</code>、<code>form-options</code>、<code>form-note</code>、<code>form-group</code>，四个二级类型都只能出现在 form 内。它一次解决了 table 双逻辑、说明无绑定、围栏过深三个问题。字段用属性指向 form-options 和 form-note，方向只有一个。名字定为 form-note，form-group 不嵌套，看板 15 项全部已定。控件仍是 0008 要求的禁用预览。</p>
   <nav class="toc">
@@ -912,3 +929,5 @@ logistics    ; 物流与仓储
   <div>页面里的控件是禁用预览的示意，按 0008 §8.3(5) 渲染器 MUST NOT submit。</div>
 </footer>
 </div>
+</body>
+</html>

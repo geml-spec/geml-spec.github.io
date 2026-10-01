@@ -1,5 +1,6 @@
 ---
-title: Get Started
+title: "Install the geml CLI and MCP server"
+description: "Install the geml CLI from npm, list, get and set sections of the Markdown you already have, keep per-section history, and add the MCP server to Claude Code."
 outline: [2, 3]
 ---
 

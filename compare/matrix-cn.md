@@ -1,3 +1,7 @@
+---
+description: "GEML 与 Markdown、HTML、CommonMark、AsciiDoc、Org-mode、Pandoc 的逐项能力对照，以及只有 GEML 同时具备的三件事。"
+---
+
 # GEML 与其他标记格式的比较
 
 *[English](./matrix.md) | 中文*

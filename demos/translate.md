@@ -1,5 +1,6 @@
 ---
-title: One source, four treatments
+title: "Translation without translated text: geml-translator"
+description: "translated.geml embeds its source block by block and the browser translates on open, so the translation never falls behind. Needs desktop Chrome."
 pageClass: demo-page
 aside: false
 ---

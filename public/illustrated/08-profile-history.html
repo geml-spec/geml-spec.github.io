@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML Illustrated · geml-history</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,10 +69,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml-history/v1: a .gemlhistory sidecar of reverse patches and snapshots beside each .geml rebuilds any old version without git or a network. Four verbs run.">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/08-profile-history.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/08-profile-history.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/08-profile-history_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML Illustrated · geml-history">
+<meta property="og:description" content="geml-history/v1: a .gemlhistory sidecar of reverse patches and snapshots beside each .geml rebuilds any old version without git or a network. Four verbs run.">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/08-profile-history.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML Illustrated · profile · geml-history/v1 (Stable) · <a href="08-profile-history_CN.html">中文</a></div>
+  <div class="eyebrow">GEML Illustrated · profile · geml-history/v1 (Stable) · <a href="08-profile-history_CN.html">中文</a> · <a href="/demos#illustrated-syntax">all illustrated pages</a> · <a href="/">GEML home</a></div>
   <h1>GEML Illustrated · geml-history</h1>
   <p class="lede">The <code>.geml</code> file holds only the <strong>current version</strong>; a same-named <code>.gemlhistory</code> sidecar holds the <strong>history</strong>: reverse patches walking back from the current version, plus full snapshots. The sidecar is itself a GEML document, admitting three block types through <code>profile = "geml-history/v1"</code>; it carries a mirror of the committed current version, so reconstructing any old version depends on neither the live file, nor git, nor the network. This page puts each rule of the profile next to the four <code>geml history</code> verbs, run for real.</p>
   <nav class="toc">
@@ -323,3 +340,5 @@ verify: OK (2 revisions reconstructed &amp; hashed)</pre>
   <div>This page: <code>docs/illustrated/08-profile-history.html</code>; Chinese version <code>08-profile-history_CN.html</code>. Profile document: <code>spec/profiles/geml-history/geml-history-profile.md</code>.</div>
 </footer>
 </div>
+</body>
+</html>

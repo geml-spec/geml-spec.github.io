@@ -1,3 +1,8 @@
+---
+title: "GEML vs CommonMark, construct by construct"
+description: "Every CommonMark 0.31.2 construct in spec order and what GEML does with it, then what GEML adds that CommonMark has no equivalent for."
+---
+
 # GEML vs. CommonMark — a construct-by-construct comparison
 
 *English | [中文](./commonmark-cn.md)*

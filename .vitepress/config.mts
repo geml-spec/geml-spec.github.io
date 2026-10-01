@@ -1,7 +1,13 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig, type HeadConfig } from 'vitepress'
 import footnote from 'markdown-it-footnote'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { isZh } from './lang'
+
+const SITE = 'https://geml-spec.github.io'
+// The card a shared link shows; outside public/logo/, which geml's update.mjs rewrites.
+const OG_IMAGE = `${SITE}/og/geml-card.png`
 
 // The specification, profiles, guides, GEPs and changelog live in geml-spec/geml
 // and are read there; the site links to them instead of keeping copies.
@@ -18,21 +24,38 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GA_ID}');`
 
+// Pages under public/ that only make sense inside another page — a demo's iframe,
+// the explainer's render stage — are not search results of their own. The code
+// map pages are geml's generated output, so this is decided here, not in them.
+const embedOnly = /[\\/](playground[\\/]codemap[\\/]|examples[\\/]render\.html$|examples[\\/]geml-media-demo[\\/]play\.html$|examples[\\/]geml-media-explainer[\\/]scenes[\\/])/
+
 // Static pages under public/ (illustrated, examples, playground) bypass the
-// VitePress head; give every built HTML file that lacks the tag the same one.
+// VitePress head; give every built HTML file that lacks the tag the same one,
+// and an embed-only page its noindex.
 function tagStaticPages(dir: string) {
   for (const d of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, d.name)
     if (d.isDirectory()) { tagStaticPages(p); continue }
     if (!d.name.endsWith('.html')) continue
     const html = readFileSync(p, 'utf8')
-    if (html.includes(gaSrc)) continue
-    // after <head>, or — for a page that leaves <head> implicit — after the doctype
-    const at = /<head[^>]*>/i.exec(html) ?? /<!doctype html>/i.exec(html)
+    const add: string[] = []
+    if (!html.includes(gaSrc)) add.push(`<script async src="${gaSrc}"></script>`, `<script>${gaInit}</script>`)
+    if (embedOnly.test(p) && !html.includes('name="robots"')) add.push('<meta name="robots" content="noindex, indexifembedded">')
+    if (add.length === 0) continue
+    // after <head> (not <header>), or — for a page that leaves <head> implicit — after the doctype
+    const at = /<head(\s[^>]*)?>/i.exec(html) ?? /<!doctype html>/i.exec(html)
     if (!at) continue
     const end = at.index + at[0].length
-    writeFileSync(p, `${html.slice(0, end)}\n<script async src="${gaSrc}"></script>\n<script>${gaInit}</script>${html.slice(end)}`)
+    writeFileSync(p, `${html.slice(0, end)}\n${add.join('\n')}${html.slice(end)}`)
   }
+}
+
+// The URL a page is served at (cleanUrls): index.md is its folder, x.md is /x.
+const pageUrl = (rel: string) => `${SITE}/${rel.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '')}`
+// A page's other-language twin, when the site has one: x.md ⇄ x-cn.md (x_cn.md on the blog).
+function twinOf(rel: string, pages: string[]) {
+  const candidates = isZh(rel) ? [rel.replace(/[-_]cn\.md$/i, '.md')] : [rel.replace(/\.md$/, '-cn.md'), rel.replace(/\.md$/, '_cn.md')]
+  return candidates.find((p) => pages.includes(p))
 }
 
 const siteSidebar = [
@@ -66,7 +89,8 @@ const siteSidebar = [
 export default defineConfig({
   title: 'GEML',
   titleTemplate: ':title · GEML',
-  description: 'A lightweight, Agent-Native markup language: plain text people read, blocks agents get, set, add and delete — and a write that would break the document is refused. Works on the Markdown you already have.',
+  // A page without its own `description:` falls back to this one.
+  description: 'Plain text people read and AI agents edit by block: geml get/set #id, and writes that would break the file are refused. Works on Markdown. CLI + MCP server.',
   lang: 'en',
   cleanUrls: true,
   lastUpdated: false,
@@ -74,14 +98,61 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo/geml-favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#E00A1E' }],
-    ['meta', { property: 'og:title', content: 'GEML — a lightweight, Agent-Native markup language' }],
-    ['meta', { property: 'og:image', content: 'https://geml-spec.github.io/logo/geml-mark.svg' }],
     ['script', { async: '', src: gaSrc }],
     ['script', {}, gaInit],
   ],
+  sitemap: {
+    hostname: SITE,
+    // public/ pages bypass VitePress; the ones that stand on their own go in by hand.
+    transformItems: (items) => [
+      ...items,
+      { url: 'playground/' },
+      ...readdirSync(fileURLToPath(new URL('../public/illustrated', import.meta.url)))
+        .filter((f) => f.endsWith('.html'))
+        .map((f) => ({ url: `illustrated/${f}` })),
+    ],
+  },
+  // Every page names its own URL, title and description for search and for a
+  // shared link, and its other-language twin when there is one.
+  transformHead: ({ pageData, siteConfig, title, description }) => {
+    if (pageData.isNotFound) return
+    const rel = pageData.relativePath
+    const url = pageUrl(rel)
+    const head: HeadConfig[] = [
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:type', content: rel.startsWith('blog/20') ? 'article' : 'website' }],
+      ['meta', { property: 'og:site_name', content: 'GEML' }],
+      ['meta', { property: 'og:locale', content: isZh(rel) ? 'zh_CN' : 'en_US' }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:image', content: OG_IMAGE }],
+      ['meta', { property: 'og:image:width', content: '1200' }],
+      ['meta', { property: 'og:image:height', content: '630' }],
+      ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ]
+    const twin = twinOf(rel, siteConfig.pages)
+    if (twin) {
+      const [en, zh] = isZh(rel) ? [twin, rel] : [rel, twin]
+      head.push(
+        ['link', { rel: 'alternate', hreflang: 'en', href: pageUrl(en) }],
+        ['link', { rel: 'alternate', hreflang: 'zh-Hans', href: pageUrl(zh) }],
+      )
+    }
+    return head
+  },
+  // The site's lang is en; a Chinese twin says so in the HTML it ships.
+  transformHtml: (code, _id, { pageData }) =>
+    isZh(pageData.relativePath) ? code.replace('<html lang="en"', '<html lang="zh-Hans"') : code,
   buildEnd: (siteConfig) => tagStaticPages(siteConfig.outDir),
   markdown: {
-    config: (md) => { md.use(footnote) },
+    config: (md) => {
+      md.use(footnote)
+      // Vue reads {{ }} in a page as an interpolation, inline code included: the
+      // cheat sheet's `{{title}}` rendered as an empty <code>. v-pre keeps it text.
+      const codeInline = md.renderer.rules.code_inline!
+      md.renderer.rules.code_inline = (...args) => codeInline(...args).replace('<code', '<code v-pre')
+    },
   },
   themeConfig: {
     logo: '/logo/geml-mark.svg',

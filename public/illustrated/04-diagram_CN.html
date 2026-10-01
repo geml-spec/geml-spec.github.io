@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML 块图解 · diagram</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,10 +123,22 @@
   footer { margin-top: 80px; border-top: 1px solid var(--line-2); padding-top: 18px; font-size: 13.5px; color: var(--ink-3); display: grid; gap: 6px; }
   footer code { background: transparent; padding: 0; color: var(--ink-2); }
 </style>
-
+<meta name="description" content="GEML 的 diagram 块两种用法：原样交给渲染器的外部 DSL，和绑到表上的内置 geml-chart，列名打错就是构建错误。">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/04-diagram_CN.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/04-diagram.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/04-diagram_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML 块图解 · diagram">
+<meta property="og:description" content="GEML 的 diagram 块两种用法：原样交给渲染器的外部 DSL，和绑到表上的内置 geml-chart，列名打错就是构建错误。">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/04-diagram_CN.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 块类型图解 · 第 4 页 / 5 · 规范 1.0</div>
+  <div class="eyebrow">GEML 块类型图解 · 规范 1.0 · <a href="04-diagram.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEML 块图解 · diagram</h1>
   <p class="lede"><code>diagram</code> 有两种用法。一种是装外部 DSL：正文原样交给 <code>format=</code> 选的渲染器，处理器只负责不解释它。另一种是内置的 <code>geml-chart</code>：图完全由属性描述、绑到一张表或一个记录数组上，所以处理器能逐条校验，一个打错的列名就是构建错误。这一页把两种都实测一遍，十几条校验逐条对上 A.4。</p>
   <nav class="toc">
@@ -442,6 +459,8 @@ Hardware,88.1,84.6
 </section>
 
 <footer>
-  <div>本页：<code>docs/illustrated/04-diagram_CN.html</code>，英文版 <code>04-diagram.html</code>。系列共五页：简单四型 · code 与 data · table 与 view · diagram · embed。</div>
+  <div>本页：<code>docs/illustrated/04-diagram_CN.html</code>，英文版 <code>04-diagram.html</code>。</div>
 </footer>
 </div>
+</body>
+</html>

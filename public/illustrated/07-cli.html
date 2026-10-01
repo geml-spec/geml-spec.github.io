@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML Illustrated · CLI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,10 +65,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="Every geml CLI verb run on one small document: convert between json, html, md and geml, read and write by block, validate; each address form and exit code.">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/07-cli.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/07-cli.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/07-cli_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML Illustrated · CLI">
+<meta property="og:description" content="Every geml CLI verb run on one small document: convert between json, html, md and geml, read and write by block, validate; each address form and exit code.">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/07-cli.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML Illustrated · the geml CLI · <a href="07-cli_CN.html">中文</a></div>
+  <div class="eyebrow">GEML Illustrated · the geml CLI · <a href="07-cli_CN.html">中文</a> · <a href="/demos#illustrated-syntax">all illustrated pages</a> · <a href="/">GEML home</a></div>
   <h1>GEML Illustrated · CLI</h1>
   <p class="lede">The <code>geml</code> command does three kinds of thing: <strong>convert</strong> a document (between json, html, md and geml), <strong>read and write by block</strong> (list, find, get, set, add, delete, rename, revert), and <strong>validate</strong> (check, plus each profile's own style check, history verify, codemap verify). Core verbs never carry a profile name. Writes have a guard: a result that does not parse is refused. This page runs every verb, the address forms it accepts and the exit codes against one small document.</p>
   <nav class="toc">
@@ -367,3 +384,5 @@ some md</pre>
   <div>This page: <code>docs/illustrated/07-cli.html</code>; Chinese version <code>07-cli_CN.html</code>. Sources: <code>geml --help</code>, <code>geml-parser/src/cli.ts</code>.</div>
 </footer>
 </div>
+</body>
+</html>

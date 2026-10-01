@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GEML 图解 · geml-history</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,10 +71,22 @@
   footer { margin-top:80px; border-top:1px solid var(--line-2); padding-top:18px; font-size:13.5px; color:var(--ink-3); display:grid; gap:6px; }
   footer code { background:transparent; padding:0; color:var(--ink-2); }
 </style>
-
+<meta name="description" content="geml-history/v1：每份 .geml 旁一个 .gemlhistory 边车，放反向补丁和快照，不靠 git、不靠网络就能重建任意旧版本。">
+<link rel="canonical" href="https://geml-spec.github.io/illustrated/08-profile-history_CN.html">
+<link rel="alternate" hreflang="en" href="https://geml-spec.github.io/illustrated/08-profile-history.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://geml-spec.github.io/illustrated/08-profile-history_CN.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="GEML">
+<meta property="og:title" content="GEML 图解 · geml-history">
+<meta property="og:description" content="geml-history/v1：每份 .geml 旁一个 .gemlhistory 边车，放反向补丁和快照，不靠 git、不靠网络就能重建任意旧版本。">
+<meta property="og:url" content="https://geml-spec.github.io/illustrated/08-profile-history_CN.html">
+<meta property="og:image" content="https://geml-spec.github.io/og/geml-card.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 图解 · profile · geml-history/v1（Stable） · <a href="08-profile-history.html">English</a></div>
+  <div class="eyebrow">GEML 图解 · profile · geml-history/v1（Stable） · <a href="08-profile-history.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEML 图解 · geml-history</h1>
   <p class="lede"><code>.geml</code> 文件只放<strong>当前版本</strong>；同名的 <code>.gemlhistory</code> 边车放<strong>历史</strong>：从当前版本往回的反向补丁，加上完整快照。边车自己就是一份 GEML 文档，靠 <code>profile = "geml-history/v1"</code> 放行三个块类型；它自带一份「已提交当前版」的镜像，所以重建任何旧版本都不依赖活文件、不依赖 git、不依赖网络。这一页把 profile 的每条规则和 <code>geml history</code> 四个动词的实测放在一起。</p>
   <nav class="toc">
@@ -325,3 +342,5 @@ verify: OK (2 revisions reconstructed &amp; hashed)</pre>
   <div>本页：<code>docs/illustrated/08-profile-history_CN.html</code>，英文版 <code>08-profile-history.html</code>。profile 文档：<code>spec/profiles/geml-history/geml-history-profile.md</code>。</div>
 </footer>
 </div>
+</body>
+</html>

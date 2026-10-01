@@ -1,5 +1,6 @@
 ---
 title: "Why Do We Need a New Text Format in the Era of LLMs?"
+description: "We have Markdown, AsciiDoc, JSON and XML, so why a new format? Because people and AI agents now co-author the same document, and none was built for that."
 date: 2026-08-03
 lang: en
 categories: [architecture, ai-agents]
@@ -8,6 +9,10 @@ lang_links:
   - label: 中文
     url: /blog/2026/08/03/why-do-we-need-a-new-text-format-in-the-era-of-llms_cn
 excerpt: "Everyone asks this question: we already have Markdown, AsciiDoc, JSON, and XML. Why invent a new format? Because the reader has changed — humans and agents now co-author the same document, and the old formats were never built for that."
+head:
+  - - script
+    - type: application/ld+json
+    - "{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":\"Why Do We Need a New Text Format in the Era of LLMs?\",\"datePublished\":\"2026-08-03\",\"inLanguage\":\"en\",\"author\":{\"@type\":\"Organization\",\"name\":\"GEML\",\"url\":\"https://geml-spec.github.io/\"},\"url\":\"https://geml-spec.github.io/blog/2026/08/03/why-do-we-need-a-new-text-format-in-the-era-of-llms\"}"
 ---
 
 

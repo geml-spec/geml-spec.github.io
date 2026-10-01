@@ -1,5 +1,6 @@
 ---
-title: An episode made end to end
+title: "geml-media demo: an episode from a four-line synopsis"
+description: "A motion-comic episode made by a loop that asks geml media todo what is missing. Change one word and geml check names the 26 items now stale."
 pageClass: demo-page
 aside: false
 ---
