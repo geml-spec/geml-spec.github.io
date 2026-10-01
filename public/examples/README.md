@@ -1,7 +1,8 @@
 # GEML examples
 
-The demos the [demos page](https://geml-spec.github.io/demos) links to. They are
-watched, not edited — the editable tour is the [playground](../playground/).
+The demos the [demos page](https://geml-spec.github.io/demos) shows, each on a page of
+its own: the result, then the GEML that made it. They are watched, not edited — the
+editable tour is the [playground](../playground/).
 
 | folder | what it is |
 |---|---|
@@ -9,7 +10,8 @@ watched, not edited — the editable tour is the [playground](../playground/).
 | `geml-media-demo/` | a 10-second cut built from one document by `geml media build`; its README walks through it |
 | `geml-media-explainer/` | a 36-second episode made end to end with `geml-media`; its README tells how |
 | `translate-demo/` | a translation with `geml-translator/v1`: `translated.geml` holds no translated text — it embeds `source.geml` block by block (Chinese by default, the command kept as written, one line in Japanese, one in French) and the viewer translates it on open |
-| `showcase.geml` | one document with a computed table, four charts, a Mermaid flow and math — open the raw file with the viewer |
+| `showcase.geml` | one document with a computed table, four charts, a Mermaid flow and math |
+| `render.html` | draws one of these documents with the viewer's own code, as the extension would: `render.html?doc=/examples/showcase.geml`. The demo pages frame it, so nothing needs installing |
 
 Every document here is `geml check`-clean: geml-spec/geml checks them with its own parser before each update it pushes here.
 
@@ -21,14 +23,16 @@ replica of a GitHub blob page — top bar, repository nav, file tree, breadcrumb
 commit row, Preview/Code/Blame, four dropdown menus — showing its own
 `article.geml`, a short note on pour-over coffee, as the file being viewed.
 
-**Open `style-demo/page.geml`** — the document itself, served over HTTP, with
+**See it** on the [demos page](https://geml-spec.github.io/demos/style), drawn by
+`render.html`. **Or open `style-demo/page.geml` itself** with
 [`geml-viewer`](https://github.com/geml-spec/geml/tree/main/integrations/geml-viewer)
-installed. The opening note tells you what you are looking at, then fades.
+installed: the opening note tells you what you are looking at, then fades.
 
-There is no `index.html` here on purpose. What is being demonstrated is that a
-`.geml` file *is* the page; wrapping it in a host page would demonstrate the
-host instead. Without the viewer a browser shows the source, which is the right
-default: the file is text, and nothing has claimed otherwise.
+There is still no `index.html` here. What is being demonstrated is that a
+`.geml` file *is* the page: `render.html` is one host shared by every example,
+not a page written for this one, and it runs the extension's own code. Without
+either, a browser shows the source, which is the right default: the file is
+text, and nothing has claimed otherwise.
 
 | file | what it holds |
 |---|---|
@@ -74,5 +78,5 @@ Everything the page reads sits inside `style-demo/`, so it opens from disk too:
 the viewer confines a `file://` document's fetches to its own folder, and that
 folder is enough. Turn on **Allow access to file URLs** for the extension and open
 `page.geml`, or serve `public/` (`python -m http.server`) and open
-`localhost:8000/examples/style-demo/page.geml`. On the site:
-<https://geml-spec.github.io/examples/style-demo/page.geml>.
+`localhost:8000/examples/style-demo/page.geml`. GitHub Pages serves `.geml` as a
+download, so the extension cannot open it there; the demos page is the way in.

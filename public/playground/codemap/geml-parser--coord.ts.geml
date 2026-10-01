@@ -8,82 +8,82 @@ resolution-default = cpg
 
 # geml-parser/coord.ts
 
-=== code {#miss .leaf src=geml-parser/src/coord.ts#L32-32 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/miss."}
+=== code {#miss .leaf src=geml-parser/src/coord.ts#L32-32 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/miss."}
 ===
 
-=== code {#stepText .leaf src=geml-parser/src/coord.ts#L35-39 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/stepText()."}
+=== code {#stepText .leaf src=geml-parser/src/coord.ts#L35-39 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/stepText()."}
 ===
 
-=== code {#pathText src=geml-parser/src/coord.ts#L41-41 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/pathText."}
+=== code {#pathText src=geml-parser/src/coord.ts#L41-41 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/pathText."}
 ===
 
-=== code {#noUnits src=geml-parser/src/coord.ts#L55-60 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/noUnits()."}
+=== code {#noUnits src=geml-parser/src/coord.ts#L55-60 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/noUnits()."}
 ===
 
-=== code {#columnIndex src=geml-parser/src/coord.ts#L65-73 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/columnIndex()."}
+=== code {#columnIndex src=geml-parser/src/coord.ts#L65-73 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/columnIndex()."}
 ===
 
-=== code {#attrStr .leaf src=geml-parser/src/coord.ts#L79-80 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/attrStr."}
+=== code {#attrStr .leaf src=geml-parser/src/coord.ts#L79-80 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/attrStr."}
 ===
 
-=== code {#cellJson .leaf src=geml-parser/src/coord.ts#L82-82 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/cellJson."}
+=== code {#cellJson .leaf src=geml-parser/src/coord.ts#L82-82 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/cellJson."}
 ===
 
-=== code {#rowText src=geml-parser/src/coord.ts#L88-96 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/rowText()."}
+=== code {#rowText src=geml-parser/src/coord.ts#L88-96 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/rowText()."}
 ===
 
-=== code {#noValueTree src=geml-parser/src/coord.ts#L103-109 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/noValueTree()."}
+=== code {#noValueTree src=geml-parser/src/coord.ts#L103-109 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/noValueTree()."}
 ===
 
-=== code {#delimOf src=geml-parser/src/coord.ts#L111-114 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/delimOf."}
+=== code {#delimOf src=geml-parser/src/coord.ts#L111-114 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/delimOf."}
 ===
 
-=== code {#projectTable src=geml-parser/src/coord.ts#L116-155 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/projectTable()."}
+=== code {#projectTable src=geml-parser/src/coord.ts#L116-155 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/projectTable()."}
 ===
 
-=== code {#projectValue src=geml-parser/src/coord.ts#L161-183 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/projectValue()."}
+=== code {#projectValue src=geml-parser/src/coord.ts#L161-183 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/projectValue()."}
 ===
 
-=== code {#describe src=geml-parser/src/coord.ts#L185-190 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/describe()."}
+=== code {#describe src=geml-parser/src/coord.ts#L185-190 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/describe()."}
 ===
 
-=== code {#oneLine src=geml-parser/src/coord.ts#L207-207 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/oneLine."}
+=== code {#oneLine src=geml-parser/src/coord.ts#L207-207 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/oneLine."}
 ===
 
-=== code {#replaceField src=geml-parser/src/coord.ts#L211-217 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/replaceField()."}
+=== code {#replaceField src=geml-parser/src/coord.ts#L211-217 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/replaceField()."}
 ===
 
-=== code {#writeTable src=geml-parser/src/coord.ts#L219-294 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/writeTable()."}
+=== code {#writeTable src=geml-parser/src/coord.ts#L219-294 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/writeTable()."}
 ===
 
-=== code {#writeValue src=geml-parser/src/coord.ts#L302-354 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/writeValue()."}
+=== code {#writeValue src=geml-parser/src/coord.ts#L302-354 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/writeValue()."}
 ===
 
-=== code {#metaView src=geml-parser/src/coord.ts#L376-397 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/metaView()."}
+=== code {#metaView src=geml-parser/src/coord.ts#L376-397 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/metaView()."}
 ===
 
-=== code {#metaText src=geml-parser/src/coord.ts#L400-402 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/metaText()."}
+=== code {#metaText src=geml-parser/src/coord.ts#L400-402 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/metaText()."}
 ===
 
-=== code {#metaLiteral src=geml-parser/src/coord.ts#L407-410 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/metaLiteral()."}
+=== code {#metaLiteral src=geml-parser/src/coord.ts#L407-410 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/metaLiteral()."}
 ===
 
-=== code {#planMetaWrite src=geml-parser/src/coord.ts#L419-437 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/planMetaWrite()."}
+=== code {#planMetaWrite src=geml-parser/src/coord.ts#L419-437 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/planMetaWrite()."}
 ===
 
-=== code {#planCoordWrite src=geml-parser/src/coord.ts#L446-462 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/planCoordWrite()."}
+=== code {#planCoordWrite src=geml-parser/src/coord.ts#L446-462 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/planCoordWrite()."}
 ===
 
-=== code {#projectCoord src=geml-parser/src/coord.ts#L471-493 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/projectCoord()."}
+=== code {#projectCoord src=geml-parser/src/coord.ts#L471-493 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/projectCoord()."}
 ===
 
-=== code {#notProjectable .leaf src=geml-parser/src/coord.ts#L505-509 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/notProjectable()."}
+=== code {#notProjectable .leaf src=geml-parser/src/coord.ts#L505-509 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/notProjectable()."}
 ===
 
-=== code {#inlineProjection src=geml-parser/src/coord.ts#L512-518 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/inlineProjection()."}
+=== code {#inlineProjection src=geml-parser/src/coord.ts#L512-518 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/inlineProjection()."}
 ===
 
-=== code {#rowTable .leaf src=geml-parser/src/coord.ts#L521-530 anchor="scip-typescript npm @geml/geml 1.11.4 src/`coord.ts`/rowTable()."}
+=== code {#rowTable .leaf src=geml-parser/src/coord.ts#L521-530 anchor="scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/rowTable()."}
 ===
 
 === table {#calls format=csv}

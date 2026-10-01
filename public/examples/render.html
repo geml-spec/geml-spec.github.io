@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GEML example</title>
+  <!-- The playground's bundle: the reference parser and the viewer's renderer,
+       so a document renders here as the browser extension renders it. -->
+  <script src="/playground/playground.js"></script>
+  <style>
+    .render-note { font: 14px/1.5 system-ui, sans-serif; color: #57606a; padding: 24px; }
+  </style>
+</head>
+<body class="geml-body">
+  <p class="render-note">Loading…</p>
+  <script>
+    // render.html?doc=/examples/showcase.geml — renders one GEML document of
+    // this site the way the viewer extension does: a style entry beside it
+    // (_index/index.geml) lays out the whole page, embeds and code graphs are
+    // read from beside the document, and math and diagrams are drawn.
+    (async function () {
+      var note = document.querySelector(".render-note");
+      function fail(text) { note.textContent = text; }
+
+      var want = new URLSearchParams(location.search).get("doc") || "";
+      var docUrl;
+      try { docUrl = new URL(want, location.href); } catch (e) { return fail("No document named: add ?doc=/path/to/file.geml"); }
+      if (docUrl.origin !== location.origin || !/\.geml$/i.test(docUrl.pathname)) {
+        return fail("Only a .geml document on this site can be shown here.");
+      }
+
+      // Relative paths in the document (icons, images, embeds, the style entry)
+      // are relative to the document, as they are when the extension opens it.
+      var base = document.createElement("base");
+      base.href = docUrl.href;
+      document.head.prepend(base);
+
+      // KaTeX's CSS asks for url(fonts/…); the fonts sit beside the bundle.
+      var st = document.createElement("style");
+      st.textContent = GEML.css + "\n" + (GEML.katexCss || "").replace(/url\(fonts\//g, "url(/playground/fonts/");
+      document.head.appendChild(st);
+      var pageCss = document.createElement("style");
+      document.head.appendChild(pageCss);
+
+      var raw;
+      try {
+        var res = await fetch(docUrl.href, { cache: "no-cache" });
+        if (!res.ok) return fail("Could not read " + docUrl.pathname + " (" + res.status + ").");
+        raw = await res.text();
+      } catch (e) { return fail("Could not read " + docUrl.pathname + "."); }
+
+      var model = GEML.parse(raw);
+      model.diagnostics = GEML.viewerDiagnostics(model.diagnostics);
+      var meta = model.children.find(function (b) { return b.kind === "block" && b.type === "meta"; });
+      var title = meta && meta.attrs && meta.attrs.title;
+      document.title = (title || docUrl.pathname.split("/").pop()) + " · GEML example";
+
+      var page = null;
+      try { page = await GEML.loadPage(docUrl.href, raw, model); } catch (e) { console.error(e); }
+      var root, layout = false;
+      if (page) {
+        var painted = GEML.paintPage(page, model);
+        root = painted.root;
+        layout = painted.usedLayout;
+        if (painted.css != null) pageCss.textContent = painted.css;
+      } else {
+        root = GEML.renderDocument(model, document, null);
+      }
+      document.body.replaceChildren(root);
+      await GEML.enhance(document.body, {
+        docUrl: docUrl.href, model: model, selfSource: raw,
+        selfName: decodeURIComponent(docUrl.pathname.split("/").pop()), layout: layout,
+      });
+
+      // With <base> set, "#id" would leave this page for the raw .geml file:
+      // keep anchors on the page, open another .geml of this site here too,
+      // and send other sites to a new tab (most refuse to be framed).
+      document.addEventListener("click", function (e) {
+        var a = e.target.closest && e.target.closest("a[href]");
+        if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+        var href = a.getAttribute("href");
+        if (href.charAt(0) === "#") {
+          e.preventDefault();
+          var el = document.getElementById(decodeURIComponent(href.slice(1)));
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+        var u = new URL(a.href);
+        if (u.origin !== location.origin) {
+          e.preventDefault();
+          window.open(u.href, "_blank", "noopener");
+        } else if (/\.geml$/i.test(u.pathname)) {
+          e.preventDefault();
+          location.href = location.pathname + "?doc=" + encodeURIComponent(u.pathname) + u.hash;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 === meta
 profile = "geml-codemap/v1"
 repo = geml
-commit = 53d68a66
+commit = 5a940566
 container = file
 entry = geml-viewer--content.js.geml#main
 resolution-default = cpg
@@ -55,6 +55,7 @@ geml-viewer/translate-browser.js,    geml-viewer--translate-browser.js.geml,    
 geml-parser/chart.ts,                geml-parser--chart.ts.geml,                2,       1,       0
 geml-parser/doc-title.ts,            geml-parser--doc-title.ts.geml,            2,       2,       0
 geml-parser/render-html.ts,          geml-parser--render-html.ts.geml,          2,       1,       0
+geml-viewer/page.js,                 geml-viewer--page.js.geml,                 2,       2,       0
 geml-viewer/snapshot.js,             geml-viewer--snapshot.js.geml,             2,       1,       0
 geml-viewer/translate-map.js,        geml-viewer--translate-map.js.geml,        2,       0,       0
 geml-parser/codemap-render.ts,       geml-parser--codemap-render.ts.geml,       1,       1,       0
@@ -94,12 +95,12 @@ geml-parser/geml.ts,           geml-parser/table.ts,                6
 geml-parser/media-check.ts,    geml-parser/media-compose.ts,        6
 geml-parser/verbs.ts,          geml-parser/attrs.ts,                6
 geml-parser/verbs.ts,          geml-parser/coord.ts,                6
-geml-viewer/content.js,        geml-viewer/render.js,               6
 geml-parser/verbs.ts,          geml-parser/block-edit.ts,           5
 geml-viewer/transclude.js,     geml-viewer/translate-browser.js,    5
 geml-parser/media-check.ts,    geml-parser/profiles.ts,             4
 geml-parser/media-verbs.ts,    geml-parser/media-compose.ts,        4
 geml-parser/media-verbs.ts,    geml-parser/media-timeline.ts,       4
+geml-viewer/page.js,           geml-viewer/render.js,               4
 geml-viewer/transclude.js,     geml-viewer/render.js,               4
 geml-parser/cli.ts,            geml-parser/style-resolve.ts,        3
 geml-parser/geml.ts,           geml-parser/selector.ts,             3
@@ -130,7 +131,9 @@ geml-parser/style-selector.ts, geml-parser/geml.ts,                 2
 geml-parser/to-md.ts,          geml-parser/doc-title.ts,            2
 geml-parser/verbs.ts,          geml-parser/from-md.ts,              2
 geml-parser/verbs.ts,          geml-parser/inline.ts,               2
-geml-viewer/content.js,        geml-viewer/style-entry.js,          2
+geml-viewer/content.js,        geml-viewer/page.js,                 2
+geml-viewer/content.js,        geml-viewer/render.js,               2
+geml-viewer/page.js,           geml-viewer/style-entry.js,          2
 geml-parser/cli.ts,            geml-parser/attrs.ts,                1
 geml-parser/cli.ts,            geml-parser/selector.ts,             1
 geml-parser/codemap-render.ts, geml-parser/code-graph.ts,           1
@@ -151,9 +154,9 @@ geml-parser/verbs.ts,          geml-parser/codemap-render.ts,       1
 geml-parser/verbs.ts,          geml-parser/render-html.ts,          1
 geml-parser/verbs.ts,          geml-parser/serialize.ts,            1
 geml-parser/verbs.ts,          geml-parser/translate.ts,            1
-geml-viewer/content.js,        geml-viewer/components.js,           1
-geml-viewer/content.js,        geml-viewer/layout.js,               1
 geml-viewer/content.js,        geml-viewer/snapshot.js,             1
 geml-viewer/content.js,        geml-viewer/transclude.js,           1
+geml-viewer/page.js,           geml-viewer/components.js,           1
+geml-viewer/page.js,           geml-viewer/layout.js,               1
 geml-viewer/render.js,         geml-viewer/chart.js,                1
 ===

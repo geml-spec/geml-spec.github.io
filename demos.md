@@ -5,26 +5,18 @@ outline: [2, 3]
 
 # Demos
 
-The demos below are built from real documents in this site's `public/examples/` folder (the code graph is the playground's own, in `public/playground/codemap/`), with the parser version the site was built from. The illustrated pages at the end are static (`public/illustrated/`): every output on them was recorded from a real run of the parser when the page was written.
+Nothing to install: every demo below renders in your browser with the viewer's own code — except the translation, which needs desktop Chrome for its built-in translator. To open `.geml` files of your own the same way, add the [viewer](https://chromewebstore.google.com/detail/opmhfphgoidpnipphfgkhhjhmnmaenie) to Chrome or Edge.
 
-## The parser's own code graph
+Each demo is one page: the result first, then the GEML that made it and the command that ran.
 
-<a href="/playground/codemap/" target="_blank">Browse the call graph</a> of `@geml/geml` and the viewer, laid out as GEML documents by `geml codemap build`: every method a block with an id, `#calls` / `#called-by` edges both ways. It is rebuilt from the parser's source on every deploy, and every document in it passes `geml check`.
-
-## A page laid out from a document — `geml-style`
-
-[`examples/style-demo/`](https://github.com/geml-spec/geml-spec.github.io/tree/main/public/examples/style-demo) is a 1:1 replica of a GitHub blob page: `page.geml` holds every string, `github.style.geml` holds every colour and length, and the viewer knows about neither. It needs the [Chrome extension](https://chromewebstore.google.com/detail/opmhfphgoidpnipphfgkhhjhmnmaenie) and a local server; the folder's README says why.
-
-## A cut built from one document — `geml-media`
-
-<a href="/examples/geml-media-demo/play.html" target="_blank">Play the 10-second sample</a>: one cut document, one command (`geml media build ep01-cut.geml --out ep01.mp4 --burn-subs`), and ffmpeg does the rest. Assets are synthetic (ffmpeg's test source), so the repository ships no media it does not own.
-
-## An episode made end to end — `geml-media`
-
-`geml-media-explainer/episode/` is a 36-second motion-comic episode produced from a four-line synopsis by a loop that only asks `geml media todo` what is missing, makes it, and logs it. Shots are composed from layers — three scene plates and seven character stands generated once — so every shot has the same face and the same room by construction, and changing one word (a coat's colour) makes `geml check` name exactly the 26 items that are now stale.
-
-- <a href="/examples/geml-media-explainer/episode/out/ep01.mp4" target="_blank">Watch the episode</a> (720×1280, 36 s, bilingual subtitles)
-- [How it was made](https://github.com/geml-spec/geml-spec.github.io/tree/main/public/examples/geml-media-explainer) — every image, voice and cut is a logged generation; the whole pipeline runs on one laptop with open-weight models and no accounts.
+| Demo | Runs in | What it shows |
+|---|---|---|
+| [A page laid out from a document](/demos/style) | any browser | a GitHub file page rebuilt from one document and one stylesheet — `geml-style` |
+| [One document, charts and all](/demos/showcase) | any browser | a computed table, four charts, a Mermaid flow and math in one file |
+| [The parser's own code graph](/demos/codemap) | any browser | the call graph of `@geml/geml` as GEML documents — `geml-codemap` |
+| [One source, four treatments](/demos/translate) | desktop Chrome | a translation that holds no translated text — `geml-translator` |
+| [A cut built from one document](/demos/media-cut) | any browser | a 10-second cut whose timeline is one document — `geml-media` |
+| [An episode made end to end](/demos/media-episode) | any browser | a 36-second episode made from a four-line synopsis — `geml-media` |
 
 ## Illustrated syntax
 

@@ -24,3 +24,16 @@
 
 /* Console transcripts: keep the prompt lines readable. */
 .vp-doc div[class*='language-console'] code { line-height: 1.55; }
+
+/* Demo pages (demos/*.md, pageClass: demo-page): the result is a page of its
+   own, so the column widens and the result gets the width. */
+.demo-page .VPDoc .container,
+.demo-page .VPDoc .content,
+.demo-page .VPDoc .content-container { max-width: 1280px !important; }
+.demo-frame {
+  display: block; width: 100%; height: 78vh; min-height: 480px;
+  border: 1px solid var(--vp-c-divider); border-radius: 8px; background: #fff;
+}
+.demo-video { display: block; max-width: 100%; max-height: 78vh; margin: 0 auto; border-radius: 8px; background: #000; }
+/* A long source scrolls inside its tab rather than stretching the page. */
+.demo-page .vp-code-group div[class*='language-'] pre { max-height: 70vh; overflow: auto; }
