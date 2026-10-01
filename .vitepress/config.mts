@@ -98,6 +98,8 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo/geml-favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#E00A1E' }],
+    // Google Search Console ownership of https://geml-spec.github.io/
+    ['meta', { name: 'google-site-verification', content: '5kETBu5-C836u2-2CK-QSAIxcbCeyX8YQ2-kdiZEnpM' }],
     ['script', { async: '', src: gaSrc }],
     ['script', {}, gaInit],
   ],
