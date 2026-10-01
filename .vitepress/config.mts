@@ -35,8 +35,6 @@ export default defineConfig({
   ],
   markdown: {
     config: (md) => { md.use(footnote) },
-    // Shiki has no grammar for GEML or EBNF; render them as plain text quietly.
-    languageAlias: { geml: 'text', ebnf: 'text' },
   },
   themeConfig: {
     logo: '/logo/geml-mark.svg',
