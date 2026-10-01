@@ -134,7 +134,7 @@
 <body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">GEML 块类型图解 · 规范 1.0 · <a href="05-embed.html">English</a> · <a href="/demos#illustrated-syntax">全部图解</a> · <a href="/">GEML 首页</a></div>
+  <div class="eyebrow">GEML 块类型图解 · 规范 1.0 · <a href="05-embed.html">English</a> · <a href="/illustrated/">全部图解</a> · <a href="/">GEML 首页</a></div>
   <h1>GEML 块图解 · embed</h1>
   <p class="lede"><code>embed</code> 站在别处内容的位置上：<code>src=</code> 命名另一份文档（或本文档）里的一节、一块、一段散文，渲染时那份内容出现在这里。它没有自己的正文，有的是一套关于「取什么、怎么取、什么不能取」的规则：<code>part=</code> 切标题的哪部分，被嵌文档必须作为独立文档解析，目标必须是 <code>.geml</code>，scheme 受限，循环报错。行内还有一个小兄弟 <code>![[#id]]</code>。这一页把这些全部实测一遍，并画出 GEP-0010 用 embed 做翻译投影、GEP-0011 让叶值坐标做投影目标的两个草案。</p>
   <nav class="toc">

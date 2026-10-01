@@ -167,6 +167,7 @@ export default defineConfig({
         text: 'Reference',
         items: [
           { text: 'Cheat sheet', link: '/cheat-sheet' },
+          { text: 'Illustrated syntax', link: '/illustrated/' },
           { text: 'Specification', link: `${GH}/spec/GEML-spec.md` },
           { text: '规范（中文）', link: `${GH}/spec/GEML-spec_CN.md` },
           { text: 'Profiles', link: `${GH_TREE}/spec/profiles` },
