@@ -24,7 +24,9 @@ export default defineConfig({
   lang: 'en',
   cleanUrls: true,
   lastUpdated: false,
-  srcExclude: ['README.md', 'node_modules/**', 'public/**', 'scripts/**'],
+  // geml-src/ is where the deploy workflow checks out geml-spec/geml; its
+  // Markdown is synced into reference/ and guide/, never served as pages itself.
+  srcExclude: ['README.md', '**/node_modules/**', 'public/**', 'scripts/**', 'geml-src/**'],
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo/geml-favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#E00A1E' }],
@@ -33,6 +35,8 @@ export default defineConfig({
   ],
   markdown: {
     config: (md) => { md.use(footnote) },
+    // Shiki has no grammar for GEML or EBNF; render them as plain text quietly.
+    languageAlias: { geml: 'text', ebnf: 'text' },
   },
   themeConfig: {
     logo: '/logo/geml-mark.svg',
