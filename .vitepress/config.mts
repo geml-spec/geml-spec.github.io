@@ -16,6 +16,7 @@ const gepSlugs: Record<string, string> = {
   '0013': '0013-prose-body-for-vocabularies',
 }
 const profiles = ['history', 'codemap', 'style', 'media', 'form', 'translator']
+const GA_ID = 'G-JFH1WQFE5T'
 
 export default defineConfig({
   title: 'GEML',
@@ -32,6 +33,12 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#E00A1E' }],
     ['meta', { property: 'og:title', content: 'GEML — a lightweight, Agent-Native markup language' }],
     ['meta', { property: 'og:image', content: 'https://geml-spec.github.io/logo/geml-mark.svg' }],
+    // Google Analytics 4 — disclosed in privacy.md; change the two together.
+    ['script', { async: '', src: `https://www.googletagmanager.com/gtag/js?id=${GA_ID}` }],
+    ['script', {}, `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_ID}');`],
   ],
   markdown: {
     config: (md) => { md.use(footnote) },

@@ -5,9 +5,10 @@ title: Privacy
 
 # Privacy
 
-**Nothing about you is collected.** GEML is a file format plus a command-line
-tool. There is no account, no telemetry, no analytics, and no server that
-belongs to this project.
+**The tools collect nothing about you.** GEML is a file format plus a
+command-line tool. There is no account, no telemetry, and no server that
+belongs to this project. The one exception is this website, which counts its
+visits with Google Analytics — see [This website](#this-website).
 
 ## The CLI, the MCP server, and the editor integrations
 
@@ -34,8 +35,19 @@ Its full policy is in
 
 ## This website
 
-These pages are static files served by **GitHub Pages**. This project sets no
-cookies and embeds no analytics, ad, or tracking scripts. GitHub operates the
+These pages are static files served by **GitHub Pages**. To see how many people
+visit and which pages they read, the site loads **Google Analytics 4**. It sets
+two first-party cookies (`_ga` and `_ga_<ID>`) and sends Google the page you
+are on, the page that linked you here, your approximate location (derived from
+your IP address, which Google Analytics 4 does not store), and your browser,
+device type and screen size. This project sees only aggregate numbers — page
+views, visitors, referrers, countries — never anything that identifies you.
+Google processes the data under
+[its own privacy policy](https://policies.google.com/privacy). To opt out,
+block cookies for this site or install
+[Google's opt-out add-on](https://tools.google.com/dlpage/gaoptout).
+
+There are no ad scripts and nothing else that tracks you. GitHub operates the
 hosting and may log requests under
 [its own privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).
 
