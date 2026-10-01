@@ -1,9 +1,10 @@
 # Build and deploy geml-spec.github.io.
 #
-# The site authors only its own pages; the specification, guides, the
-# playground bundle and the codemap come from a geml-spec/geml checkout at the
-# ref named in geml-source.json, so a deploy can never ship a stale copy of any
-# of them. One deploy at a time, never cancelled mid-flight.
+# Everything the site serves is committed here. The pieces made from the
+# parser — the playground bundle and its fonts, the parser's code graph, the
+# logos — are pushed in by geml-spec/geml's website workflow whenever its main
+# changes, so this build needs nothing but VitePress. One deploy at a time,
+# never cancelled mid-flight.
 name: Deploy site
 
 on:
@@ -23,55 +24,17 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-
-      - name: Which geml commit to build from
-        id: source
-        run: echo "ref=$(jq -r .ref geml-source.json)" >> "$GITHUB_OUTPUT"
-
-      - uses: actions/checkout@v4
-        with:
-          repository: geml-spec/geml
-          ref: ${{ steps.source.outputs.ref }}
-          path: geml-src
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            geml-src/geml-parser/package-lock.json
-            geml-src/integrations/geml-viewer/package-lock.json
 
       - name: Install the site
         run: npm ci
-
-      - name: Build the parser
-        working-directory: geml-src/geml-parser
-        run: npm ci && npm run build
-
-      - name: Install the viewer (esbuild, KaTeX, Mermaid)
-        working-directory: geml-src/integrations/geml-viewer
-        run: npm ci
-
-      - name: Sync spec, guides and illustrated pages
-        run: node scripts/sync-geml.mjs
-        env: { GEML_SRC: geml-src }
-
-      - name: Bundle the playground
-        run: node scripts/build-playground.mjs
-        env: { GEML_SRC: geml-src }
-
-      - name: Build the parser's code graph
-        run: node scripts/build-codemap.mjs
-        env: { GEML_SRC: geml-src }
-
-      - name: geml check every demo document
-        run: node scripts/check-demos.mjs
-        env: { GEML_SRC: geml-src }
 
       - name: Build the site
         run: npm run build

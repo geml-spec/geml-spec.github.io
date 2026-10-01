@@ -1,0 +1,25 @@
+=== meta
+title = "Back up your photos"
+===
+
+# Back up your photos {#backup}
+
+Plug in the external drive and copy the folder across.
+
+=== code {#cmd lang=sh}
+rsync -a ~/Pictures/ /Volumes/Backup/Pictures/
+===
+
+Then check that nothing was left behind.
+
+## Check {#check}
+
+Compare what each place holds.
+
+=== table {#counts format=csv header=1}
+place, photos
+laptop, 2140
+drive, 2140
+===
+
+If the numbers differ, run the copy again.

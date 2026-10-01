@@ -67,7 +67,7 @@ wrote fy.geml
 $ geml fy.geml --to md          # project it back to Markdown, totals filled in
 ```
 
-The [cheat sheet](/cheat-sheet) lists every construct; the [specification](/reference/spec) is normative and short enough to read in a sitting.
+The [cheat sheet](/cheat-sheet) lists every construct; the [specification](https://github.com/geml-spec/geml/blob/main/spec/GEML-spec.md) is normative and short enough to read in a sitting.
 
 ## Set up an agent
 
@@ -91,7 +91,7 @@ claude mcp add --scope user geml -- npx -y @geml/geml mcp --root .
 }
 ```
 
-Plugins are packaged for Claude Code (`claude plugin marketplace add geml-spec/geml`), Codex and DeepSeek Harness. Details: [Claude Code & MCP](/guide/mcp).
+Plugins are packaged for Claude Code (`claude plugin marketplace add geml-spec/geml`), Codex and DeepSeek Harness. Details: [Claude Code & MCP](https://github.com/geml-spec/geml/blob/main/docs/mcp-guide.md).
 
 ## See it rendered
 

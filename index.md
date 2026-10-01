@@ -156,13 +156,14 @@ Read `.geml` in the browser with the [Chrome extension](https://chromewebstore.g
 
 ## Reference
 
-- [Specification](/reference/spec) · [中文](/reference/spec-cn) — normative, with Appendix A's diagnostic catalogue
-- [Profiles](/reference/profiles/) — how GEML is extended, and the six vocabularies so far
-- [Proposals (GEPs)](/reference/geps/) — the change process, and every accepted proposal
-- [Writing a parser](/guide/writing-a-parser) — the conformance suite a second implementation must reproduce
-- [Claude Code & MCP](/guide/mcp) — the eleven tools and one-line setup
-- [Comparisons](/guide/comparison) — against Markdown, CommonMark, XML and JSON
-- [Manifesto](/guide/manifesto) — Doc-as-a-Base: four laws and their boundaries
+- [Specification](https://github.com/geml-spec/geml/blob/main/spec/GEML-spec.md) · [中文](https://github.com/geml-spec/geml/blob/main/spec/GEML-spec_CN.md) — normative, with Appendix A's diagnostic catalogue
+- [Profiles](https://github.com/geml-spec/geml/tree/main/spec/profiles) — how GEML is extended, the six vocabularies so far, and a one-page usage guide for each
+- [Proposals (GEPs)](https://github.com/geml-spec/geml/tree/main/spec/proposals) — the change process, and every accepted proposal
+- [Writing a parser](https://github.com/geml-spec/geml/blob/main/docs/WRITING-A-PARSER.md) — the conformance suite a second implementation must reproduce
+- [Claude Code & MCP](https://github.com/geml-spec/geml/blob/main/docs/mcp-guide.md) — the eleven tools and one-line setup
+- [Comparisons](/compare/matrix) — against Markdown, CommonMark, XML and JSON
+- [Benchmarks](/benchmarks/) — what addressing by block saves, measured
+- [Manifesto](/manifesto) — Doc-as-a-Base: four laws and their boundaries
 - [Source](https://github.com/geml-spec/geml) — spec, parser, integrations; issues and critique welcome
 
 The parser is `@geml/geml` on npm. Spec 1.0 is stable: rules already in it will not shift under you; a breaking change bumps the spec version and ships with updated conformance cases.

@@ -1,5 +1,0 @@
-{
-  "repo": "geml-spec/geml",
-  "ref": "main",
-  "note": "The commit of geml-spec/geml this site is built from: its parser powers the playground, its spec and docs are synced into reference/ and guide/, its code graph is the codemap demo. A branch name tracks the tip; a SHA pins a release."
-}

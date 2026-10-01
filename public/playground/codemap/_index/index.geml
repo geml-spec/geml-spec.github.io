@@ -1,0 +1,12 @@
+=== meta
+profile = "geml-style/v1"
+title = "codemap style entry"
+default-style = "style.geml"
+===
+
+This map's style entry point. `default-style` names the stylesheet every
+document in this root uses. Seeded on first build; build never rewrites it.
+
+To give some document a DIFFERENT stylesheet, add a `#sitemap` table here
+(`| document | template |` rows). Resolution is two steps and no more: an
+exact row wins, otherwise `default-style` — no glob, no cascade.

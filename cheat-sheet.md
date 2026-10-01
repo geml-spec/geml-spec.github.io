@@ -5,7 +5,7 @@ outline: [2, 3]
 
 # Cheat sheet
 
-One page of the language and the tools. The [specification](/reference/spec) is normative; where this page and the spec disagree, the spec wins.
+One page of the language and the tools. The [specification](https://github.com/geml-spec/geml/blob/main/spec/GEML-spec.md) is normative; where this page and the spec disagree, the spec wins.
 
 ## The block
 
@@ -121,7 +121,7 @@ profile = "geml-media/v1"
 The title is {{title}}.
 ```
 
-`{{key}}` interpolates a meta value in prose. `profile` declares a vocabulary (see [Profiles](/reference/profiles/)); its block types, attributes and checks then apply.
+`{{key}}` interpolates a meta value in prose. `profile` declares a vocabulary (see [Profiles](https://github.com/geml-spec/geml/tree/main/spec/profiles)); its block types, attributes and checks then apply.
 
 ## Selectors and addresses (CLI)
 

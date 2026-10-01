@@ -1,0 +1,29 @@
+=== meta
+title = "备份照片（一份原文，四种处理，零手写文字）"
+profile = "geml-translator/v1"
+translate-to = "zh-cn"
+===
+
+=== embed {src=source.geml#backup part=head}
+===
+
+=== embed {src=source.geml#backup-before-cmd}
+===
+
+=== embed {src=source.geml#cmd translate-to=none}
+===
+
+=== embed {src=source.geml#cmd-between-check translate-to=ja}
+===
+
+=== embed {src=source.geml#check part=head}
+===
+
+=== embed {src=source.geml#check-before-counts}
+===
+
+=== embed {src=source.geml#counts}
+===
+
+=== embed {src=source.geml#check-after-counts translate-to=fr}
+===
