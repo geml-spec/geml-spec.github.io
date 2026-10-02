@@ -8,10 +8,10 @@ resolution-default = cpg
 
 # geml-viewer/page.js
 
-=== code {#loadPage src=integrations/geml-viewer/src/page.js#L15-27 anchor="scip-typescript npm geml-viewer 1.3.3 src/`page.js`/loadPage()."}
+=== code {#loadPage src=integrations/geml-viewer/src/page.js#L15-27 anchor="scip-typescript npm geml-viewer 1.3.4 src/`page.js`/loadPage()."}
 ===
 
-=== code {#paintPage src=integrations/geml-viewer/src/page.js#L33-58 anchor="scip-typescript npm geml-viewer 1.3.3 src/`page.js`/paintPage()."}
+=== code {#paintPage src=integrations/geml-viewer/src/page.js#L33-58 anchor="scip-typescript npm geml-viewer 1.3.4 src/`page.js`/paintPage()."}
 ===
 
 === table {#calls format=csv}

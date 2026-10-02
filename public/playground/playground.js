@@ -27270,7 +27270,7 @@
   function formatPrefixAuto_default(x6, p3) {
     var d3 = formatDecimalParts(x6, p3);
     if (!d3) return prefixExponent = void 0, x6.toPrecision(p3);
-    var coefficient = d3[0], exponent = d3[1], i5 = exponent - (prefixExponent = Math.max(-8, Math.min(8, Math.floor(exponent / 3))) * 3) + 1, n2 = coefficient.length;
+    var coefficient = d3[0], exponent2 = d3[1], i5 = exponent2 - (prefixExponent = Math.max(-8, Math.min(8, Math.floor(exponent2 / 3))) * 3) + 1, n2 = coefficient.length;
     return i5 === n2 ? coefficient : i5 > n2 ? coefficient + new Array(i5 - n2 + 1).join("0") : i5 > 0 ? coefficient.slice(0, i5) + "." + coefficient.slice(i5) : "0." + new Array(1 - i5).join("0") + formatDecimalParts(x6, Math.max(0, p3 + i5 - 1))[0];
   }
   var prefixExponent;
@@ -27285,8 +27285,8 @@
   function formatRounded_default(x6, p3) {
     var d3 = formatDecimalParts(x6, p3);
     if (!d3) return x6 + "";
-    var coefficient = d3[0], exponent = d3[1];
-    return exponent < 0 ? "0." + new Array(-exponent).join("0") + coefficient : coefficient.length > exponent + 1 ? coefficient.slice(0, exponent + 1) + "." + coefficient.slice(exponent + 1) : coefficient + new Array(exponent - coefficient.length + 2).join("0");
+    var coefficient = d3[0], exponent2 = d3[1];
+    return exponent2 < 0 ? "0." + new Array(-exponent2).join("0") + coefficient : coefficient.length > exponent2 + 1 ? coefficient.slice(0, exponent2 + 1) + "." + coefficient.slice(exponent2 + 1) : coefficient + new Array(exponent2 - coefficient.length + 2).join("0");
   }
   var init_formatRounded = __esm({
     "node_modules/d3-format/src/formatRounded.js"() {
@@ -185418,14 +185418,45 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       return "left";
     return void 0;
   }
+  var WHITE = new RegExp("^\\p{White_Space}$", "u");
+  function whiteSpaceBounds(s2) {
+    let a2 = 0;
+    let b3 = s2.length;
+    while (a2 < b3 && WHITE.test(s2[a2]))
+      a2++;
+    while (b3 > a2 && WHITE.test(s2[b3 - 1]))
+      b3--;
+    return [a2, b3];
+  }
+  var trimWhiteSpace = (s2) => {
+    const [a2, b3] = whiteSpaceBounds(s2);
+    return s2.slice(a2, b3);
+  };
   function splitPipes(line2) {
-    let s2 = line2.trim();
+    let s2 = trimWhiteSpace(line2);
     if (s2.startsWith("|"))
       s2 = s2.slice(1);
-    if (s2.endsWith("|"))
+    if (s2.endsWith("|") && !s2.endsWith("\\|"))
       s2 = s2.slice(0, -1);
-    return s2.split("|").map((c3) => c3.trim());
+    const cells = [];
+    let cur = "";
+    for (let i5 = 0; i5 < s2.length; i5++) {
+      if (s2[i5] === "\\" && s2[i5 + 1] === "|") {
+        cur += "|";
+        i5++;
+        continue;
+      }
+      if (s2[i5] === "|") {
+        cells.push(trimWhiteSpace(cur));
+        cur = "";
+        continue;
+      }
+      cur += s2[i5];
+    }
+    cells.push(trimWhiteSpace(cur));
+    return cells;
   }
+  var escapeCellPipes = (text5) => text5.replace(/\|/g, "\\|");
   function parseVisual(body) {
     const kept = [];
     const rows = [];
@@ -185446,7 +185477,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       const headerRow = sepIdx > 0 ? rows[sepIdx - 1] : [];
       const align = rows[sepIdx].map(alignOf);
       const cells = rows.slice(sepIdx + 1);
-      const columns = headerRow.length ? headerRow : letters(cells[0]?.length ?? align.length);
+      const columns = headerRow.length ? headerRow : letters(cells.length ? cells.reduce((m3, r2) => Math.max(m3, r2.length), 0) : align.length);
       return { columns, align, header: headerRow.length > 0, cells, lines: kept.slice(sepIdx + 1) };
     }
     const width3 = rows.reduce((m3, r2) => Math.max(m3, r2.length), 0);
@@ -185458,7 +185489,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     body.forEach((l4, i5) => {
       if (l4.trim() !== "") {
         kept.push(i5);
-        rows.push(l4.split(sep2).map((c3) => c3.trim()));
+        rows.push(l4.split(sep2).map(trimWhiteSpace));
       }
     });
     if (header && rows.length) {
@@ -185569,22 +185600,30 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   function applyFormat(fmt4, v3) {
     if (!isFinite(v3))
       return "-";
-    return fmt4.replace(/%%|%[-+ 0]*\d*(?:\.\d+)?[fFeEgGd]/g, (m3) => {
+    return fmt4.replace(/%%|%[-+ 0#]*\d*(?:\.(\d+)([feg])|d)/g, (m3, digits, type3) => {
       if (m3 === "%%")
         return "%";
-      const mm = /^%[-+ 0]*\d*(?:\.(\d+))?([fFeEgGd])$/.exec(m3);
-      if (!mm)
-        return m3;
-      const prec = mm[1] !== void 0 ? parseInt(mm[1], 10) : void 0;
-      const type3 = mm[2];
-      if (type3 === "d")
-        return String(Math.round(v3));
-      if (type3 === "e" || type3 === "E")
-        return v3.toExponential(prec);
-      if (type3 === "g" || type3 === "G")
-        return String(v3);
-      return v3.toFixed(prec ?? 6);
+      if (type3 === void 0)
+        return String(Math.sign(v3) * Math.round(Math.abs(v3)) || 0);
+      const prec = Math.min(parseInt(digits, 10), 100);
+      if (type3 === "e")
+        return exponent(v3.toExponential(prec));
+      if (type3 === "g")
+        return significant(v3, prec);
+      return v3.toFixed(prec);
     });
+  }
+  var exponent = (s2) => s2.replace(/e([+-])(\d)$/, "e$10$2");
+  function significant(v3, prec) {
+    const p3 = Math.max(prec, 1);
+    const e3 = v3.toExponential(p3 - 1);
+    const x6 = Number(e3.slice(e3.indexOf("e") + 1));
+    const strip = (s2) => s2.includes(".") ? s2.replace(/0+$/, "").replace(/\.$/, "") : s2;
+    if (x6 < -4 || x6 >= p3) {
+      const at3 = e3.indexOf("e");
+      return exponent(strip(e3.slice(0, at3)) + e3.slice(at3));
+    }
+    return strip(v3.toFixed(Math.min(p3 - 1 - x6, 100)));
   }
   function evalExpr(toks, row, col, agg) {
     let p3 = 0;
@@ -185689,7 +185728,13 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     const caption = attrs["caption"];
     if (typeof caption === "string")
       model.caption = caption;
-    for (const r2 of raw.cells) {
+    for (const [ri, r2] of raw.cells.entries()) {
+      if (r2.length !== columns.length) {
+        const n2 = Math.abs(r2.length - columns.length);
+        const which = n2 === 1 ? "cell is" : `${n2} cells are`;
+        const fix = r2.length > columns.length ? `the extra ${which} dropped` : `the missing ${which} empty`;
+        diagnostics.push({ severity: "warning", code: "ragged-table-row", message: `table body row ${ri + 1} has ${r2.length} cell${r2.length === 1 ? "" : "s"} for ${columns.length} column${columns.length === 1 ? "" : "s"}; ${fix}` });
+      }
       const row = [];
       for (let c3 = 0; c3 < columns.length; c3++) {
         const text5 = r2[c3] ?? "";
@@ -186583,6 +186628,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         refuseExtras(rawKey, l4.n);
         const qk = quotedScalar(rawKey);
         const key = qk === null ? rawKey : qk;
+        if (Object.prototype.hasOwnProperty.call(out, key))
+          throw new Refusal(`the mapping has the key \`${key}\` twice`, l4.n);
         const rest = l4.text.slice(cut + 1).trim();
         const at3 = l4.n;
         p3++;
@@ -186878,6 +186925,95 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         return { error: e3.what, line: e3.at };
       throw e3;
     }
+  }
+
+  // ../../geml-parser/dist/ijson.js
+  init_define_process_argv();
+  var LONE_SURROGATE = new RegExp("\\p{Cs}", "u");
+  function iJsonFault(text5) {
+    const stack = [];
+    let expectKey = false;
+    let i5 = 0;
+    while (i5 < text5.length) {
+      const c3 = text5[i5];
+      if (c3 === "{") {
+        stack.push(/* @__PURE__ */ new Set());
+        expectKey = true;
+        i5++;
+        continue;
+      }
+      if (c3 === "[") {
+        stack.push(null);
+        expectKey = false;
+        i5++;
+        continue;
+      }
+      if (c3 === "}" || c3 === "]") {
+        stack.pop();
+        expectKey = false;
+        i5++;
+        continue;
+      }
+      if (c3 === ",") {
+        expectKey = stack[stack.length - 1] instanceof Set;
+        i5++;
+        continue;
+      }
+      if (c3 === ":") {
+        expectKey = false;
+        i5++;
+        continue;
+      }
+      if (c3 === '"') {
+        let j3 = i5 + 1;
+        while (text5[j3] !== '"')
+          j3 += text5[j3] === "\\" ? 2 : 1;
+        const s2 = JSON.parse(text5.slice(i5, j3 + 1));
+        if (LONE_SURROGATE.test(s2))
+          return { why: "a string holds a lone surrogate, which no Unicode text can carry", offset: i5 };
+        const names = stack[stack.length - 1];
+        if (expectKey && names instanceof Set) {
+          if (names.has(s2))
+            return { why: `the member name ${JSON.stringify(s2)} occurs twice in one object`, offset: i5 };
+          names.add(s2);
+        }
+        i5 = j3 + 1;
+        continue;
+      }
+      if (c3 === "-" || c3 >= "0" && c3 <= "9") {
+        const m3 = /^-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/.exec(text5.slice(i5));
+        if (!Number.isFinite(Number(m3[0])))
+          return { why: `the number ${m3[0]} is past the range of a binary64 value`, offset: i5 };
+        i5 += m3[0].length;
+        continue;
+      }
+      i5++;
+    }
+    return null;
+  }
+  function valueFault(v3) {
+    if (typeof v3 === "number")
+      return Number.isFinite(v3) ? null : "a number has no finite value";
+    if (typeof v3 === "string")
+      return LONE_SURROGATE.test(v3) ? "a string holds a lone surrogate, which no Unicode text can carry" : null;
+    if (Array.isArray(v3)) {
+      for (const x6 of v3) {
+        const f2 = valueFault(x6);
+        if (f2)
+          return f2;
+      }
+      return null;
+    }
+    if (v3 !== null && typeof v3 === "object") {
+      for (const [k3, x6] of Object.entries(v3)) {
+        if (LONE_SURROGATE.test(k3))
+          return "a key holds a lone surrogate, which no Unicode text can carry";
+        const f2 = valueFault(x6);
+        if (f2)
+          return f2;
+      }
+    }
+    return null;
   }
 
   // ../../geml-parser/dist/selector.js
@@ -189416,7 +189552,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (fmt4 === "csv") {
       return texts.join(`${delimOf(block2.attrs)} `);
     }
-    return `| ${texts.join(" | ")} |`;
+    return `| ${texts.map(escapeCellPipes).join(" | ")} |`;
   }
   function noValueTree(block2) {
     const fmt4 = attrStr(block2.attrs, "format") ?? "json";
@@ -189579,13 +189715,22 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   }
   function parseDataBody(fmt4, body, openLineNo) {
     const diags = [];
+    const outside = (why, line2) => {
+      diags.push({ severity: "error", code: "data-parse", message: `data: ${why}, which the value domain excludes (I-JSON)`, line: line2 });
+    };
     if (fmt4 === "json") {
       const text5 = body.join("\n");
+      let value2;
       try {
-        return { value: JSON.parse(text5), diags };
+        value2 = JSON.parse(text5);
       } catch (e3) {
         diags.push({ severity: "error", code: "data-parse", message: `data: body is not valid JSON (${e3 instanceof Error ? e3.message : String(e3)})`, line: jsonErrorLine(e3, text5, openLineNo) });
+        return { diags };
       }
+      const fault = iJsonFault(text5);
+      if (!fault)
+        return { value: value2, diags };
+      outside(fault.why, openLineNo + text5.slice(0, fault.offset).split("\n").length);
     } else if (fmt4 === "jsonl") {
       const values3 = [];
       let ok = true;
@@ -189598,20 +189743,34 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         } catch {
           diags.push({ severity: "error", code: "data-parse", message: `data: body line ${li + 1} is not one JSON value`, line: openLineNo + 1 + li });
           ok = false;
+          continue;
+        }
+        const fault = iJsonFault(t4);
+        if (fault) {
+          outside(`body line ${li + 1}: ${fault.why}`, openLineNo + 1 + li);
+          ok = false;
         }
       }
       if (ok)
         return { value: values3, diags };
     } else if (fmt4 === "yaml") {
       const r2 = parseYaml(body);
-      if ("value" in r2)
-        return { value: r2.value, diags };
-      diags.push({ severity: "error", code: "data-parse", message: `data: body is not YAML this processor reads (${r2.error})`, line: openLineNo + 1 + r2.line });
+      if ("value" in r2) {
+        const fault = valueFault(r2.value);
+        if (!fault)
+          return { value: r2.value, diags };
+        outside(fault, openLineNo);
+      } else
+        diags.push({ severity: "error", code: "data-parse", message: `data: body is not YAML this processor reads (${r2.error})`, line: openLineNo + 1 + r2.line });
     } else if (fmt4 === "edn") {
       const r2 = parseEdn(body);
-      if ("value" in r2)
-        return { value: r2.value, diags };
-      diags.push({ severity: "error", code: "data-parse", message: `data: body is not EDN this processor reads (${r2.error})`, line: openLineNo + 1 + r2.line });
+      if ("value" in r2) {
+        const fault = valueFault(r2.value);
+        if (!fault)
+          return { value: r2.value, diags };
+        outside(fault, openLineNo);
+      } else
+        diags.push({ severity: "error", code: "data-parse", message: `data: body is not EDN this processor reads (${r2.error})`, line: openLineNo + 1 + r2.line });
     } else if (fmt4 === "toml") {
       diags.push({ severity: "warning", code: "data-format-no-engine", message: `data: no \`${fmt4}\` engine in this processor; body kept raw, not verified`, line: openLineNo });
     } else {
@@ -189816,8 +189975,45 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
     return out;
   }
+  function withoutCodeSpans(s2) {
+    let out = "";
+    let i5 = 0;
+    while (i5 < s2.length) {
+      const c3 = s2[i5];
+      if (c3 === "\\" && /[!-/:-@[-`{-~]/.test(s2.charAt(i5 + 1))) {
+        out += s2.slice(i5, i5 + 2);
+        i5 += 2;
+        continue;
+      }
+      if (c3 === "`") {
+        let n2 = 0;
+        while (s2[i5 + n2] === "`")
+          n2++;
+        const close3 = s2.indexOf("`".repeat(n2), i5 + n2);
+        if (close3 >= 0) {
+          i5 = close3 + n2;
+          continue;
+        }
+        out += s2.slice(i5, i5 + n2);
+        i5 += n2;
+        continue;
+      }
+      if (c3 === "$") {
+        const close3 = s2.indexOf("$", i5 + 1);
+        if (close3 > i5 + 1) {
+          out += s2.slice(i5, close3 + 1);
+          i5 = close3 + 1;
+          continue;
+        }
+      }
+      out += c3;
+      i5++;
+    }
+    return out;
+  }
   function slug(text5) {
-    return text5.toLowerCase().normalize("NFD").replace(/`[^`]*`/g, "").replace(/[^\p{L}\p{N}\s\-_]/gu, "").trim().replace(/\s+/g, "-");
+    const kept = withoutCodeSpans(text5.toLowerCase().normalize("NFD")).replace(/[^\p{L}\p{N}\p{White_Space}\-_]/gu, "");
+    return trimWhiteSpace(kept).replace(new RegExp("\\p{White_Space}+", "gu"), "-");
   }
   function nameKey(name) {
     return name.normalize("NFD");
@@ -191114,17 +191310,20 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (!hit.ok)
       return err("unresolved-reference", `\`${written}\`: ${hit.why}`);
     const projected = ref.node?.type === "project";
-    let shown = hit.text;
+    const inline = inlineProjection(hit, written);
+    let shown;
     if (projected) {
-      const inline = inlineProjection(hit, written);
       if (!inline.ok)
         return err("inline-transclusion-not-inline", `\`![[${written}]]\` projects inline content, but ${inline.why}`);
       shown = inline.text;
     } else if (ref.embed && (hit.shape === "column" || hit.shape === "tree")) {
       return err("embed-target-not-projectable", `\`=== embed {src=${written}}\` cannot stand for that target: ${notProjectable(hit.shape, written)}`);
+    } else if (inline.ok) {
+      shown = inline.text;
     }
     if (ref.node) {
-      ref.node.value = shown;
+      if (shown !== void 0)
+        ref.node.value = shown;
       if (block2.kind === "block" && block2.id !== void 0)
         ref.node.base = base;
       else if (nameKey(base) !== nameKey("meta"))
@@ -191693,8 +191892,10 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         const { end, closed } = fenceClose(lines, i5, open3, consumed);
         if (id39 !== void 0)
           add3(id39, base + i5, base + end);
-        units?.push({ span: { start: base + i5, end: base + end }, kind: "block", type: type3, ...id39 !== void 0 ? { id: id39 } : {}, ...keysOf(a2) });
-        if ((REGISTRY.get(type3) ?? ctx.vocab.bodies.get(type3) ?? "raw") === "flow" && depth < MAX_NESTING) {
+        const flow = (REGISTRY.get(type3) ?? ctx.vocab.bodies.get(type3) ?? "raw") === "flow";
+        const body = { start: base + i5 + consumed, end: base + (closed ? end - 1 : end) };
+        units?.push({ span: { start: base + i5, end: base + end }, kind: "block", type: type3, ...id39 !== void 0 ? { id: id39 } : {}, ...keysOf(a2), ...flow ? { body } : {} });
+        if (flow && depth < MAX_NESTING) {
           collectSpans(lines.slice(i5 + consumed, closed ? end - 1 : end), base + i5 + consumed, out, ctx, depth + 1, units);
         }
         i5 = end;
@@ -191813,13 +192014,17 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   }
   function proseRunTargets(blocks2) {
     const out = /* @__PURE__ */ new Map();
+    collectRunTargets(blocks2, null, out);
+    return out;
+  }
+  function collectRunTargets(blocks2, root4, out) {
     const stack = [];
     let prev2 = null;
     let run5 = [];
     const isAnchor = (b3) => b3.kind === "heading" || b3.kind === "block";
     const flush = (next3) => {
       if (run5.length > 0) {
-        const container2 = stack.length > 0 ? stack[stack.length - 1] : null;
+        const container2 = stack.length > 0 ? stack[stack.length - 1] : root4;
         const id39 = runAddress(container2 === null ? null : { id: container2.id }, prev2 === null ? null : { id: prev2.id }, next3 === null ? null : { id: next3.id });
         if (id39 !== void 0 && !out.has(id39))
           out.set(id39, run5);
@@ -191842,9 +192047,10 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       }
       flush(b3);
       prev2 = b3;
+      if (b3.kind === "block" && b3.mode === "flow" && b3.children)
+        collectRunTargets(b3.children, { id: b3.id }, out);
     }
     flush(null);
-    return out;
   }
   function proseRuns(units, lineCount) {
     const children2 = /* @__PURE__ */ new Map();
@@ -191854,21 +192060,14 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         stack.pop();
       const parent4 = stack.length > 0 ? stack[stack.length - 1] : null;
       (children2.get(parent4) ?? children2.set(parent4, []).get(parent4)).push(u2);
-      if (u2.kind === "heading")
+      if (u2.kind === "heading" || u2.body !== void 0)
         stack.push(u2);
     }
     const runs = [];
     for (const [container2, kids] of children2) {
-      const bodyStart = container2 === null ? 0 : container2.span.start + 1;
-      const bodyEnd = container2 === null ? lineCount : container2.span.end;
-      const siblings2 = [];
-      let cursor = bodyStart;
-      for (const k3 of kids) {
-        if (k3.span.start < cursor)
-          continue;
-        siblings2.push(k3);
-        cursor = k3.span.end;
-      }
+      const bodyStart = container2 === null ? 0 : container2.body?.start ?? container2.span.start + 1;
+      const bodyEnd = container2 === null ? lineCount : container2.body?.end ?? container2.span.end;
+      const siblings2 = kids;
       const gaps = [];
       let at3 = bodyStart;
       for (const k3 of siblings2) {
