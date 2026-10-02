@@ -921,9 +921,9 @@ geml-parser--cli.ts.geml#runCheck,                   #metaOf,                   
 #resolveCharts,                                      #recordsToTable,             call, geml-parser/src/geml.ts:2944
 #resolveCharts,                                      #recordsToTable,             call, geml-parser/src/geml.ts:2972
 #parse,                                              #resolveCharts,              call, geml-parser/src/geml.ts:3043
-geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1603
-geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1606
-geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1607
+geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1620
+geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1623
+geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1624
 #validateProjections,                                #parse,                      call, geml-parser/src/geml.ts:1929
 #remoteRelation,                                     #parse,                      call, geml-parser/src/geml.ts:2140
 geml-parser--graph-style.ts.geml#parseGraphStyle,    #parse,                      call, geml-parser/src/graph-style.ts:68

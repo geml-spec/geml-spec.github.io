@@ -64,7 +64,7 @@ from,            to,                                               kind, confide
 
 === table {#called-by format=csv}
 from,                                  to,                  kind, site
-geml-parser--cli.ts.geml#runStyle,     #resolverFor,        call, geml-parser/src/cli.ts:1602
+geml-parser--cli.ts.geml#runStyle,     #resolverFor,        call, geml-parser/src/cli.ts:1619
 #existsFor,                            #resolverFor,        call, geml-parser/src/host-fs.ts:84
 #docOptsFor,                           #resolverFor,        call, geml-parser/src/host-fs.ts:115
 #docOptsFor,                           #existsFor,          call, geml-parser/src/host-fs.ts:115
