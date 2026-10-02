@@ -865,7 +865,7 @@ geml-parser--cli.ts.geml#runRevert,        #HistoryReader-firstChanged, call, ge
 #get,                                      #insideAny,                  call, geml-parser/src/verbs.ts:643
 geml-parser--cli.ts.geml#runList,          #list,                       call, geml-parser/src/cli.ts:1245
 geml-parser--cli.ts.geml#runGet,           #list,                       call, geml-parser/src/cli.ts:1330
-geml-parser--mcp-core.ts.geml#toolsFor,    #list,                       call, geml-parser/src/mcp-core.ts:277
+geml-parser--mcp-core.ts.geml#toolsFor,    #list,                       call, geml-parser/src/mcp-core.ts:300
 #unitNode,                                 #blocksOfType,               call, geml-parser/src/verbs.ts:576
 #unitNode,                                 #typeIndex,                  call, geml-parser/src/verbs.ts:576
 geml-parser--cli.ts.geml#runHistory,       #selectUnits,                call, geml-parser/src/cli.ts:1046
@@ -886,14 +886,14 @@ geml-parser--cli.ts.geml#runHistory,       #unitNode,                   call, ge
 geml-parser--cli.ts.geml#runHistory,       #reportMatches,              call, geml-parser/src/cli.ts:1053
 #get,                                      #reportMatches,              call, geml-parser/src/verbs.ts:690
 geml-parser--cli.ts.geml#runGet,           #get,                        call, geml-parser/src/cli.ts:1333
-geml-parser--mcp-core.ts.geml#toolsFor,    #get,                        call, geml-parser/src/mcp-core.ts:336
+geml-parser--mcp-core.ts.geml#toolsFor,    #get,                        call, geml-parser/src/mcp-core.ts:361
 geml-parser--cli.ts.geml#runFind,          #findInSource,               call, geml-parser/src/cli.ts:1280
 geml-parser--cli.ts.geml#runFind,          #formatFindRows,             call, geml-parser/src/cli.ts:1284
-geml-parser--mcp-core.ts.geml#toolsFor,    #formatFindRows,             call, geml-parser/src/mcp-core.ts:306
+geml-parser--mcp-core.ts.geml#toolsFor,    #formatFindRows,             call, geml-parser/src/mcp-core.ts:330
 geml-parser--cli.ts.geml#runCheck,         #check,                      call, geml-parser/src/cli.ts:869
 #transform,                                #loadModelJson,              call, geml-parser/src/verbs.ts:870
 geml-parser--cli.ts.geml#runTransform,     #transform,                  call, geml-parser/src/cli.ts:1144
-geml-parser--mcp-core.ts.geml#toolsFor,    #transform,                  call, geml-parser/src/mcp-core.ts:431
+geml-parser--mcp-core.ts.geml#toolsFor,    #transform,                  call, geml-parser/src/mcp-core.ts:459
 geml-parser--cli.ts.geml#runReplace,       #replace,                    call, geml-parser/src/cli.ts:1363
 #set,                                      #extractBlock,               call, geml-parser/src/verbs.ts:1262
 #setIntro,                                 #extractBlock,               call, geml-parser/src/verbs.ts:1304
@@ -907,19 +907,19 @@ geml-parser--cli.ts.geml#runReplace,       #replace,                    call, ge
 #setIntro,                                 #reportNewAddress,           call, geml-parser/src/verbs.ts:1321
 #setBody,                                  #reportNewAddress,           call, geml-parser/src/verbs.ts:1358
 geml-parser--cli.ts.geml#runSet,           #set,                        call, geml-parser/src/cli.ts:1404
-geml-parser--mcp-core.ts.geml#toolsFor,    #set,                        call, geml-parser/src/mcp-core.ts:468
+geml-parser--mcp-core.ts.geml#toolsFor,    #set,                        call, geml-parser/src/mcp-core.ts:497
 #set,                                      #setIntro,                   call, geml-parser/src/verbs.ts:1239
 #set,                                      #setBody,                    call, geml-parser/src/verbs.ts:1240
 #set,                                      #setMeta,                    call, geml-parser/src/verbs.ts:1233
 #set,                                      #setCoord,                   call, geml-parser/src/verbs.ts:1234
 geml-parser--cli.ts.geml#runAdd,           #add,                        call, geml-parser/src/cli.ts:1426
-geml-parser--mcp-core.ts.geml#toolsFor,    #add,                        call, geml-parser/src/mcp-core.ts:492
+geml-parser--mcp-core.ts.geml#toolsFor,    #add,                        call, geml-parser/src/mcp-core.ts:522
 #add,                                      #insertFragment,             call, geml-parser/src/verbs.ts:1507
 #revert,                                   #insertFragment,             call, geml-parser/src/verbs.ts:2067
 geml-parser--cli.ts.geml#runDelete,        #del,                        call, geml-parser/src/cli.ts:1442
-geml-parser--mcp-core.ts.geml#toolsFor,    #del,                        call, geml-parser/src/mcp-core.ts:510
+geml-parser--mcp-core.ts.geml#toolsFor,    #del,                        call, geml-parser/src/mcp-core.ts:541
 geml-parser--cli.ts.geml#runRename,        #rename,                     call, geml-parser/src/cli.ts:1468
-geml-parser--mcp-core.ts.geml#toolsFor,    #rename,                     call, geml-parser/src/mcp-core.ts:528
+geml-parser--mcp-core.ts.geml#toolsFor,    #rename,                     call, geml-parser/src/mcp-core.ts:560
 #rename,                                   #rewriteId,                  call, geml-parser/src/verbs.ts:1621
 #extractBlock,                             #bodyRange,                  call, geml-parser/src/verbs.ts:1142
 #rewriteId,                                #bodyRange,                  call, geml-parser/src/verbs.ts:1655
@@ -957,7 +957,7 @@ geml-parser--mcp-core.ts.geml#toolsFor,    #rename,                     call, ge
 #setCoord,                                 #spliceSpan,                 call, geml-parser/src/verbs.ts:1459
 #spliceBlock,                              #spliceSpan,                 call, geml-parser/src/verbs.ts:1715
 geml-parser--cli.ts.geml#runRevert,        #revert,                     call, geml-parser/src/cli.ts:1510
-geml-parser--mcp-core.ts.geml#toolsFor,    #revert,                     call, geml-parser/src/mcp-core.ts:558
+geml-parser--mcp-core.ts.geml#toolsFor,    #revert,                     call, geml-parser/src/mcp-core.ts:591
 #revert,                                   #resurrectPosition,          call, geml-parser/src/verbs.ts:2059
 ===
 

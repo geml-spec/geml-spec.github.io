@@ -4109,6 +4109,13 @@
       "id": "readViewBody"
     }
   ],
+  "reads": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`mcp-core.ts`/reads.",
+      "doc": "geml-parser--mcp-core.ts.geml",
+      "id": "reads"
+    }
+  ],
   "realOf": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`geml.ts`/realOf().",
@@ -6139,6 +6146,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`coord.ts`/writeValue().",
       "doc": "geml-parser--coord.ts.geml",
       "id": "writeValue"
+    }
+  ],
+  "writes": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`mcp-core.ts`/writes.",
+      "doc": "geml-parser--mcp-core.ts.geml",
+      "id": "writes"
     }
   ],
   "writtenKnobs": [

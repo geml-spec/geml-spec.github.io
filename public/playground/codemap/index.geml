@@ -1,7 +1,7 @@
 === meta
 profile = "geml-codemap/v1"
 repo = geml
-commit = 7c7aa9a
+commit = ab5a31f
 container = file
 entry = geml-viewer--content.js.geml#main
 resolution-default = cpg
@@ -16,10 +16,10 @@ geml-parser/verbs.ts,                geml-parser--verbs.ts.geml,                
 geml-parser/render.ts,               geml-parser--render.ts.geml,               48,      8,       0
 geml-parser/cli.ts,                  geml-parser--cli.ts.geml,                  47,      0,       0
 geml-parser/history.ts,              geml-parser--history.ts.geml,              39,      7,       0
+geml-parser/mcp-core.ts,             geml-parser--mcp-core.ts.geml,             28,      1,       0
 geml-parser/media-verbs.ts,          geml-parser--media-verbs.ts.geml,          28,      15,      0
 geml-viewer/render.js,               geml-viewer--render.js.geml,               28,      5,       0
 geml-parser/coord.ts,                geml-parser--coord.ts.geml,                26,      8,       0
-geml-parser/mcp-core.ts,             geml-parser--mcp-core.ts.geml,             26,      0,       0
 geml-parser/style-resolve.ts,        geml-parser--style-resolve.ts.geml,        26,      2,       0
 geml-parser/table.ts,                geml-parser--table.ts.geml,                26,      2,       0
 geml-parser/inline.ts,               geml-parser--inline.ts.geml,               22,      4,       0
@@ -144,6 +144,7 @@ geml-parser/geml.ts,           geml-parser/yaml.ts,                 1
 geml-parser/graph-style.ts,    geml-parser/geml.ts,                 1
 geml-parser/host-fs.ts,        geml-parser/geml.ts,                 1
 geml-parser/mcp.ts,            geml-parser/host-fs.ts,              1
+geml-parser/mcp.ts,            geml-parser/mcp-core.ts,             1
 geml-parser/media-timeline.ts, geml-parser/geml.ts,                 1
 geml-parser/media-verbs.ts,    geml-parser/media-player-runtime.ts, 1
 geml-parser/style-resolve.ts,  geml-parser/geml.ts,                 1
