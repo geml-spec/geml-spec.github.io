@@ -1956,6 +1956,13 @@
       "id": "fmt"
     }
   ],
+  "fmtBytes": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`cli.ts`/fmtBytes().",
+      "doc": "geml-parser--cli.ts.geml",
+      "id": "fmtBytes"
+    }
+  ],
   "fmtNum": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`render.ts`/fmtNum().",
@@ -4053,6 +4060,13 @@
       "id": "readInput"
     }
   ],
+  "readNote": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`cli.ts`/readNote().",
+      "doc": "geml-parser--cli.ts.geml",
+      "id": "readNote"
+    }
+  ],
   "readParen": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`inline.ts`/readParen().",
@@ -6097,6 +6111,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`media-verbs.ts`/MediaHost#writeDoc().",
       "doc": "geml-parser--media-verbs.ts.geml",
       "id": "MediaHost-writeDoc"
+    }
+  ],
+  "writeNote": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`cli.ts`/writeNote().",
+      "doc": "geml-parser--cli.ts.geml",
+      "id": "writeNote"
     }
   ],
   "writeOut": [

@@ -900,9 +900,9 @@ geml-parser--cli.ts.geml#runCheck,                   #metaOf,                   
 #resolveCharts,                                      #recordsToTable,             call, geml-parser/src/geml.ts:2886
 #resolveCharts,                                      #recordsToTable,             call, geml-parser/src/geml.ts:2914
 #parse,                                              #resolveCharts,              call, geml-parser/src/geml.ts:2985
-geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1562
-geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1565
-geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1566
+geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1603
+geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1606
+geml-parser--cli.ts.geml#runStyle,                   #parse,                      call, geml-parser/src/cli.ts:1607
 #validateProjections,                                #parse,                      call, geml-parser/src/geml.ts:1877
 #remoteRelation,                                     #parse,                      call, geml-parser/src/geml.ts:2088
 geml-parser--graph-style.ts.geml#parseGraphStyle,    #parse,                      call, geml-parser/src/graph-style.ts:68
@@ -1071,8 +1071,8 @@ geml-parser--verbs.ts.geml#unitNode,                 #findBlockSite,            
 geml-parser--verbs.ts.geml#unitNode,                 #sectionEndIndex,            call, geml-parser/src/verbs.ts:573
 geml-parser--verbs.ts.geml#contentShape,             #sectionEndIndex,            call, geml-parser/src/verbs.ts:1698
 geml-parser--cli.ts.geml#runHistory,                 #historyPathFor,             call, geml-parser/src/cli.ts:972
-geml-parser--cli.ts.geml#runRename,                  #historyPathFor,             call, geml-parser/src/cli.ts:1422
-geml-parser--cli.ts.geml#runRevert,                  #historyPathFor,             call, geml-parser/src/cli.ts:1460
+geml-parser--cli.ts.geml#runRename,                  #historyPathFor,             call, geml-parser/src/cli.ts:1463
+geml-parser--cli.ts.geml#runRevert,                  #historyPathFor,             call, geml-parser/src/cli.ts:1501
 #isCliInvocation,                                    #realOf,                     call, geml-parser/src/geml.ts:3686
 #isCliInvocation,                                    #realOf,                     call, geml-parser/src/geml.ts:3686
 ===

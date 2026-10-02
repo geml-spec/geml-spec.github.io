@@ -1,7 +1,7 @@
 === meta
 profile = "geml-codemap/v1"
 repo = geml
-commit = cd25600
+commit = 7c7aa9a
 container = file
 entry = geml-viewer--content.js.geml#main
 resolution-default = cpg
@@ -14,7 +14,7 @@ module,                              doc,                                       
 geml-parser/geml.ts,                 geml-parser--geml.ts.geml,                 113,     26,      0
 geml-parser/verbs.ts,                geml-parser--verbs.ts.geml,                67,      21,      0
 geml-parser/render.ts,               geml-parser--render.ts.geml,               48,      8,       0
-geml-parser/cli.ts,                  geml-parser--cli.ts.geml,                  44,      0,       0
+geml-parser/cli.ts,                  geml-parser--cli.ts.geml,                  47,      0,       0
 geml-parser/history.ts,              geml-parser--history.ts.geml,              39,      7,       0
 geml-parser/media-verbs.ts,          geml-parser--media-verbs.ts.geml,          28,      15,      0
 geml-viewer/render.js,               geml-viewer--render.js.geml,               28,      5,       0
