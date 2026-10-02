@@ -27,6 +27,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # every commit: lastUpdated dates each page for the sitemap
 
       - uses: actions/setup-node@v4
         with:

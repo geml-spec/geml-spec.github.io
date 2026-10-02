@@ -3,6 +3,7 @@ import footnote from 'markdown-it-footnote'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { execFileSync } from 'node:child_process'
 import { isZh } from './lang'
 
 const SITE = 'https://geml-spec.github.io'
@@ -19,10 +20,18 @@ const profileGuides = profiles.map((p) => ({ text: `geml-${p}`, link: `${GH}/spe
 // Google Analytics 4 — disclosed in privacy.md; change the two together.
 const GA_ID = 'G-JFH1WQFE5T'
 const gaSrc = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`
+// gtag() queues from the first moment; the tag itself is fetched once the page has
+// loaded and gone idle, so it no longer holds up the main thread while the page is
+// being read for the first time. Nothing queued before then is lost.
 const gaInit = `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${GA_ID}');`
+gtag('config', '${GA_ID}');
+(function () {
+  var load = function () { var s = document.createElement('script'); s.async = true; s.src = '${gaSrc}'; document.head.appendChild(s); };
+  var idle = function () { 'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 3000 }) : setTimeout(load, 1500); };
+  document.readyState === 'complete' ? idle() : addEventListener('load', idle);
+})();`
 
 // Pages under public/ that only make sense inside another page — a demo's iframe,
 // the explainer's render stage — are not search results of their own. The code
@@ -30,8 +39,9 @@ gtag('config', '${GA_ID}');`
 const embedOnly = /[\\/](playground[\\/]codemap[\\/]|examples[\\/]render\.html$|examples[\\/]geml-media-demo[\\/]play\.html$|examples[\\/]geml-media-explainer[\\/]scenes[\\/])/
 
 // Static pages under public/ (illustrated, examples, playground) bypass the
-// VitePress head; give every built HTML file that lacks the tag the same one,
-// and an embed-only page its noindex.
+// VitePress head; give every built HTML file that lacks the tag the same one, an
+// icon if it names none (else the browser asks for /favicon.ico), and an
+// embed-only page its noindex.
 function tagStaticPages(dir: string) {
   for (const d of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, d.name)
@@ -39,7 +49,8 @@ function tagStaticPages(dir: string) {
     if (!d.name.endsWith('.html')) continue
     const html = readFileSync(p, 'utf8')
     const add: string[] = []
-    if (!html.includes(gaSrc)) add.push(`<script async src="${gaSrc}"></script>`, `<script>${gaInit}</script>`)
+    if (!html.includes(gaSrc)) add.push(`<script>${gaInit}</script>`)
+    if (!/<link[^>]+rel="(shortcut )?icon"/i.test(html)) add.push('<link rel="icon" type="image/svg+xml" href="/logo/geml-favicon.svg">')
     if (embedOnly.test(p) && !html.includes('name="robots"')) add.push('<meta name="robots" content="noindex, indexifembedded">')
     if (add.length === 0) continue
     // after <head> (not <header>), or — for a page that leaves <head> implicit — after the doctype
@@ -48,6 +59,13 @@ function tagStaticPages(dir: string) {
     const end = at.index + at[0].length
     writeFileSync(p, `${html.slice(0, end)}\n${add.join('\n')}${html.slice(end)}`)
   }
+}
+
+// A public/ page's last commit, for the sitemap's <lastmod> (VitePress dates only its own pages).
+const siteRoot = fileURLToPath(new URL('..', import.meta.url))
+function lastCommit(path: string) {
+  try { return execFileSync('git', ['log', '-1', '--format=%cI', '--', path], { cwd: siteRoot, encoding: 'utf8' }).trim() || undefined }
+  catch { return undefined }
 }
 
 // The URL a page is served at (cleanUrls): index.md is its folder, x.md is /x.
@@ -74,6 +92,8 @@ const siteSidebar = [
       { text: 'Overview', link: '/benchmarks/' },
       { text: 'Addressing cost', link: '/benchmarks/addressing-cost' },
       { text: 'Mixed toolchain', link: '/benchmarks/mixed-toolchain' },
+      { text: '一次实测：改文档花了多少（中文）', link: '/benchmarks/agent-editing-log-cn' },
+      { text: 'LLM 改文档时做了什么（中文）', link: '/benchmarks/what-llm-did-when-editing-cn' },
     ],
   },
   {
@@ -93,14 +113,15 @@ export default defineConfig({
   description: 'Plain text people read and AI agents edit by block: geml get/set #id, and writes that would break the file are refused. Works on Markdown. CLI + MCP server.',
   lang: 'en',
   cleanUrls: true,
-  lastUpdated: false,
+  // Each page's last commit date: shown under the page, and the sitemap's <lastmod>
+  // (deploy.yml checks out the full history for it).
+  lastUpdated: true,
   srcExclude: ['README.md', '**/node_modules/**', 'public/**'],
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo/geml-favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#E00A1E' }],
     // Google Search Console ownership of https://geml-spec.github.io/
     ['meta', { name: 'google-site-verification', content: '5kETBu5-C836u2-2CK-QSAIxcbCeyX8YQ2-kdiZEnpM' }],
-    ['script', { async: '', src: gaSrc }],
     ['script', {}, gaInit],
   ],
   sitemap: {
@@ -108,10 +129,10 @@ export default defineConfig({
     // public/ pages bypass VitePress; the ones that stand on their own go in by hand.
     transformItems: (items) => [
       ...items,
-      { url: 'playground/' },
+      { url: 'playground/', lastmod: lastCommit('public/playground/index.html') },
       ...readdirSync(fileURLToPath(new URL('../public/illustrated', import.meta.url)))
         .filter((f) => f.endsWith('.html'))
-        .map((f) => ({ url: `illustrated/${f}` })),
+        .map((f) => ({ url: `illustrated/${f}`, lastmod: lastCommit(`public/illustrated/${f}`) })),
     ],
   },
   // Every page names its own URL, title and description for search and for a
