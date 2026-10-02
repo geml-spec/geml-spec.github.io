@@ -6064,6 +6064,13 @@
       "id": "withoutClosingHashes"
     }
   ],
+  "withoutMarkup": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`geml.ts`/withoutMarkup().",
+      "doc": "geml-parser--geml.ts.geml",
+      "id": "withoutMarkup"
+    }
+  ],
   "word": [
     {
       "anchor": "scip-typescript npm geml-viewer 1.3.3 src/`transclude.js`/word.",

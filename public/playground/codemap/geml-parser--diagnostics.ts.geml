@@ -13,22 +13,22 @@ resolution-default = cpg
 
 === table {#called-by format=csv}
 from,                                                 to,               kind, site
-geml-parser--geml.ts.geml#chartSourceTable,           #normalizeSource, call, geml-parser/src/geml.ts:1673
-geml-parser--geml.ts.geml#reportBorrowedVocabularies, #normalizeSource, call, geml-parser/src/geml.ts:1765
-geml-parser--geml.ts.geml#gatherEmbeds,               #normalizeSource, call, geml-parser/src/geml.ts:1899
-geml-parser--geml.ts.geml#tableFromDocument,          #normalizeSource, call, geml-parser/src/geml.ts:1910
-geml-parser--geml.ts.geml#resolveTableSources,        #normalizeSource, call, geml-parser/src/geml.ts:2002
-geml-parser--geml.ts.geml#resolveViewSources,         #normalizeSource, call, geml-parser/src/geml.ts:2158
-geml-parser--geml.ts.geml#gatherIds,                  #normalizeSource, call, geml-parser/src/geml.ts:2213
-geml-parser--geml.ts.geml#vocabularyOf,               #normalizeSource, call, geml-parser/src/geml.ts:2239
-geml-parser--geml.ts.geml#metaOf,                     #normalizeSource, call, geml-parser/src/geml.ts:2249
-geml-parser--geml.ts.geml#blockFromDocument,          #normalizeSource, call, geml-parser/src/geml.ts:2304
-geml-parser--geml.ts.geml#sliceSourceRange,           #normalizeSource, call, geml-parser/src/geml.ts:2644
-geml-parser--geml.ts.geml#resolveCharts,              #normalizeSource, call, geml-parser/src/geml.ts:2862
-geml-parser--geml.ts.geml#parse,                      #normalizeSource, call, geml-parser/src/geml.ts:2917
-geml-parser--geml.ts.geml#blockSpans,                 #normalizeSource, call, geml-parser/src/geml.ts:3193
-geml-parser--geml.ts.geml#unitSpans,                  #normalizeSource, call, geml-parser/src/geml.ts:3218
-geml-parser--geml.ts.geml#addressedUnits,             #normalizeSource, call, geml-parser/src/geml.ts:3454
+geml-parser--geml.ts.geml#chartSourceTable,           #normalizeSource, call, geml-parser/src/geml.ts:1694
+geml-parser--geml.ts.geml#reportBorrowedVocabularies, #normalizeSource, call, geml-parser/src/geml.ts:1786
+geml-parser--geml.ts.geml#gatherEmbeds,               #normalizeSource, call, geml-parser/src/geml.ts:1920
+geml-parser--geml.ts.geml#tableFromDocument,          #normalizeSource, call, geml-parser/src/geml.ts:1931
+geml-parser--geml.ts.geml#resolveTableSources,        #normalizeSource, call, geml-parser/src/geml.ts:2023
+geml-parser--geml.ts.geml#resolveViewSources,         #normalizeSource, call, geml-parser/src/geml.ts:2179
+geml-parser--geml.ts.geml#gatherIds,                  #normalizeSource, call, geml-parser/src/geml.ts:2234
+geml-parser--geml.ts.geml#vocabularyOf,               #normalizeSource, call, geml-parser/src/geml.ts:2260
+geml-parser--geml.ts.geml#metaOf,                     #normalizeSource, call, geml-parser/src/geml.ts:2270
+geml-parser--geml.ts.geml#blockFromDocument,          #normalizeSource, call, geml-parser/src/geml.ts:2325
+geml-parser--geml.ts.geml#sliceSourceRange,           #normalizeSource, call, geml-parser/src/geml.ts:2665
+geml-parser--geml.ts.geml#resolveCharts,              #normalizeSource, call, geml-parser/src/geml.ts:2883
+geml-parser--geml.ts.geml#parse,                      #normalizeSource, call, geml-parser/src/geml.ts:2938
+geml-parser--geml.ts.geml#blockSpans,                 #normalizeSource, call, geml-parser/src/geml.ts:3214
+geml-parser--geml.ts.geml#unitSpans,                  #normalizeSource, call, geml-parser/src/geml.ts:3239
+geml-parser--geml.ts.geml#addressedUnits,             #normalizeSource, call, geml-parser/src/geml.ts:3475
 ===
 
 === table {#unresolved format=csv hidden}
