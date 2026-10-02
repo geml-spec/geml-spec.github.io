@@ -7,52 +7,52 @@ resolution-default = cpg
 
 # geml-parser/mcp.ts
 
-=== code {#configure src=geml-parser/src/mcp.ts#L64-67 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/configure()."}
+=== code {#configure src=geml-parser/src/mcp.ts#L64-67 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/configure()."}
 ===
 
-=== code {#resolveInRoot src=geml-parser/src/mcp.ts#L80-95 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveInRoot()."}
+=== code {#resolveInRoot src=geml-parser/src/mcp.ts#L80-95 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/resolveInRoot()."}
 ===
 
-=== code {#narrowToRoot src=geml-parser/src/mcp.ts#L100-107 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/narrowToRoot()."}
+=== code {#narrowToRoot src=geml-parser/src/mcp.ts#L100-107 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/narrowToRoot()."}
 ===
 
-=== code {#resolveRoot src=geml-parser/src/mcp.ts#L111-114 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveRoot()."}
+=== code {#resolveRoot src=geml-parser/src/mcp.ts#L111-114 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/resolveRoot()."}
 ===
 
-=== code {#resolveGraphDir src=geml-parser/src/mcp.ts#L118-124 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveGraphDir()."}
+=== code {#resolveGraphDir src=geml-parser/src/mcp.ts#L118-124 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/resolveGraphDir()."}
 ===
 
-=== code {#rootReal src=geml-parser/src/mcp.ts#L129-131 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/rootReal()."}
+=== code {#rootReal src=geml-parser/src/mcp.ts#L129-131 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/rootReal()."}
 ===
 
-=== code {#snapshot src=geml-parser/src/mcp.ts#L140-150 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/snapshot()."}
+=== code {#snapshot src=geml-parser/src/mcp.ts#L140-150 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/snapshot()."}
 ===
 
-=== code {#docResolver src=geml-parser/src/mcp.ts#L159-170 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/docResolver()."}
+=== code {#docResolver src=geml-parser/src/mcp.ts#L159-170 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/docResolver()."}
 ===
 
-=== code {#ctxFor src=geml-parser/src/mcp.ts#L184-193 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/ctxFor()."}
+=== code {#ctxFor src=geml-parser/src/mcp.ts#L184-193 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/ctxFor()."}
 ===
 
-=== code {#markdownOpts src=geml-parser/src/mcp.ts#L200-202 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/markdownOpts()."}
+=== code {#markdownOpts src=geml-parser/src/mcp.ts#L200-202 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/markdownOpts()."}
 ===
 
-=== code {#allTools src=geml-parser/src/mcp.ts#L291-293 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/allTools()."}
+=== code {#allTools src=geml-parser/src/mcp.ts#L291-293 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/allTools()."}
 ===
 
-=== code {#confineSchema .leaf src=geml-parser/src/mcp.ts#L301-315 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/confineSchema()."}
+=== code {#confineSchema .leaf src=geml-parser/src/mcp.ts#L301-315 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/confineSchema()."}
 ===
 
-=== code {#loadGraphTools src=geml-parser/src/mcp.ts#L328-353 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/loadGraphTools()."}
+=== code {#loadGraphTools src=geml-parser/src/mcp.ts#L328-353 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/loadGraphTools()."}
 ===
 
-=== code {#handleLine src=geml-parser/src/mcp.ts#L361-363 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/handleLine()."}
+=== code {#handleLine src=geml-parser/src/mcp.ts#L361-363 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/handleLine()."}
 ===
 
-=== code {#parseArgs src=geml-parser/src/mcp.ts#L390-417 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/parseArgs()."}
+=== code {#parseArgs src=geml-parser/src/mcp.ts#L390-417 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/parseArgs()."}
 ===
 
-=== code {#resolveGraphOpt src=geml-parser/src/mcp.ts#L424-434 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveGraphOpt()."}
+=== code {#resolveGraphOpt src=geml-parser/src/mcp.ts#L424-434 anchor="scip-typescript npm @geml/geml 1.11.6 src/`mcp.ts`/resolveGraphOpt()."}
 ===
 
 === table {#calls format=csv}
