@@ -64,3 +64,7 @@
 /* Inline code in the brand's deeper red: the bright one reads at 4.35:1 on the code
    background, under the 4.5:1 small text needs; this one at 5.4:1. */
 :root { --vp-code-color: var(--vp-c-brand-2); }
+
+/* A code block's language label in the secondary text colour: the default reads at
+   3:1 on the code background, this one at 5.4:1. */
+:root { --vp-code-lang-color: var(--vp-c-text-2); }
