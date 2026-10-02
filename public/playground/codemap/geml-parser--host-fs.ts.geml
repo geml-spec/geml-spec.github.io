@@ -70,8 +70,8 @@ geml-parser--cli.ts.geml#runStyle,     #resolverFor,        call, geml-parser/sr
 #docOptsFor,                           #existsFor,          call, geml-parser/src/host-fs.ts:115
 #noteFinderFor,                        #existsFor,          call, geml-parser/src/host-fs.ts:131
 geml-parser--cli.ts.geml#docOpts,      #docOptsFor,         call, geml-parser/src/cli.ts:383
-geml-parser--mcp.ts.geml#ctxFor,       #docOptsFor,         call, geml-parser/src/mcp.ts:186
-geml-parser--mcp.ts.geml#markdownOpts, #docOptsFor,         call, geml-parser/src/mcp.ts:201
+geml-parser--mcp.ts.geml#ctxFor,       #docOptsFor,         call, geml-parser/src/mcp.ts:187
+geml-parser--mcp.ts.geml#markdownOpts, #docOptsFor,         call, geml-parser/src/mcp.ts:202
 #docOptsFor,                           #noteFinderFor,      call, geml-parser/src/host-fs.ts:116
 #noteFinderFor,                        #notesUnder,         call, geml-parser/src/host-fs.ts:139
 geml-parser--cli.ts.geml#runCheck,     #obsidianVaultAbove, call, geml-parser/src/cli.ts:903

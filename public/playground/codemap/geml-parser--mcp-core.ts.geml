@@ -217,7 +217,7 @@ from,                                    to,                          kind, site
 #toolsFor,                               #reads,                      call, geml-parser/src/mcp-core.ts:379
 #toolsFor,                               #reads,                      call, geml-parser/src/mcp-core.ts:411
 #toolsFor,                               #reads,                      call, geml-parser/src/mcp-core.ts:449
-geml-parser--mcp.ts.geml#loadGraphTools, #reads,                      call, geml-parser/src/mcp.ts:346
+geml-parser--mcp.ts.geml#loadGraphTools, #reads,                      call, geml-parser/src/mcp.ts:348
 #toolsFor,                               #writes,                     call, geml-parser/src/mcp-core.ts:494
 #toolsFor,                               #writes,                     call, geml-parser/src/mcp-core.ts:515
 #toolsFor,                               #writes,                     call, geml-parser/src/mcp-core.ts:538

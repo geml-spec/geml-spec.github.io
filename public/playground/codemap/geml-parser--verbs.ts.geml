@@ -170,58 +170,58 @@ resolution-default = cpg
 === code {#insertFragment src=geml-parser/src/verbs.ts#L1645-1674 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/insertFragment()."}
 ===
 
-=== code {#del src=geml-parser/src/verbs.ts#L1691-1715 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/del()."}
+=== code {#del src=geml-parser/src/verbs.ts#L1694-1732 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/del()."}
 ===
 
-=== code {#rename src=geml-parser/src/verbs.ts#L1737-1777 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/rename()."}
+=== code {#rename src=geml-parser/src/verbs.ts#L1754-1794 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/rename()."}
 ===
 
-=== code {#rewriteId src=geml-parser/src/verbs.ts#L1787-1806 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/rewriteId()."}
+=== code {#rewriteId src=geml-parser/src/verbs.ts#L1804-1823 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/rewriteId()."}
 ===
 
-=== code {#bodyRange src=geml-parser/src/verbs.ts#L1815-1826 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/bodyRange()."}
+=== code {#bodyRange src=geml-parser/src/verbs.ts#L1832-1843 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/bodyRange()."}
 ===
 
-=== code {#contentShape src=geml-parser/src/verbs.ts#L1832-1843 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/contentShape()."}
+=== code {#contentShape src=geml-parser/src/verbs.ts#L1849-1860 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/contentShape()."}
 ===
 
-=== code {#spliceBlock src=geml-parser/src/verbs.ts#L1851-1855 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/spliceBlock()."}
+=== code {#spliceBlock src=geml-parser/src/verbs.ts#L1868-1872 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/spliceBlock()."}
 ===
 
-=== code {#countBlockUnits src=geml-parser/src/verbs.ts#L1860-1864 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/countBlockUnits()."}
+=== code {#countBlockUnits src=geml-parser/src/verbs.ts#L1877-1881 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/countBlockUnits()."}
 ===
 
-=== code {#forgives src=geml-parser/src/verbs.ts#L1892-1892 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/forgives."}
+=== code {#forgives src=geml-parser/src/verbs.ts#L1909-1909 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/forgives."}
 ===
 
-=== code {#errorKey .leaf src=geml-parser/src/verbs.ts#L1901-1901 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/errorKey."}
+=== code {#errorKey .leaf src=geml-parser/src/verbs.ts#L1918-1918 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/errorKey."}
 ===
 
-=== code {#predated src=geml-parser/src/verbs.ts#L1902-1905 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/predated()."}
+=== code {#predated src=geml-parser/src/verbs.ts#L1919-1922 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/predated()."}
 ===
 
-=== code {#onDisk src=geml-parser/src/verbs.ts#L1913-1924 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/onDisk()."}
+=== code {#onDisk src=geml-parser/src/verbs.ts#L1930-1941 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/onDisk()."}
 ===
 
-=== code {#refuseWrite src=geml-parser/src/verbs.ts#L1928-1931 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/refuseWrite()."}
+=== code {#refuseWrite src=geml-parser/src/verbs.ts#L1945-1948 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/refuseWrite()."}
 ===
 
-=== code {#refusalProse src=geml-parser/src/verbs.ts#L1935-1945 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/refusalProse()."}
+=== code {#refusalProse src=geml-parser/src/verbs.ts#L1952-1962 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/refusalProse()."}
 ===
 
-=== code {#errorsAdded src=geml-parser/src/verbs.ts#L1947-1957 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/errorsAdded()."}
+=== code {#errorsAdded src=geml-parser/src/verbs.ts#L1964-1974 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/errorsAdded()."}
 ===
 
-=== code {#introduced src=geml-parser/src/verbs.ts#L1962-1979 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/introduced()."}
+=== code {#introduced src=geml-parser/src/verbs.ts#L1979-1996 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/introduced()."}
 ===
 
-=== code {#spliceSpan src=geml-parser/src/verbs.ts#L1985-2081 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/spliceSpan()."}
+=== code {#spliceSpan src=geml-parser/src/verbs.ts#L2002-2098 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/spliceSpan()."}
 ===
 
-=== code {#revert src=geml-parser/src/verbs.ts#L2114-2239 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/revert()."}
+=== code {#revert src=geml-parser/src/verbs.ts#L2131-2256 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/revert()."}
 ===
 
-=== code {#resurrectPosition src=geml-parser/src/verbs.ts#L2247-2277 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/resurrectPosition()."}
+=== code {#resurrectPosition src=geml-parser/src/verbs.ts#L2264-2294 anchor="scip-typescript npm @geml/geml 1.11.6 src/`verbs.ts`/resurrectPosition()."}
 ===
 
 === table {#calls format=csv}
@@ -562,6 +562,7 @@ from,               to,                                                   kind, 
 #del,               geml-parser--geml.ts.geml#parse,                      call,
 #del,               geml-parser--geml.ts.geml#parse,                      call,
 #del,               geml-parser--geml.ts.geml#splitLines,                 call,
+#del,               geml-parser--geml.ts.geml#stripEol,                   call,
 #rename,            #declaresId,                                          call,
 #rename,            #errorsAdded,                                         call,
 #rename,            #fail,                                                call,
@@ -722,7 +723,7 @@ geml-parser--host-fs.ts.geml#readConfined, #ViewError-new,              call, ge
 #oneHop,                                   #FileAccess-shownPath,       call, geml-parser/src/verbs.ts:191
 #oneHop,                                   #FileAccess-shownPath,       call, geml-parser/src/verbs.ts:194
 geml-parser--cli.ts.geml#ctxFor,           #VerbContext-docOpts,        call, geml-parser/src/cli.ts:391
-geml-parser--mcp.ts.geml#ctxFor,           #VerbContext-docOpts,        call, geml-parser/src/mcp.ts:186
+geml-parser--mcp.ts.geml#ctxFor,           #VerbContext-docOpts,        call, geml-parser/src/mcp.ts:187
 #resolveSelector,                          #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:270
 #list,                                     #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:355
 #reservedMeta,                             #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:556
@@ -736,16 +737,16 @@ geml-parser--mcp.ts.geml#ctxFor,           #VerbContext-docOpts,        call, ge
 #replace,                                  #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1084
 #insertFragment,                           #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1646
 #insertFragment,                           #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1664
-#del,                                      #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1709
-#rename,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1742
-#rename,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1761
-#rewriteId,                                #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1788
-#spliceSpan,                               #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1989
-#spliceSpan,                               #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:2024
-#revert,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:2229
-#revert,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:2232
+#del,                                      #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1726
+#rename,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1759
+#rename,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1778
+#rewriteId,                                #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:1805
+#spliceSpan,                               #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:2006
+#spliceSpan,                               #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:2041
+#revert,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:2246
+#revert,                                   #VerbContext-docOpts,        call, geml-parser/src/verbs.ts:2249
 geml-parser--cli.ts.geml#ctxFor,           #VerbContext-note,           call, geml-parser/src/cli.ts:392
-geml-parser--mcp.ts.geml#ctxFor,           #VerbContext-note,           call, geml-parser/src/mcp.ts:190
+geml-parser--mcp.ts.geml#ctxFor,           #VerbContext-note,           call, geml-parser/src/mcp.ts:191
 #list,                                     #VerbContext-note,           call, geml-parser/src/verbs.ts:395
 #selectUnits,                              #VerbContext-note,           call, geml-parser/src/verbs.ts:544
 #reportMatches,                            #VerbContext-note,           call, geml-parser/src/verbs.ts:585
@@ -754,16 +755,16 @@ geml-parser--mcp.ts.geml#ctxFor,           #VerbContext-note,           call, ge
 #asMarkdown,                               #VerbContext-note,           call, geml-parser/src/verbs.ts:1238
 #reportNewAddress,                         #VerbContext-note,           call, geml-parser/src/verbs.ts:1303
 #set,                                      #VerbContext-note,           call, geml-parser/src/verbs.ts:1409
-#del,                                      #VerbContext-note,           call, geml-parser/src/verbs.ts:1698
-#del,                                      #VerbContext-note,           call, geml-parser/src/verbs.ts:1712
-#rename,                                   #VerbContext-note,           call, geml-parser/src/verbs.ts:1757
-#spliceSpan,                               #VerbContext-note,           call, geml-parser/src/verbs.ts:2049
-#spliceSpan,                               #VerbContext-note,           call, geml-parser/src/verbs.ts:2051
-#revert,                                   #VerbContext-note,           call, geml-parser/src/verbs.ts:2203
+#del,                                      #VerbContext-note,           call, geml-parser/src/verbs.ts:1701
+#del,                                      #VerbContext-note,           call, geml-parser/src/verbs.ts:1729
+#rename,                                   #VerbContext-note,           call, geml-parser/src/verbs.ts:1774
+#spliceSpan,                               #VerbContext-note,           call, geml-parser/src/verbs.ts:2066
+#spliceSpan,                               #VerbContext-note,           call, geml-parser/src/verbs.ts:2068
+#revert,                                   #VerbContext-note,           call, geml-parser/src/verbs.ts:2220
 geml-parser--cli.ts.geml#runRevert,        #HistoryReader-resolve,      call, geml-parser/src/cli.ts:1507
-#revert,                                   #HistoryReader-resolve,      call, geml-parser/src/verbs.ts:2154
+#revert,                                   #HistoryReader-resolve,      call, geml-parser/src/verbs.ts:2171
 geml-parser--cli.ts.geml#runRevert,        #HistoryReader-firstChanged, call, geml-parser/src/cli.ts:1508
-#revert,                                   #HistoryReader-firstChanged, call, geml-parser/src/verbs.ts:2150
+#revert,                                   #HistoryReader-firstChanged, call, geml-parser/src/verbs.ts:2167
 #resolveSelector,                          #fail,                       call, geml-parser/src/verbs.ts:291
 #resolveSelector,                          #fail,                       call, geml-parser/src/verbs.ts:298
 #selectUnits,                              #fail,                       call, geml-parser/src/verbs.ts:457
@@ -815,27 +816,27 @@ geml-parser--cli.ts.geml#runRevert,        #HistoryReader-firstChanged, call, ge
 #add,                                      #fail,                       call, geml-parser/src/verbs.ts:1622
 #add,                                      #fail,                       call, geml-parser/src/verbs.ts:1633
 #insertFragment,                           #fail,                       call, geml-parser/src/verbs.ts:1672
-#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1740
-#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1744
-#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1745
-#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1752
-#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1764
-#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1765
-#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1774
-#spliceBlock,                              #fail,                       call, geml-parser/src/verbs.ts:1853
-#spliceSpan,                               #fail,                       call, geml-parser/src/verbs.ts:2031
-#spliceSpan,                               #fail,                       call, geml-parser/src/verbs.ts:2063
-#spliceSpan,                               #fail,                       call, geml-parser/src/verbs.ts:2077
-#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2151
-#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2157
-#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2165
+#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1757
+#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1761
+#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1762
+#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1769
+#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1781
+#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1782
+#rename,                                   #fail,                       call, geml-parser/src/verbs.ts:1791
+#spliceBlock,                              #fail,                       call, geml-parser/src/verbs.ts:1870
+#spliceSpan,                               #fail,                       call, geml-parser/src/verbs.ts:2048
+#spliceSpan,                               #fail,                       call, geml-parser/src/verbs.ts:2080
+#spliceSpan,                               #fail,                       call, geml-parser/src/verbs.ts:2094
+#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2168
+#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2174
 #revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2182
-#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2195
-#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2221
-#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2237
-#resurrectPosition,                        #fail,                       call, geml-parser/src/verbs.ts:2257
-#resurrectPosition,                        #fail,                       call, geml-parser/src/verbs.ts:2263
-#refuseWrite,                              #refuseBroken,               call, geml-parser/src/verbs.ts:1930
+#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2199
+#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2212
+#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2238
+#revert,                                   #fail,                       call, geml-parser/src/verbs.ts:2254
+#resurrectPosition,                        #fail,                       call, geml-parser/src/verbs.ts:2274
+#resurrectPosition,                        #fail,                       call, geml-parser/src/verbs.ts:2280
+#refuseWrite,                              #refuseBroken,               call, geml-parser/src/verbs.ts:1947
 #selfOf,                                   #baseName,                   call, geml-parser/src/verbs.ts:132
 #transform,                                #baseName,                   call, geml-parser/src/verbs.ts:889
 #oneHop,                                   #walkOf,                     call, geml-parser/src/verbs.ts:187
@@ -857,21 +858,21 @@ geml-parser--cli.ts.geml#runRevert,        #HistoryReader-firstChanged, call, ge
 #setIntro,                                 #walkOf,                     call, geml-parser/src/verbs.ts:1431
 #setMeta,                                  #walkOf,                     call, geml-parser/src/verbs.ts:1520
 #add,                                      #walkOf,                     call, geml-parser/src/verbs.ts:1632
-#del,                                      #walkOf,                     call, geml-parser/src/verbs.ts:1692
-#rename,                                   #walkOf,                     call, geml-parser/src/verbs.ts:1749
-#rename,                                   #walkOf,                     call, geml-parser/src/verbs.ts:1756
-#rewriteId,                                #walkOf,                     call, geml-parser/src/verbs.ts:1789
-#spliceBlock,                              #walkOf,                     call, geml-parser/src/verbs.ts:1852
-#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2030
-#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2033
-#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2033
-#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2074
-#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2130
-#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2139
-#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2191
-#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2217
-#resurrectPosition,                        #walkOf,                     call, geml-parser/src/verbs.ts:2252
-#resurrectPosition,                        #walkOf,                     call, geml-parser/src/verbs.ts:2266
+#del,                                      #walkOf,                     call, geml-parser/src/verbs.ts:1695
+#rename,                                   #walkOf,                     call, geml-parser/src/verbs.ts:1766
+#rename,                                   #walkOf,                     call, geml-parser/src/verbs.ts:1773
+#rewriteId,                                #walkOf,                     call, geml-parser/src/verbs.ts:1806
+#spliceBlock,                              #walkOf,                     call, geml-parser/src/verbs.ts:1869
+#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2047
+#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2050
+#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2050
+#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2091
+#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2147
+#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2156
+#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2208
+#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2234
+#resurrectPosition,                        #walkOf,                     call, geml-parser/src/verbs.ts:2269
+#resurrectPosition,                        #walkOf,                     call, geml-parser/src/verbs.ts:2283
 #resolveSelector,                          #selfOf,                     call, geml-parser/src/verbs.ts:270
 #list,                                     #selfOf,                     call, geml-parser/src/verbs.ts:355
 #reservedMeta,                             #selfOf,                     call, geml-parser/src/verbs.ts:556
@@ -882,14 +883,14 @@ geml-parser--cli.ts.geml#runRevert,        #HistoryReader-firstChanged, call, ge
 #replace,                                  #selfOf,                     call, geml-parser/src/verbs.ts:1084
 #insertFragment,                           #selfOf,                     call, geml-parser/src/verbs.ts:1646
 #insertFragment,                           #selfOf,                     call, geml-parser/src/verbs.ts:1664
-#del,                                      #selfOf,                     call, geml-parser/src/verbs.ts:1709
-#rename,                                   #selfOf,                     call, geml-parser/src/verbs.ts:1742
-#rename,                                   #selfOf,                     call, geml-parser/src/verbs.ts:1761
-#rewriteId,                                #selfOf,                     call, geml-parser/src/verbs.ts:1788
-#spliceSpan,                               #selfOf,                     call, geml-parser/src/verbs.ts:1989
-#spliceSpan,                               #selfOf,                     call, geml-parser/src/verbs.ts:2024
-#revert,                                   #selfOf,                     call, geml-parser/src/verbs.ts:2229
-#revert,                                   #selfOf,                     call, geml-parser/src/verbs.ts:2232
+#del,                                      #selfOf,                     call, geml-parser/src/verbs.ts:1726
+#rename,                                   #selfOf,                     call, geml-parser/src/verbs.ts:1759
+#rename,                                   #selfOf,                     call, geml-parser/src/verbs.ts:1778
+#rewriteId,                                #selfOf,                     call, geml-parser/src/verbs.ts:1805
+#spliceSpan,                               #selfOf,                     call, geml-parser/src/verbs.ts:2006
+#spliceSpan,                               #selfOf,                     call, geml-parser/src/verbs.ts:2041
+#revert,                                   #selfOf,                     call, geml-parser/src/verbs.ts:2246
+#revert,                                   #selfOf,                     call, geml-parser/src/verbs.ts:2249
 #list,                                     #whereOf,                    call, geml-parser/src/verbs.ts:350
 #get,                                      #whereOf,                    call, geml-parser/src/verbs.ts:612
 #findInSource,                             #whereOf,                    call, geml-parser/src/verbs.ts:741
@@ -964,7 +965,7 @@ geml-parser--cli.ts.geml#runReplace,       #replace,                    call, ge
 #setBody,                                  #asMarkdown,                 call, geml-parser/src/verbs.ts:1475
 #add,                                      #asMarkdown,                 call, geml-parser/src/verbs.ts:1623
 #set,                                      #declaresId,                 call, geml-parser/src/verbs.ts:1401
-#rename,                                   #declaresId,                 call, geml-parser/src/verbs.ts:1751
+#rename,                                   #declaresId,                 call, geml-parser/src/verbs.ts:1768
 #set,                                      #relinkMarkdown,             call, geml-parser/src/verbs.ts:1405
 #set,                                      #relinkMarkdown,             call, geml-parser/src/verbs.ts:1406
 #set,                                      #reportNewAddress,           call, geml-parser/src/verbs.ts:1416
@@ -979,51 +980,51 @@ geml-parser--mcp-core.ts.geml#toolsFor,    #set,                        call, ge
 geml-parser--cli.ts.geml#runAdd,           #add,                        call, geml-parser/src/cli.ts:1426
 geml-parser--mcp-core.ts.geml#toolsFor,    #add,                        call, geml-parser/src/mcp-core.ts:526
 #add,                                      #insertFragment,             call, geml-parser/src/verbs.ts:1637
-#revert,                                   #insertFragment,             call, geml-parser/src/verbs.ts:2206
+#revert,                                   #insertFragment,             call, geml-parser/src/verbs.ts:2223
 geml-parser--cli.ts.geml#runDelete,        #del,                        call, geml-parser/src/cli.ts:1442
 geml-parser--mcp-core.ts.geml#toolsFor,    #del,                        call, geml-parser/src/mcp-core.ts:545
 geml-parser--cli.ts.geml#runRename,        #rename,                     call, geml-parser/src/cli.ts:1468
 geml-parser--mcp-core.ts.geml#toolsFor,    #rename,                     call, geml-parser/src/mcp-core.ts:564
-#rename,                                   #rewriteId,                  call, geml-parser/src/verbs.ts:1760
+#rename,                                   #rewriteId,                  call, geml-parser/src/verbs.ts:1777
 #extractBlock,                             #bodyRange,                  call, geml-parser/src/verbs.ts:1142
-#rewriteId,                                #bodyRange,                  call, geml-parser/src/verbs.ts:1794
+#rewriteId,                                #bodyRange,                  call, geml-parser/src/verbs.ts:1811
 #set,                                      #contentShape,               call, geml-parser/src/verbs.ts:1360
-#revert,                                   #spliceBlock,                call, geml-parser/src/verbs.ts:2177
+#revert,                                   #spliceBlock,                call, geml-parser/src/verbs.ts:2194
 #replace,                                  #countBlockUnits,            call, geml-parser/src/verbs.ts:1097
 #replace,                                  #countBlockUnits,            call, geml-parser/src/verbs.ts:1097
-#spliceSpan,                               #countBlockUnits,            call, geml-parser/src/verbs.ts:2033
-#spliceSpan,                               #countBlockUnits,            call, geml-parser/src/verbs.ts:2033
-#errorsAdded,                              #forgives,                   call, geml-parser/src/verbs.ts:1953
-#predated,                                 #errorKey,                   call, geml-parser/src/verbs.ts:1903
-#predated,                                 #errorKey,                   call, geml-parser/src/verbs.ts:1904
-#onDisk,                                   #errorKey,                   call, geml-parser/src/verbs.ts:1917
-#onDisk,                                   #errorKey,                   call, geml-parser/src/verbs.ts:1918
-#onDisk,                                   #errorKey,                   call, geml-parser/src/verbs.ts:1921
-#refusalProse,                             #predated,                   call, geml-parser/src/verbs.ts:1942
-#refuseWrite,                              #onDisk,                     call, geml-parser/src/verbs.ts:1929
+#spliceSpan,                               #countBlockUnits,            call, geml-parser/src/verbs.ts:2050
+#spliceSpan,                               #countBlockUnits,            call, geml-parser/src/verbs.ts:2050
+#errorsAdded,                              #forgives,                   call, geml-parser/src/verbs.ts:1970
+#predated,                                 #errorKey,                   call, geml-parser/src/verbs.ts:1920
+#predated,                                 #errorKey,                   call, geml-parser/src/verbs.ts:1921
+#onDisk,                                   #errorKey,                   call, geml-parser/src/verbs.ts:1934
+#onDisk,                                   #errorKey,                   call, geml-parser/src/verbs.ts:1935
+#onDisk,                                   #errorKey,                   call, geml-parser/src/verbs.ts:1938
+#refusalProse,                             #predated,                   call, geml-parser/src/verbs.ts:1959
+#refuseWrite,                              #onDisk,                     call, geml-parser/src/verbs.ts:1946
 #replace,                                  #refuseWrite,                call, geml-parser/src/verbs.ts:1093
 #insertFragment,                           #refuseWrite,                call, geml-parser/src/verbs.ts:1669
-#rename,                                   #refuseWrite,                call, geml-parser/src/verbs.ts:1763
-#spliceSpan,                               #refuseWrite,                call, geml-parser/src/verbs.ts:2044
-#revert,                                   #refuseWrite,                call, geml-parser/src/verbs.ts:2234
-#refuseWrite,                              #refusalProse,               call, geml-parser/src/verbs.ts:1930
+#rename,                                   #refuseWrite,                call, geml-parser/src/verbs.ts:1780
+#spliceSpan,                               #refuseWrite,                call, geml-parser/src/verbs.ts:2061
+#revert,                                   #refuseWrite,                call, geml-parser/src/verbs.ts:2251
+#refuseWrite,                              #refusalProse,               call, geml-parser/src/verbs.ts:1947
 #replace,                                  #errorsAdded,                call, geml-parser/src/verbs.ts:1091
 #insertFragment,                           #errorsAdded,                call, geml-parser/src/verbs.ts:1668
-#rename,                                   #errorsAdded,                call, geml-parser/src/verbs.ts:1762
-#spliceSpan,                               #errorsAdded,                call, geml-parser/src/verbs.ts:2042
-#revert,                                   #errorsAdded,                call, geml-parser/src/verbs.ts:2233
-#del,                                      #introduced,                 call, geml-parser/src/verbs.ts:1711
-#errorsAdded,                              #introduced,                 call, geml-parser/src/verbs.ts:1956
+#rename,                                   #errorsAdded,                call, geml-parser/src/verbs.ts:1779
+#spliceSpan,                               #errorsAdded,                call, geml-parser/src/verbs.ts:2059
+#revert,                                   #errorsAdded,                call, geml-parser/src/verbs.ts:2250
+#del,                                      #introduced,                 call, geml-parser/src/verbs.ts:1728
+#errorsAdded,                              #introduced,                 call, geml-parser/src/verbs.ts:1973
 #set,                                      #spliceSpan,                 call, geml-parser/src/verbs.ts:1407
 #set,                                      #spliceSpan,                 call, geml-parser/src/verbs.ts:1415
 #setIntro,                                 #spliceSpan,                 call, geml-parser/src/verbs.ts:1448
 #setBody,                                  #spliceSpan,                 call, geml-parser/src/verbs.ts:1486
 #setMeta,                                  #spliceSpan,                 call, geml-parser/src/verbs.ts:1542
 #setCoord,                                 #spliceSpan,                 call, geml-parser/src/verbs.ts:1588
-#spliceBlock,                              #spliceSpan,                 call, geml-parser/src/verbs.ts:1854
+#spliceBlock,                              #spliceSpan,                 call, geml-parser/src/verbs.ts:1871
 geml-parser--cli.ts.geml#runRevert,        #revert,                     call, geml-parser/src/cli.ts:1510
 geml-parser--mcp-core.ts.geml#toolsFor,    #revert,                     call, geml-parser/src/mcp-core.ts:595
-#revert,                                   #resurrectPosition,          call, geml-parser/src/verbs.ts:2198
+#revert,                                   #resurrectPosition,          call, geml-parser/src/verbs.ts:2215
 ===
 
 === table {#unresolved format=csv hidden}
@@ -1197,6 +1198,7 @@ from,               to
 #del,               Set.add
 #del,               Set.has
 #del,               String.replace
+#del,               String.trim
 #rename,            Array.filter
 #rename,            Array.find
 #rename,            Array.join
