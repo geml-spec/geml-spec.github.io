@@ -246,8 +246,8 @@ geml-parser--verbs.ts.geml#get,              #metaText,         call, geml-parse
 #metaText,                                   #metaLiteral,      call, geml-parser/src/coord.ts:401
 #planMetaWrite,                              #metaLiteral,      call, geml-parser/src/coord.ts:423
 #planCoordWrite,                             #planMetaWrite,    call, geml-parser/src/coord.ts:457
-geml-parser--verbs.ts.geml#setMeta,          #planMetaWrite,    call, geml-parser/src/verbs.ts:1401
-geml-parser--verbs.ts.geml#setCoord,         #planCoordWrite,   call, geml-parser/src/verbs.ts:1447
+geml-parser--verbs.ts.geml#setMeta,          #planMetaWrite,    call, geml-parser/src/verbs.ts:1530
+geml-parser--verbs.ts.geml#setCoord,         #planCoordWrite,   call, geml-parser/src/verbs.ts:1576
 geml-parser--geml.ts.geml#validateCoordRef,  #projectCoord,     call, geml-parser/src/geml.ts:2406
 geml-parser--geml.ts.geml#embedCoordinate,   #projectCoord,     call, geml-parser/src/geml.ts:3296
 geml-parser--verbs.ts.geml#get,              #projectCoord,     call, geml-parser/src/verbs.ts:633

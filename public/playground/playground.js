@@ -184960,6 +184960,16 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       return { doc: d3 };
     return {};
   }
+  function markdownDest(content) {
+    const d3 = content.trim();
+    if (d3.startsWith("<")) {
+      const end = d3.indexOf(">");
+      if (end > 0)
+        return d3.slice(1, end);
+    }
+    const m3 = /^(\S+)\s+(?:"[^"]*"|'[^']*'|\([^()]*\))$/.exec(d3);
+    return m3 ? m3[1] : d3;
+  }
   function pairsOf(s2) {
     const br = new Int32Array(s2.length).fill(-1);
     const pa = new Int32Array(s2.length).fill(-1);
@@ -185185,7 +185195,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         if (label && paren) {
           const a2 = readAttrs(s2, paren.end);
           const attrObj = a2 ? a2.attrs : { classes: [], attrs: {} };
-          const dest = classifyDest(paren.content);
+          const dest = classifyDest(sink.markdown ? markdownDest(paren.content) : paren.content);
           const node2 = {
             type: "link",
             // The label window starts one character past this `[`, so the shared

@@ -302,11 +302,11 @@ from,                                to,                   kind, site
 #save,                               #renderHistory,       call, geml-parser/src/history.ts:634
 #restore,                            #renderHistory,       call, geml-parser/src/history.ts:717
 geml-parser--cli.ts.geml#runHistory, #save,                call, geml-parser/src/cli.ts:996
-geml-parser--mcp.ts.geml#snapshot,   #save,                call, geml-parser/src/mcp.ts:143
+geml-parser--mcp.ts.geml#snapshot,   #save,                call, geml-parser/src/mcp.ts:144
 geml-parser--cli.ts.geml#runHistory, #verify,              call, geml-parser/src/cli.ts:1063
 geml-parser--cli.ts.geml#runHistory, #restore,             call, geml-parser/src/cli.ts:1060
 geml-parser--cli.ts.geml#runHistory, #isCurrent,           call, geml-parser/src/cli.ts:992
-geml-parser--mcp.ts.geml#snapshot,   #isCurrent,           call, geml-parser/src/mcp.ts:142
+geml-parser--mcp.ts.geml#snapshot,   #isCurrent,           call, geml-parser/src/mcp.ts:143
 geml-parser--cli.ts.geml#runHistory, #listRevisions,       call, geml-parser/src/cli.ts:993
 geml-parser--cli.ts.geml#runHistory, #listRevisions,       call, geml-parser/src/cli.ts:1016
 #restore,                            #resolveRevision,     call, geml-parser/src/history.ts:695

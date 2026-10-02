@@ -599,6 +599,13 @@
       "id": "arbitrateWithinGroups"
     }
   ],
+  "asMarkdown": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`verbs.ts`/asMarkdown().",
+      "doc": "geml-parser--verbs.ts.geml",
+      "id": "asMarkdown"
+    }
+  ],
   "asText": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`mcp-core.ts`/asText.",
@@ -1269,6 +1276,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`profiles.ts`/declaredVocabularies().",
       "doc": "geml-parser--profiles.ts.geml",
       "id": "declaredVocabularies"
+    }
+  ],
+  "declaresId": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`verbs.ts`/declaresId().",
+      "doc": "geml-parser--verbs.ts.geml",
+      "id": "declaresId"
     }
   ],
   "defaultGraphStyle": [
@@ -2061,6 +2075,13 @@
       "id": "gemlFilesUnder"
     }
   ],
+  "gemlSyntaxIn": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`verbs.ts`/gemlSyntaxIn().",
+      "doc": "geml-parser--verbs.ts.geml",
+      "id": "gemlSyntaxIn"
+    }
+  ],
   "gemlToMd": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`to-md.ts`/gemlToMd().",
@@ -2185,6 +2206,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`profiles.ts`/ProfileIO#hashText().",
       "doc": "geml-parser--profiles.ts.geml",
       "id": "ProfileIO-hashText"
+    }
+  ],
+  "headingAttrObject": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`verbs.ts`/headingAttrObject().",
+      "doc": "geml-parser--verbs.ts.geml",
+      "id": "headingAttrObject"
     }
   ],
   "headingId": [
@@ -2974,6 +3002,20 @@
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`geml.ts`/markdownCodeRuns().",
       "doc": "geml-parser--geml.ts.geml",
       "id": "markdownCodeRuns"
+    }
+  ],
+  "markdownDest": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`inline.ts`/markdownDest().",
+      "doc": "geml-parser--inline.ts.geml",
+      "id": "markdownDest"
+    }
+  ],
+  "markdownOpts": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/markdownOpts().",
+      "doc": "geml-parser--mcp.ts.geml",
+      "id": "markdownOpts"
     }
   ],
   "mask": [
@@ -4278,6 +4320,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`geml.ts`/relationBlock().",
       "doc": "geml-parser--geml.ts.geml",
       "id": "relationBlock"
+    }
+  ],
+  "relinkMarkdown": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.11.5 src/`verbs.ts`/relinkMarkdown().",
+      "doc": "geml-parser--verbs.ts.geml",
+      "id": "relinkMarkdown"
     }
   ],
   "remoteLabel": [

@@ -66,7 +66,7 @@ geml-parser--cli.ts.geml#runGet,             #parseSelector,   call, geml-parser
 geml-parser--verbs.ts.geml#selectUnits,      #parseSelector,   call, geml-parser/src/verbs.ts:454
 geml-parser--verbs.ts.geml#get,              #parseSelector,   call, geml-parser/src/verbs.ts:613
 geml-parser--verbs.ts.geml#resolveSetTarget, #parseSelector,   call, geml-parser/src/verbs.ts:1161
-geml-parser--verbs.ts.geml#set,              #parseSelector,   call, geml-parser/src/verbs.ts:1230
+geml-parser--verbs.ts.geml#set,              #parseSelector,   call, geml-parser/src/verbs.ts:1334
 #keyForm,                                    #atKeyOf,         call, geml-parser/src/selector.ts:229
 #parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:155
 #parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:187
@@ -76,7 +76,7 @@ geml-parser--verbs.ts.geml#list,             #shortestAddress, call, geml-parser
 geml-parser--verbs.ts.geml#findInSource,     #shortestAddress, call, geml-parser/src/verbs.ts:764
 geml-parser--verbs.ts.geml#replace,          #shortestAddress, call, geml-parser/src/verbs.ts:1078
 geml-parser--verbs.ts.geml#resolveSetTarget, #shortestAddress, call, geml-parser/src/verbs.ts:1172
-geml-parser--verbs.ts.geml#reportNewAddress, #shortestAddress, call, geml-parser/src/verbs.ts:1199
+geml-parser--verbs.ts.geml#reportNewAddress, #shortestAddress, call, geml-parser/src/verbs.ts:1303
 geml-parser--verbs.ts.geml#selectUnits,      #matchContent,    call, geml-parser/src/verbs.ts:472
 geml-parser--verbs.ts.geml#selectUnits,      #discoveryHint,   call, geml-parser/src/verbs.ts:493
 geml-parser--verbs.ts.geml#selectUnits,      #discoveryHint,   call, geml-parser/src/verbs.ts:500

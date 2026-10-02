@@ -7,49 +7,52 @@ resolution-default = cpg
 
 # geml-parser/mcp.ts
 
-=== code {#configure src=geml-parser/src/mcp.ts#L63-66 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/configure()."}
+=== code {#configure src=geml-parser/src/mcp.ts#L64-67 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/configure()."}
 ===
 
-=== code {#resolveInRoot src=geml-parser/src/mcp.ts#L79-94 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveInRoot()."}
+=== code {#resolveInRoot src=geml-parser/src/mcp.ts#L80-95 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveInRoot()."}
 ===
 
-=== code {#narrowToRoot src=geml-parser/src/mcp.ts#L99-106 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/narrowToRoot()."}
+=== code {#narrowToRoot src=geml-parser/src/mcp.ts#L100-107 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/narrowToRoot()."}
 ===
 
-=== code {#resolveRoot src=geml-parser/src/mcp.ts#L110-113 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveRoot()."}
+=== code {#resolveRoot src=geml-parser/src/mcp.ts#L111-114 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveRoot()."}
 ===
 
-=== code {#resolveGraphDir src=geml-parser/src/mcp.ts#L117-123 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveGraphDir()."}
+=== code {#resolveGraphDir src=geml-parser/src/mcp.ts#L118-124 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveGraphDir()."}
 ===
 
-=== code {#rootReal src=geml-parser/src/mcp.ts#L128-130 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/rootReal()."}
+=== code {#rootReal src=geml-parser/src/mcp.ts#L129-131 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/rootReal()."}
 ===
 
-=== code {#snapshot src=geml-parser/src/mcp.ts#L139-149 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/snapshot()."}
+=== code {#snapshot src=geml-parser/src/mcp.ts#L140-150 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/snapshot()."}
 ===
 
-=== code {#docResolver src=geml-parser/src/mcp.ts#L158-169 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/docResolver()."}
+=== code {#docResolver src=geml-parser/src/mcp.ts#L159-170 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/docResolver()."}
 ===
 
-=== code {#ctxFor src=geml-parser/src/mcp.ts#L183-191 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/ctxFor()."}
+=== code {#ctxFor src=geml-parser/src/mcp.ts#L184-193 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/ctxFor()."}
 ===
 
-=== code {#allTools src=geml-parser/src/mcp.ts#L277-279 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/allTools()."}
+=== code {#markdownOpts src=geml-parser/src/mcp.ts#L200-202 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/markdownOpts()."}
 ===
 
-=== code {#confineSchema .leaf src=geml-parser/src/mcp.ts#L287-301 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/confineSchema()."}
+=== code {#allTools src=geml-parser/src/mcp.ts#L291-293 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/allTools()."}
 ===
 
-=== code {#loadGraphTools src=geml-parser/src/mcp.ts#L314-339 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/loadGraphTools()."}
+=== code {#confineSchema .leaf src=geml-parser/src/mcp.ts#L301-315 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/confineSchema()."}
 ===
 
-=== code {#handleLine src=geml-parser/src/mcp.ts#L347-349 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/handleLine()."}
+=== code {#loadGraphTools src=geml-parser/src/mcp.ts#L328-353 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/loadGraphTools()."}
 ===
 
-=== code {#parseArgs src=geml-parser/src/mcp.ts#L376-403 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/parseArgs()."}
+=== code {#handleLine src=geml-parser/src/mcp.ts#L361-363 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/handleLine()."}
 ===
 
-=== code {#resolveGraphOpt src=geml-parser/src/mcp.ts#L410-420 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveGraphOpt()."}
+=== code {#parseArgs src=geml-parser/src/mcp.ts#L390-417 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/parseArgs()."}
+===
+
+=== code {#resolveGraphOpt src=geml-parser/src/mcp.ts#L424-434 anchor="scip-typescript npm @geml/geml 1.11.5 src/`mcp.ts`/resolveGraphOpt()."}
 ===
 
 === table {#calls format=csv}
@@ -61,6 +64,8 @@ from,             to,                                             kind, confiden
 #ctxFor,          geml-parser--host-fs.ts.geml#docOptsFor,        call,
 #ctxFor,          geml-parser--verbs.ts.geml#VerbContext-docOpts, call,
 #ctxFor,          geml-parser--verbs.ts.geml#VerbContext-note,    call,
+#markdownOpts,    geml-parser--geml.ts.geml#isMarkdownPath,       call,
+#markdownOpts,    geml-parser--host-fs.ts.geml#docOptsFor,        call,
 #loadGraphTools,  #confineSchema,                                 call,
 #loadGraphTools,  #resolveGraphDir,                               call,
 #loadGraphTools,  geml-parser--mcp-core.ts.geml#reads,            call,
@@ -69,11 +74,11 @@ from,             to,                                             kind, confiden
 
 === table {#called-by format=csv}
 from,             to,               kind, site
-#resolveRoot,     #narrowToRoot,    call, geml-parser/src/mcp.ts:112
-#resolveGraphDir, #narrowToRoot,    call, geml-parser/src/mcp.ts:122
-#loadGraphTools,  #resolveGraphDir, call, geml-parser/src/mcp.ts:336
-#loadGraphTools,  #confineSchema,   call, geml-parser/src/mcp.ts:329
-#parseArgs,       #resolveGraphOpt, call, geml-parser/src/mcp.ts:402
+#resolveRoot,     #narrowToRoot,    call, geml-parser/src/mcp.ts:113
+#resolveGraphDir, #narrowToRoot,    call, geml-parser/src/mcp.ts:123
+#loadGraphTools,  #resolveGraphDir, call, geml-parser/src/mcp.ts:350
+#loadGraphTools,  #confineSchema,   call, geml-parser/src/mcp.ts:343
+#parseArgs,       #resolveGraphOpt, call, geml-parser/src/mcp.ts:416
 ===
 
 === table {#unresolved format=csv hidden}
@@ -95,6 +100,7 @@ from,             to
 #docResolver,     readFileSync
 #docResolver,     realpathSync
 #docResolver,     resolve
+#ctxFor,          Array.push
 #loadGraphTools,  Array.map
 #handleLine,      Socket.write
 #parseArgs,       StatsBase.isDirectory
