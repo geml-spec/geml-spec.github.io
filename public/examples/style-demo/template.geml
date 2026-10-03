@@ -33,8 +33,10 @@ A 1:1 replica of a GitHub page, to see how geml-style renders
 ![Open quick search dialog, type / to search](icons/search.svg)
 ===
 
-=== form-field {#site-search type=text placeholder="Type / to search"}
+==== form {#site-search-form}
+=== form-field {#site-search name=q type=text placeholder="Type / to search"}
 ===
+====
 
 === text {#search-key}
 `/`
@@ -118,13 +120,15 @@ More ![](icons/triangle-down.svg)
 ![main branch](icons/git-branch.svg)
 ===
 
+==== form {#branch-form}
 === form-options {#branches format=csv}
 value,label
 main,main
 ===
 
-=== form-field {#branch type=select options=#branches value=main}
+=== form-field {#branch name=branch type=select options=#branches value=main}
 ===
+====
 
 === text {#side-tools}
 - [![](icons/plus.svg)](https://github.com/geml-spec/geml-spec.github.io/new/main/public/examples/style-demo){title="Add file"}
@@ -135,8 +139,10 @@ main,main
 ![Go to file](icons/search.svg)
 ===
 
-=== form-field {#file-find type=text placeholder="Go to file"}
+==== form {#file-find-form}
+=== form-field {#file-find name=path type=text placeholder="Go to file"}
 ===
+====
 
 === text {#find-key}
 `T`
@@ -192,6 +198,7 @@ main,main
 [Latest commit](https://github.com/geml-spec/geml-spec.github.io/commits/main/public/examples/style-demo/article.geml){title="Latest commit"} [![](icons/history.svg) History](https://github.com/geml-spec/geml-spec.github.io/commits/main/public/examples/style-demo/article.geml){title="History"}
 ===
 
+==== form {#view-form}
 === form-options {#views format=csv}
 value,label
 Preview,Preview
@@ -199,8 +206,9 @@ Code,Code
 Blame,Blame
 ===
 
-=== form-field {#view type=select options=#views value=Preview}
+=== form-field {#view name=view type=select options=#views value=Preview}
 ===
+====
 
 === text {#file-meta}
 48 lines (36 loc) · 1.5 KB
