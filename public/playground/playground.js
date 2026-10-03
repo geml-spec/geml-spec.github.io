@@ -184989,10 +184989,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     const m3 = /^(\S+)\s+(?:"[^"]*"|'[^']*'|\([^()]*\))$/.exec(d3);
     return m3 ? m3[1] : d3;
   }
+  var ESCAPABLE = /[!-/:-@[-`{-~]/;
   function pairsOf(s2) {
     const br = new Int32Array(s2.length).fill(-1);
+    const lb = new Int32Array(s2.length).fill(-1);
     const pa = new Int32Array(s2.length).fill(-1);
-    const bs = [], ps = [];
+    const bs = [], ls = [], ps = [];
     for (let i5 = 0; i5 < s2.length; i5++) {
       const c3 = s2[i5];
       if (c3 === "[")
@@ -185001,7 +185003,41 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         const j3 = bs.pop();
         if (j3 !== void 0)
           br[j3] = i5;
-      } else if (c3 === "(")
+      }
+    }
+    for (let i5 = 0; i5 < s2.length; ) {
+      const c3 = s2[i5];
+      if (c3 === "\\" && ESCAPABLE.test(s2[i5 + 1] ?? "")) {
+        i5 += 2;
+        continue;
+      }
+      if (c3 === "`") {
+        const n2 = backtickRun(s2, i5);
+        const close3 = findCodeSpanClose(s2, i5, n2);
+        i5 = close3 >= 0 ? close3 + n2 : i5 + n2;
+        continue;
+      }
+      if (c3 === "$") {
+        const close3 = s2.indexOf("$", i5 + 1);
+        i5 = close3 > i5 + 1 ? close3 + 1 : i5 + 1;
+        continue;
+      }
+      if (c3 === "[")
+        ls.push(i5);
+      else if (c3 === "]") {
+        const j3 = ls.pop();
+        if (j3 !== void 0)
+          lb[j3] = i5;
+      }
+      i5++;
+    }
+    for (let i5 = 0; i5 < s2.length; i5++) {
+      const c3 = s2[i5];
+      if (c3 === "\\") {
+        i5++;
+        continue;
+      }
+      if (c3 === "(")
         ps.push(i5);
       else if (c3 === ")") {
         const j3 = ps.pop();
@@ -185009,7 +185045,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           pa[j3] = i5;
       }
     }
-    return { br, pa, off: 0 };
+    return { br, lb, pa, off: 0 };
   }
   function pairEnd(m3, p3, s2, i5) {
     const j3 = m3[p3.off + i5];
@@ -185022,6 +185058,15 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (s2[i5] !== "(")
       return null;
     const j3 = pairEnd(p3.pa, p3, s2, i5);
+    if (j3 < 0)
+      return null;
+    const content = s2.slice(i5 + 1, j3);
+    return content.includes("\n") ? null : { content, end: j3 + 1 };
+  }
+  function readLabel(s2, i5, p3) {
+    if (s2[i5] !== "[")
+      return null;
+    const j3 = pairEnd(p3.lb, p3, s2, i5);
     return j3 < 0 ? null : { content: s2.slice(i5 + 1, j3), end: j3 + 1 };
   }
   function readBracket(s2, i5, p3) {
@@ -185162,7 +185207,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         }
       }
       if (c3 === "!" && s2[i5 + 1] === "[") {
-        const label = readBracket(s2, i5 + 1, p3);
+        const label = readLabel(s2, i5 + 1, p3);
         const paren = label ? readParen(s2, label.end, p3) : null;
         if (label && paren) {
           const a2 = readAttrs(s2, paren.end);
@@ -185217,7 +185262,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         }
       }
       if (c3 === "[") {
-        const label = readBracket(s2, i5, p3);
+        const label = readLabel(s2, i5, p3);
         const paren = label ? readParen(s2, label.end, p3) : null;
         if (label && paren) {
           const a2 = readAttrs(s2, paren.end);
@@ -185227,7 +185272,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
             type: "link",
             // The label window starts one character past this `[`, so the shared
             // maps are read at that offset instead of being rebuilt for it.
-            children: parseInline(label.content, at3(i5 + 1), sink, depth + 1, { br: p3.br, pa: p3.pa, off: p3.off + i5 + 1 }),
+            children: parseInline(label.content, at3(i5 + 1), sink, depth + 1, { br: p3.br, lb: p3.lb, pa: p3.pa, off: p3.off + i5 + 1 }),
             attrs: attrObj.attrs
           };
           if (dest.href)

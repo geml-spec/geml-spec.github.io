@@ -4233,6 +4233,13 @@
       "id": "readInput"
     }
   ],
+  "readLabel": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.0 src/`inline.ts`/readLabel().",
+      "doc": "geml-parser--inline.ts.geml",
+      "id": "readLabel"
+    }
+  ],
   "readNote": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/readNote().",
