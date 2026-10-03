@@ -136,19 +136,19 @@ resolution-default = cpg
 === code {#runChild src=geml-parser/src/cli.ts#L1578-1584 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/runChild()."}
 ===
 
-=== code {#runStyle src=geml-parser/src/cli.ts#L1590-1640 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/runStyle()."}
+=== code {#runStyle src=geml-parser/src/cli.ts#L1590-1648 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/runStyle()."}
 ===
 
-=== code {#runMcp src=geml-parser/src/cli.ts#L1647-1650 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/runMcp()."}
+=== code {#runMcp src=geml-parser/src/cli.ts#L1655-1658 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/runMcp()."}
 ===
 
-=== code {#skillTextFor src=geml-parser/src/cli.ts#L1681-1686 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/skillTextFor()."}
+=== code {#skillTextFor src=geml-parser/src/cli.ts#L1689-1694 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/skillTextFor()."}
 ===
 
-=== code {#installOtherTools src=geml-parser/src/cli.ts#L1688-1727 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/installOtherTools()."}
+=== code {#installOtherTools src=geml-parser/src/cli.ts#L1696-1735 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/installOtherTools()."}
 ===
 
-=== code {#runSkill src=geml-parser/src/cli.ts#L1729-1844 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/runSkill()."}
+=== code {#runSkill src=geml-parser/src/cli.ts#L1737-1852 anchor="scip-typescript npm @geml/geml 1.12.0 src/`cli.ts`/runSkill()."}
 ===
 
 === table {#calls format=csv}
@@ -480,8 +480,9 @@ from,                to,                                                    kind
 #runStyle,           geml-parser--geml.ts.geml#parse,                       call,
 #runStyle,           geml-parser--geml.ts.geml#parse,                       call,
 #runStyle,           geml-parser--geml.ts.geml#parse,                       call,
+#runStyle,           geml-parser--geml.ts.geml#parse,                       call,
 #runStyle,           geml-parser--host-fs.ts.geml#resolverFor,              call,
-#runStyle,           geml-parser--style-resolve.ts.geml#loadStylesheet,     call,
+#runStyle,           geml-parser--style-resolve.ts.geml#expandCorpus,       call,
 #runStyle,           geml-parser--style-resolve.ts.geml#loadStylesheet,     call,
 #runStyle,           geml-parser--style-resolve.ts.geml#resolveStyle,       call,
 #runMcp,             #runChild,                                             call,
@@ -581,10 +582,10 @@ from,                to,                    kind, site
 #runStyle,           #fail,                 call, geml-parser/src/cli.ts:1592
 #runStyle,           #fail,                 call, geml-parser/src/cli.ts:1596
 #runStyle,           #fail,                 call, geml-parser/src/cli.ts:1597
-#runSkill,           #fail,                 call, geml-parser/src/cli.ts:1731
-#runSkill,           #fail,                 call, geml-parser/src/cli.ts:1742
+#runSkill,           #fail,                 call, geml-parser/src/cli.ts:1739
 #runSkill,           #fail,                 call, geml-parser/src/cli.ts:1750
-#runSkill,           #fail,                 call, geml-parser/src/cli.ts:1755
+#runSkill,           #fail,                 call, geml-parser/src/cli.ts:1758
+#runSkill,           #fail,                 call, geml-parser/src/cli.ts:1763
 #verb,               #refuseBroken,         call, geml-parser/src/cli.ts:406
 #contentFrom,        #readInput,            call, geml-parser/src/cli.ts:417
 #runMedia,           #readInput,            call, geml-parser/src/cli.ts:655
@@ -610,7 +611,7 @@ from,                to,                    kind, site
 #runRename,          #useRoot,              call, geml-parser/src/cli.ts:1452
 #runRevert,          #useRoot,              call, geml-parser/src/cli.ts:1497
 #ctxFor,             #docOpts,              call, geml-parser/src/cli.ts:391
-#runStyle,           #docOpts,              call, geml-parser/src/cli.ts:1620
+#runStyle,           #docOpts,              call, geml-parser/src/cli.ts:1626
 #runCheck,           #ctxFor,               call, geml-parser/src/cli.ts:869
 #runHistory,         #ctxFor,               call, geml-parser/src/cli.ts:1046
 #runHistory,         #ctxFor,               call, geml-parser/src/cli.ts:1050
@@ -746,9 +747,9 @@ from,                to,                    kind, site
 #runRevert,          #flag,                 call, geml-parser/src/cli.ts:1491
 #runRevert,          #flag,                 call, geml-parser/src/cli.ts:1501
 #runCodemap,         #runChild,             call, geml-parser/src/cli.ts:1565
-#runMcp,             #runChild,             call, geml-parser/src/cli.ts:1649
-#installOtherTools,  #skillTextFor,         call, geml-parser/src/cli.ts:1689
-#runSkill,           #installOtherTools,    call, geml-parser/src/cli.ts:1787
+#runMcp,             #runChild,             call, geml-parser/src/cli.ts:1657
+#installOtherTools,  #skillTextFor,         call, geml-parser/src/cli.ts:1697
+#runSkill,           #installOtherTools,    call, geml-parser/src/cli.ts:1795
 ===
 
 === table {#unresolved format=csv hidden}
@@ -955,6 +956,8 @@ from,                to
 #runStyle,           String.startsWith
 #runStyle,           String.trim
 #runStyle,           basename
+#runStyle,           dirname
+#runStyle,           join
 #runStyle,           readFileSync
 #runMcp,             dirname
 #runMcp,             fileURLToPath

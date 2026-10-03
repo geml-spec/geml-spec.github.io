@@ -14,20 +14,35 @@ resolution-default = cpg
 === code {#isStyleEntry src=integrations/geml-viewer/src/style-entry.js#L19-23 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/isStyleEntry()."}
 ===
 
-=== code {#referencedDocs src=integrations/geml-viewer/src/style-entry.js#L26-51 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/referencedDocs()."}
+=== code {#normalizePath src=integrations/geml-viewer/src/style-entry.js#L26-34 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/normalizePath()."}
 ===
 
-=== code {#producersOf src=integrations/geml-viewer/src/style-entry.js#L58-70 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/producersOf()."}
+=== code {#dirOf .leaf src=integrations/geml-viewer/src/style-entry.js#L35-35 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/dirOf."}
 ===
 
-=== code {#borrowedDocs src=integrations/geml-viewer/src/style-entry.js#L84-107 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/borrowedDocs()."}
+=== code {#candidatesFor src=integrations/geml-viewer/src/style-entry.js#L37-44 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/candidatesFor()."}
 ===
 
-=== code {#loadPageStyle src=integrations/geml-viewer/src/style-entry.js#L113-159 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/loadPageStyle()."}
+=== code {#referencedDocs src=integrations/geml-viewer/src/style-entry.js#L47-72 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/referencedDocs()."}
+===
+
+=== code {#producersOf src=integrations/geml-viewer/src/style-entry.js#L79-91 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/producersOf()."}
+===
+
+=== code {#borrowedDocs src=integrations/geml-viewer/src/style-entry.js#L105-143 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/borrowedDocs()."}
+===
+
+=== code {#loadPageStyle src=integrations/geml-viewer/src/style-entry.js#L149-217 anchor="scip-typescript npm geml-viewer 1.3.4 src/`style-entry.js`/loadPageStyle()."}
 ===
 
 === table {#calls format=csv}
 from,           to,              kind, confidence
+#candidatesFor, #dirOf,          call,
+#candidatesFor, #dirOf,          call,
+#candidatesFor, #normalizePath,  call,
+#candidatesFor, #normalizePath,  call,
+#loadPageStyle, #candidatesFor,  call,
+#loadPageStyle, #candidatesFor,  call,
 #loadPageStyle, #entryUrlFor,    call,
 #loadPageStyle, #isStyleEntry,   call,
 #loadPageStyle, #producersOf,    call,
@@ -37,11 +52,17 @@ from,           to,              kind, confidence
 
 === table {#called-by format=csv}
 from,                               to,              kind, site
-#loadPageStyle,                     #entryUrlFor,    call, integrations/geml-viewer/src/style-entry.js:114
-#loadPageStyle,                     #isStyleEntry,   call, integrations/geml-viewer/src/style-entry.js:119
-#loadPageStyle,                     #referencedDocs, call, integrations/geml-viewer/src/style-entry.js:124
-#loadPageStyle,                     #referencedDocs, call, integrations/geml-viewer/src/style-entry.js:144
-#loadPageStyle,                     #producersOf,    call, integrations/geml-viewer/src/style-entry.js:158
+#loadPageStyle,                     #entryUrlFor,    call, integrations/geml-viewer/src/style-entry.js:150
+#loadPageStyle,                     #isStyleEntry,   call, integrations/geml-viewer/src/style-entry.js:155
+#candidatesFor,                     #normalizePath,  call, integrations/geml-viewer/src/style-entry.js:41
+#candidatesFor,                     #normalizePath,  call, integrations/geml-viewer/src/style-entry.js:42
+#candidatesFor,                     #dirOf,          call, integrations/geml-viewer/src/style-entry.js:41
+#candidatesFor,                     #dirOf,          call, integrations/geml-viewer/src/style-entry.js:41
+#loadPageStyle,                     #candidatesFor,  call, integrations/geml-viewer/src/style-entry.js:183
+#loadPageStyle,                     #candidatesFor,  call, integrations/geml-viewer/src/style-entry.js:200
+#loadPageStyle,                     #referencedDocs, call, integrations/geml-viewer/src/style-entry.js:163
+#loadPageStyle,                     #referencedDocs, call, integrations/geml-viewer/src/style-entry.js:195
+#loadPageStyle,                     #producersOf,    call, integrations/geml-viewer/src/style-entry.js:216
 geml-viewer--page.js.geml#loadPage, #borrowedDocs,   call, integrations/geml-viewer/src/page.js:20
 geml-viewer--page.js.geml#loadPage, #loadPageStyle,  call, integrations/geml-viewer/src/page.js:16
 ===
@@ -50,12 +71,23 @@ geml-viewer--page.js.geml#loadPage, #loadPageStyle,  call, integrations/geml-vie
 from,            to
 #isStyleEntry,   Array.includes
 #isStyleEntry,   String.split
+#normalizePath,  Array.join
+#normalizePath,  Array.pop
+#normalizePath,  Array.push
+#candidatesFor,  RegExp.test
 #referencedDocs, Array.push
 #producersOf,    Console.warn
 #producersOf,    Map.set
 #producersOf,    Set.add
 #borrowedDocs,   Array.push
+#borrowedDocs,   Array.shift
+#borrowedDocs,   RegExp.test
 #borrowedDocs,   Set.add
+#borrowedDocs,   Set.has
+#borrowedDocs,   String.slice
+#borrowedDocs,   String.split
+#borrowedDocs,   String.startsWith
+#borrowedDocs,   decodeURIComponent
 #loadPageStyle,  Array.map
 #loadPageStyle,  Array.pop
 #loadPageStyle,  Array.push

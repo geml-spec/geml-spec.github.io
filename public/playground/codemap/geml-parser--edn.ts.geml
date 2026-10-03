@@ -184,7 +184,7 @@ geml-parser--geml.ts.geml#parseDataBody, #parseEdn,        call, geml-parser/src
 #render,                                 #isWrap,          call, geml-parser/src/edn.ts:328
 #render,                                 #isWrap,          call, geml-parser/src/edn.ts:329
 #render,                                 #scalar,          call, geml-parser/src/edn.ts:345
-geml-parser--coord.ts.geml#writeValue,   #serializeEdn,    call, geml-parser/src/coord.ts:339
+geml-parser--coord.ts.geml#writeValue,   #serializeEdn,    call, geml-parser/src/coord.ts:343
 #serializeEdn,                           #render,          call, geml-parser/src/edn.ts:323
 ===
 

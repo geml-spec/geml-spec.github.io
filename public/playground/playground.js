@@ -184863,6 +184863,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       return parseFloat(t4);
     return t4;
   }
+  var WHITE_SPACE = new RegExp("^\\p{White_Space}$", "u");
   function tokenize(s2) {
     const out = [];
     let cur = "";
@@ -184875,7 +184876,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       } else if (ch3 === '"') {
         inQuote = !inQuote;
         cur += ch3;
-      } else if (!inQuote && /\s/.test(ch3)) {
+      } else if (!inQuote && WHITE_SPACE.test(ch3)) {
         if (cur) {
           out.push(cur);
           cur = "";
@@ -184895,17 +184896,16 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     const count2 = (name) => void written.set(name, (written.get(name) ?? 0) + 1);
     for (const tok of tokenize(inner3)) {
       if (tok.startsWith("#")) {
-        out.id = tok.slice(1);
+        if (out.id === void 0)
+          out.id = tok.slice(1);
       } else if (tok.startsWith(".")) {
         out.classes.push(tok.slice(1));
         count2(tok.slice(1));
       } else {
         const eq4 = tok.indexOf("=");
         const key = eq4 > 0 ? tok.slice(0, eq4) : tok;
-        if (eq4 > 0)
-          out.attrs[key] = coerce(tok.slice(eq4 + 1));
-        else
-          out.attrs[key] = true;
+        if (!Object.hasOwn(out.attrs, key))
+          out.attrs[key] = eq4 > 0 ? coerce(tok.slice(eq4 + 1)) : true;
         count2(key);
       }
     }
@@ -184918,6 +184918,25 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   // ../../geml-parser/dist/inline.js
   init_define_process_argv();
   var MAX_INLINE_NESTING = 100;
+  function backtickRun(s2, i5) {
+    let n2 = 0;
+    while (s2[i5 + n2] === "`")
+      n2++;
+    return n2;
+  }
+  function findCodeSpanClose(s2, i5, n2) {
+    let j3 = i5 + n2;
+    while (j3 < s2.length) {
+      const k3 = s2.indexOf("`", j3);
+      if (k3 < 0)
+        return -1;
+      const m3 = backtickRun(s2, k3);
+      if (m3 === n2)
+        return k3;
+      j3 = k3 + m3;
+    }
+    return -1;
+  }
   var META_REF_SRC = "\\{\\{\\s*([A-Za-z_][A-Za-z0-9_-]*)\\s*\\}\\}";
   var SAFE_SCHEMES = /* @__PURE__ */ new Set(["http", "https", "mailto", "tel"]);
   function schemeOf(url) {
@@ -185014,10 +185033,21 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   function readAttrs(s2, i5) {
     if (s2[i5] !== "{")
       return null;
-    const close3 = s2.indexOf("}", i5);
-    if (close3 < 0)
-      return null;
-    return { attrs: parseAttrs(s2.slice(i5, close3 + 1)), end: close3 + 1 };
+    let quoted = false;
+    for (let k3 = i5 + 1; k3 < s2.length; k3++) {
+      const c3 = s2[k3];
+      if (quoted && c3 === "\\" && (s2[k3 + 1] === '"' || s2[k3 + 1] === "\\")) {
+        k3++;
+        continue;
+      }
+      if (c3 === '"') {
+        quoted = !quoted;
+        continue;
+      }
+      if (!quoted && c3 === "}")
+        return { attrs: parseAttrs(s2.slice(i5, k3 + 1)), end: k3 + 1 };
+    }
+    return null;
   }
   function lineOf(s2, first3) {
     const nl = [];
@@ -185072,17 +185102,14 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         continue;
       }
       if (c3 === "`") {
-        let n2 = 0;
-        while (s2[i5 + n2] === "`")
-          n2++;
-        const fence = "`".repeat(n2);
-        const close3 = s2.indexOf(fence, i5 + n2);
+        const n2 = backtickRun(s2, i5);
+        const close3 = findCodeSpanClose(s2, i5, n2);
         if (close3 >= 0) {
           atom2({ type: "code", value: s2.slice(i5 + n2, close3) }, i5, close3 + n2);
           i5 = close3 + n2;
           continue;
         }
-        buf += fence;
+        buf += "`".repeat(n2);
         i5 += n2;
         continue;
       }
@@ -185514,8 +185541,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   }
   function letters(n2) {
     const out = [];
-    for (let i5 = 0; i5 < n2; i5++)
-      out.push(String.fromCharCode(65 + i5));
+    for (let i5 = 0; i5 < n2; i5++) {
+      let s2 = "";
+      for (let k3 = i5; k3 >= 0; k3 = Math.floor(k3 / 26) - 1)
+        s2 = String.fromCharCode(65 + k3 % 26) + s2;
+      out.push(s2);
+    }
     return out;
   }
   var AGGS = /* @__PURE__ */ new Set(["sum", "avg", "min", "max", "count"]);
@@ -185704,7 +185735,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         diagnostics.push({ severity: "error", code: "table-src-and-body", message: "table has both `src` and an inline body; provide one, not both" });
       }
       const headerAttr = attrs["header"];
-      const header = headerAttr === void 0 ? true : headerAttr === true || headerAttr === 1 || headerAttr === "1";
+      const header = !(headerAttr === false || headerAttr === 0 || headerAttr === "0" || headerAttr === "false");
       const model2 = { header, columns: [], align: [], rows: [], src };
       const caption2 = attrs["caption"];
       if (typeof caption2 === "string")
@@ -185714,7 +185745,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     let raw;
     if (fmt4 === "csv" || fmt4 === "tsv") {
       const headerAttr = attrs["header"];
-      const header = headerAttr === void 0 ? true : headerAttr === true || headerAttr === 1 || headerAttr === "1";
+      const header = !(headerAttr === false || headerAttr === 0 || headerAttr === "0" || headerAttr === "false");
       raw = parseDelimited(body, resolveDelim(fmt4, attrs["delim"], diagnostics), header);
     } else {
       if (fmt4 !== void 0)
@@ -189198,7 +189229,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   init_define_process_argv();
   var STYLE_SEVERITY = {
     "style-selector-unsupported": "error",
-    "style-ambiguous-rule": "error",
+    "style-ambiguous-rule": "warning",
     "style-unknown-state": "error",
     "style-unknown-screen": "error",
     "style-unknown-value-source": "error",
@@ -189305,6 +189336,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     "geml-form/v1": {
       state: "draft",
       since: "1.10.0",
+      // GEP-0008's structural rules, held here with the family until the GEP
+      // lands in §3 — as the profile's §1.1 says of the attribute keys: a
+      // `form-*` block is meaningful only inside a `form` (geml.ts checkFormChild),
+      // and a field carries a `name=` no other field of its form carries
+      // (checkFieldName) — the key a handler receives and a coordinate addresses.
+      diagnostics: { "form-child-outside-form": "error", "form-field-missing-name": "error", "form-duplicate-name": "error" },
       // 类型进来了：在 GEP-0008 落到 §3 的核心注册表之前，声明了这个 profile 的文档就能用
       // form-* 家族 —— 和 geml-style 用同一条路。不声明的文档照旧 unknown-block-type。
       types: ["form", "form-field", "form-group", "form-options", "form-note"],
@@ -189314,7 +189351,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       // GEP-0008 自己的例子会逐键报未知。键的归属是分开的，写在这里只是因为类型还
       // 住在 profile 里：
       //   · 六个约束键（pattern/min/max/step/maxlength/accept）是**这份 profile 的**；
-      //   · 其余是 **GEP-0008 的**（label/description/placeholder/type/required/
+      //   · 其余是 **GEP-0008 的**（name/label/description/placeholder/type/required/
       //     multiple/value/options，form 的 handler，form-options 的表体键）。
       // GEP-0008 一旦落进 §3，后者应当搬到核心的类型表里，这里只留前六个。
       attrs: {
@@ -189325,6 +189362,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           "step",
           "maxlength",
           "accept",
+          "name",
           "label",
           "description",
           "placeholder",
@@ -189508,7 +189546,181 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
 
   // ../../geml-parser/dist/serialize.js
   init_define_process_argv();
+  function looksTyped(s2) {
+    return s2 === "true" || s2 === "false" || /^[+-]?\d+$/.test(s2) || /^[+-]?(\d+\.\d*|\.\d+|\d+)([eE][+-]?\d+)?$/.test(s2) && /[.eE]/.test(s2);
+  }
+  function serAttrValue(v3) {
+    if (v3 === true)
+      return "";
+    if (v3 === false)
+      return "false";
+    if (typeof v3 === "number")
+      return String(v3);
+    return `"${v3.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+  }
+  function serAttrs(a2) {
+    const parts = [];
+    if (a2.id !== void 0)
+      parts.push(`#${a2.id}`);
+    for (const c3 of a2.classes ?? [])
+      parts.push(`.${c3}`);
+    for (const [k3, v3] of Object.entries(a2.attrs ?? {})) {
+      parts.push(v3 === true ? k3 : `${k3}=${serAttrValue(v3)}`);
+    }
+    return parts.length ? `{${parts.join(" ")}}` : "";
+  }
+  function serDataValue(v3) {
+    if (typeof v3 === "boolean")
+      return String(v3);
+    if (typeof v3 === "number")
+      return String(v3);
+    return looksTyped(v3) || v3.trim() !== v3 ? `"${v3}"` : v3;
+  }
+  function escText(s2) {
+    return s2.replace(/[\\`*~$\[\]]/g, (c3) => "\\" + c3);
+  }
   var META_REF_G = new RegExp(META_REF_SRC, "g");
+  function escMetaRef(s2) {
+    return s2.replace(META_REF_G, (m3, _key, offset) => {
+      let bs = 0;
+      for (let k3 = offset - 1; k3 >= 0 && s2[k3] === "\\"; k3--)
+        bs++;
+      return (bs % 2 === 1 ? "\\\\{" : "\\{") + m3.slice(1);
+    });
+  }
+  function longestRun(s2, ch3) {
+    let max10 = 0;
+    let run5 = 0;
+    for (const c3 of s2) {
+      if (c3 === ch3) {
+        run5++;
+        if (run5 > max10)
+          max10 = run5;
+      } else
+        run5 = 0;
+    }
+    return max10;
+  }
+  function linkDest(n2) {
+    if (n2.href !== void 0)
+      return n2.href;
+    if (n2.doc !== void 0)
+      return n2.anchor !== void 0 ? `${n2.doc}#${n2.anchor}` : n2.doc;
+    if (n2.anchor !== void 0)
+      return `#${n2.anchor}`;
+    return "";
+  }
+  function serInline(n2, esc2) {
+    switch (n2.type) {
+      case "text":
+        return escMetaRef(esc2 ? escText(n2.value) : n2.value);
+      case "emph":
+        return `*${serSeq(n2.children, esc2)}*`;
+      case "strong":
+        return `**${serSeq(n2.children, esc2)}**`;
+      case "strike":
+        return `~~${serSeq(n2.children, esc2)}~~`;
+      case "code": {
+        const f2 = "`".repeat(longestRun(n2.value, "`") + 1);
+        return f2 + n2.value + f2;
+      }
+      case "math":
+        return `$${n2.value}$`;
+      case "break":
+        return "\\\n";
+      case "image":
+        return `![${n2.alt}](${n2.src})${serAttrs({ attrs: n2.attrs })}`;
+      case "link":
+        return `[${serSeq(n2.children, esc2)}](${linkDest(n2)})${serAttrs({ attrs: n2.attrs })}`;
+      case "autoref":
+        return `[[${n2.doc !== void 0 ? `${n2.doc}#${n2.anchor}` : `#${n2.anchor}`}]]`;
+      case "project":
+        return `![[${n2.doc !== void 0 ? `${n2.doc}#${n2.anchor}` : `#${n2.anchor}`}]]`;
+      case "footnote":
+        return `[^${n2.ref}]`;
+    }
+  }
+  function serSeq(ns, esc2) {
+    return ns.map((n2) => serInline(n2, esc2)).join("");
+  }
+  function serInlines(ns) {
+    const lazy = serSeq(ns, false);
+    if (JSON.stringify(parseInline(lazy, 0, { refs: [] })) === JSON.stringify(ns))
+      return lazy;
+    const escaped = serSeq(ns, true);
+    if (JSON.stringify(parseInline(escaped, 0, { refs: [] })) === JSON.stringify(ns))
+      return escaped;
+    return serSeq(ns, true).replace(/!(?=\[\[)/g, "\\!");
+  }
+  function serList(list, indent) {
+    const out = [];
+    const start2 = list.start ?? 1;
+    list.items.forEach((item, k3) => {
+      const marker = list.ordered ? `${start2 + k3}. ` : "- ";
+      const task = item.checked === void 0 ? "" : item.checked ? "[x] " : "[ ] ";
+      const [head2, ...cont] = serInlines(item.inlines).split("\n");
+      out.push(indent + marker + task + head2);
+      const contIndent = indent + " ".repeat(marker.length + task.length);
+      for (const l4 of cont)
+        out.push(contIndent + l4);
+      for (const child of item.children ?? []) {
+        out.push(child.kind === "list" ? serList(child, indent + "  ") : serBlock(child));
+      }
+      if (list.loose && k3 < list.items.length - 1)
+        out.push("");
+    });
+    return out.join("\n");
+  }
+  function serTypedBlock(b3) {
+    let body;
+    if (b3.mode === "flow") {
+      body = (b3.children ?? []).map(serBlock).join("\n\n").split("\n");
+    } else if (b3.mode === "data") {
+      body = Object.entries(b3.data ?? {}).map(([k3, v3]) => `${k3} = ${serDataValue(v3)}`);
+    } else if (b3.type === "data" && b3.value !== void 0 && b3.attrs["src"] === void 0 && // Canonical form is defined for the two JSON forms and ONLY them. Any other
+    // format the processor has an engine for — `yaml` here — has a value too,
+    // and re-emitting THAT as pretty JSON would rewrite a yaml body into JSON
+    // on a reformat. Its authored bytes are its canonical form.
+    ["json", "jsonl"].includes(String(b3.attrs["format"] ?? "json"))) {
+      body = String(b3.attrs["format"] ?? "json") === "jsonl" && Array.isArray(b3.value) ? b3.value.map((v3) => JSON.stringify(v3)) : JSON.stringify(b3.value, null, 2).split("\n");
+    } else {
+      body = b3.raw ?? [];
+    }
+    let maxEq = 2;
+    for (const ln of body) {
+      const m3 = /^(=+)[ \t]*$/.exec(ln);
+      if (m3)
+        maxEq = Math.max(maxEq, m3[1].length);
+    }
+    const fence = "=".repeat(Math.max(3, maxEq + 1));
+    const attrs = serAttrs({ id: b3.id, classes: b3.classes, attrs: b3.attrs });
+    const open3 = fence + " " + b3.type + (attrs ? " " + attrs : "");
+    return [open3, ...body, fence].join("\n");
+  }
+  var STARTS_BLOCK = /^(?:={3,}(?:[ \t]|$)|#{1,6}[ \t]|%%|[ \t]*(?:[-*]|\d+\.)[ \t]+)/;
+  function escBlockStarts(text5) {
+    return text5.split("\n").map((l4) => STARTS_BLOCK.test(l4) ? "\\" + l4 : l4).join("\n");
+  }
+  function serBlock(b3) {
+    switch (b3.kind) {
+      case "heading": {
+        const attrs = serAttrs({ id: b3.id, classes: b3.classes, attrs: b3.attrs });
+        return "#".repeat(b3.level) + " " + serInlines(b3.inlines) + (attrs ? " " + attrs : "");
+      }
+      case "paragraph":
+        return escBlockStarts(serInlines(b3.inlines));
+      case "hidden":
+        return "%%" + (b3.text ? " " + b3.text : "");
+      case "list":
+        return serList(b3, "");
+      case "block":
+        return serTypedBlock(b3);
+    }
+  }
+  function serialize(doc) {
+    const blocks2 = Array.isArray(doc) ? doc : doc.children;
+    return blocks2.map(serBlock).join("\n\n") + "\n";
+  }
 
   // ../../geml-parser/dist/to-md.js
   init_define_process_argv();
@@ -189525,7 +189737,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   }
   var pathText = (path5) => path5.map(stepText).join("");
   function noUnits(block2, path5, rebase2 = (s2) => s2) {
-    const why = `\`${block2.type}\` carries no addressable units inside it \u2014 a coordinate needs a table, a \`data\` block, or \`meta\` (GEP 0011)`;
+    const why = `\`${block2.type}\` carries no addressable units inside it \u2014 a coordinate needs a table, a \`data\` block, \`meta\` (GEP 0011), or a \`form\` (GEP 0008)`;
     const src = block2.type === "embed" ? block2.attrs["src"] : void 0;
     if (typeof src !== "string" || !src.includes("#"))
       return why;
@@ -189678,6 +189890,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (block2.type === "view" && (block2.table === void 0 || block2.table.columns.length === 0)) {
       return miss("this view's `src=` did not resolve, so it has no rows to address");
     }
+    if (block2.type === "form" || block2.type === "form-group")
+      return projectForm(block2, path5);
     if (block2.table)
       return projectTable(block2, block2.table, path5);
     if (block2.value !== void 0)
@@ -189689,7 +189903,46 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     return miss(noUnits(block2, path5, rebase2));
   }
   function notProjectable(shape, written) {
-    return shape === "column" ? `\`${written}\` is a whole column \u2014 as many values as the table has rows; project one cell (\`[<row>]["<column>"]\`), a whole row (\`[<row>]\`), or select the rows with a \`view\` (\`where=\`, \`select=\`)` : `\`${written}\` is a value-tree node with more nodes inside it; project one leaf value under it`;
+    if (shape === "column") {
+      return `\`${written}\` is a whole column \u2014 as many values as the table has rows; project one cell (\`[<row>]["<column>"]\`), a whole row (\`[<row>]\`), or select the rows with a \`view\` (\`where=\`, \`select=\`)`;
+    }
+    if (shape === "field") {
+      return `\`${written}\` is a form field \u2014 a control, not content; reference it with \`[[\u2026]]\`, which says its label`;
+    }
+    return `\`${written}\` is a value-tree node with more nodes inside it; project one leaf value under it`;
+  }
+  function formFields(blocks2) {
+    const out = [];
+    for (const b3 of blocks2) {
+      if (b3.kind !== "block")
+        continue;
+      if (b3.type === "form-field")
+        out.push(b3);
+      else if (b3.type === "form-group" && b3.children !== void 0)
+        out.push(...formFields(b3.children));
+    }
+    return out;
+  }
+  function projectForm(block2, path5) {
+    const step3 = path5[0];
+    if (step3.kind === "index") {
+      return miss(`a ${block2.type}'s fields are addressed by \`name=\` \u2014 \`["<name>"]\` \u2014 not by position`);
+    }
+    if (block2.children === void 0) {
+      return miss(`this \`${block2.type}\` was not read as a form, so it has no fields to address \u2014 is \`geml-form/v1\` declared?`);
+    }
+    const fields = formFields(block2.children);
+    const field = fields.find((f2) => f2.attrs["name"] === step3.name);
+    if (field === void 0) {
+      const names = fields.map((f2) => attrStr(f2.attrs, "name")).filter((n2) => n2 !== void 0);
+      const have = names.length === 0 ? "it has no named field" : `its fields are ${names.map((n2) => `\`${n2}\``).join(", ")}`;
+      return miss(`this \`${block2.type}\` has no field named \`${step3.name}\`; ${have}`);
+    }
+    if (path5.length > 1) {
+      return miss(`a field carries no units inside it \u2014 \`${pathText(path5.slice(1))}\` addresses nothing under \`${stepText(step3)}\``);
+    }
+    const json3 = field.id !== void 0 ? { id: field.id, ...field.attrs } : { ...field.attrs };
+    return { ok: true, shape: "field", text: serialize([field]).trimEnd(), json: json3, shown: attrStr(field.attrs, "label") ?? step3.name };
   }
   function inlineProjection(hit, written) {
     if (hit.shape === "leaf")
@@ -189829,13 +190082,67 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (!m3)
       return null;
     const rest = trimSpaceTabEnd(line2.slice(m3[0].length));
-    if (rest.endsWith("}")) {
-      const lastClose = rest.lastIndexOf("}", rest.length - 2);
-      const open3 = rest.indexOf("{", lastClose + 1);
-      if (open3 >= 0)
-        return [line2, m3[1], trimSpaceTabEnd(rest.slice(0, open3)), rest.slice(open3)];
-    }
+    const open3 = headingObjectStart(rest);
+    if (open3 >= 0)
+      return [line2, m3[1], trimSpaceTabEnd(rest.slice(0, open3)), rest.slice(open3)];
     return [line2, m3[1], rest, void 0];
+  }
+  function headingObjectStart(text5) {
+    if (!text5.endsWith("}"))
+      return -1;
+    const verbatim = verbatimMask(text5);
+    if (verbatim[text5.length - 1] === 1)
+      return -1;
+    let quoted = false;
+    for (let k3 = text5.length - 2; k3 >= 0; k3--) {
+      const c3 = text5[k3];
+      if (c3 === '"') {
+        let n2 = 0;
+        while (k3 - 1 - n2 >= 0 && text5[k3 - 1 - n2] === "\\")
+          n2++;
+        if (n2 % 2 === 0)
+          quoted = !quoted;
+        continue;
+      }
+      if (quoted || c3 !== "{" && c3 !== "}" || verbatim[k3] === 1)
+        continue;
+      if (c3 === "}")
+        return -1;
+      return k3 === 0 || text5[k3 - 1] === " " || text5[k3 - 1] === "	" ? k3 : -1;
+    }
+    return -1;
+  }
+  function verbatimMask(text5) {
+    const mask2 = new Uint8Array(text5.length);
+    let i5 = 0;
+    while (i5 < text5.length) {
+      const c3 = text5[i5];
+      if (c3 === "\\") {
+        i5 += 2;
+        continue;
+      }
+      if (c3 === "`") {
+        const n2 = backtickRun(text5, i5);
+        const close3 = findCodeSpanClose(text5, i5, n2);
+        if (close3 >= 0) {
+          mask2.fill(1, i5, close3 + n2);
+          i5 = close3 + n2;
+        } else
+          i5 += n2;
+        continue;
+      }
+      if (c3 === "$") {
+        const close3 = text5.indexOf("$", i5 + 1);
+        if (close3 > i5 + 1) {
+          mask2.fill(1, i5, close3 + 1);
+          i5 = close3 + 1;
+        } else
+          i5++;
+        continue;
+      }
+      i5++;
+    }
+    return mask2;
   }
   var ATTR_KEY_EQ = /^[A-Za-z][A-Za-z0-9_-]*=/;
   function looksLikeAttrObject(inner3) {
@@ -189853,10 +190160,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         continue;
       }
       if (c3 === "`") {
-        let n2 = 0;
-        while (text5[i5 + n2] === "`")
-          n2++;
-        const close3 = text5.indexOf("`".repeat(n2), i5 + n2);
+        const n2 = backtickRun(text5, i5);
+        const close3 = findCodeSpanClose(text5, i5, n2);
         i5 = close3 >= 0 ? close3 + n2 : i5 + n2;
         continue;
       }
@@ -189986,10 +190291,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         continue;
       }
       if (c3 === "`") {
-        let n2 = 0;
-        while (s2[i5 + n2] === "`")
-          n2++;
-        const close3 = s2.indexOf("`".repeat(n2), i5 + n2);
+        const n2 = backtickRun(s2, i5);
+        const close3 = findCodeSpanClose(s2, i5, n2);
         if (close3 >= 0) {
           i5 = close3 + n2;
           continue;
@@ -190035,10 +190338,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         continue;
       }
       if (c3 === "`") {
-        let n2 = 0;
-        while (text5[i5 + n2] === "`")
-          n2++;
-        const close3 = text5.indexOf("`".repeat(n2), i5 + n2);
+        const n2 = backtickRun(text5, i5);
+        const close3 = findCodeSpanClose(text5, i5, n2);
         if (close3 >= 0) {
           out += text5.slice(i5, close3 + n2);
           i5 = close3 + n2;
@@ -190280,12 +190581,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         diags.push({ severity: "error", code: "embed-target-not-geml", message: `embed: \`${docPath}\` is not a GEML document; \`src=\` names a \`.geml\` file (optionally with a #fragment)`, line: openLineNo });
       } else if (docPath === "") {
         if (anchor2 !== void 0)
-          (ctx.embeds ??= []).push({ doc: "", anchor: anchor2, line: openLineNo });
+          (ctx.embeds ??= []).push({ doc: "", anchor: anchor2, ...partOf(block2.attrs), line: openLineNo });
         if (anchor2 !== void 0)
           ctx.refs.push({ kind: "internal", anchor: anchor2, line: openLineNo, embed: true });
       } else {
         ctx.refs.push({ kind: "cross", doc: docPath, anchor: anchor2, line: openLineNo, embed: true });
-        (ctx.embeds ??= []).push(anchor2 === void 0 ? { doc: docPath, line: openLineNo } : { doc: docPath, anchor: anchor2, line: openLineNo });
+        (ctx.embeds ??= []).push(anchor2 === void 0 ? { doc: docPath, ...partOf(block2.attrs), line: openLineNo } : { doc: docPath, anchor: anchor2, ...partOf(block2.attrs), line: openLineNo });
       }
     }
     if (body.some((l4) => l4.trim() !== "")) {
@@ -190412,6 +190713,32 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     ["view", readViewBody],
     ["diagram", readDiagramBody]
   ]);
+  var FORM_CHILDREN = /* @__PURE__ */ new Set(["form-field", "form-group", "form-options", "form-note"]);
+  function checkFormChild(type3, openLineNo, ctx) {
+    const parent4 = ctx.parentTypes?.at(-1);
+    const ok = type3 === "form-field" ? parent4 === "form" || parent4 === "form-group" : parent4 === "form";
+    if (ok)
+      return true;
+    const where = parent4 === void 0 ? "lies outside any `form`" : `sits in a \`${parent4}\``;
+    const belongs = type3 === "form-field" ? "a field belongs directly in a `form`, or in a `form-group` inside one" : type3 === "form-group" ? "a group belongs directly in a `form`, and groups do not nest" : `a \`${type3}\` belongs directly in a \`form\``;
+    ctx.diags.push({ severity: "error", code: "form-child-outside-form", message: `\`${type3}\` ${where}; ${belongs} (GEP-0008)`, line: openLineNo });
+    return false;
+  }
+  function checkFieldName(attrs, openLineNo, ctx) {
+    const name = attrs["name"];
+    if (typeof name !== "string" || name.length === 0) {
+      ctx.diags.push({ severity: "error", code: "form-field-missing-name", message: "a `form-field` needs `name=` \u2014 the key its handler receives, unique within the form (GEP-0008)", line: openLineNo });
+      return;
+    }
+    const names = ctx.formNames?.at(-1);
+    if (names === void 0)
+      return;
+    if (names.has(name)) {
+      ctx.diags.push({ severity: "error", code: "form-duplicate-name", message: `two fields of this form are named \`${name}\`; a name is unique within its form (GEP-0008)`, line: openLineNo });
+      return;
+    }
+    names.add(name);
+  }
   function readFencedBlock(lines, i5, consumed, open3, base, ctx, depth) {
     const openLen = open3[1].length;
     const type3 = open3[2];
@@ -190438,6 +190765,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       block2.hidden = true;
     if (type3 === "embed")
       recordEmbedSrc(block2, attrs, body, openLineNo, ctx);
+    if (FORM_CHILDREN.has(type3) && ctx.vocab.types.has("form")) {
+      const placed = checkFormChild(type3, openLineNo, ctx);
+      if (placed && type3 === "form-field")
+        checkFieldName(attrs.attrs, openLineNo, ctx);
+    }
     if (mode === "prose") {
       block2.children = scanProse(body, base + i5 + 1, ctx);
     } else if (mode === "flow") {
@@ -190445,7 +190777,13 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         ctx.diags.push({ severity: "error", code: "block-nesting-too-deep", message: `block nesting too deep (max ${MAX_NESTING}); body kept as raw`, line: openLineNo });
         block2.raw = body;
       } else {
+        (ctx.parentTypes ??= []).push(type3);
+        if (type3 === "form")
+          (ctx.formNames ??= []).push(/* @__PURE__ */ new Set());
         block2.children = scanBlocks(body, base + i5 + 1, ctx, depth + 1);
+        if (type3 === "form")
+          ctx.formNames.pop();
+        ctx.parentTypes.pop();
       }
     } else if (mode === "data") {
       block2.data = parseData(body);
@@ -190749,43 +191087,121 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     return model;
   }
   var inferDataFormat = (target) => /\.tsv$/i.test(target) ? "tsv" : "csv";
-  var EMBED_DEPTH_LIMIT = 8;
-  function detectTransclusionCycles(ctx, opts) {
-    if (!opts.resolveDoc || ctx.embeds === void 0 || ctx.embeds.length === 0)
-      return;
-    const resolve3 = opts.resolveDoc;
-    const embedsOf = /* @__PURE__ */ new Map();
-    const reported = /* @__PURE__ */ new Set();
-    const colour = /* @__PURE__ */ new Map();
-    const walk2 = (path5, base, stack, line2) => {
-      const rel3 = relJoinPath(base, path5);
-      if (colour.get(rel3) === "grey") {
-        const chain = [...stack, rel3].join(" \u2192 ");
-        if (reported.has(chain))
-          return;
-        reported.add(chain);
-        ctx.diags.push({ severity: "error", code: "transclusion-cycle", message: `transclusion cycle: ${chain}`, line: line2 });
-        return;
+  var EMBED_DEPTH_LIMIT = 16;
+  var WHITE_CHAR = new RegExp("^\\p{White_Space}$", "u");
+  function trimWhiteSpaceEnd(s2) {
+    let b3 = s2.length;
+    while (b3 > 0 && WHITE_CHAR.test(s2[b3 - 1]))
+      b3--;
+    return s2.slice(0, b3);
+  }
+  var EMBED_PARTS = /* @__PURE__ */ new Set(["whole", "head", "body", "intro"]);
+  function partOf(attrs) {
+    const p3 = attrs["part"];
+    return typeof p3 === "string" && EMBED_PARTS.has(p3) ? { part: p3 } : {};
+  }
+  function soleParagraph(b3) {
+    if (b3.kind !== "block" || b3.prose !== true)
+      return null;
+    const kids = (b3.children ?? []).filter((c3) => c3.kind !== "hidden" && !(c3.kind === "paragraph" && c3.text.trim() === ""));
+    const only = kids.length === 1 ? kids[0] : void 0;
+    return only !== void 0 && only.kind === "paragraph" ? only : null;
+  }
+  var CHAIN_BUDGET = 1e4;
+  function chainSitesIn(blocks2, out) {
+    const inl = (nodes5) => {
+      for (const n2 of nodes5) {
+        if (n2.type === "project")
+          out.push({ ...n2.doc !== void 0 ? { doc: n2.doc } : {}, anchor: n2.anchor, inline: true });
+        else if (n2.type === "emph" || n2.type === "strong" || n2.type === "strike" || n2.type === "link")
+          inl(n2.children);
       }
-      if (colour.get(rel3) === "black")
-        return;
-      if (stack.length >= EMBED_DEPTH_LIMIT)
-        return;
-      colour.set(rel3, "grey");
-      let inner3 = embedsOf.get(rel3);
-      if (inner3 === void 0) {
-        const src = resolve3(rel3);
-        inner3 = src === null ? [] : gatherEmbeds(src);
-        embedsOf.set(rel3, inner3);
-      }
-      for (const e3 of inner3)
-        walk2(e3.doc, relDirPath(rel3), [...stack, rel3], line2);
-      colour.set(rel3, "black");
     };
+    const items = (its) => {
+      for (const it of its) {
+        inl(it.inlines);
+        if (it.children)
+          chainSitesIn(it.children, out);
+      }
+    };
+    for (const b3 of blocks2) {
+      if (b3.kind === "paragraph" || b3.kind === "heading")
+        inl(b3.inlines);
+      else if (b3.kind === "list")
+        items(b3.items);
+      else if (b3.kind === "block") {
+        const src = b3.type === "embed" && typeof b3.attrs["src"] === "string" ? b3.attrs["src"].trim() : "";
+        if (src !== "") {
+          const hash = src.indexOf("#");
+          const doc = hash < 0 ? src : src.slice(0, hash);
+          out.push({ ...doc !== "" ? { doc } : {}, ...hash < 0 ? {} : { anchor: src.slice(hash + 1) }, ...partOf(b3.attrs), inline: false });
+        }
+        if (b3.children)
+          chainSitesIn(b3.children, out);
+      }
+    }
+  }
+  function detectTransclusionCycles(children2, ctx, opts) {
     const root4 = opts.self ?? "";
-    for (const e3 of ctx.embeds)
-      walk2(e3.doc, relDirPath(root4), [root4], e3.line);
-    reportBorrowedVocabularies(ctx, opts, root4, resolve3);
+    const models = /* @__PURE__ */ new Map([[root4, children2]]);
+    const load2 = (name) => {
+      if (!models.has(name)) {
+        const src = opts.resolveDoc ? opts.resolveDoc(name) : null;
+        models.set(name, src === null ? null : parse(src).children);
+      }
+      return models.get(name);
+    };
+    const found = /* @__PURE__ */ new Map();
+    let budget = CHAIN_BUDGET;
+    const visit = (name, sites, docs, path5, origin) => {
+      for (const s2 of sites) {
+        if (budget <= 0)
+          return;
+        let target = name;
+        if (s2.doc !== void 0) {
+          if (!/\.geml$/i.test(s2.doc))
+            continue;
+          target = relJoinPath(relDirPath(name), s2.doc);
+        }
+        if (s2.anchor !== void 0 && s2.anchor.includes("["))
+          continue;
+        const model = load2(target);
+        if (model === null)
+          continue;
+        const sel = selectEmbed(model, s2.anchor, s2.part ?? "whole");
+        if (sel === null || s2.inline && !(sel.length === 1 && soleParagraph(sel[0]) !== null))
+          continue;
+        const key = s2.anchor === void 0 ? target : `${target}#${nameKey(s2.anchor)}`;
+        if (target !== name && docs.includes(target)) {
+          if (!found.has(origin))
+            found.set(origin, `transclusion cycle: \`${target}\` is already being expanded: ${[...docs, target].join(" \u2192 ")}`);
+          continue;
+        }
+        if (path5.includes(key)) {
+          const shown = s2.anchor === void 0 ? target : `${target}#${s2.anchor}`;
+          if (!found.has(origin))
+            found.set(origin, `transclusion cycle: \`${shown}\` is already being expanded`);
+          continue;
+        }
+        if (path5.length >= EMBED_DEPTH_LIMIT)
+          continue;
+        budget--;
+        const next3 = [];
+        chainSitesIn(sel, next3);
+        visit(target, next3, target !== name ? [...docs, target] : docs, [...path5, key], origin);
+      }
+    };
+    const starts = [
+      ...(ctx.embeds ?? []).map((e3) => ({ site: { ...e3.doc !== "" ? { doc: e3.doc } : {}, ...e3.anchor !== void 0 ? { anchor: e3.anchor } : {}, ...e3.part !== void 0 ? { part: e3.part } : {}, inline: false }, line: e3.line })),
+      ...(ctx.projections ?? []).map((p3) => ({ site: { ...p3.doc !== void 0 ? { doc: p3.doc } : {}, anchor: p3.anchor, inline: true }, line: p3.line }))
+    ];
+    for (const { site, line: line2 } of starts)
+      visit(root4, [site], [root4], [], line2);
+    for (const [line2, message] of [...found].sort((a2, b3) => a2[0] - b3[0])) {
+      ctx.diags.push({ severity: "error", code: "transclusion-cycle", message, line: line2 });
+    }
+    if (opts.resolveDoc)
+      reportBorrowedVocabularies(ctx, opts, root4, opts.resolveDoc);
   }
   function reportBorrowedVocabularies(ctx, opts, root4, resolve3) {
     const seen = /* @__PURE__ */ new Set();
@@ -190810,46 +191226,6 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       }
     }
   }
-  function detectSelfEmbedCycles(source, ctx) {
-    const selfEmbeds = (ctx.embeds ?? []).filter((e3) => e3.doc === "" && e3.anchor !== void 0);
-    if (selfEmbeds.length === 0)
-      return;
-    const spans = blockSpans(source, { markdown: ctx.markdown });
-    for (const e3 of selfEmbeds) {
-      const span = spans.get(e3.anchor);
-      if (span === void 0)
-        continue;
-      const line2 = e3.line - 1;
-      if (line2 >= span.start && line2 < span.end) {
-        ctx.diags.push({
-          severity: "error",
-          code: "transclusion-cycle",
-          message: `transclusion cycle: \`#${e3.anchor}\` selects the content this embed is part of`,
-          line: e3.line
-        });
-      }
-    }
-  }
-  function detectSelfProjectionCycles(source, ctx) {
-    const local = (ctx.projections ?? []).filter((p3) => p3.doc === void 0);
-    if (local.length === 0)
-      return;
-    const spans = blockSpans(source, { markdown: ctx.markdown });
-    for (const p3 of local) {
-      const span = spans.get(p3.anchor);
-      if (span === void 0)
-        continue;
-      const line2 = p3.line - 1;
-      if (line2 >= span.start && line2 < span.end) {
-        ctx.diags.push({
-          severity: "error",
-          code: "transclusion-cycle",
-          message: `transclusion cycle: \`![[#${p3.anchor}]]\` projects the content it is part of`,
-          line: p3.line
-        });
-      }
-    }
-  }
   function projectableInlines(blocks2, id39) {
     const key = nameKey(id39);
     const found = (function find5(bs) {
@@ -190864,14 +191240,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       }
       return void 0;
     })(blocks2);
-    if (found === void 0)
-      return null;
-    if (found.kind !== "block" || found.prose !== true)
-      return "not-inline";
-    const kids = (found.children ?? []).filter((c3) => !(c3.kind === "paragraph" && c3.text.trim() === ""));
-    if (kids.length !== 1 || kids[0].kind !== "paragraph")
-      return "not-inline";
-    return { inlines: kids[0].inlines };
+    if (found === void 0) {
+      return [...proseRunTargets(blocks2).keys()].some((k3) => nameKey(k3) === key) ? "not-inline" : null;
+    }
+    const sole = soleParagraph(found);
+    return sole === null ? "not-inline" : { inlines: sole.inlines };
   }
   function validateProjections(children2, ctx, opts) {
     for (const p3 of ctx.projections ?? []) {
@@ -190918,11 +191291,6 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   function relDirPath(p3) {
     const i5 = p3.lastIndexOf("/");
     return i5 < 0 ? "" : p3.slice(0, i5);
-  }
-  function gatherEmbeds(source) {
-    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: EMPTY_VOCABULARY, embeds: [] };
-    scanBlocks(normalizeSource(source).split("\n"), 0, ctx);
-    return (ctx.embeds ?? []).map((e3) => e3.anchor === void 0 ? { doc: e3.doc } : { doc: e3.doc, anchor: e3.anchor });
   }
   function tableFromDocument(source, id39) {
     const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: EMPTY_VOCABULARY };
@@ -190985,14 +191353,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       if (target.includes("#"))
         continue;
       const scheme = schemeOf(target);
-      if (scheme === "http" || scheme === "https")
-        continue;
-      if (scheme !== null) {
-        err(line2, "unresolvable-table-source", `table source \`${target}\` names a disallowed URL scheme`);
+      if (scheme === "http" || scheme === "https") {
+        deferBlock(block2, ctx);
         continue;
       }
-      if (!/\.(csv|tsv)$/i.test(target)) {
-        err(line2, "unresolvable-table-source", `table source \`${target}\` is not a \`.csv\`/\`.tsv\` data file`);
+      if (scheme !== null) {
+        err(line2, "unresolvable-table-source", `table source \`${target}\` names a disallowed URL scheme`);
         continue;
       }
       if (!opts.resolveDoc) {
@@ -191027,6 +191393,26 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (caption !== void 0)
       model.caption = caption;
     return model;
+  }
+  function deferBlock(block2, ctx) {
+    if (block2.id !== void 0) {
+      const key = nameKey(block2.id);
+      if (ctx.tables?.get(key) === block2.table)
+        ctx.tables.delete(key);
+      (ctx.dataSrcPending ??= /* @__PURE__ */ new Set()).add(block2.id);
+    }
+    delete block2.table;
+  }
+  function defers(block2) {
+    if (block2.kind !== "block")
+      return false;
+    if (block2.type === "table" || block2.type === "view")
+      return block2.table === void 0;
+    if (block2.type !== "data")
+      return false;
+    const src = block2.attrs["src"];
+    const scheme = typeof src === "string" ? schemeOf(src.trim()) : null;
+    return scheme === "http" || scheme === "https";
   }
   function relationBlock(blocks2, id39) {
     for (const block2 of blocks2) {
@@ -191064,7 +191450,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       const exists = findBlockSite(document2.children, id39) !== void 0;
       return exists ? "not-a-relation" : null;
     }
-    if (block2.type === "view" && (block2.table === void 0 || block2.table.columns.length === 0)) {
+    if (block2.table === void 0)
+      return "defer";
+    if (block2.type === "view" && block2.table.columns.length === 0) {
       const why = document2.diagnostics.find((d3) => d3.severity === "error" && /^(view-source-|unresolved-cross-document-reference$|unresolvable-document$|unresolved-reference$)/.test(d3.code));
       return { unresolved: why?.message ?? `\`#${id39}\` did not resolve in that document`, ...why ? { code: why.code } : {} };
     }
@@ -191091,7 +191479,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           }
           if ([...unresolved].some((entry) => entry.block === source))
             return void 0;
-          return source.table ?? null;
+          return source.table ?? "defer";
         }
         if (!opts.resolveDoc) {
           ctx.diags.push({ severity: "warning", code: "unchecked-cross-document-reference", message: `view source \`${target}\` not checked (no document resolver)`, line: line2 });
@@ -191130,9 +191518,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       }
       const scheme = schemeOf(target);
       if (scheme === "http" || scheme === "https")
-        return null;
-      if (scheme !== null || !/\.(csv|tsv)$/i.test(target)) {
-        error3(line2, "unresolvable-table-source", `view source \`${target}\` is not a \`.csv\`/\`.tsv\` data file or a relation target`);
+        return "defer";
+      if (scheme !== null) {
+        error3(line2, "unresolvable-table-source", `view source \`${target}\` names a disallowed URL scheme`);
         return null;
       }
       if (!opts.resolveDoc) {
@@ -191163,6 +191551,10 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         progress2 = true;
         if (source === null)
           continue;
+        if (source === "defer") {
+          deferBlock(entry.block, ctx);
+          continue;
+        }
         const local = /^#([^#]+)$/.exec(entry.target.trim());
         const depth = (local ? depthOf.get(nameKey(local[1])) ?? 0 : 0) + 1;
         if (entry.block.id !== void 0)
@@ -191306,6 +191698,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
     const doc = ref.doc;
     const rebase2 = doc === void 0 ? void 0 : (src) => src.startsWith("#") ? `${doc}${src}` : relJoinPath(relDirPath(doc), src);
+    if (defers(block2))
+      return true;
     const hit = projectCoord(block2, path5, rebase2);
     if (!hit.ok)
       return err("unresolved-reference", `\`${written}\`: ${hit.why}`);
@@ -191316,10 +191710,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       if (!inline.ok)
         return err("inline-transclusion-not-inline", `\`![[${written}]]\` projects inline content, but ${inline.why}`);
       shown = inline.text;
-    } else if (ref.embed && (hit.shape === "column" || hit.shape === "tree")) {
-      return err("embed-target-not-projectable", `\`=== embed {src=${written}}\` cannot stand for that target: ${notProjectable(hit.shape, written)}`);
+    } else if (ref.embed && !inline.ok) {
+      return err("embed-target-not-projectable", `\`=== embed {src=${written}}\` cannot stand for that target: ${inline.why}`);
     } else if (inline.ok) {
       shown = inline.text;
+    } else if (hit.shown !== void 0) {
+      shown = hit.shown;
     }
     if (ref.node) {
       if (shown !== void 0)
@@ -191384,10 +191780,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         i5++;
         continue;
       }
-      let n2 = 0;
-      while (line2[i5 + n2] === "`")
-        n2++;
-      const close3 = line2.indexOf("`".repeat(n2), i5 + n2);
+      const n2 = backtickRun(line2, i5);
+      const close3 = findCodeSpanClose(line2, i5, n2);
       if (close3 < 0) {
         out += line2.slice(i5, i5 + n2);
         i5 += n2;
@@ -191665,12 +192059,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           continue;
         }
         if (!table) {
-          if (hash < 0 && /\.(csv|tsv)$/i.test(id39)) {
-            const sugar = chartSourceTable(ctx, opts, block2, id39, line2);
-            if (sugar === null)
-              continue;
-            table = sugar;
-          } else if (hash < 0 && /\.(json|jsonl)$/i.test(id39) && schemeOf(id39) === null) {
+          if (hash < 0 && /\.(json|jsonl)$/i.test(id39) && schemeOf(id39) === null) {
             if (!opts.resolveDoc) {
               ctx.diags.push({ severity: "warning", code: "unchecked-cross-document-reference", message: `geml-chart: data source \`${id39}\` not checked (no document resolver)`, line: line2 });
               continue;
@@ -191693,8 +192082,10 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
             ctx.diags.push({ severity: "error", code: "bad-data-source", message: `geml-chart: \`data=${id39}\`: a remote json/jsonl source needs a named \`data\` block with \`src=\``, line: line2 });
             continue;
           } else if (hash < 0 && /\.[a-z0-9]+$/i.test(id39)) {
-            ctx.diags.push({ severity: "error", code: "unresolvable-table-source", message: `geml-chart: \`data=${id39}\` is not a \`.csv\`/\`.tsv\`/\`.json\`/\`.jsonl\` data file, and not a \`#id\` naming a table or data block`, line: line2 });
-            continue;
+            const sugar = chartSourceTable(ctx, opts, block2, id39, line2);
+            if (sugar === null)
+              continue;
+            table = sugar;
           } else {
             const known = ctx.ids.has(nameKey(id39));
             const what = known ? `data target \`#${id39}\` is not a table` : `unresolved reference \`#${id39}\``;
@@ -191788,10 +192179,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         targets.add(a2);
     }
     validateRefs(ctx, opts, children2);
-    detectTransclusionCycles(ctx, opts);
-    detectSelfEmbedCycles(source, ctx);
+    detectTransclusionCycles(children2, ctx, opts);
     validateProjections(children2, ctx, opts);
-    detectSelfProjectionCycles(source, ctx);
     for (const m3 of ctx.mediaDocTargets ?? []) {
       ctx.diags.push({
         severity: "error",
@@ -191812,13 +192201,13 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (!((first3.startsWith("===") || first3.startsWith("#")) && first3.endsWith("\\"))) {
       return { line: first3, consumed: 1 };
     }
-    let folded = first3.slice(0, -1).trimEnd();
+    let folded = trimWhiteSpaceEnd(first3.slice(0, -1));
     let consumed = 1;
     while (i5 + consumed < lines.length) {
-      const next3 = lines[i5 + consumed].trim();
+      const next3 = trimWhiteSpace(lines[i5 + consumed]);
       consumed++;
       if (next3.endsWith("\\")) {
-        folded += " " + next3.slice(0, -1).trimEnd();
+        folded += " " + trimWhiteSpaceEnd(next3.slice(0, -1));
         continue;
       }
       folded += " " + next3;
@@ -192014,18 +192403,20 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   }
   function proseRunTargets(blocks2) {
     const out = /* @__PURE__ */ new Map();
-    collectRunTargets(blocks2, null, out);
+    const metaSolo = metaView(blocks2).blocks.length === 1;
+    collectRunTargets(blocks2, null, out, metaSolo);
     return out;
   }
-  function collectRunTargets(blocks2, root4, out) {
+  function collectRunTargets(blocks2, root4, out, metaSolo) {
     const stack = [];
     let prev2 = null;
     let run5 = [];
     const isAnchor = (b3) => b3.kind === "heading" || b3.kind === "block";
+    const anchorId = (b3) => b3.id ?? (b3.kind === "block" && b3.type === "meta" && metaSolo ? "meta" : void 0);
     const flush = (next3) => {
-      if (run5.length > 0) {
+      if (run5.some((b3) => b3.kind !== "hidden")) {
         const container2 = stack.length > 0 ? stack[stack.length - 1] : root4;
-        const id39 = runAddress(container2 === null ? null : { id: container2.id }, prev2 === null ? null : { id: prev2.id }, next3 === null ? null : { id: next3.id });
+        const id39 = runAddress(container2 === null ? null : { id: container2.id }, prev2 === null ? null : { id: anchorId(prev2) }, next3 === null ? null : { id: anchorId(next3) });
         if (id39 !== void 0 && !out.has(id39))
           out.set(id39, run5);
       }
@@ -192048,11 +192439,14 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       flush(b3);
       prev2 = b3;
       if (b3.kind === "block" && b3.mode === "flow" && b3.children)
-        collectRunTargets(b3.children, { id: b3.id }, out);
+        collectRunTargets(b3.children, { id: b3.id }, out, metaSolo);
     }
     flush(null);
   }
-  function proseRuns(units, lineCount) {
+  function proseRuns(units, lines) {
+    const lineCount = lines.length;
+    const metaSolo = units.filter((u2) => u2.type === "meta").length === 1;
+    const anchor2 = (u2) => u2 === null ? null : { ...u2.id !== void 0 ? { id: u2.id } : u2.type === "meta" && metaSolo ? { id: "meta" } : {} };
     const children2 = /* @__PURE__ */ new Map();
     const stack = [];
     for (const u2 of units) {
@@ -192078,7 +192472,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       for (const g2 of gaps) {
         if (g2.to <= g2.from)
           continue;
-        const id39 = runAddress(container2, g2.prev, g2.next);
+        if (lines.slice(g2.from, g2.to).every((l4) => l4.trim() === "" || /^[ \t]*%%/.test(l4)))
+          continue;
+        const id39 = runAddress(container2, anchor2(g2.prev), anchor2(g2.next));
         runs.push({ span: { start: g2.from, end: g2.to }, kind: "prose", ...id39 !== void 0 ? { id: id39 } : {} });
       }
     }
@@ -192103,7 +192499,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     const units = [];
     collectSpans(lines, 0, /* @__PURE__ */ new Map(), ctx, 0, units);
     const declared = new Set(units.map((u2) => u2.id).filter((id39) => id39 !== void 0).map(nameKey));
-    for (const run5 of proseRuns(units, lines.length)) {
+    for (const run5 of proseRuns(units, lines)) {
       let { start: start2, end } = run5.span;
       while (start2 < end && lines[start2].trim() === "")
         start2++;
@@ -192622,6 +193018,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       row.appendChild(lab2);
     }
     const common2 = {};
+    if (a2.name !== void 0) common2.name = String(a2.name);
     if (a2.placeholder !== void 0) common2.placeholder = String(a2.placeholder);
     if (a2.required !== void 0) common2.required = "";
     for (const k3 of CONSTRAINTS) if (a2[k3] !== void 0) common2[k3] = String(a2[k3]);
@@ -192706,6 +193103,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       );
     }
     if ((type3 === "table" || type3 === "view") && b3.table) return renderTable(b3.table, dom, labels, b3.id);
+    if (type3 === "table" || type3 === "view") return srcPlaceholder(dom, b3.id, typeof b3.attrs?.src === "string" ? b3.attrs.src : "");
     if (type3 === "note") {
       const q3 = el(dom, "blockquote", { class: "geml-note", id: b3.id });
       for (const c3 of b3.children || []) {
@@ -192814,13 +193212,14 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     wrap3.appendChild(el(dom, "pre", null, [el(dom, "code", { text: (b3.raw || []).join("\n") })]));
     return wrap3;
   }
+  function srcPlaceholder(dom, id39, src) {
+    return el(dom, "div", { class: "geml-block", id: id39 }, [
+      el(dom, "span", { class: "geml-tag", text: "table \xB7 src" }),
+      el(dom, "p", { text: `Data not loaded from ${src}` })
+    ]);
+  }
   function renderTable(model, dom, labels, id39) {
-    if (model.src !== void 0 && model.columns.length === 0) {
-      return el(dom, "div", { class: "geml-block", id: id39 }, [
-        el(dom, "span", { class: "geml-tag", text: "table \xB7 src" }),
-        el(dom, "p", { text: `Data not loaded from ${model.src}` })
-      ]);
-    }
+    if (model.src !== void 0 && model.columns.length === 0) return srcPlaceholder(dom, id39, model.src);
     const table = el(dom, "table", { id: id39 });
     if (model.caption) table.appendChild(el(dom, "caption", { text: model.caption }));
     if (model.header) {
@@ -193277,12 +193676,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   function candidates(doc) {
     const blocks2 = [];
     const counter = { n: 0 };
-    walk(doc.children, [], blocks2, counter);
+    walk(doc.children, [], blocks2, counter, false, runNamesOf(doc));
     const out = [];
     for (const c3 of blocks2) {
       out.push(c3);
       for (const [part, inlineType] of PARTS) {
-        if (!hasInline(c3.block, inlineType))
+        if (!(c3.nodes ?? [c3.block]).some((n2) => hasInline(n2, inlineType)))
           continue;
         out.push({ block: c3.block, self: { type: part, classes: [], attrs: {} }, ancestors: [...c3.ancestors, c3.self], index: c3.index, part });
       }
@@ -193299,27 +193698,54 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       return (b3.children ?? []).some((ch3) => hasInline(ch3, type3));
     return false;
   }
-  function walk(nodes5, inherited, out, counter, insideBlock = false) {
+  function runNamesOf(doc) {
+    const declared = /* @__PURE__ */ new Set();
+    const collect2 = (bs) => {
+      for (const b3 of bs) {
+        if ((b3.kind === "block" || b3.kind === "heading") && b3.id !== void 0)
+          declared.add(nameKey(b3.id));
+        if (b3.kind === "block" && b3.children)
+          collect2(b3.children);
+      }
+    };
+    collect2(doc.children);
+    const out = /* @__PURE__ */ new Map();
+    for (const [addr, run5] of proseRunTargets(doc.children)) {
+      if (run5.length > 0 && !declared.has(nameKey(addr)))
+        out.set(run5[0], addr);
+    }
+    return out;
+  }
+  function walk(nodes5, inherited, out, counter, insideBlock, runNames) {
     const headings = [];
+    const chain = () => [...inherited, ...headings.map((h2) => h2.ref)];
+    let stretch = [];
+    const flush = () => {
+      const content = stretch.filter((b3) => b3.kind !== "hidden");
+      if (!insideBlock && content.length > 0) {
+        const self2 = { type: "prose", classes: [], attrs: {} };
+        const name = runNames.get(stretch[0]);
+        if (name !== void 0)
+          self2.id = name;
+        out.push({ block: content[0], nodes: stretch, self: self2, ancestors: chain(), index: counter.n++ });
+      }
+      stretch = [];
+    };
     for (const n2 of nodes5) {
-      const chain = () => [...inherited, ...headings.map((h2) => h2.ref)];
+      if (n2.kind === "paragraph" || n2.kind === "list" || n2.kind === "hidden") {
+        stretch.push(n2);
+        continue;
+      }
+      flush();
       if (n2.kind === "heading") {
         while (headings.length > 0 && headings[headings.length - 1].level >= n2.level)
           headings.pop();
-        const ref = { classes: n2.classes, attrs: n2.attrs };
-        if (n2.id !== void 0)
-          ref.id = n2.id;
-        const outer = chain();
-        headings.push({ ref, level: n2.level });
         const self3 = { type: "heading", classes: n2.classes, attrs: { ...n2.attrs, level: n2.level } };
         if (n2.id !== void 0)
           self3.id = n2.id;
+        const outer = chain();
+        headings.push({ ref: self3, level: n2.level });
         out.push({ block: n2, self: self3, ancestors: outer, index: counter.n++ });
-        continue;
-      }
-      if (n2.kind === "paragraph" && !insideBlock) {
-        const self3 = { type: "prose", classes: [], attrs: {} };
-        out.push({ block: n2, self: self3, ancestors: chain(), index: counter.n++ });
         continue;
       }
       if (n2.kind !== "block")
@@ -193329,8 +193755,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         self2.id = n2.id;
       out.push({ block: n2, self: self2, ancestors: chain(), index: counter.n++ });
       if (n2.children && n2.children.length > 0)
-        walk(n2.children, [...chain(), self2], out, counter, true);
+        walk(n2.children, [...chain(), self2], out, counter, true, runNames);
     }
+    flush();
   }
   function matchSimple(s2, n2) {
     if (s2.type !== void 0 && s2.type !== n2.type)
@@ -193356,7 +193783,14 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (!matchSimple(target, c3.self))
       return false;
     let ai = c3.ancestors.length - 1;
-    for (let si = sel.steps.length - 2; si >= 0; si--) {
+    let si = sel.steps.length - 2;
+    if (wantsPart) {
+      if (!matchSimple(sel.steps[si], c3.ancestors[ai]))
+        return false;
+      si--;
+      ai--;
+    }
+    for (; si >= 0; si--) {
       const step3 = sel.steps[si];
       let found = false;
       while (ai >= 0) {
@@ -193401,10 +193835,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
 
   // ../../geml-parser/dist/style-resolve.js
   init_define_process_argv();
-  var RULE_RESERVED = /* @__PURE__ */ new Set(["match", "component", "handler", "show", "filter", "screen", "when"]);
+  var CORE_KEYS = /* @__PURE__ */ new Set(["caption", "hidden"]);
+  var RULE_RESERVED = /* @__PURE__ */ new Set(["match", "component", "handler", "show", "filter", "screen", "when", ...CORE_KEYS]);
   var RUNTIME_KEYS = /* @__PURE__ */ new Set(["component", "handler", "show", "filter"]);
-  var STATE_KNOWN = /* @__PURE__ */ new Set(["type", "match", "on", "value-from", "init-value"]);
-  var CONTAINER_RESERVED = /* @__PURE__ */ new Set(["slots", "axis", "component"]);
+  var STATE_KNOWN = /* @__PURE__ */ new Set(["type", "match", "on", "value-from", "init-value", ...CORE_KEYS]);
+  var CONTAINER_RESERVED = /* @__PURE__ */ new Set(["slots", "axis", "component", ...CORE_KEYS]);
   var AXES = /* @__PURE__ */ new Set(["row", "column"]);
   var BOX_WORDS = /* @__PURE__ */ new Set([
     "width",
@@ -193612,7 +194047,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   function str2(v3) {
     return v3 === void 0 ? void 0 : String(v3);
   }
-  var EMBED_DEPTH_CAP = 8;
+  var EMBED_DEPTH_CAP = 16;
   var FRAME_DEPTH_CAP = 16;
   function entryLayers(doc, forDoc) {
     const meta3 = doc.children.find((b3) => b3.kind === "block" && b3.type === "meta");
@@ -193700,11 +194135,16 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       return doc.children;
     return [...layers.map((l4) => implicitEmbed(l4.path, l4.id)), ...doc.children];
   }
-  function expandEmbeds(children2, sheet, opts, seen, depth) {
+  var EMBED_PARTS2 = /* @__PURE__ */ new Set(["whole", "head", "body", "intro"]);
+  function expandEmbeds(nodes5, file, sheet, opts, seen, depth) {
     const out = [];
-    for (const b3 of children2) {
-      if (!(b3.kind === "block" && b3.type === "embed")) {
+    for (const b3 of nodes5) {
+      if (b3.kind !== "block") {
         out.push(b3);
+        continue;
+      }
+      if (b3.type !== "embed") {
+        out.push(b3.children && b3.children.length > 0 ? { ...b3, children: expandEmbeds(b3.children, file, sheet, opts, seen, depth) } : b3);
         continue;
       }
       const id39 = b3.id ?? "(anon)";
@@ -193712,6 +194152,8 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       const hash = written.indexOf("#");
       const docPath = hash < 0 ? written : written.slice(0, hash);
       const anchor2 = hash < 0 ? void 0 : written.slice(hash + 1);
+      const partRaw = str2(b3.attrs["part"]);
+      const part = partRaw !== void 0 && EMBED_PARTS2.has(partRaw) ? partRaw : "whole";
       const say = (why) => void sheet.diagnostics.push(styleDiag("style-embed-not-expanded", `\`embed\`${written ? ` of \`${written}\`` : ""} contributed no rules: ${why}`, id39));
       if (written === "") {
         say("no `src=`");
@@ -193721,33 +194163,33 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         say(`nesting deeper than ${EMBED_DEPTH_CAP}`);
         continue;
       }
-      let target;
+      let next3;
+      let key;
       if (docPath === "") {
-        const key = `#${anchor2 ?? ""}`;
+        key = `${file.name}#${anchor2 ?? ""}`;
         if (seen.has(key)) {
-          say(`\`${key}\` is already being expanded (cycle)`);
+          say(`\`#${anchor2 ?? ""}\` is already being expanded (cycle)`);
           continue;
         }
-        target = children2;
-        seen = /* @__PURE__ */ new Set([...seen, key]);
+        next3 = file;
       } else {
         if (!opts.loadDoc || !opts.parseDoc) {
           say("this caller supplied no document resolver");
           continue;
         }
-        if (seen.has(docPath)) {
-          say(`\`${docPath}\` is already being expanded (cycle)`);
-          continue;
-        }
-        const src = opts.loadDoc(docPath);
-        if (src === null) {
+        const got = opts.loadDoc(docPath, file.name);
+        if (got === null) {
           say(`cannot resolve \`${docPath}\``);
           continue;
         }
-        target = sheetBlocks(opts.parseDoc(src), sheet);
-        seen = /* @__PURE__ */ new Set([...seen, docPath]);
+        key = got.name;
+        if (seen.has(key)) {
+          say(`\`${docPath}\` is already being expanded (cycle)`);
+          continue;
+        }
+        next3 = { name: got.name, root: sheetBlocks(opts.parseDoc(got.text), sheet) };
       }
-      const picked = selectEmbed(target, anchor2);
+      const picked = selectEmbed(next3.root, anchor2, part);
       if (picked === null) {
         say(anchor2 === void 0 ? "the target is empty" : `\`#${anchor2}\` is not in it`);
         continue;
@@ -193756,17 +194198,19 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         say(anchor2 === void 0 ? "the target is empty" : `\`#${anchor2}\` holds no blocks`);
         continue;
       }
-      out.push(...expandEmbeds(picked, sheet, opts, seen, depth + 1));
+      out.push(...expandEmbeds(picked, next3, sheet, opts, /* @__PURE__ */ new Set([...seen, key]), depth + 1));
     }
     return out;
   }
   function loadStylesheet(doc, opts = {}) {
     const sheet = { rules: [], states: [], screens: [], frames: [], diagnostics: [] };
+    const self2 = opts.self ?? "";
+    const file = { name: self2, root: expandTokens(doc.children, tokensOf(doc), sheet) };
     let layer = 0;
     for (const src of entryLayers(doc, opts.forDoc)) {
-      collect(expandEmbeds([implicitEmbed(src.path, src.id)], sheet, opts, /* @__PURE__ */ new Set(), 0), sheet, layer++);
+      collect(expandEmbeds([implicitEmbed(src.path, src.id)], file, sheet, opts, /* @__PURE__ */ new Set([self2]), 0), sheet, layer++);
     }
-    collect(expandEmbeds(expandTokens(doc.children, tokensOf(doc), sheet), sheet, opts, /* @__PURE__ */ new Set(), 0), sheet, layer);
+    collect(expandEmbeds(file.root, file, sheet, opts, /* @__PURE__ */ new Set([self2]), 0), sheet, layer);
     return sheet;
   }
   function collect(nodes5, sheet, layer) {
@@ -193775,6 +194219,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     for (const b3 of blocks2) {
       const id39 = b3.id ?? "(anon)";
       if (b3.type === "style-rule") {
+        const position5 = sheet.ruleBlocks ?? 0;
+        sheet.ruleBlocks = position5 + 1;
+        const label = b3.id !== void 0 ? `#${b3.id}` : `[${position5}]`;
         const match3 = str2(b3.attrs["match"]);
         if (match3 === void 0) {
           sheet.diagnostics.push(styleDiag("style-missing-attribute", "`style-rule` requires `match=`", id39));
@@ -193816,6 +194263,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         }
         const rule = {
           id: id39,
+          label,
           branches: r2.branches,
           params,
           box,
@@ -193953,47 +194401,41 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       }
       if (best !== null) {
         hits.push({ rule, conds: best, order: order2 });
-        used.add(rule.id);
+        used.add(rule.label);
       }
     });
     return hits;
   }
+  var sameConds = (a2, b3) => a2.size === b3.size && [...a2].every((x6) => b3.has(x6));
   function arbitrateWithinGroups(hits, clash) {
     const groups = /* @__PURE__ */ new Map();
-    const groupOf = (h2) => {
+    const members = /* @__PURE__ */ new Map();
+    for (const h2 of hits) {
       const key = whenKey(h2.rule.when);
-      let g2 = groups.get(key);
-      if (g2 === void 0) {
-        g2 = { when: h2.rule.when, order: h2.order, params: {}, owner: /* @__PURE__ */ new Map() };
-        groups.set(key, g2);
+      if (!groups.has(key)) {
+        groups.set(key, { when: h2.rule.when, order: h2.order, params: {}, owner: /* @__PURE__ */ new Map() });
+        members.set(key, []);
       }
-      return g2;
-    };
-    for (const hit of hits) {
-      const g2 = groupOf(hit);
-      for (const [k3, v3] of Object.entries(ruleProps(hit.rule))) {
-        const prev2 = g2.owner.get(k3);
-        if (prev2 === void 0) {
-          g2.params[k3] = v3;
-          g2.owner.set(k3, hit);
-          continue;
-        }
-        if (hit.rule.layer !== prev2.rule.layer) {
-          if (hit.rule.layer > prev2.rule.layer) {
-            g2.params[k3] = v3;
-            g2.owner.set(k3, hit);
-          }
-          continue;
-        }
-        if (moreSpecific(hit.conds, prev2.conds)) {
-          g2.params[k3] = v3;
-          g2.owner.set(k3, hit);
-          continue;
-        }
-        if (moreSpecific(prev2.conds, hit.conds))
-          continue;
-        const identical = prev2.conds.size === hit.conds.size && [...prev2.conds].every((x6) => hit.conds.has(x6));
-        clash(prev2, hit, k3, identical);
+      members.get(key).push(h2);
+    }
+    for (const [key, g2] of groups) {
+      const hs = members.get(key);
+      const words = [];
+      for (const h2 of hs)
+        for (const k3 of Object.keys(ruleProps(h2.rule)))
+          if (!words.includes(k3))
+            words.push(k3);
+      for (const k3 of words) {
+        const setting = hs.filter((h2) => Object.hasOwn(ruleProps(h2.rule), k3));
+        const top2 = Math.max(...setting.map((h2) => h2.rule.layer));
+        const inLayer = setting.filter((h2) => h2.rule.layer === top2);
+        const maximal = inLayer.filter((h2) => !inLayer.some((o2) => o2 !== h2 && moreSpecific(o2.conds, h2.conds)));
+        const holder = maximal.reduce((x6, y6) => y6.order < x6.order ? y6 : x6);
+        g2.params[k3] = ruleProps(holder.rule)[k3];
+        g2.owner.set(k3, holder);
+        for (const m3 of maximal)
+          if (m3 !== holder)
+            clash(holder, m3, k3, sameConds(holder.conds, m3.conds));
       }
     }
     return groups;
@@ -194003,19 +194445,32 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       const short = g2.owner.get("border");
       if (short === void 0)
         continue;
+      const drop2 = /* @__PURE__ */ new Map();
       for (const side of BORDER_SIDES) {
         const one4 = g2.owner.get(side);
-        if (one4 === void 0 || one4.rule.id === short.rule.id)
+        if (one4 === void 0 || one4.rule === short.rule || one4.rule.layer !== short.rule.layer)
           continue;
-        if (one4.rule.layer !== short.rule.layer)
-          continue;
-        const first3 = short.order <= one4.order;
-        const [a2, b3] = first3 ? [short, one4] : [one4, short];
-        report(a2, first3 ? "border" : side, b3, first3 ? side : "border");
+        if (short.order <= one4.order) {
+          if (!drop2.has(side))
+            drop2.set(side, [short, "border", one4, side]);
+        } else if (!drop2.has("border")) {
+          drop2.set("border", [one4, side, short, "border"]);
+        }
+      }
+      for (const [word2, [a2, aWord, b3, bWord]] of drop2) {
+        delete g2.params[word2];
+        g2.owner.delete(word2);
+        report(a2, aWord, b3, bWord);
       }
     }
   }
   function arbitrateAcrossGroups(gs, clash) {
+    const losses = /* @__PURE__ */ new Map();
+    const lose = (g2, k3, byOrder) => {
+      const m3 = losses.get(g2) ?? losses.set(g2, /* @__PURE__ */ new Map()).get(g2);
+      if (!m3.has(k3) || m3.get(k3) === null && byOrder !== null)
+        m3.set(k3, byOrder);
+    };
     for (let i5 = 0; i5 < gs.length; i5++)
       for (let j3 = i5 + 1; j3 < gs.length; j3++) {
         const A2 = gs[i5], B3 = gs[j3];
@@ -194026,16 +194481,25 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
             continue;
           const a2 = A2.owner.get(k3), b3 = B3.owner.get(k3);
           if (a2.rule.layer !== b3.rule.layer) {
-            const loser = a2.rule.layer > b3.rule.layer ? B3 : A2;
-            delete loser.params[k3];
-            loser.owner.delete(k3);
+            lose(a2.rule.layer > b3.rule.layer ? B3 : A2, k3, null);
             continue;
           }
           if (moreSpecific(a2.conds, b3.conds) || moreSpecific(b3.conds, a2.conds))
             continue;
-          clash(a2, b3, k3, false);
+          if (a2.order <= b3.order)
+            lose(B3, k3, [a2, b3]);
+          else
+            lose(A2, k3, [b3, a2]);
         }
       }
+    for (const [g2, words] of losses) {
+      for (const [k3, byOrder] of words) {
+        delete g2.params[k3];
+        g2.owner.delete(k3);
+        if (byOrder !== null)
+          clash(byOrder[0], byOrder[1], k3, false);
+      }
+    }
   }
   function splitParams(p3) {
     const box = {}, params = {};
@@ -194093,7 +194557,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       const binding = {
         doc: entry.path,
         block: address(entry.c),
-        rules: hits.map((h2) => h2.rule.id),
+        rules: hits.map((h2) => h2.rule.label),
         params: base.params,
         box: base.box,
         variants
@@ -194140,26 +194604,41 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       diagnostics.push(d3);
     }
     const containerIds = /* @__PURE__ */ new Set([...sheet.screens.map((c3) => c3.id), ...sheet.frames.map((c3) => c3.id)]);
-    const forContainer = /* @__PURE__ */ new Map();
-    for (const rule of sheet.rules) {
-      const m3 = rule.branches.length === 1 ? /^#([A-Za-z0-9_-]+)$/.exec(rule.branches[0].source.trim()) : null;
-      if (!m3 || !containerIds.has(m3[1]))
+    const dressed = /* @__PURE__ */ new Map();
+    for (const c3 of [...sheet.screens, ...sheet.frames]) {
+      const hits = [];
+      sheet.rules.forEach((rule, order2) => {
+        const m3 = rule.branches.length === 1 ? /^#([A-Za-z0-9_-]+)$/.exec(rule.branches[0].source.trim()) : null;
+        if (!m3 || m3[1] !== c3.id)
+          return;
+        const conds = selectorConditions(rule.branches[0]);
+        for (const w4 of rule.when)
+          conds.add(`when:${w4.state}=${w4.value}`);
+        hits.push({ rule, conds, order: order2 });
+        used.add(rule.label);
+      });
+      if (hits.length === 0)
         continue;
-      const id39 = m3[1];
-      const cur = forContainer.get(id39) ?? { box: {}, variants: [] };
-      if (rule.when.length === 0)
-        Object.assign(cur.box, rule.box);
-      else {
-        const when = /* @__PURE__ */ Object.create(null);
-        for (const c3 of rule.when)
-          when[c3.state] = c3.value;
-        cur.variants.push({ when, box: rule.box, params: rule.params });
+      const clash = (a2, b3, k3, identical) => {
+        diagnostics.push(styleDiag("style-ambiguous-rule", `\`${a2.rule.label}\` and \`${b3.rule.label}\` both set \`${k3}\` on container \`#${c3.id}\` \u2014 ` + (identical ? "their selectors are identical; delete one, or tell them apart with `when=`" : "neither is more specific"), b3.rule.id));
+      };
+      const groups = arbitrateWithinGroups(hits, clash);
+      reportBorderClashes(groups, (a2, aWord, b3, bWord) => {
+        diagnostics.push(styleDiag("style-ambiguous-rule", `\`${a2.rule.label}\` sets \`${aWord}\` and \`${b3.rule.label}\` sets \`${bWord}\` on container \`#${c3.id}\` \u2014 a shorthand and one of its sides in the same layer`, b3.rule.id));
+      });
+      const gs = [...groups.values()];
+      arbitrateAcrossGroups(gs, clash);
+      const { base, variants } = assembleGroups(gs, groups);
+      if (c3.component === void 0) {
+        const stray = strayParams(gs);
+        if (stray.size > 0) {
+          diagnostics.push(styleDiag("style-unknown-attribute", `\`${[...stray.keys()].join("`, `")}\` on container \`#${c3.id}\` has no \`component=\` to receive it`, [...stray.values()][0].rule.id));
+        }
       }
-      forContainer.set(id39, cur);
-      used.add(rule.id);
+      dressed.set(c3.id, { box: base.box, params: base.params, variants });
     }
     for (const rule of sheet.rules) {
-      if (!used.has(rule.id)) {
+      if (!used.has(rule.label)) {
         diagnostics.push(styleDiag("style-unmatched-rule", `rule \`#${rule.id}\` matched no block in the corpus`, rule.id));
       }
     }
@@ -194264,16 +194743,31 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       }
       return { kind: "blocks", selector: slot, blocks: picked };
     });
+    const dressUp = (c3) => {
+      const d3 = dressed.get(c3.id);
+      const params = { ...c3.params, ...d3?.params ?? {} };
+      let component2 = c3.component;
+      if (params["component"] !== void 0) {
+        component2 = String(params["component"]);
+        delete params["component"];
+      }
+      const out = { box: { ...c3.box, ...d3?.box ?? {} }, params, variants: d3?.variants ?? [] };
+      if (component2 !== void 0)
+        out.component = component2;
+      return out;
+    };
     const screens = sheet.screens.map((scr) => {
-      const out = { id: scr.id, axis: scr.axis, box: { ...scr.box, ...forContainer.get(scr.id)?.box ?? {} }, variants: forContainer.get(scr.id)?.variants ?? [], params: scr.params, slots: resolveSlots(scr, "screen"), bindings: perScreen.get(scr.id) };
-      if (scr.component !== void 0)
-        out.component = scr.component;
+      const d3 = dressUp(scr);
+      const out = { id: scr.id, axis: scr.axis, box: d3.box, variants: d3.variants, params: d3.params, slots: resolveSlots(scr, "screen"), bindings: perScreen.get(scr.id) };
+      if (d3.component !== void 0)
+        out.component = d3.component;
       return out;
     });
     const frames = sheet.frames.map((f2) => {
-      const out = { id: f2.id, axis: f2.axis, box: { ...f2.box, ...forContainer.get(f2.id)?.box ?? {} }, variants: forContainer.get(f2.id)?.variants ?? [], params: f2.params, slots: resolveSlots(f2, "frame") };
-      if (f2.component !== void 0)
-        out.component = f2.component;
+      const d3 = dressUp(f2);
+      const out = { id: f2.id, axis: f2.axis, box: d3.box, variants: d3.variants, params: d3.params, slots: resolveSlots(f2, "frame") };
+      if (d3.component !== void 0)
+        out.component = d3.component;
       return out;
     });
     const frameById = new Map(sheet.frames.map((f2) => [f2.id, f2]));
@@ -194939,6 +195433,22 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     const profile = meta3 && meta3.data ? String(meta3.data.profile ?? "") : "";
     return profile.split(/\s+/).includes("geml-style/v1");
   }
+  function normalizePath(p3) {
+    const out = [];
+    for (const seg of p3.split("/")) {
+      if (seg === "" || seg === ".") continue;
+      if (seg === ".." && out.length > 0 && out[out.length - 1] !== "..") out.pop();
+      else out.push(seg);
+    }
+    return out.join("/");
+  }
+  var dirOf = (name) => name.includes("/") ? name.slice(0, name.lastIndexOf("/")) : "";
+  function candidatesFor(path5, from2) {
+    if (/^[a-z][a-z0-9+.-]*:/i.test(path5) || path5.startsWith("/")) return [path5];
+    const near = normalizePath(dirOf(from2) ? `${dirOf(from2)}/${path5}` : path5);
+    const root4 = normalizePath(`../${path5}`);
+    return near === root4 ? [near] : [near, root4];
+  }
   function referencedDocs(doc, forDoc) {
     const out = [];
     const meta3 = doc.children.find((b3) => b3.kind === "block" && b3.type === "meta");
@@ -194979,25 +195489,38 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     return producers;
   }
   async function borrowedDocs(model, parse7, fetchText, baseUrl) {
-    const srcs = /* @__PURE__ */ new Set();
-    const walk2 = (nodes5) => {
+    const embedsOf = (nodes5, into) => {
       for (const b3 of nodes5 ?? []) {
         if (b3.kind === "block" && b3.type === "embed" && typeof b3.attrs?.src === "string") {
           const src = b3.attrs.src.trim();
           const doc = src.includes("#") ? src.slice(0, src.indexOf("#")) : src;
-          if (doc) srcs.add(doc);
+          if (/\.geml$/i.test(doc)) into.push(doc);
         }
-        if (b3.children) walk2(b3.children);
+        if (b3.children) embedsOf(b3.children, into);
       }
     };
-    walk2(model.children);
+    const dir2 = new URL(".", baseUrl).href;
+    const seen = /* @__PURE__ */ new Set([new URL(baseUrl).href.split("#")[0]]);
     const out = [];
-    for (const rel3 of srcs) {
-      try {
-        const text5 = await fetchText(new URL(rel3, baseUrl).href);
-        if (text5 == null) continue;
-        out.push({ path: rel3, doc: parse7(text5), text: text5 });
-      } catch {
+    const queue = [{ doc: model, url: baseUrl }];
+    while (queue.length > 0) {
+      const { doc, url } = queue.shift();
+      const srcs = [];
+      embedsOf(doc.children, srcs);
+      for (const rel3 of srcs) {
+        const target = new URL(rel3, url).href.split("#")[0];
+        if (seen.has(target)) continue;
+        seen.add(target);
+        if (out.length >= STYLE_PREFETCH_FILES) return out;
+        try {
+          const text5 = await fetchText(target);
+          if (text5 == null) continue;
+          const parsed = parse7(text5);
+          const path5 = target.startsWith(dir2) ? decodeURIComponent(target.slice(dir2.length)) : target;
+          out.push({ path: path5, doc: parsed, text: text5 });
+          queue.push({ doc: parsed, url: target });
+        } catch {
+        }
       }
     }
     return out;
@@ -195015,38 +195538,62 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (!isStyleEntry(entryDoc)) return null;
     const forDoc = decodeURIComponent(new URL(docUrl).pathname.split("/").pop() || "");
     const cache4 = /* @__PURE__ */ new Map();
-    const queue = referencedDocs(entryDoc, forDoc).map((rel3) => ({ rel: rel3, depth: 1 }));
+    const SELF = "index.geml";
+    const queue = referencedDocs(entryDoc, forDoc).map((path5) => ({ path: path5, from: SELF, depth: 1 }));
     let files = 0;
-    while (queue.length > 0) {
-      const { rel: rel3, depth } = queue.shift();
-      if (cache4.has(rel3) || depth > STYLE_PREFETCH_DEPTH) continue;
-      if (++files > STYLE_PREFETCH_FILES) {
-        console.warn(`[geml-viewer] style entry references more than ${STYLE_PREFETCH_FILES} files; ignoring it`);
-        return null;
-      }
+    const fetchOne = async (rel3) => {
+      if (cache4.has(rel3)) return cache4.get(rel3);
+      if (++files > STYLE_PREFETCH_FILES) return void 0;
       const text5 = await fetchText(new URL(rel3, entryUrl).href);
       if (text5 == null) {
         cache4.set(rel3, null);
-        continue;
+        return null;
       }
       if (text5.length > STYLE_DOC_BYTES_CAP) {
         console.warn(`[geml-viewer] stylesheet \`${rel3}\` is larger than ${STYLE_DOC_BYTES_CAP} bytes; treated as unreadable`);
         cache4.set(rel3, null);
-        continue;
+        return null;
       }
       cache4.set(rel3, text5);
+      return text5;
+    };
+    while (queue.length > 0) {
+      const { path: path5, from: from2, depth } = queue.shift();
+      if (depth > STYLE_PREFETCH_DEPTH) continue;
+      let name = null;
+      let text5 = null;
+      for (const rel3 of candidatesFor(path5, from2)) {
+        const got = await fetchOne(rel3);
+        if (got === void 0) {
+          console.warn(`[geml-viewer] style entry references more than ${STYLE_PREFETCH_FILES} files; ignoring it`);
+          return null;
+        }
+        if (got !== null) {
+          name = rel3;
+          text5 = got;
+          break;
+        }
+      }
+      if (text5 === null) continue;
       let sub3;
       try {
         sub3 = parse7(text5);
       } catch {
         continue;
       }
-      for (const next3 of referencedDocs(sub3, "")) queue.push({ rel: next3, depth: depth + 1 });
+      for (const next3 of referencedDocs(sub3, "")) queue.push({ path: next3, from: name, depth: depth + 1 });
     }
     const sheet = loadStylesheet2(entryDoc, {
-      loadDoc: (rel3) => cache4.get(rel3) ?? null,
+      loadDoc: (path5, from2) => {
+        for (const rel3 of candidatesFor(path5, from2)) {
+          const text5 = cache4.get(rel3);
+          if (typeof text5 === "string") return { name: rel3, text: text5 };
+        }
+        return null;
+      },
       parseDoc: (s2) => parse7(s2),
-      forDoc
+      forDoc,
+      self: SELF
     });
     const corpus = [{ path: forDoc, doc: model }, ...docs];
     const vm = resolveStyle2(sheet, corpus, components3 ? { components: components3 } : void 0);
@@ -195252,12 +195799,15 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     for (const { path: path5, doc } of corpus) {
       for (const c3 of candidates(doc)) {
         const a2 = address(c3);
-        out.set(`${path5}${a2}`, c3.block);
-        if (corpus.length === 1) out.set(a2, c3.block);
+        const node2 = c3.nodes ? proseRun(c3.nodes) : c3.block;
+        out.set(`${path5}${a2}`, node2);
+        if (corpus.length === 1) out.set(a2, node2);
       }
     }
     return out;
   }
+  var proseRun = (nodes5) => ({ kind: "block", type: "prose", mode: "flow", classes: [], attrs: {}, children: nodes5 });
+  var isProseRun = (node2) => node2?.kind === "block" && node2.type === "prose" && node2.id === void 0 && Array.isArray(node2.children);
   var at = (doc, block2) => `${doc}${block2}`;
   var PLACEMENT_CAP = 2e3;
   function renderPage(vm, model, dom, opts) {
@@ -195303,6 +195853,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         const t4 = sources.get(path5);
         if (typeof t4 === "string") return t4;
       }
+      if (isProseRun(node2)) return node2.children.map((c3) => c3.text ?? "").filter((t4) => t4 !== "").join("\n\n");
       const id39 = node2.kind === "heading" || node2.kind === "block" ? node2.id : void 0;
       const span = id39 !== void 0 && spans && docPath === hostPath ? spans.get(id39) : void 0;
       if (span && typeof hostText === "string") {
@@ -195359,8 +195910,10 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       const addrOf = /* @__PURE__ */ new Map();
       for (const c3 of candidates(entry.doc)) {
         placed.add(at(path5, address(c3)));
-        if (c3.part === void 0) addrOf.set(c3.block, address(c3));
+        if (c3.part === void 0) for (const n2 of c3.nodes ?? [c3.block]) addrOf.set(n2, address(c3));
       }
+      let open3 = null;
+      let openAddr;
       for (const child of entry.doc.children ?? []) {
         if (over()) throw new RangeError("placement cap");
         const el2 = renderBlock2(child, dom, labels, ctx.byId);
@@ -195368,6 +195921,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         const addr = addrOf.get(child);
         if (addr === void 0) {
           frag.appendChild(el2);
+          open3 = null;
+          continue;
+        }
+        if (open3 !== null && openAddr === addr) {
+          open3.appendChild(el2);
           continue;
         }
         const wrap3 = dom.createElement("div");
@@ -195376,8 +195934,19 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         wrap3.setAttribute("data-doc", path5);
         wrap3.appendChild(el2);
         frag.appendChild(wrap3);
+        open3 = wrap3;
+        openAddr = addr;
       }
       return frag;
+    };
+    const renderRun = (nodes5) => {
+      const div = dom.createElement("div");
+      div.className = "geml-prose";
+      for (const n2 of nodes5) {
+        const k3 = renderBlock2(n2, dom, labels, ctx.byId);
+        if (k3) div.appendChild(k3);
+      }
+      return div;
     };
     const place = (doc, block2) => {
       const addr = at(doc, block2);
@@ -195388,7 +195957,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       const b3 = lookup2(binding, doc, block2);
       const params = b3 ? b3.params : {};
       const name = typeof params.component === "string" ? params.component : "";
-      const render10 = Object.hasOwn(components3, name) ? components3[name] : ((blk) => renderBlock2(blk, dom, labels, ctx.byId));
+      const render10 = Object.hasOwn(components3, name) ? components3[name] : isProseRun(node2) ? ((blk) => renderRun(blk.children)) : ((blk) => renderBlock2(blk, dom, labels, ctx.byId));
       ctx.renderBorrowed = (n2) => n2?.kind === "block" && n2.type === "embed" ? borrowedFor(n2) : null;
       const named2 = Object.hasOwn(components3, name);
       const inner3 = named2 ? render10(node2, params, ctx) : ctx.renderBorrowed(node2) ?? render10(node2, params, ctx);
@@ -195831,7 +196400,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   }
 
   // src/media-player.js
-  var dirOf = (p3) => {
+  var dirOf2 = (p3) => {
     const i5 = p3.lastIndexOf("/");
     return i5 < 0 ? "" : p3.slice(0, i5);
   };
@@ -195941,7 +196510,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       if (typeof file !== "string") continue;
       const media = dom.createElement(c3.kind === "audio" ? "audio" : "video");
       media.className = "geml-layer geml-layer-" + c3.kind;
-      media.setAttribute("src", joinRel(dirOf(hit.path), file));
+      media.setAttribute("src", joinRel(dirOf2(hit.path), file));
       media.setAttribute("preload", "auto");
       media.setAttribute("playsinline", "");
       media.setAttribute("data-clip", c3.id);
