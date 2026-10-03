@@ -44,7 +44,7 @@ They are made from the parser and pushed here by
 `integrations/website/update.mjs` on every change to its `main`.
 
 - `playground.js` bundles the reference parser, the viewer's renderer, KaTeX and
-  Mermaid into one file (`integrations/geml-viewer/playground.build.mjs`, entry
+  Mermaid into one file (`integrations/chrome-geml-viewer/playground.build.mjs`, entry
   `playground-entry.js`); `fonts/` holds KaTeX's fonts beside it.
 - `codemap/` is the parser's and the viewer's **own** call graph — one GEML
   document per source file plus a module index, and the CLI-rendered `.html`

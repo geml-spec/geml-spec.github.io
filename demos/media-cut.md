@@ -27,7 +27,7 @@ A 10-second cut — two shots, one line of voice and its subtitle — whose time
 geml media build ep01/ep01-cut.geml --out ep01.mp4 --root . --burn-subs
 ```
 
-The player above reads the same timeline without encoding anything; geml's [`media-page.mjs`](https://github.com/geml-spec/geml/blob/main/integrations/geml-viewer/tools/media-page.mjs) wrote it, and `geml media export ep01/ep01-cut.geml --to player` writes a plainer one.
+The player above reads the same timeline without encoding anything; geml's [`media-page.mjs`](https://github.com/geml-spec/geml/blob/main/integrations/chrome-geml-viewer/tools/media-page.mjs) wrote it, and `geml media export ep01/ep01-cut.geml --to player` writes a plainer one.
 
 ::: code-group
 <<< @/public/examples/geml-media-demo/ep01/ep01-cut.geml [ep01-cut.geml]

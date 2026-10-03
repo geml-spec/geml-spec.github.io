@@ -32,7 +32,7 @@ geml media build ep01/ep01-cut.geml --out ep01.mp4 --root . --burn-subs
 不编码、秒开、能拖进度条：
 
 ```bash
-node ../../integrations/geml-viewer/tools/media-page.mjs . ep01/ep01-cut.geml
+node ../../integrations/chrome-geml-viewer/tools/media-page.mjs . ep01/ep01-cut.geml
 ```
 
 写出 `play.html`，双击就是这条片子的播放面：画面按时间切，配音落在第 4.4 秒，

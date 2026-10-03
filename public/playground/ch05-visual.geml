@@ -54,7 +54,7 @@ viewer calls the parser's published API and not its internals.
 
 **Click a module to open its rendered page.**
 
-=== diagram {#v-modmap format=geml-code-graph src=codemap/index.geml caption="geml-parser + geml-viewer — module overview (their own codemap)"}
+=== diagram {#v-modmap format=geml-code-graph src=codemap/index.geml caption="geml-parser + chrome-geml-viewer — module overview (their own codemap)"}
 ===
 
 And one container at method level, rooted at `renderHtml`. **Click a node for

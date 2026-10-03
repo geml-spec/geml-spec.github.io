@@ -25,7 +25,7 @@ commit row, Preview/Code/Blame, four dropdown menus — showing its own
 
 **See it** on the [demos page](https://geml-spec.github.io/demos/style), drawn by
 `render.html`. **Or open `style-demo/page.geml` itself** with
-[`geml-viewer`](https://github.com/geml-spec/geml/tree/main/integrations/geml-viewer)
+[`geml-viewer`](https://github.com/geml-spec/geml/tree/main/integrations/chrome-geml-viewer)
 installed: the opening note tells you what you are looking at, then fades.
 
 There is still no `index.html` here. What is being demonstrated is that a

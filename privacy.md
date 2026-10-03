@@ -31,7 +31,7 @@ No document content is transmitted anywhere by anything in this project.
 
 GEML Viewer renders `.geml` files locally in your browser and collects nothing.
 Its full policy is in
-[`integrations/geml-viewer/PRIVACY.md`](https://github.com/geml-spec/geml/blob/main/integrations/geml-viewer/PRIVACY.md).
+[`integrations/chrome-geml-viewer/PRIVACY.md`](https://github.com/geml-spec/geml/blob/main/integrations/chrome-geml-viewer/PRIVACY.md).
 
 ## This website
 
