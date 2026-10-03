@@ -1,0 +1,33 @@
+=== meta
+profile = "geml-codemap/v1"
+module = chrome-geml-viewer/snapshot.js
+src = integrations/chrome-geml-viewer/src/snapshot.js
+entry = #snapshot
+resolution-default = cpg
+===
+
+# chrome-geml-viewer/snapshot.js
+
+=== code {#topLevel src=integrations/chrome-geml-viewer/src/snapshot.js#L15-18 anchor="scip-typescript npm geml-viewer 1.3.5 src/`snapshot.js`/topLevel()."}
+===
+
+=== code {#snapshot src=integrations/chrome-geml-viewer/src/snapshot.js#L26-46 anchor="scip-typescript npm geml-viewer 1.3.5 src/`snapshot.js`/snapshot()."}
+===
+
+=== table {#calls format=csv}
+from,      to,        kind, confidence
+#snapshot, #topLevel, call,
+===
+
+=== table {#called-by format=csv}
+from,                                                to,        kind, site
+#snapshot,                                           #topLevel, call, integrations/chrome-geml-viewer/src/snapshot.js:27
+chrome-geml-viewer--content.js.geml#addExportButton, #snapshot, call, integrations/chrome-geml-viewer/src/content.js:376
+===
+
+=== table {#unresolved format=csv hidden}
+from,      to
+#topLevel, Array.filter
+#snapshot, Array.push
+#snapshot, gemlToMd
+===

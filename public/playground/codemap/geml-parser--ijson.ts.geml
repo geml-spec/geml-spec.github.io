@@ -8,10 +8,10 @@ resolution-default = cpg
 
 # geml-parser/ijson.ts
 
-=== code {#iJsonFault src=geml-parser/src/ijson.ts#L31-65 anchor="scip-typescript npm @geml/geml 1.12.0 src/`ijson.ts`/iJsonFault()."}
+=== code {#iJsonFault src=geml-parser/src/ijson.ts#L31-65 anchor="scip-typescript npm @geml/geml 1.12.1 src/`ijson.ts`/iJsonFault()."}
 ===
 
-=== code {#valueFault src=geml-parser/src/ijson.ts#L72-87 anchor="scip-typescript npm @geml/geml 1.12.0 src/`ijson.ts`/valueFault()."}
+=== code {#valueFault src=geml-parser/src/ijson.ts#L72-87 anchor="scip-typescript npm @geml/geml 1.12.1 src/`ijson.ts`/valueFault()."}
 ===
 
 === table {#called-by format=csv}

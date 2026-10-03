@@ -1,0 +1,11 @@
+=== meta
+profile = "geml-codemap/v1"
+module = chrome-geml-viewer/render-html-stub.js
+src = integrations/chrome-geml-viewer/src/render-html-stub.js
+resolution-default = cpg
+===
+
+# chrome-geml-viewer/render-html-stub.js
+
+=== code {#renderHtml src=integrations/chrome-geml-viewer/src/render-html-stub.js#L14-16 anchor="scip-typescript npm geml-viewer 1.3.5 src/`render-html-stub.js`/renderHtml()."}
+===
