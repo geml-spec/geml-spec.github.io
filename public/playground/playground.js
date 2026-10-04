@@ -23772,7 +23772,7 @@
     stop5 = +stop5, start2 = +start2, count2 = +count2;
     return tickSpec(start2, stop5, count2)[2];
   }
-  function tickStep(start2, stop5, count2) {
+  function tickStep2(start2, stop5, count2) {
     stop5 = +stop5, start2 = +start2, count2 = +count2;
     const reverse2 = stop5 < start2, inc = reverse2 ? tickIncrement(stop5, start2, count2) : tickIncrement(start2, stop5, count2);
     return (reverse2 ? -1 : 1) * (inc < 0 ? 1 / -inc : inc);
@@ -28497,7 +28497,7 @@
 
   // node_modules/d3-scale/src/tickFormat.js
   function tickFormat(start2, stop5, count2, specifier) {
-    var step3 = tickStep(start2, stop5, count2), precision;
+    var step3 = tickStep2(start2, stop5, count2), precision;
     specifier = formatSpecifier(specifier == null ? ",f" : specifier);
     switch (specifier.type) {
       case "s": {
@@ -29008,8 +29008,8 @@
     function tickInterval2(start2, stop5, count2) {
       const target = Math.abs(stop5 - start2) / count2;
       const i5 = bisector(([, , step4]) => step4).right(tickIntervals, target);
-      if (i5 === tickIntervals.length) return year.every(tickStep(start2 / durationYear, stop5 / durationYear, count2));
-      if (i5 === 0) return millisecond.every(Math.max(tickStep(start2, stop5, count2), 1));
+      if (i5 === tickIntervals.length) return year.every(tickStep2(start2 / durationYear, stop5 / durationYear, count2));
+      if (i5 === 0) return millisecond.every(Math.max(tickStep2(start2, stop5, count2), 1));
       const [t4, step3] = tickIntervals[target / tickIntervals[i5 - 1][2] < tickIntervals[i5][2] / target ? i5 - 1 : i5];
       return t4.every(step3);
     }
@@ -262150,7 +262150,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       itemGroup.append("text").attr("x", 16).attr("y", 0).attr("class", "radarLegendText").text(curve.label);
     });
   }
-  var defaultOptions, MAX_TICKS, defaultRadarData, data4, DEFAULT_RADAR_CONFIG, getConfig23, getAxes, getCurves, getOptions2, setAxes, setCurves, computeCurveEntries, setOptions7, clear210, db5, populate17, parser21, draw21, drawFrame, drawGraticule, drawAxes2, renderer6, genIndexStyles, buildRadarStyleOptions, styles4, diagram22;
+  var defaultOptions, MAX_TICKS2, defaultRadarData, data4, DEFAULT_RADAR_CONFIG, getConfig23, getAxes, getCurves, getOptions2, setAxes, setCurves, computeCurveEntries, setOptions7, clear210, db5, populate17, parser21, draw21, drawFrame, drawGraticule, drawAxes2, renderer6, genIndexStyles, buildRadarStyleOptions, styles4, diagram22;
   var init_diagram_YEKJPTXX = __esm({
     "node_modules/mermaid/dist/chunks/mermaid.core/diagram-YEKJPTXX.mjs"() {
       init_define_process_argv();
@@ -262168,7 +262168,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         min: 0,
         graticule: "circle"
       };
-      MAX_TICKS = 32;
+      MAX_TICKS2 = 32;
       defaultRadarData = {
         axes: [],
         curves: [],
@@ -262234,11 +262234,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           min: optionMap.min?.value ?? defaultOptions.min,
           graticule: optionMap.graticule?.value ?? defaultOptions.graticule
         };
-        if (data4.options.ticks > MAX_TICKS) {
+        if (data4.options.ticks > MAX_TICKS2) {
           log.warn(
-            `Radar diagram ticks (${data4.options.ticks}) exceeds maximum allowed (${MAX_TICKS}). Using ${MAX_TICKS} instead.`
+            `Radar diagram ticks (${data4.options.ticks}) exceeds maximum allowed (${MAX_TICKS2}). Using ${MAX_TICKS2} instead.`
           );
-          data4.options.ticks = MAX_TICKS;
+          data4.options.ticks = MAX_TICKS2;
         }
       }, "setOptions");
       clear210 = /* @__PURE__ */ __name(() => {
@@ -292765,7 +292765,17 @@ ${isHandDrawn ? "" : `
 
   // ../../geml-parser/dist/inline.js
   init_define_process_argv();
-  var MAX_INLINE_NESTING = 100;
+
+  // ../../geml-parser/dist/bounds.js
+  init_define_process_argv();
+  var CHAIN_DEPTH = 16;
+  var DATA_DEPTH = 200;
+  var TABLE_CELLS = 1e6;
+  var BLOCK_NESTING = 256;
+  var INLINE_NESTING = 100;
+  var BORROWED_CELLS = 4e6;
+
+  // ../../geml-parser/dist/inline.js
   function backtickRun(s2, i5) {
     let n2 = 0;
     while (s2[i5 + n2] === "`")
@@ -292923,24 +292933,26 @@ ${isHandDrawn ? "" : `
     const j3 = pairEnd(p3.br, p3, s2, i5);
     return j3 < 0 ? null : { content: s2.slice(i5 + 1, j3), end: j3 + 1 };
   }
-  function readAttrs(s2, i5) {
+  function attrEnds(s2) {
+    const end = new Int32Array(s2.length + 2).fill(-1);
+    const inq = new Int32Array(s2.length + 2).fill(-1);
+    for (let k3 = s2.length - 1; k3 >= 0; k3--) {
+      const c3 = s2[k3];
+      if (c3 === "\\" && (s2[k3 + 1] === '"' || s2[k3 + 1] === "\\"))
+        inq[k3] = inq[k3 + 2];
+      else
+        inq[k3] = c3 === '"' ? end[k3 + 1] : inq[k3 + 1];
+      end[k3] = c3 === "}" ? k3 : c3 === '"' ? inq[k3 + 1] : end[k3 + 1];
+    }
+    return end;
+  }
+  function readAttrs(s2, i5, p3) {
     if (s2[i5] !== "{")
       return null;
-    let quoted = false;
-    for (let k3 = i5 + 1; k3 < s2.length; k3++) {
-      const c3 = s2[k3];
-      if (quoted && c3 === "\\" && (s2[k3 + 1] === '"' || s2[k3 + 1] === "\\")) {
-        k3++;
-        continue;
-      }
-      if (c3 === '"') {
-        quoted = !quoted;
-        continue;
-      }
-      if (!quoted && c3 === "}")
-        return { attrs: parseAttrs(s2.slice(i5, k3 + 1)), end: k3 + 1 };
-    }
-    return null;
+    if (p3.ab?.s !== s2)
+      p3.ab = { s: s2, end: attrEnds(s2) };
+    const k3 = p3.ab.end[i5 + 1];
+    return k3 < 0 ? null : { attrs: parseAttrs(s2.slice(i5, k3 + 1)), end: k3 + 1 };
   }
   function lineOf(s2, first4) {
     const nl = [];
@@ -293025,7 +293037,7 @@ ${isHandDrawn ? "" : `
           const hash = dest.indexOf("#");
           const name = (hash < 0 ? dest : dest.slice(0, hash)).trim();
           const frag = hash < 0 ? void 0 : dest.slice(hash + 1).trim();
-          if (name !== "" || frag !== void 0 && frag !== "") {
+          if ((name !== "" || frag !== void 0 && frag !== "") && schemeOf(name) === null) {
             const node2 = frag !== void 0 ? { type: "autoref", anchor: frag, ...name !== "" ? { doc: name } : {} } : { type: "text", value: s2.slice(i5, inner3.end + 1) };
             atom2(node2, i5, inner3.end + 1);
             if (/\.geml$/i.test(name)) {
@@ -293058,7 +293070,7 @@ ${isHandDrawn ? "" : `
         const label = readLabel(s2, i5 + 1, p3);
         const paren = label ? readParen(s2, label.end, p3) : null;
         if (label && paren) {
-          const a2 = readAttrs(s2, paren.end);
+          const a2 = readAttrs(s2, paren.end, p3);
           const attrObj = a2 ? a2.attrs : { classes: [], attrs: {} };
           const rawSrc = paren.content.trim();
           const src = isSafeUrl(rawSrc, true) ? rawSrc : "";
@@ -293113,7 +293125,7 @@ ${isHandDrawn ? "" : `
         const label = readLabel(s2, i5, p3);
         const paren = label ? readParen(s2, label.end, p3) : null;
         if (label && paren) {
-          const a2 = readAttrs(s2, paren.end);
+          const a2 = readAttrs(s2, paren.end, p3);
           const attrObj = a2 ? a2.attrs : { classes: [], attrs: {} };
           const dest = classifyDest(sink.markdown ? markdownDest(paren.content) : paren.content);
           const node2 = {
@@ -293315,10 +293327,10 @@ ${isHandDrawn ? "" : `
     return head ? finalize(processEmphasis(head, first4)) : [];
   }
   function parseInline(s2, line2, sink, depth = 0, pairs2) {
-    if (depth > MAX_INLINE_NESTING) {
+    if (depth > INLINE_NESTING) {
       const diags = sink.diags;
       if (Array.isArray(diags) && !diags.some((d3) => d3.code === "inline-nesting-too-deep"))
-        diags.push({ severity: "error", code: "inline-nesting-too-deep", message: `inline nesting too deep (max ${MAX_INLINE_NESTING})`, line: line2 });
+        diags.push({ severity: "error", code: "inline-nesting-too-deep", message: `inline nesting too deep (max ${INLINE_NESTING})`, line: line2 });
       return emphasize([s2]);
     }
     return emphasize(scanAtoms(s2, line2, sink, depth, pairs2 ?? pairsOf(s2)));
@@ -293619,6 +293631,9 @@ ${isHandDrawn ? "" : `
       throw new Error("trailing tokens in formula");
     return v3;
   }
+  function tooLarge(columns, rows) {
+    return columns * rows > TABLE_CELLS ? { severity: "error", code: "table-too-large", message: `${columns} columns \xD7 ${rows} rows is more than ${TABLE_CELLS} cells; no rows are kept` } : null;
+  }
   function parseTable(body, attrs, line2, sink) {
     const diagnostics = [];
     const fmt4 = typeof attrs["format"] === "string" ? attrs["format"] : void 0;
@@ -293652,6 +293667,12 @@ ${isHandDrawn ? "" : `
     const caption = attrs["caption"];
     if (typeof caption === "string")
       model.caption = caption;
+    const huge = tooLarge(columns.length, raw.cells.length);
+    if (huge !== null) {
+      diagnostics.push(huge);
+      model.rowLines = [];
+      return { model, diagnostics };
+    }
     for (const [ri, r2] of raw.cells.entries()) {
       if (r2.length !== columns.length) {
         const n2 = Math.abs(r2.length - columns.length);
@@ -293675,16 +293696,23 @@ ${isHandDrawn ? "" : `
     }
     return { model, diagnostics };
   }
+  function columnRef(columns, name) {
+    const byName = columns.indexOf(name);
+    if (byName >= 0)
+      return byName;
+    if (!/^[A-Z]+$/.test(name))
+      return -1;
+    let n2 = 0;
+    for (const c3 of name) {
+      n2 = n2 * 26 + c3.charCodeAt(0) - 64;
+      if (n2 > columns.length)
+        return -1;
+    }
+    return n2 - 1;
+  }
   function applyDerivations(model, attrs, line2, sink, diagnostics) {
     const columns = model.columns;
-    const colIndex = (name) => {
-      const byName = columns.indexOf(name);
-      if (byName >= 0)
-        return byName;
-      if (/^[A-Z]$/.test(name))
-        return name.charCodeAt(0) - 65;
-      return -1;
-    };
+    const colIndex = (name) => columnRef(columns, name);
     const cellNum = (ci, row) => {
       const v3 = model.rows[row]?.[ci]?.value;
       return typeof v3 === "number" ? v3 : null;
@@ -293732,9 +293760,9 @@ ${isHandDrawn ? "" : `
       if (fn3 === "avg")
         return vals.reduce((a2, b3) => a2 + b3, 0) / vals.length;
       if (fn3 === "min")
-        return Math.min(...vals);
+        return vals.reduce((a2, b3) => Math.min(a2, b3), Infinity);
       if (fn3 === "max")
-        return Math.max(...vals);
+        return vals.reduce((a2, b3) => Math.max(a2, b3), -Infinity);
       return null;
     };
     let aggCache = /* @__PURE__ */ new Map();
@@ -293791,6 +293819,11 @@ ${isHandDrawn ? "" : `
           failed = true;
         }
       }
+      if (failed)
+        for (const row of model.rows) {
+          ensureCell(row, ci);
+          row[ci] = { text: "", inlines: [] };
+        }
     }
     const summaryDecls = Object.entries(attrs).filter(([k3]) => k3 === "summary" || /^summary\d+$/.test(k3)).map(([, v3]) => v3).filter((v3) => typeof v3 === "string").flatMap((v3) => v3.split(";")).map((s2) => s2.trim()).filter((s2) => s2 !== "");
     if (summaryDecls.length > 0) {
@@ -293988,7 +294021,7 @@ ${isHandDrawn ? "" : `
     }
   }
   function aggregateValue(model, rows, fn3, name) {
-    const ci = model.columns.indexOf(name);
+    const ci = columnRef(model.columns, name);
     if (ci < 0)
       return null;
     if (fn3 === "count")
@@ -294001,9 +294034,9 @@ ${isHandDrawn ? "" : `
     if (fn3 === "avg")
       return values2.reduce((a2, b3) => a2 + b3, 0) / values2.length;
     if (fn3 === "min")
-      return Math.min(...values2);
+      return values2.reduce((a2, b3) => Math.min(a2, b3), Infinity);
     if (fn3 === "max")
-      return Math.max(...values2);
+      return values2.reduce((a2, b3) => Math.max(a2, b3), -Infinity);
     return null;
   }
   function groupView(model, by, aggregate, diagnostics) {
@@ -294022,20 +294055,44 @@ ${isHandDrawn ? "" : `
         continue;
       }
       const target = splitName(declaration2.slice(0, eq4));
-      specs.push({ ...target, toks: lexExpr(declaration2.slice(eq4 + 1).trim()) });
-    }
-    const missing = /* @__PURE__ */ new Set();
-    for (const spec of specs) {
-      for (const tok of spec.toks) {
-        if (tok.t === "name" && model.columns.indexOf(tok.v) < 0 && !AGG_FNS.has(tok.v.toLowerCase()))
-          missing.add(tok.v);
+      const toks = lexExpr(declaration2.slice(eq4 + 1).trim());
+      let broken = false;
+      try {
+        evalExpr(toks, 0, () => 0, () => 0);
+      } catch (e3) {
+        diagnostics.push({ severity: "error", code: "bad-aggregate-entry", message: `aggregate \`${target.name}\`: ${e3.message}` });
+        broken = true;
       }
+      specs.push({ ...target, toks, broken });
     }
-    for (const name of missing) {
-      diagnostics.push({ severity: "error", code: "view-unknown-column", message: `aggregate: unknown column \`${name}\`` });
+    for (const spec of specs) {
+      if (spec.broken)
+        continue;
+      const refs = [];
+      const bare = [];
+      const toks = spec.toks;
+      for (let i5 = 0; i5 < toks.length; i5++) {
+        const tok = toks[i5];
+        if (tok.t !== "name")
+          continue;
+        if (toks[i5 + 1]?.t === "lp" && AGG_FNS.has(tok.v.toLowerCase())) {
+          const arg = toks[i5 + 2];
+          if (arg?.t === "name") {
+            refs.push(arg.v);
+            i5 += 2;
+          }
+          continue;
+        }
+        refs.push(tok.v);
+        bare.push(tok.v);
+      }
+      const unknown = refs.find((name) => columnRef(model.columns, name) < 0);
+      if (unknown !== void 0)
+        diagnostics.push({ severity: "error", code: "view-unknown-column", message: `aggregate: unknown column \`${unknown}\`` });
+      else if (bare.length > 0)
+        diagnostics.push({ severity: "error", code: "aggregate-error", message: `aggregate \`${spec.name}\` reads \`${bare[0]}\` without an aggregate` });
+      spec.broken = unknown !== void 0 || bare.length > 0;
     }
-    if (missing.size > 0)
-      return;
     const groups = /* @__PURE__ */ new Map();
     for (const row of model.rows) {
       const key = JSON.stringify(keyIndexes.map((ci) => row[ci]?.text ?? ""));
@@ -294051,6 +294108,10 @@ ${isHandDrawn ? "" : `
       const first4 = rows[0];
       const out = keyIndexes.map((ci) => ({ ...first4[ci], inlines: [...first4[ci].inlines] }));
       for (const spec of specs) {
+        if (spec.broken) {
+          out.push({ text: "", inlines: [] });
+          continue;
+        }
         try {
           const value2 = evalExpr(spec.toks, 0, () => null, (fn3, name) => aggregateValue({ ...model, columns: sourceColumns }, rows, fn3, name));
           const text5 = spec.fmt ? applyFormat(spec.fmt, value2) : defaultNum(value2);
@@ -294067,9 +294128,39 @@ ${isHandDrawn ? "" : `
     model.rows = outputRows;
     delete model.rowLines;
   }
+  function columnList(source) {
+    const out = [];
+    let cur = "";
+    let blank = true;
+    let quoted = false;
+    for (const c3 of source) {
+      if (quoted) {
+        cur += c3;
+        if (c3 === "'")
+          quoted = false;
+        continue;
+      }
+      if (c3 === ",") {
+        out.push(cur);
+        cur = "";
+        blank = true;
+        continue;
+      }
+      if (c3 === "'" && blank)
+        quoted = true;
+      if (!/\s/.test(c3))
+        blank = false;
+      cur += c3;
+    }
+    out.push(cur);
+    return out.map((e3) => e3.trim()).filter(Boolean);
+  }
+  function columnName(entry) {
+    return entry.length >= 2 && entry.startsWith("'") && entry.indexOf("'", 1) === entry.length - 1 ? { name: entry.slice(1, -1), quoted: true } : { name: entry, quoted: false };
+  }
   function orderView(model, source, diagnostics) {
     const keys3 = [];
-    for (const part of source.split(",").map((s2) => s2.trim()).filter(Boolean)) {
+    for (const part of columnList(source)) {
       const p3 = part.trim();
       let dirWord;
       let head = p3;
@@ -294083,8 +294174,7 @@ ${isHandDrawn ? "" : `
           break;
         }
       }
-      const quotedWhole = head.length >= 3 && head.startsWith("'") && head.endsWith("'") && !head.slice(1, -1).includes("'");
-      const name = (quotedWhole ? head.slice(1, -1) : head).trim();
+      const { name } = columnName(head);
       if (name === "") {
         diagnostics.push({ severity: "error", code: "view-order-error", message: `order: bad key \`${part}\`` });
         continue;
@@ -294117,10 +294207,10 @@ ${isHandDrawn ? "" : `
     model.rows = indexed.map((v3) => v3.row);
   }
   function selectView(model, source, diagnostics) {
-    const names = source.split(",").map((s2) => s2.trim()).filter(Boolean);
     const indexes = [];
-    for (const name of names) {
-      if (name.includes("=")) {
+    for (const entry of columnList(source)) {
+      const { name, quoted } = columnName(entry);
+      if (!quoted && name.includes("=")) {
         diagnostics.push({ severity: "error", code: "view-select-expression", message: `select: \`${name}\` is an expression; derive columns with \`compute=\`` });
         continue;
       }
@@ -294131,8 +294221,6 @@ ${isHandDrawn ? "" : `
       }
       indexes.push(ci);
     }
-    if (indexes.length !== names.length)
-      return;
     model.columns = indexes.map((i5) => model.columns[i5]);
     model.align = indexes.map((i5) => model.align[i5]);
     model.rows = model.rows.map((row) => indexes.map((i5) => row[i5] ?? { text: "", inlines: [] }));
@@ -294143,7 +294231,7 @@ ${isHandDrawn ? "" : `
     const rowFormulas = formulas.filter((formula) => !hasAggregate(formula));
     const aggregateFormulas = formulas.filter(hasAggregate);
     const byRaw = attrs["by"];
-    const by = typeof byRaw === "string" ? byRaw.split(",").map((s2) => s2.trim()).filter(Boolean) : [];
+    const by = typeof byRaw === "string" ? columnList(byRaw).map((e3) => columnName(e3).name) : [];
     for (const formula of formulas) {
       const name = formulaName(formula);
       if (name !== null && originalColumns.has(name))
@@ -294155,6 +294243,12 @@ ${isHandDrawn ? "" : `
     }
     if (rowFormulas.length)
       applyDerivations(model, computedAttrs(rowFormulas), line2, sink, diagnostics);
+    const huge = tooLarge(model.columns.length, model.rows.length);
+    if (huge !== null) {
+      diagnostics.push(huge);
+      model.rows = [];
+      return;
+    }
     const where = attrs["where"];
     if (typeof where === "string" && where.trim() !== "") {
       const aggregateNames = new Set(aggregateFormulas.map(formulaName).filter((v3) => v3 !== null));
@@ -294212,7 +294306,10 @@ ${isHandDrawn ? "" : `
         summaryAttrs[kept === 0 ? "summary" : `summary${kept + 1}`] = summary;
         kept++;
       }
-      applyDerivations(model, summaryAttrs, line2, sink, diagnostics);
+      if (kept === 0)
+        model.summary = model.columns.map(() => ({ text: "", inlines: [] }));
+      else
+        applyDerivations(model, summaryAttrs, line2, sink, diagnostics);
     }
   }
   function ensureCell(row, ci) {
@@ -294403,7 +294500,6 @@ ${isHandDrawn ? "" : `
     }
     return -1;
   }
-  var MAX_DEPTH = 200;
   var Refusal = class extends Error {
     line;
     constructor(message, line2) {
@@ -294453,8 +294549,10 @@ ${isHandDrawn ? "" : `
         throw new Refusal("a flow collection is outside this subset \u2014 write it in block form (only `[]` and `{}` are read, as the empty sequence and map)", n2);
       }
     };
-    function inlineValue(text5, at3, parentIndent) {
+    function inlineValue(text5, at3, parentIndent, depth) {
       const t4 = text5.trim();
+      if ((t4 === "[]" || t4 === "{}") && depth >= DATA_DEPTH)
+        tooDeep2(at3);
       if (t4 === "[]")
         return [];
       if (t4 === "{}")
@@ -294475,7 +294573,10 @@ ${isHandDrawn ? "" : `
         if (first4 < 0)
           return chomp === "-" ? "" : "\n";
         const rawLines = body.slice(first4, last3 + 1).map((r2) => r2.replace(/\r$/, ""));
-        const base = Math.min(...rawLines.filter((r2) => r2.trim() !== "").map((r2) => r2.length - r2.replace(/^[ \t]+/, "").length));
+        let base = Infinity;
+        for (const r2 of rawLines)
+          if (r2.trim() !== "")
+            base = Math.min(base, r2.length - r2.replace(/^[ \t]+/, "").length);
         const parts = rawLines.map((r2) => r2.trim() === "" ? "" : r2.slice(base));
         let s2 = fold ? parts.join(" ") : parts.join("\n");
         if (chomp !== "-")
@@ -294488,10 +294589,13 @@ ${isHandDrawn ? "" : `
         throw new Refusal(`\`${t4}\` has no finite value \u2014 the value domain here has no infinity`, at3);
       return v3;
     }
+    const tooDeep2 = (at3) => {
+      throw new Refusal(`nesting deeper than ${DATA_DEPTH} levels is outside the value tree`, at3);
+    };
     function parseBlock(indent, depth) {
       const first4 = peek2();
-      if (depth > MAX_DEPTH)
-        throw new Refusal(`nesting deeper than ${MAX_DEPTH} levels is outside this subset`, first4.n);
+      if (depth >= DATA_DEPTH)
+        tooDeep2(first4.n);
       if (first4.text === "-" || first4.text.startsWith("- "))
         return parseSeq(indent, depth);
       return parseMap(indent, depth);
@@ -294519,11 +294623,11 @@ ${isHandDrawn ? "" : `
         if (rest === "-" || rest.startsWith("- ") || keyEnd(rest) >= 0) {
           const afterDash = l4.text.slice(1);
           const inner3 = indent + 1 + (afterDash.length - afterDash.replace(/^ +/, "").length);
-          lines.splice(p3, 0, { n: at3, indent: inner3, text: rest });
+          lines[--p3] = { n: at3, indent: inner3, text: rest };
           out.push(parseBlock(inner3, depth + 1));
           continue;
         }
-        out.push(inlineValue(rest, at3, indent));
+        out.push(inlineValue(rest, at3, indent, depth + 1));
       }
       return out;
     }
@@ -294566,7 +294670,7 @@ ${isHandDrawn ? "" : `
             setKey(key, null);
           continue;
         }
-        setKey(key, inlineValue(rest, at3, indent));
+        setKey(key, inlineValue(rest, at3, indent, depth + 1));
       }
       return out;
     }
@@ -294593,6 +294697,7 @@ ${isHandDrawn ? "" : `
   var Reader = class {
     text;
     i = 0;
+    depth = 0;
     constructor(text5) {
       this.text = text5;
     }
@@ -294616,7 +294721,7 @@ ${isHandDrawn ? "" : `
         }
         if (this.text[this.i] === "#" && this.text[this.i + 1] === "_") {
           this.i += 2;
-          this.value();
+          this.nest(() => this.value());
           continue;
         }
         return;
@@ -294626,15 +294731,25 @@ ${isHandDrawn ? "" : `
     refuse(what, at3 = this.i) {
       throw new Refusal2(what, this.line(at3));
     }
+    // One level for each container being read, and for each `#_` discard.
+    nest(read) {
+      if (++this.depth > DATA_DEPTH)
+        this.refuse(`nesting deeper than ${DATA_DEPTH} levels is outside the value tree`);
+      try {
+        return read();
+      } finally {
+        this.depth--;
+      }
+    }
     value() {
       this.skip();
       if (this.i >= this.text.length)
         this.refuse("the body ends where a value was expected");
       const c3 = this.text[this.i];
       if (c3 === "{")
-        return this.map();
+        return this.nest(() => this.map());
       if (c3 === "[")
-        return this.vector();
+        return this.nest(() => this.vector());
       if (c3 === "(")
         this.refuse("a list `(\u2026)` \u2014 this reading has vectors and sets, not lists");
       if (c3 === '"')
@@ -294642,7 +294757,7 @@ ${isHandDrawn ? "" : `
       if (c3 === "\\")
         this.refuse("a character literal `\\x`");
       if (c3 === "#")
-        return this.dispatch();
+        return this.text[this.i + 1] === "{" ? this.nest(() => this.dispatch()) : this.dispatch();
       return this.atom();
     }
     map() {
@@ -294854,6 +294969,26 @@ ${isHandDrawn ? "" : `
   // ../../geml-parser/dist/ijson.js
   init_define_process_argv();
   var LONE_SURROGATE = new RegExp("\\p{Cs}", "u");
+  function tooDeep(text5) {
+    let depth = 0;
+    for (let i5 = 0; i5 < text5.length; i5++) {
+      const c3 = text5[i5];
+      if (c3 === '"') {
+        i5++;
+        while (i5 < text5.length && text5[i5] !== '"')
+          i5 += text5[i5] === "\\" ? 2 : 1;
+        continue;
+      }
+      if (c3 === "{" || c3 === "[") {
+        if (++depth > DATA_DEPTH)
+          return i5;
+        continue;
+      }
+      if (c3 === "}" || c3 === "]")
+        depth--;
+    }
+    return -1;
+  }
   function iJsonFault(text5) {
     const stack = [];
     let expectKey = false;
@@ -295046,7 +295181,7 @@ ${isHandDrawn ? "" : `
     if (a2["hide-accessors"] !== void 0)
       written.hideAccessors = bool(a2["hide-accessors"], true);
     if (a2["palette"] !== void 0) {
-      const list = String(a2["palette"]).split(/\s+/).filter((x6) => x6.length > 0);
+      const list = String(a2["palette"]).split(/\s+/).filter((x6) => /^#[0-9a-f]{3,8}$|^[a-z]+$/i.test(x6));
       if (list.length > 0)
         written.palette = list;
     }
@@ -295449,7 +295584,7 @@ ${isHandDrawn ? "" : `
     }
     return { data: { start: start2, depth, roots: finalRoots, nodes: nodes5, edges: edges3, module: String(meta0["module"] ?? "") || void 0, style: graphStyle }, truncated };
   }
-  function codeGraphRuntime(root4) {
+  function codeGraphRuntime(root4, host) {
     var CG_PALETTE_FALLBACK = [
       "#e3f2fd",
       "#e8f5e9",
@@ -296082,7 +296217,7 @@ ${isHandDrawn ? "" : `
           var s3 = raw.slice(a2, b3);
           if (!s3)
             return "";
-          return /^[a-zA-Z][a-zA-Z0-9+.\-]*:/.test(s3) || s3.slice(0, 2) === "//" ? "" : s3;
+          return /^[a-zA-Z][a-zA-Z0-9+.\-]*:/.test(s3) || /^[\/\\]{2}/.test(s3) ? "" : s3;
         }
         var navBase = relOnly(String(mount2.getAttribute("data-src") || data6.start || "").replace(/[^\/]*$/, ""));
         var live = function() {
@@ -296363,7 +296498,8 @@ ${isHandDrawn ? "" : `
           };
           bar.appendChild(resetBtn);
         }
-        if (typeof location !== "undefined") {
+        var srvSearch = typeof location !== "undefined" && /^https?:$/.test(location.protocol);
+        if (typeof location !== "undefined" && (srvSearch || !(host && host.noScriptIndex))) {
           let withIndex2 = function(cb) {
             if (window.__gemlSearch)
               return cb(window.__gemlSearch);
@@ -296452,7 +296588,6 @@ ${isHandDrawn ? "" : `
           searchWrap.appendChild(searchBox);
           searchWrap.appendChild(searchMenu);
           bar.appendChild(searchWrap);
-          var srvSearch = /^https?:$/.test(location.protocol);
           var searchSeq = 0, searchTop = null;
           searchBox.addEventListener("input", function() {
             var my = ++searchSeq, qv = searchBox.value;
@@ -297017,6 +297152,8 @@ ${isHandDrawn ? "" : `
   }
   function translateBlocks(blocks2, lang, t4, opts = {}) {
     return blocks2.map((b3) => {
+      if ((b3.kind === "block" || b3.kind === "heading") && b3.hidden === true)
+        return b3;
       switch (b3.kind) {
         case "heading":
         case "paragraph": {
@@ -297083,6 +297220,10 @@ ${isHandDrawn ? "" : `
     "media-shape-empty": "error",
     "media-clip-unassembled": "error",
     "media-duration-required": "error",
+    // 值要交给播放器、ffmpeg 与时间线绘制：认不出的写法、跑出 24 小时的时间，都是结构坏了。
+    "media-src-not-relative": "error",
+    "media-gain-invalid": "error",
+    "media-time-out-of-range": "error",
     "media-track-missing": "error",
     "media-track-kind-missing": "error",
     "media-track-kind-unknown": "error",
@@ -297859,10 +298000,16 @@ ${isHandDrawn ? "" : `
   function reLit(s2) {
     return s2.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
+  function labeledClose(id38) {
+    return new RegExp(`^={3,}[ \\t]*#${reLit(id38)}[ \\t]*$`);
+  }
   function parseDataBody(fmt4, body, openLineNo) {
     const diags = [];
     const outside = (why, line2) => {
       diags.push({ severity: "error", code: "data-parse", message: `data: ${why}, which the value domain excludes (I-JSON)`, line: line2 });
+    };
+    const tooDeepAt = (line2) => {
+      diags.push({ severity: "error", code: "data-parse", message: `data: nesting deeper than ${DATA_DEPTH} levels is outside what this processor reads`, line: line2 });
     };
     if (fmt4 === "json") {
       const text5 = body.join("\n");
@@ -297871,6 +298018,11 @@ ${isHandDrawn ? "" : `
         value2 = JSON.parse(text5);
       } catch (e3) {
         diags.push({ severity: "error", code: "data-parse", message: `data: body is not valid JSON (${e3 instanceof Error ? e3.message : String(e3)})`, line: jsonErrorLine(e3, text5, openLineNo) });
+        return { diags };
+      }
+      const deep = tooDeep(text5);
+      if (deep >= 0) {
+        tooDeepAt(openLineNo + text5.slice(0, deep).split("\n").length);
         return { diags };
       }
       const fault = iJsonFault(text5);
@@ -297888,6 +298040,11 @@ ${isHandDrawn ? "" : `
           values2.push(JSON.parse(t4));
         } catch {
           diags.push({ severity: "error", code: "data-parse", message: `data: body line ${li + 1} is not one JSON value`, line: openLineNo + 1 + li });
+          ok = false;
+          continue;
+        }
+        if (tooDeep(t4) >= 0) {
+          tooDeepAt(openLineNo + 1 + li);
           ok = false;
           continue;
         }
@@ -298092,7 +298249,6 @@ ${isHandDrawn ? "" : `
   var FENCE_LIKE = /^={3,}[ \t]*([A-Za-z][A-Za-z0-9_-]*)\b/;
   var ATTR_EVIDENCE = /[{}]|[A-Za-z][A-Za-z0-9_-]*=/;
   var LIST_ITEM = /^[ \t]*(?:[-*]|\d+\.)[ \t]+(.*)$/;
-  var MAX_NESTING = 256;
   function isCloseFence(line2, openLen) {
     const t4 = line2.trimEnd();
     return /^=+$/.test(t4) && t4.length === openLen;
@@ -298336,7 +298492,7 @@ ${isHandDrawn ? "" : `
     const root4 = mkList(matchMarker(lines[i5]));
     const stack = [{ list: root4, indent: matchMarker(lines[i5]).indent }];
     let prevBlank = false;
-    let tooDeep = false;
+    let tooDeep2 = false;
     while (i5 < lines.length) {
       if (lines[i5].trim() === "") {
         prevBlank = true;
@@ -298354,10 +298510,10 @@ ${isHandDrawn ? "" : `
         const parent4 = top2.list.items[top2.list.items.length - 1];
         if (!parent4)
           break;
-        if (stack.length >= MAX_NESTING) {
-          if (!tooDeep) {
-            ctx.diags.push({ severity: "error", code: "list-nesting-too-deep", message: `list nesting too deep (max ${MAX_NESTING})`, line: base + i5 + 1 });
-            tooDeep = true;
+        if (stack.length >= BLOCK_NESTING) {
+          if (!tooDeep2) {
+            ctx.diags.push({ severity: "error", code: "list-nesting-too-deep", message: `list nesting too deep (max ${BLOCK_NESTING})`, line: base + i5 + 1 });
+            tooDeep2 = true;
           }
           cur = top2.list;
         } else {
@@ -298388,7 +298544,7 @@ ${isHandDrawn ? "" : `
     return { block: root4, next: i5 };
   }
   function scanFenceBody(lines, start2, base, openLen, id38, type3, openLineNo, ctx) {
-    const labeled = id38 !== void 0 ? new RegExp(`^={3,}[ \\t]*#${reLit(id38)}[ \\t]*$`) : null;
+    const labeled = id38 !== void 0 ? labeledClose(id38) : null;
     const body = [];
     let j3 = start2;
     let closed = false;
@@ -298666,8 +298822,8 @@ ${isHandDrawn ? "" : `
     if (mode === "prose") {
       block2.children = scanProse(body, base + i5 + 1, ctx);
     } else if (mode === "flow") {
-      if (depth >= MAX_NESTING) {
-        ctx.diags.push({ severity: "error", code: "block-nesting-too-deep", message: `block nesting too deep (max ${MAX_NESTING}); body kept as raw`, line: openLineNo });
+      if (depth >= BLOCK_NESTING) {
+        ctx.diags.push({ severity: "error", code: "block-nesting-too-deep", message: `block nesting too deep (max ${BLOCK_NESTING}); body kept as raw`, line: openLineNo });
         block2.raw = body;
       } else {
         (ctx.parentTypes ??= []).push(type3);
@@ -298961,6 +299117,8 @@ ${isHandDrawn ? "" : `
       ctx.diags.push({ severity: "warning", code: "unchecked-cross-document-reference", message: `geml-chart: data source \`${target}\` not checked (no document resolver)`, line: line2 });
       return null;
     }
+    if (overBudget(ctx, line2, `geml-chart data source \`${target}\``))
+      return null;
     const text5 = opts.resolveDoc(target);
     if (text5 === null) {
       ctx.diags.push({ severity: "error", code: "unresolvable-table-source", message: `geml-chart: cannot resolve data source \`${target}\``, line: line2 });
@@ -298976,11 +299134,13 @@ ${isHandDrawn ? "" : `
     const { model, diagnostics } = parseTable(normalizeSource(text5).split("\n"), attrs, line2, ctx);
     for (const d3 of diagnostics)
       ctx.diags.push({ ...d3, line: line2 });
+    if (!borrow(ctx, model.columns.length * model.rows.length, line2, `geml-chart data source \`${target}\``))
+      model.rows = [];
     model.src = target;
     return model;
   }
   var inferDataFormat = (target) => /\.tsv$/i.test(target) ? "tsv" : "csv";
-  var EMBED_DEPTH_LIMIT = 16;
+  var EMBED_TOTAL_CAP = 1e3;
   var WHITE_CHAR = new RegExp("^\\p{White_Space}$", "u");
   function trimWhiteSpaceEnd(s2) {
     let b3 = s2.length;
@@ -299046,6 +299206,21 @@ ${isHandDrawn ? "" : `
     };
     const found = /* @__PURE__ */ new Map();
     let budget = CHAIN_BUDGET;
+    const stepMemo = /* @__PURE__ */ new Map();
+    const stepFrom = (model, target, s2) => {
+      const k3 = `${target}\0${s2.anchor ?? ""}\0${s2.part ?? "whole"}\0${s2.inline ? 1 : 0}`;
+      if (!stepMemo.has(k3)) {
+        const sel = selectEmbed(model, s2.anchor, s2.part ?? "whole");
+        if (sel === null || s2.inline && !(sel.length === 1 && soleParagraph(sel[0]) !== null))
+          stepMemo.set(k3, null);
+        else {
+          const next3 = [];
+          chainSitesIn(sel, next3);
+          stepMemo.set(k3, next3);
+        }
+      }
+      return stepMemo.get(k3);
+    };
     const visit = (name, sites, docs, path5, origin) => {
       for (const s2 of sites) {
         if (budget <= 0)
@@ -299061,8 +299236,8 @@ ${isHandDrawn ? "" : `
         const model = load2(target);
         if (model === null)
           continue;
-        const sel = selectEmbed(model, s2.anchor, s2.part ?? "whole");
-        if (sel === null || s2.inline && !(sel.length === 1 && soleParagraph(sel[0]) !== null))
+        const next3 = stepFrom(model, target, s2);
+        if (next3 === null)
           continue;
         const key = s2.anchor === void 0 ? target : `${target}#${nameKey(s2.anchor)}`;
         if (target !== name && docs.includes(target)) {
@@ -299076,11 +299251,9 @@ ${isHandDrawn ? "" : `
             found.set(origin, `transclusion cycle: \`${shown}\` is already being expanded`);
           continue;
         }
-        if (path5.length >= EMBED_DEPTH_LIMIT)
+        if (path5.length >= CHAIN_DEPTH)
           continue;
         budget--;
-        const next3 = [];
-        chainSitesIn(sel, next3);
         visit(target, next3, target !== name ? [...docs, target] : docs, [...path5, key], origin);
       }
     };
@@ -299139,16 +299312,36 @@ ${isHandDrawn ? "" : `
     const sole = soleParagraph(found);
     return sole === null ? "not-inline" : { inlines: sole.inlines };
   }
+  function docReads(opts) {
+    const texts = /* @__PURE__ */ new Map();
+    const models = /* @__PURE__ */ new Map();
+    const text5 = (doc) => {
+      if (!texts.has(doc))
+        texts.set(doc, opts.resolveDoc ? opts.resolveDoc(doc) : null);
+      return texts.get(doc);
+    };
+    return {
+      text: text5,
+      parsed(doc) {
+        if (!models.has(doc)) {
+          const src = text5(doc);
+          models.set(doc, src === null ? null : parse(src).children);
+        }
+        return models.get(doc);
+      },
+      scanned: /* @__PURE__ */ new Map()
+    };
+  }
   function validateProjections(children2, ctx, opts) {
+    const docs = docReads(opts);
     for (const p3 of ctx.projections ?? []) {
       let blocks2 = null;
       if (p3.doc === void 0)
         blocks2 = children2;
       else if (opts.resolveDoc) {
-        const src = opts.resolveDoc(p3.doc);
-        if (src === null)
+        blocks2 = docs.parsed(p3.doc);
+        if (blocks2 === null)
           continue;
-        blocks2 = parse(src).children;
       }
       if (blocks2 === null)
         continue;
@@ -299237,6 +299430,16 @@ ${isHandDrawn ? "" : `
       }
     }
   }
+  function borrow(ctx, cells, line2, what) {
+    ctx.borrowed = (ctx.borrowed ?? 0) + cells;
+    if (ctx.borrowed <= BORROWED_CELLS)
+      return true;
+    ctx.diags.push({ severity: "error", code: "table-too-large", message: `${what} takes this document past ${BORROWED_CELLS} cells read from elsewhere (\xA79.2); it keeps no rows`, line: line2 });
+    return false;
+  }
+  function overBudget(ctx, line2, what) {
+    return (ctx.borrowed ?? 0) >= BORROWED_CELLS && !borrow(ctx, 0, line2, what);
+  }
   function resolveTableSources(ctx, opts) {
     const pending = ctx.tableSources ?? [];
     if (pending.length === 0)
@@ -299258,6 +299461,8 @@ ${isHandDrawn ? "" : `
         ctx.diags.push({ severity: "warning", code: "unchecked-cross-document-reference", message: `table source \`${target}\` not checked (no document resolver)`, line: line2 });
         continue;
       }
+      if (overBudget(ctx, line2, `table source \`${target}\``))
+        continue;
       const text5 = opts.resolveDoc(target);
       if (text5 === null) {
         err(line2, "unresolvable-table-source", `cannot resolve table source \`${target}\``);
@@ -299268,6 +299473,8 @@ ${isHandDrawn ? "" : `
       const { model, diagnostics } = parseTable(normalizeSource(text5).split("\n"), attrs, line2, ctx);
       model.src = target;
       delete model.rowLines;
+      if (!borrow(ctx, model.columns.length * model.rows.length, line2, `table source \`${target}\``))
+        model.rows = [];
       block2.table = model;
       for (const d3 of diagnostics)
         ctx.diags.push({ ...d3, line: line2 });
@@ -299356,6 +299563,7 @@ ${isHandDrawn ? "" : `
     if (pending.length === 0)
       return;
     const unresolved = new Set(pending);
+    const pendingBlocks = new Map(pending.map((entry) => [entry.block, entry]));
     const error3 = (line2, code, message) => {
       ctx.diags.push({ severity: "error", code, message, line: line2 });
     };
@@ -299370,8 +299578,9 @@ ${isHandDrawn ? "" : `
             error3(line2, ctx.ids.has(nameKey(id38)) ? "view-source-not-a-relation" : "unresolved-reference", ctx.ids.has(nameKey(id38)) ? `view source \`#${id38}\` is not a table or view` : `unresolved reference \`#${id38}\``);
             return null;
           }
-          if ([...unresolved].some((entry) => entry.block === source))
-            return void 0;
+          const waiting = pendingBlocks.get(source);
+          if (waiting !== void 0 && unresolved.has(waiting))
+            return { wait: source };
           return source.table ?? "defer";
         }
         if (!opts.resolveDoc) {
@@ -299384,8 +299593,8 @@ ${isHandDrawn ? "" : `
           error3(line2, "view-source-cycle", `view source \`${target}\` returns to a document already being resolved: ${[...stack, canonical].map((d3) => d3 === "" ? "(this document)" : d3).join(" \u2192 ")}`);
           return null;
         }
-        if (stack.length > EMBED_DEPTH_LIMIT) {
-          error3(line2, "view-source-too-deep", `view source \`${target}\` is ${stack.length} documents deep; the bound is ${EMBED_DEPTH_LIMIT} (\xA79.3)`);
+        if (stack.length > CHAIN_DEPTH) {
+          error3(line2, "view-source-too-deep", `view source \`${target}\` is ${stack.length} documents deep; the bound is ${CHAIN_DEPTH} (\xA79.3)`);
           return null;
         }
         const text6 = opts.resolveDoc(path5);
@@ -299420,6 +299629,8 @@ ${isHandDrawn ? "" : `
         ctx.diags.push({ severity: "warning", code: "unchecked-cross-document-reference", message: `view source \`${target}\` not checked (no document resolver)`, line: line2 });
         return null;
       }
+      if (overBudget(ctx, line2, `view source \`${target}\``))
+        return null;
       const text5 = opts.resolveDoc(target);
       if (text5 === null) {
         error3(line2, "unresolvable-table-source", `cannot resolve view source \`${target}\``);
@@ -299433,38 +299644,56 @@ ${isHandDrawn ? "" : `
       return parsed.model;
     };
     const depthOf = /* @__PURE__ */ new Map();
-    let progress2 = true;
-    while (progress2 && unresolved.size > 0) {
-      progress2 = false;
-      for (const entry of [...unresolved]) {
-        const source = sourceOf(entry.target, entry.line);
-        if (source === void 0)
-          continue;
-        unresolved.delete(entry);
-        progress2 = true;
-        if (source === null)
-          continue;
-        if (source === "defer") {
-          deferBlock(entry.block, ctx);
-          continue;
-        }
-        const local = /^#([^#]+)$/.exec(entry.target.trim());
-        const depth = (local ? depthOf.get(nameKey(local[1])) ?? 0 : 0) + 1;
-        if (entry.block.id !== void 0)
-          depthOf.set(nameKey(entry.block.id), depth);
-        if (depth > EMBED_DEPTH_LIMIT) {
-          error3(entry.line, "view-source-too-deep", `view source chain is ${depth} deep; the bound is ${EMBED_DEPTH_LIMIT} (\xA79.3)`);
-          continue;
-        }
-        const model = copyRelation(source, entry.target, blockCaption(entry.block));
-        const diagnostics = [];
-        deriveView(model, entry.block.attrs, entry.line, ctx, diagnostics);
-        entry.block.table = model;
-        for (const diag of diagnostics)
-          ctx.diags.push({ ...diag, line: entry.line });
-        if (entry.block.id !== void 0)
-          (ctx.tables ??= /* @__PURE__ */ new Map()).set(nameKey(entry.block.id), model);
+    const waiters = /* @__PURE__ */ new Map();
+    const queue = [...pending];
+    for (let q3 = 0; q3 < queue.length; q3++) {
+      const entry = queue[q3];
+      if (!unresolved.has(entry))
+        continue;
+      const source = sourceOf(entry.target, entry.line);
+      if (source !== null && typeof source === "object" && "wait" in source) {
+        const list = waiters.get(source.wait);
+        if (list)
+          list.push(entry);
+        else
+          waiters.set(source.wait, [entry]);
+        continue;
       }
+      unresolved.delete(entry);
+      const released = waiters.get(entry.block);
+      if (released) {
+        waiters.delete(entry.block);
+        queue.push(...released);
+      }
+      if (source === null)
+        continue;
+      if (source === "defer") {
+        deferBlock(entry.block, ctx);
+        continue;
+      }
+      const local = /^#([^#]+)$/.exec(entry.target.trim());
+      const depth = (local ? depthOf.get(nameKey(local[1])) ?? 0 : 0) + 1;
+      if (entry.block.id !== void 0)
+        depthOf.set(nameKey(entry.block.id), depth);
+      if (depth > CHAIN_DEPTH) {
+        error3(entry.line, "view-source-too-deep", `view source chain is ${depth} deep; the bound is ${CHAIN_DEPTH} (\xA79.3)`);
+        continue;
+      }
+      if (!borrow(ctx, source.columns.length * source.rows.length, entry.line, `view source \`${entry.target}\``)) {
+        const model2 = copyRelation({ ...source, rows: [] }, entry.target, blockCaption(entry.block));
+        entry.block.table = model2;
+        if (entry.block.id !== void 0)
+          (ctx.tables ??= /* @__PURE__ */ new Map()).set(nameKey(entry.block.id), model2);
+        continue;
+      }
+      const model = copyRelation(source, entry.target, blockCaption(entry.block));
+      const diagnostics = [];
+      deriveView(model, entry.block.attrs, entry.line, ctx, diagnostics);
+      entry.block.table = model;
+      for (const diag of diagnostics)
+        ctx.diags.push({ ...diag, line: entry.line });
+      if (entry.block.id !== void 0)
+        (ctx.tables ??= /* @__PURE__ */ new Map()).set(nameKey(entry.block.id), model);
     }
     for (const entry of unresolved) {
       error3(entry.line, "view-source-cycle", `view source chain closes a cycle at \`${entry.target}\``);
@@ -299512,7 +299741,7 @@ ${isHandDrawn ? "" : `
               firstLine.set(k3, line3);
             }
           }
-        } else if ((REGISTRY.get(type3) ?? "raw") === "flow" && depth < MAX_NESTING) {
+        } else if ((REGISTRY.get(type3) ?? "raw") === "flow" && depth < BLOCK_NESTING) {
           walk2(body, base + i5 + 1, depth + 1);
         }
         i5 = end - 1;
@@ -299521,13 +299750,13 @@ ${isHandDrawn ? "" : `
     walk2(lines, 0, 0);
     return meta3;
   }
-  function blockFromDocument(source, id38) {
-    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: EMPTY_VOCABULARY };
-    const blocks2 = scanBlocks(normalizeSource(source).split("\n"), 0, ctx);
-    const inner3 = {};
-    resolveTableSources(ctx, inner3);
-    resolveViewSources(ctx, inner3);
-    resolveDataSources(ctx, inner3);
+  function blockFromDocument(source, id38, scanned) {
+    let hit = scanned?.get(source);
+    if (hit === void 0) {
+      hit = scanForCoordinates(source);
+      scanned?.set(source, hit);
+    }
+    const { blocks: blocks2, ctx } = hit;
     if (nameKey(id38) === nameKey("meta") && !ctx.ids.has(nameKey("meta"))) {
       const view = metaView(blocks2);
       if (view.blocks.length === 0)
@@ -299539,16 +299768,25 @@ ${isHandDrawn ? "" : `
         if ((b3.kind === "block" || b3.kind === "heading") && b3.id !== void 0 && nameKey(b3.id) === nameKey(id38))
           return b3;
         if (b3.kind === "block" && b3.children) {
-          const inner4 = find4(b3.children);
-          if (inner4)
-            return inner4;
+          const inner3 = find4(b3.children);
+          if (inner3)
+            return inner3;
         }
       }
       return void 0;
     };
     return find4(blocks2) ?? null;
   }
-  function validateCoordRef(ref, children2, ctx, opts) {
+  function scanForCoordinates(source) {
+    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: EMPTY_VOCABULARY };
+    const blocks2 = scanBlocks(normalizeSource(source).split("\n"), 0, ctx);
+    const inner3 = {};
+    resolveTableSources(ctx, inner3);
+    resolveViewSources(ctx, inner3);
+    resolveDataSources(ctx, inner3);
+    return { blocks: blocks2, ctx };
+  }
+  function validateCoordRef(ref, children2, ctx, opts, docs) {
     const anchor2 = ref.anchor;
     if (anchor2 === void 0)
       return false;
@@ -299570,10 +299808,10 @@ ${isHandDrawn ? "" : `
         ctx.diags.push({ severity: "warning", code: "unchecked-cross-document-reference", message: `\`${written}\` not checked (no document resolver)`, line: ref.line });
         return true;
       }
-      const text5 = opts.resolveDoc(ref.doc);
+      const text5 = docs.text(ref.doc);
       if (text5 === null)
         return err("unresolvable-document", `cannot resolve document \`${ref.doc}\``);
-      block2 = blockFromDocument(text5, base);
+      block2 = blockFromDocument(text5, base, docs.scanned);
       if (!block2)
         return err("unresolved-cross-document-reference", `unresolved reference \`${ref.doc}#${base}\``);
     } else if (nameKey(base) === nameKey("meta") && !ctx.ids.has(nameKey("meta"))) {
@@ -299713,19 +299951,20 @@ ${isHandDrawn ? "" : `
   }
   function validateRefs(ctx, opts, children2) {
     const docIds = /* @__PURE__ */ new Map();
+    const docs = docReads(opts);
     for (const ref of ctx.refs) {
       if (ref.kind === "wikilink") {
         validateWikilink(ref, ctx, opts);
         continue;
       }
-      if (validateCoordRef(ref, children2, ctx, opts))
+      if (validateCoordRef(ref, children2, ctx, opts, docs))
         continue;
       if (ref.kind === "cross") {
         if (!ref.doc)
           continue;
         const gemlTarget = /\.geml$/i.test(ref.doc);
         if (!gemlTarget && ref.anchor !== void 0 && opts.resolveDoc) {
-          if (opts.resolveDoc(ref.doc) === null && !opts.docExists?.(ref.doc)) {
+          if (docs.text(ref.doc) === null && !opts.docExists?.(ref.doc)) {
             ctx.diags.push({ severity: "error", code: "unresolvable-document", message: `cannot resolve document \`${ref.doc}\``, line: ref.line });
           }
           continue;
@@ -299736,7 +299975,7 @@ ${isHandDrawn ? "" : `
         }
         let ids = docIds.get(ref.doc);
         if (ids === void 0) {
-          const src = opts.resolveDoc(ref.doc);
+          const src = docs.text(ref.doc);
           if (src === null) {
             if (opts.docExists?.(ref.doc)) {
               docIds.set(ref.doc, /* @__PURE__ */ new Set());
@@ -300094,6 +300333,16 @@ ${isHandDrawn ? "" : `
     if (!((first4.startsWith("===") || first4.startsWith("#")) && first4.endsWith("\\"))) {
       return { line: first4, consumed: 1 };
     }
+    if (first4.startsWith("===")) {
+      const { reach, tail } = continuations(lines);
+      const k3 = i5 + 1 < lines.length ? reach[i5 + 1] : i5;
+      const rest = i5 + 1 < lines.length ? tail[i5 + 1] : "";
+      const head = trimWhiteSpaceEnd(first4.slice(0, -1));
+      const last3 = rest !== "" ? rest : head.slice(-1);
+      if (last3 !== "}" && !(rest === "" && /^={3,}[ \t]*[A-Za-z][A-Za-z0-9_-]*$/.test(head))) {
+        return { line: first4, consumed: k3 - i5 + 1 };
+      }
+    }
     let folded = trimWhiteSpaceEnd(first4.slice(0, -1));
     let consumed = 1;
     while (i5 + consumed < lines.length) {
@@ -300108,10 +300357,29 @@ ${isHandDrawn ? "" : `
     }
     return { line: folded, consumed };
   }
+  var CONTINUATIONS = /* @__PURE__ */ new WeakMap();
+  function continuations(lines) {
+    let c3 = CONTINUATIONS.get(lines);
+    if (c3 === void 0) {
+      const reach = new Int32Array(lines.length);
+      const tail = new Array(lines.length);
+      for (let j3 = lines.length - 1; j3 >= 0; j3--) {
+        const t4 = trimWhiteSpace(lines[j3]);
+        const goesOn = t4.endsWith("\\");
+        const seg = goesOn ? trimWhiteSpaceEnd(t4.slice(0, -1)) : t4;
+        const after = goesOn && j3 + 1 < lines.length ? tail[j3 + 1] : "";
+        reach[j3] = goesOn && j3 + 1 < lines.length ? reach[j3 + 1] : j3;
+        tail[j3] = after !== "" ? after : seg.slice(-1);
+      }
+      c3 = { reach, tail };
+      CONTINUATIONS.set(lines, c3);
+    }
+    return c3;
+  }
   function fenceClose(lines, i5, open3, consumed = 1) {
     const openLen = open3[1].length;
     const id38 = open3[3] ? parseAttrs(open3[3]).id : void 0;
-    const labeled = id38 !== void 0 ? new RegExp(`^={3,}[ \\t]+#${reLit(id38)}[ \\t]*$`) : null;
+    const labeled = id38 !== void 0 ? labeledClose(id38) : null;
     for (let j3 = i5 + consumed; j3 < lines.length; j3++) {
       if (isCloseFence(lines[j3], openLen) || labeled && labeled.test(lines[j3]))
         return { end: j3 + 1, closed: true };
@@ -300177,7 +300445,7 @@ ${isHandDrawn ? "" : `
         const flow = (REGISTRY.get(type3) ?? ctx.vocab.bodies.get(type3) ?? "raw") === "flow";
         const body = { start: base + i5 + consumed, end: base + (closed ? end - 1 : end) };
         units?.push({ span: { start: base + i5, end: base + end }, kind: "block", type: type3, ...id38 !== void 0 ? { id: id38 } : {}, ...keysOf(a2), ...flow ? { body } : {} });
-        if (flow && depth < MAX_NESTING) {
+        if (flow && depth < BLOCK_NESTING) {
           collectSpans(lines.slice(i5 + consumed, closed ? end - 1 : end), base + i5 + consumed, out, ctx, depth + 1, units);
         }
         i5 = end;
@@ -300418,7 +300686,7 @@ ${isHandDrawn ? "" : `
       return null;
     const lastText = trimSpaceTabEnd(stripEol(lines[span.end - 1] ?? ""));
     const bid = open3[3] ? parseAttrs(open3[3]).id : void 0;
-    const labeled = bid !== void 0 && new RegExp(`^={3,}[ \\t]+#${reLit(bid)}[ \\t]*$`).test(lastText);
+    const labeled = bid !== void 0 && labeledClose(bid).test(lastText);
     return isCloseFence(lastText, open3[1].length) || labeled ? lines[span.end - 1] ?? "" : null;
   }
   function narrowToBody(lines, span) {
@@ -300818,13 +301086,16 @@ ${isHandDrawn ? "" : `
     }
   }
   var SAFE_HREF_SCHEME = /^(?:https?|mailto|tel):/i;
+  function asBrowserReads(url) {
+    return String(url).replace(/[\x00-\x20]/g, "").replace(/\\/g, "/");
+  }
   function schemeOf2(url) {
-    const m3 = /^([a-zA-Z][a-zA-Z0-9+.-]*):/.exec(String(url).replace(/[\x00-\x20]/g, ""));
+    const m3 = /^([a-zA-Z][a-zA-Z0-9+.-]*):/.exec(asBrowserReads(url));
     return m3 ? m3[0] : null;
   }
   function isSafeHref(url) {
     if (typeof url !== "string") return false;
-    const u2 = url.replace(/[\x00-\x20]/g, "");
+    const u2 = asBrowserReads(url);
     if (u2 === "") return false;
     if (u2.startsWith("//")) return false;
     if (schemeOf2(u2) === null) return true;
@@ -300832,21 +301103,22 @@ ${isHandDrawn ? "" : `
   }
   function isSafeMediaSrc(url) {
     if (typeof url !== "string") return false;
-    const u2 = url.trim();
+    const u2 = asBrowserReads(url);
     if (u2 === "") return false;
     if (u2.startsWith("//")) return true;
     if (schemeOf2(u2) === null) return true;
     return /^(?:https?|data):/i.test(u2);
   }
   function isRemoteSrc(url) {
-    const u2 = String(url).replace(/[\x00-\x20]/g, "");
+    const u2 = asBrowserReads(url);
     if (u2.startsWith("//")) return true;
     const s2 = schemeOf2(u2);
     return s2 !== null && /^https?:$/i.test(s2);
   }
-  function mergeRel(existing, add3) {
-    const set5 = new Set(String(existing || "").split(/\s+/).filter(Boolean));
-    for (const t4 of add3.split(/\s+/)) if (t4) set5.add(t4);
+  function targetRel(existing) {
+    const set5 = new Set(String(existing || "").split(/\s+/).filter((t4) => t4 && t4.toLowerCase() !== "opener"));
+    set5.add("noopener");
+    set5.add("noreferrer");
     return [...set5].join(" ");
   }
   function linkAttrs(n2) {
@@ -300859,7 +301131,7 @@ ${isHandDrawn ? "" : `
     const at3 = n2.attrs || {};
     if (at3.target) {
       a2.target = at3.target;
-      a2.rel = at3.target === "_blank" ? mergeRel(at3.rel, "noopener noreferrer") : at3.rel;
+      a2.rel = targetRel(at3.rel);
     } else if (at3.rel) {
       a2.rel = at3.rel;
     }
@@ -301940,8 +302212,6 @@ ${isHandDrawn ? "" : `
   function str2(v3) {
     return v3 === void 0 ? void 0 : String(v3);
   }
-  var EMBED_DEPTH_CAP = 16;
-  var FRAME_DEPTH_CAP = 16;
   function entryLayers(doc, forDoc) {
     const meta3 = doc.children.find((b3) => b3.kind === "block" && b3.type === "meta");
     const data6 = meta3 && meta3.kind === "block" ? meta3.data : void 0;
@@ -302029,7 +302299,7 @@ ${isHandDrawn ? "" : `
     return [...layers.map((l4) => implicitEmbed(l4.path, l4.id)), ...doc.children];
   }
   var EMBED_PARTS2 = /* @__PURE__ */ new Set(["whole", "head", "body", "intro"]);
-  function expandEmbeds(nodes5, file, sheet, opts, seen, depth) {
+  function expandEmbeds(nodes5, file, sheet, opts, seen, depth, run5) {
     const out = [];
     for (const b3 of nodes5) {
       if (b3.kind !== "block") {
@@ -302037,7 +302307,7 @@ ${isHandDrawn ? "" : `
         continue;
       }
       if (b3.type !== "embed") {
-        out.push(b3.children && b3.children.length > 0 ? { ...b3, children: expandEmbeds(b3.children, file, sheet, opts, seen, depth) } : b3);
+        out.push(b3.children && b3.children.length > 0 ? { ...b3, children: expandEmbeds(b3.children, file, sheet, opts, seen, depth, run5) } : b3);
         continue;
       }
       const id38 = b3.id ?? "(anon)";
@@ -302052,10 +302322,17 @@ ${isHandDrawn ? "" : `
         say("no `src=`");
         continue;
       }
-      if (depth >= EMBED_DEPTH_CAP) {
-        say(`nesting deeper than ${EMBED_DEPTH_CAP}`);
+      if (depth >= CHAIN_DEPTH) {
+        say(`nesting deeper than ${CHAIN_DEPTH}`);
         continue;
       }
+      if (run5.spent >= EMBED_TOTAL_CAP) {
+        if (!run5.told)
+          say(`expansion budget spent (${EMBED_TOTAL_CAP} expansions); this and later embeds were not expanded`);
+        run5.told = true;
+        continue;
+      }
+      run5.spent++;
       let next3;
       let key;
       if (docPath === "") {
@@ -302080,7 +302357,12 @@ ${isHandDrawn ? "" : `
           say(`\`${docPath}\` is already being expanded (cycle)`);
           continue;
         }
-        next3 = { name: got.name, root: sheetBlocks(opts.parseDoc(got.text), sheet) };
+        let parsed = run5.parsed.get(got.name);
+        if (parsed === void 0) {
+          parsed = opts.parseDoc(got.text);
+          run5.parsed.set(got.name, parsed);
+        }
+        next3 = { name: got.name, root: sheetBlocks(parsed, sheet) };
       }
       const picked = selectEmbed(next3.root, anchor2, part);
       if (picked === null) {
@@ -302091,7 +302373,7 @@ ${isHandDrawn ? "" : `
         say(anchor2 === void 0 ? "the target is empty" : `\`#${anchor2}\` holds no blocks`);
         continue;
       }
-      out.push(...expandEmbeds(picked, next3, sheet, opts, /* @__PURE__ */ new Set([...seen, key]), depth + 1));
+      out.push(...expandEmbeds(picked, next3, sheet, opts, /* @__PURE__ */ new Set([...seen, key]), depth + 1, run5));
     }
     return out;
   }
@@ -302099,11 +302381,12 @@ ${isHandDrawn ? "" : `
     const sheet = { rules: [], states: [], screens: [], frames: [], diagnostics: [] };
     const self2 = opts.self ?? "";
     const file = { name: self2, root: expandTokens(doc.children, tokensOf(doc), sheet) };
+    const run5 = { spent: 0, told: false, parsed: /* @__PURE__ */ new Map() };
     let layer = 0;
     for (const src of entryLayers(doc, opts.forDoc)) {
-      collect(expandEmbeds([implicitEmbed(src.path, src.id)], file, sheet, opts, /* @__PURE__ */ new Set([self2]), 0), sheet, layer++);
+      collect(expandEmbeds([implicitEmbed(src.path, src.id)], file, sheet, opts, /* @__PURE__ */ new Set([self2]), 0, run5), sheet, layer++);
     }
-    collect(expandEmbeds(file.root, file, sheet, opts, /* @__PURE__ */ new Set([self2]), 0), sheet, layer);
+    collect(expandEmbeds(file.root, file, sheet, opts, /* @__PURE__ */ new Set([self2]), 0, run5), sheet, layer);
     return sheet;
   }
   function collect(nodes5, sheet, layer) {
@@ -302320,7 +302603,7 @@ ${isHandDrawn ? "" : `
             words.push(k3);
       for (const k3 of words) {
         const setting = hs.filter((h2) => Object.hasOwn(ruleProps(h2.rule), k3));
-        const top2 = Math.max(...setting.map((h2) => h2.rule.layer));
+        const top2 = setting.reduce((t4, h2) => Math.max(t4, h2.rule.layer), -Infinity);
         const inLayer = setting.filter((h2) => h2.rule.layer === top2);
         const maximal = inLayer.filter((h2) => !inLayer.some((o2) => o2 !== h2 && moreSpecific(o2.conds, h2.conds)));
         const holder = maximal.reduce((x6, y6) => y6.order < x6.order ? y6 : x6);
@@ -302723,10 +303006,10 @@ ${isHandDrawn ? "" : `
     }
     let deepest = null;
     for (const [id38, d3] of depth)
-      if (d3 > FRAME_DEPTH_CAP && (deepest === null || d3 > deepest.d))
+      if (d3 > CHAIN_DEPTH && (deepest === null || d3 > deepest.d))
         deepest = { id: id38, d: d3 };
     if (deepest !== null) {
-      diagnostics.push(styleDiag("style-frame-too-deep", `frames nest ${deepest.d} deep at \`#${deepest.id}\`; the cap is ${FRAME_DEPTH_CAP} \u2014 a page is not that deep`, deepest.id));
+      diagnostics.push(styleDiag("style-frame-too-deep", `frames nest ${deepest.d} deep at \`#${deepest.id}\`; the cap is ${CHAIN_DEPTH} \u2014 a page is not that deep`, deepest.id));
     }
     for (const f2 of sheet.frames) {
       if (!referencedBy.has(f2.id)) {
@@ -302849,14 +303132,14 @@ ${isHandDrawn ? "" : `
   translateSlice.concurrency = 1;
 
   // src/transclude.js
-  var EMBED_DEPTH_CAP2 = 8;
-  var EMBED_TOTAL_CAP = 1e3;
+  var EMBED_DEPTH_CAP = CHAIN_DEPTH;
+  var EMBED_TOTAL_CAP2 = 1e3;
   var EMBED_BYTES_CAP2 = 8 * 1024 * 1024;
   var EMBED_DOC_BYTES_CAP2 = 4 * 1024 * 1024;
   async function expandTransclusions(container2, opts) {
     const caps = {
-      depth: opts.caps?.depth ?? EMBED_DEPTH_CAP2,
-      total: opts.caps?.total ?? EMBED_TOTAL_CAP,
+      depth: opts.caps?.depth ?? EMBED_DEPTH_CAP,
+      total: opts.caps?.total ?? EMBED_TOTAL_CAP2,
       bytes: opts.caps?.bytes ?? EMBED_BYTES_CAP2,
       docBytes: opts.caps?.docBytes ?? EMBED_DOC_BYTES_CAP2
     };
@@ -302998,10 +303281,17 @@ ${isHandDrawn ? "" : `
     el2.className = "geml-transclusion geml-transclusion-expanded";
     state5.bytes += el2.innerHTML.length;
     await expandNested();
-    const want = resolveTarget(state5.docMeta, {
+    const named2 = resolveTarget(state5.docMeta, {
       ...el2.hasAttribute("data-translate-to") ? { "translate-to": el2.getAttribute("data-translate-to") } : {}
     });
-    if (want === null) return;
+    if (named2 === null) return;
+    const want = languageTag(named2);
+    if (want === null) {
+      const why = "`translate-to` is not a language tag";
+      el2.setAttribute("data-translation-note", why);
+      refusalNote(el2, dom, null, why);
+      return;
+    }
     const pending = pendingBar(el2, dom, want);
     const r2 = await (state5.translateSlice ?? translateSlice)(picked, want, { glossary: state5.glossary });
     pending.remove();
@@ -303014,7 +303304,14 @@ ${isHandDrawn ? "" : `
     el2.setAttribute("data-translation-note", r2.why);
     if (r2.needsGesture) offerTranslation(el2, dom, want, picked, paint);
     else if (r2.retryable === true) retryTranslation(el2, dom, want, r2.why, picked, paint, state5);
-    else refusalNote(el2, dom, want, r2.why);
+    else refusalNote(el2, dom, want, r2.why, r2.link);
+  }
+  function languageTag(tag) {
+    try {
+      return Intl.getCanonicalLocales(tag).length === 1 ? tag : null;
+    } catch {
+      return null;
+    }
   }
   async function expandOneInline(el2, curUrl, curChildren, stack, state5) {
     const dom = el2.ownerDocument;
@@ -303102,21 +303399,26 @@ ${isHandDrawn ? "" : `
       await expandOneInline(nested, rel3, children2, [...stack, key], state5);
     }
   }
-  function refusalNote(el2, dom, lang, why) {
+  function refusalNote(el2, dom, lang, why, link2) {
     const bar = dom.createElement("div");
     bar.className = "geml-translate-offer geml-translate-refused";
-    const at3 = why.lastIndexOf(" https://");
-    const url = at3 < 0 ? "" : why.slice(at3 + 1);
-    if (url === "" || url.includes(" ")) {
-      bar.textContent = `Not translated to ${lang}: ${why}`;
+    const head = lang === null ? "Not translated" : `Not translated to ${lang}`;
+    let href = null;
+    try {
+      const u2 = new URL(link2);
+      if (u2.protocol === "https:") href = u2.href;
+    } catch {
+    }
+    if (href === null) {
+      bar.textContent = `${head}: ${why}`;
       el2.prepend(bar);
       return;
     }
-    bar.textContent = `Not translated to ${lang}: ${why.slice(0, at3 + 1)}`;
+    bar.textContent = `${head}: ${why}: `;
     const a2 = dom.createElement("a");
-    a2.href = url;
+    a2.href = href;
     a2.rel = "noreferrer";
-    a2.textContent = url;
+    a2.textContent = href;
     bar.appendChild(a2);
     el2.prepend(bar);
   }
@@ -303282,7 +303584,9 @@ ${isHandDrawn ? "" : `
     return children2;
   }
   function isRelativeUrl(u2) {
-    return typeof u2 === "string" && u2 !== "" && !u2.startsWith("#") && !u2.startsWith("//") && !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(u2);
+    if (typeof u2 !== "string") return false;
+    const r2 = asBrowserReads(u2);
+    return r2 !== "" && !r2.startsWith("#") && !r2.startsWith("//") && !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(r2);
   }
   function rebase(u2, baseUrl) {
     try {
@@ -303315,7 +303619,7 @@ ${isHandDrawn ? "" : `
 
   // src/style-entry.js
   init_define_process_argv();
-  var STYLE_PREFETCH_DEPTH = 8;
+  var STYLE_PREFETCH_DEPTH = CHAIN_DEPTH;
   var STYLE_PREFETCH_FILES = 32;
   var STYLE_DOC_BYTES_CAP = 4 * 1024 * 1024;
   function entryUrlFor(docUrl) {
@@ -303396,6 +303700,7 @@ ${isHandDrawn ? "" : `
     const seen = /* @__PURE__ */ new Set([new URL(baseUrl).href.split("#")[0]]);
     const out = [];
     const queue = [{ doc: model, url: baseUrl }];
+    let fetched = 0;
     while (queue.length > 0) {
       const { doc, url } = queue.shift();
       const srcs = [];
@@ -303404,10 +303709,11 @@ ${isHandDrawn ? "" : `
         const target = new URL(rel3, url).href.split("#")[0];
         if (seen.has(target)) continue;
         seen.add(target);
-        if (out.length >= STYLE_PREFETCH_FILES) return out;
+        if (fetched >= STYLE_PREFETCH_FILES) return out;
+        fetched++;
         try {
           const text5 = await fetchText(target);
-          if (text5 == null) continue;
+          if (text5 == null || text5.length > STYLE_DOC_BYTES_CAP) continue;
           const parsed = parse7(text5);
           const path5 = target.startsWith(dir2) ? decodeURIComponent(target.slice(dir2.length)) : target;
           out.push({ path: path5, doc: parsed, text: text5 });
@@ -303418,7 +303724,7 @@ ${isHandDrawn ? "" : `
     }
     return out;
   }
-  async function loadPageStyle({ docUrl, fetchText, parse: parse7, loadStylesheet: loadStylesheet2, resolveStyle: resolveStyle2, model, components: components3, docs = [] }) {
+  async function loadPageStyle({ docUrl, fetchText, parse: parse7, loadStylesheet: loadStylesheet2, resolveStyle: resolveStyle2, model, components: components3, borrow: borrow2 }) {
     const entryUrl = entryUrlFor(docUrl);
     const entryText = await fetchText(entryUrl);
     if (entryText == null) return null;
@@ -303488,9 +303794,10 @@ ${isHandDrawn ? "" : `
       forDoc,
       self: SELF
     });
+    const docs = borrow2 ? await borrow2() : [];
     const corpus = [{ path: forDoc, doc: model }, ...docs];
     const vm = resolveStyle2(sheet, corpus, components3 ? { components: components3 } : void 0);
-    return { vm, forDoc, corpus, producers: producersOf(sheet), errors: vm.diagnostics.filter((d3) => d3.severity === "error") };
+    return { vm, forDoc, docUrl, corpus, producers: producersOf(sheet), errors: vm.diagnostics.filter((d3) => d3.severity === "error") };
   }
 
   // src/layout.js
@@ -303738,7 +304045,7 @@ ${isHandDrawn ? "" : `
         spans = null;
       }
     }
-    const ctx = { dom, renderBlock: renderBlock2, labels, state: state5, model, vmStates, byId, corpus, sources, spans };
+    const ctx = { dom, renderBlock: renderBlock2, labels, state: state5, model, vmStates, byId, corpus, sources, spans, docUrl: opts.docUrl ?? null };
     const sourceOf = (node2, docPath) => {
       if (node2.kind === "block" && node2.type === "embed") {
         const src = typeof node2.attrs?.src === "string" ? node2.attrs.src.trim() : "";
@@ -304293,18 +304600,18 @@ ${isHandDrawn ? "" : `
   }
 
   // src/media-player.js
-  var dirOf2 = (p3) => {
-    const i5 = p3.lastIndexOf("/");
-    return i5 < 0 ? "" : p3.slice(0, i5);
-  };
-  function joinRel(dir2, rel3) {
-    const out = [];
-    for (const s2 of (dir2 ? dir2.split("/") : []).concat(String(rel3).split("/"))) {
-      if (s2 === "" || s2 === ".") continue;
-      if (s2 === "..") out.pop();
-      else out.push(s2);
+  function assetUrl(file, docPath, pageUrl) {
+    const s2 = String(file).replace(/[\x00-\x20]/g, "");
+    if (s2 === "" || s2.includes("\\") || s2.startsWith("//") || /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(s2)) return null;
+    let page, url;
+    try {
+      page = new URL(pageUrl);
+      url = new URL(String(file), new URL(docPath, page));
+    } catch {
+      return null;
     }
-    return out.join("/");
+    if (page.protocol === "file:") return url.href.startsWith(new URL(".", page).href) ? url.href : null;
+    return (page.protocol === "http:" || page.protocol === "https:") && url.origin === page.origin ? url.href : null;
   }
   function blockById(doc, id38) {
     let found = null;
@@ -304401,10 +304708,12 @@ ${isHandDrawn ? "" : `
       if (hit === null) continue;
       const file = hit.block.attrs ? hit.block.attrs.src : void 0;
       if (typeof file !== "string") continue;
+      const url = assetUrl(file, hit.path, ctx.docUrl);
+      if (url === null) continue;
       const media = dom.createElement(c3.kind === "audio" ? "audio" : "video");
       media.className = "geml-layer geml-layer-" + c3.kind;
-      media.setAttribute("src", joinRel(dirOf2(hit.path), file));
-      media.setAttribute("preload", "auto");
+      media.setAttribute("src", url);
+      media.setAttribute("preload", "metadata");
       media.setAttribute("playsinline", "");
       media.setAttribute("data-clip", c3.id);
       media.setAttribute("data-start", c3.start.toFixed(3));
@@ -304495,6 +304804,14 @@ ${isHandDrawn ? "" : `
     return null;
   }
   var pct = (v3, total) => total > 0 ? v3 / total * 100 : 0;
+  var MAX_TICKS = 200;
+  function tickStep(duration) {
+    const raw = duration / MAX_TICKS;
+    if (!(raw > 1)) return 1;
+    const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+    for (const m3 of [1, 2, 5]) if (m3 * pow >= raw) return m3 * pow;
+    return 10 * pow;
+  }
   function clip2(block2, params, ctx) {
     const dom = ctx.dom;
     const el2 = dom.createElement("div");
@@ -304531,7 +304848,9 @@ ${isHandDrawn ? "" : `
       const ruler = dom.createElement("div");
       ruler.className = "geml-track-ruler";
       ruler.setAttribute("aria-hidden", "true");
-      for (let s2 = 0; s2 <= Math.floor(tl.duration); s2++) {
+      const step3 = Number.isFinite(tl.duration) ? tickStep(tl.duration) : 0;
+      for (let i5 = 0; step3 > 0 && i5 * step3 <= tl.duration; i5++) {
+        const s2 = i5 * step3;
         const tick = dom.createElement("span");
         tick.className = "geml-tick";
         tick.style.position = "absolute";
@@ -304687,8 +305006,8 @@ ${isHandDrawn ? "" : `
       resolveStyle,
       model,
       // 文档 embed 进来的那些也进语料 —— 样式才指得到借来的块（地址是 `other.geml#id`）。
-      // 同一道同源闸；取不到就少一份语料，页面照画。
-      docs: await borrowedDocs(model, parse, fetchText, docUrl),
+      // 同一道同源闸；取不到就少一份语料，页面照画。入口认下之后才取。
+      borrow: () => borrowedDocs(model, parse, fetchText, docUrl),
       // 注册表往下传，unknown-component 才检查得起来（否则组件名写错静默退回默认渲染）。
       components: Object.keys(COMPONENTS)
     });
@@ -304714,7 +305033,8 @@ ${isHandDrawn ? "" : `
       components: COMPONENTS,
       state: state5,
       producers: page.producers,
-      corpus: page.corpus
+      corpus: page.corpus,
+      docUrl: page.docUrl
     });
     if (out.error) {
       const root4 = renderDocument(model, dom, focus);

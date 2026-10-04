@@ -7,34 +7,31 @@ resolution-default = cpg
 
 # chrome-geml-viewer/media-player.js
 
-=== code {#dirOf .leaf src=integrations/chrome-geml-viewer/src/media-player.js#L12-12 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/dirOf."}
+=== code {#assetUrl src=integrations/chrome-geml-viewer/src/media-player.js#L21-33 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/assetUrl()."}
 ===
 
-=== code {#joinRel src=integrations/chrome-geml-viewer/src/media-player.js#L15-22 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/joinRel()."}
+=== code {#blockById .leaf src=integrations/chrome-geml-viewer/src/media-player.js#L35-45 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/blockById()."}
 ===
 
-=== code {#blockById .leaf src=integrations/chrome-geml-viewer/src/media-player.js#L24-34 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/blockById()."}
+=== code {#findRef src=integrations/chrome-geml-viewer/src/media-player.js#L51-67 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/findRef()."}
 ===
 
-=== code {#findRef src=integrations/chrome-geml-viewer/src/media-player.js#L40-56 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/findRef()."}
+=== code {#dbToGain src=integrations/chrome-geml-viewer/src/media-player.js#L69-72 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/dbToGain."}
 ===
 
-=== code {#dbToGain src=integrations/chrome-geml-viewer/src/media-player.js#L58-61 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/dbToGain."}
+=== code {#textOf src=integrations/chrome-geml-viewer/src/media-player.js#L75-86 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/textOf()."}
 ===
 
-=== code {#textOf src=integrations/chrome-geml-viewer/src/media-player.js#L64-75 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/textOf()."}
+=== code {#timelineOf src=integrations/chrome-geml-viewer/src/media-player.js#L88-101 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/timelineOf()."}
 ===
 
-=== code {#timelineOf src=integrations/chrome-geml-viewer/src/media-player.js#L77-90 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/timelineOf()."}
+=== code {#fmt src=integrations/chrome-geml-viewer/src/media-player.js#L103-106 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/fmt()."}
 ===
 
-=== code {#fmt src=integrations/chrome-geml-viewer/src/media-player.js#L92-95 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/fmt()."}
+=== code {#player src=integrations/chrome-geml-viewer/src/media-player.js#L112-201 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/player()."}
 ===
 
-=== code {#player src=integrations/chrome-geml-viewer/src/media-player.js#L101-186 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/player()."}
-===
-
-=== code {#playerLive src=integrations/chrome-geml-viewer/src/media-player.js#L194-198 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media-player.js`/playerLive()."}
+=== code {#playerLive src=integrations/chrome-geml-viewer/src/media-player.js#L209-213 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-player.js`/playerLive()."}
 ===
 
 === table {#calls format=csv}
@@ -42,11 +39,10 @@ from,        to,          kind, confidence
 #findRef,    #blockById,  call,
 #findRef,    #blockById,  call,
 #timelineOf, #findRef,    call,
+#player,     #assetUrl,   call,
 #player,     #dbToGain,   call,
-#player,     #dirOf,      call,
 #player,     #findRef,    call,
 #player,     #fmt,        call,
-#player,     #joinRel,    call,
 #player,     #textOf,     call,
 #player,     #timelineOf, call,
 #playerLive, #player,     call,
@@ -54,25 +50,24 @@ from,        to,          kind, confidence
 
 === table {#called-by format=csv}
 from,        to,          kind, site
-#player,     #dirOf,      call, integrations/chrome-geml-viewer/src/media-player.js:137
-#player,     #joinRel,    call, integrations/chrome-geml-viewer/src/media-player.js:137
-#findRef,    #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:47
-#findRef,    #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:52
-#timelineOf, #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:82
-#player,     #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:127
-#player,     #dbToGain,   call, integrations/chrome-geml-viewer/src/media-player.js:144
-#player,     #textOf,     call, integrations/chrome-geml-viewer/src/media-player.js:129
-#player,     #timelineOf, call, integrations/chrome-geml-viewer/src/media-player.js:105
-#player,     #fmt,        call, integrations/chrome-geml-viewer/src/media-player.js:180
-#playerLive, #player,     call, integrations/chrome-geml-viewer/src/media-player.js:195
+#player,     #assetUrl,   call, integrations/chrome-geml-viewer/src/media-player.js:146
+#findRef,    #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:58
+#findRef,    #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:63
+#timelineOf, #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:93
+#player,     #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:138
+#player,     #dbToGain,   call, integrations/chrome-geml-viewer/src/media-player.js:159
+#player,     #textOf,     call, integrations/chrome-geml-viewer/src/media-player.js:140
+#player,     #timelineOf, call, integrations/chrome-geml-viewer/src/media-player.js:116
+#player,     #fmt,        call, integrations/chrome-geml-viewer/src/media-player.js:195
+#playerLive, #player,     call, integrations/chrome-geml-viewer/src/media-player.js:210
 ===
 
 === table {#unresolved format=csv hidden}
 from,        to
-#joinRel,    Array.join
-#joinRel,    Array.pop
-#joinRel,    Array.push
-#joinRel,    String.split
+#assetUrl,   RegExp.test
+#assetUrl,   String.includes
+#assetUrl,   String.replace
+#assetUrl,   String.startsWith
 #findRef,    String.indexOf
 #findRef,    String.replace
 #findRef,    String.slice

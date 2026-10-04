@@ -8,31 +8,31 @@ resolution-default = cpg
 
 # chrome-geml-viewer/style-entry.js
 
-=== code {#entryUrlFor .leaf src=integrations/chrome-geml-viewer/src/style-entry.js#L14-16 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/entryUrlFor()."}
+=== code {#entryUrlFor .leaf src=integrations/chrome-geml-viewer/src/style-entry.js#L16-18 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/entryUrlFor()."}
 ===
 
-=== code {#isStyleEntry src=integrations/chrome-geml-viewer/src/style-entry.js#L19-23 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/isStyleEntry()."}
+=== code {#isStyleEntry src=integrations/chrome-geml-viewer/src/style-entry.js#L21-25 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/isStyleEntry()."}
 ===
 
-=== code {#normalizePath src=integrations/chrome-geml-viewer/src/style-entry.js#L26-34 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/normalizePath()."}
+=== code {#normalizePath src=integrations/chrome-geml-viewer/src/style-entry.js#L28-36 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/normalizePath()."}
 ===
 
-=== code {#dirOf .leaf src=integrations/chrome-geml-viewer/src/style-entry.js#L35-35 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/dirOf."}
+=== code {#dirOf .leaf src=integrations/chrome-geml-viewer/src/style-entry.js#L37-37 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/dirOf."}
 ===
 
-=== code {#candidatesFor src=integrations/chrome-geml-viewer/src/style-entry.js#L37-44 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/candidatesFor()."}
+=== code {#candidatesFor src=integrations/chrome-geml-viewer/src/style-entry.js#L39-46 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/candidatesFor()."}
 ===
 
-=== code {#referencedDocs src=integrations/chrome-geml-viewer/src/style-entry.js#L47-72 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/referencedDocs()."}
+=== code {#referencedDocs src=integrations/chrome-geml-viewer/src/style-entry.js#L49-74 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/referencedDocs()."}
 ===
 
-=== code {#producersOf src=integrations/chrome-geml-viewer/src/style-entry.js#L79-91 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/producersOf()."}
+=== code {#producersOf src=integrations/chrome-geml-viewer/src/style-entry.js#L81-93 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/producersOf()."}
 ===
 
-=== code {#borrowedDocs src=integrations/chrome-geml-viewer/src/style-entry.js#L105-143 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/borrowedDocs()."}
+=== code {#borrowedDocs src=integrations/chrome-geml-viewer/src/style-entry.js#L110-150 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/borrowedDocs()."}
 ===
 
-=== code {#loadPageStyle src=integrations/chrome-geml-viewer/src/style-entry.js#L149-217 anchor="scip-typescript npm geml-viewer 1.3.5 src/`style-entry.js`/loadPageStyle()."}
+=== code {#loadPageStyle src=integrations/chrome-geml-viewer/src/style-entry.js#L160-229 anchor="scip-typescript npm geml-viewer 1.3.6 src/`style-entry.js`/loadPageStyle()."}
 ===
 
 === table {#calls format=csv}
@@ -52,17 +52,17 @@ from,           to,              kind, confidence
 
 === table {#called-by format=csv}
 from,                                      to,              kind, site
-#loadPageStyle,                            #entryUrlFor,    call, integrations/chrome-geml-viewer/src/style-entry.js:150
-#loadPageStyle,                            #isStyleEntry,   call, integrations/chrome-geml-viewer/src/style-entry.js:155
-#candidatesFor,                            #normalizePath,  call, integrations/chrome-geml-viewer/src/style-entry.js:41
-#candidatesFor,                            #normalizePath,  call, integrations/chrome-geml-viewer/src/style-entry.js:42
-#candidatesFor,                            #dirOf,          call, integrations/chrome-geml-viewer/src/style-entry.js:41
-#candidatesFor,                            #dirOf,          call, integrations/chrome-geml-viewer/src/style-entry.js:41
-#loadPageStyle,                            #candidatesFor,  call, integrations/chrome-geml-viewer/src/style-entry.js:183
-#loadPageStyle,                            #candidatesFor,  call, integrations/chrome-geml-viewer/src/style-entry.js:200
-#loadPageStyle,                            #referencedDocs, call, integrations/chrome-geml-viewer/src/style-entry.js:163
-#loadPageStyle,                            #referencedDocs, call, integrations/chrome-geml-viewer/src/style-entry.js:195
-#loadPageStyle,                            #producersOf,    call, integrations/chrome-geml-viewer/src/style-entry.js:216
+#loadPageStyle,                            #entryUrlFor,    call, integrations/chrome-geml-viewer/src/style-entry.js:161
+#loadPageStyle,                            #isStyleEntry,   call, integrations/chrome-geml-viewer/src/style-entry.js:166
+#candidatesFor,                            #normalizePath,  call, integrations/chrome-geml-viewer/src/style-entry.js:43
+#candidatesFor,                            #normalizePath,  call, integrations/chrome-geml-viewer/src/style-entry.js:44
+#candidatesFor,                            #dirOf,          call, integrations/chrome-geml-viewer/src/style-entry.js:43
+#candidatesFor,                            #dirOf,          call, integrations/chrome-geml-viewer/src/style-entry.js:43
+#loadPageStyle,                            #candidatesFor,  call, integrations/chrome-geml-viewer/src/style-entry.js:194
+#loadPageStyle,                            #candidatesFor,  call, integrations/chrome-geml-viewer/src/style-entry.js:211
+#loadPageStyle,                            #referencedDocs, call, integrations/chrome-geml-viewer/src/style-entry.js:174
+#loadPageStyle,                            #referencedDocs, call, integrations/chrome-geml-viewer/src/style-entry.js:206
+#loadPageStyle,                            #producersOf,    call, integrations/chrome-geml-viewer/src/style-entry.js:228
 chrome-geml-viewer--page.js.geml#loadPage, #borrowedDocs,   call, integrations/chrome-geml-viewer/src/page.js:20
 chrome-geml-viewer--page.js.geml#loadPage, #loadPageStyle,  call, integrations/chrome-geml-viewer/src/page.js:16
 ===

@@ -8,7 +8,7 @@ resolution-default = cpg
 
 # geml-parser/codemap-render.ts
 
-=== code {#codeGraphDiagram src=geml-parser/src/codemap-render.ts#L24-48 anchor="scip-typescript npm @geml/geml 1.12.1 src/`codemap-render.ts`/codeGraphDiagram."}
+=== code {#codeGraphDiagram src=geml-parser/src/codemap-render.ts#L24-48 anchor="scip-typescript npm @geml/geml 1.12.2 src/`codemap-render.ts`/codeGraphDiagram."}
 ===
 
 === table {#calls format=csv}
@@ -29,7 +29,7 @@ from,              to,                                             kind, confide
 
 === table {#called-by format=csv}
 from,                                 to,                kind, site
-geml-parser--verbs.ts.geml#transform, #codeGraphDiagram, call, geml-parser/src/verbs.ts:895
+geml-parser--verbs.ts.geml#transform, #codeGraphDiagram, call, geml-parser/src/verbs.ts:913
 ===
 
 === table {#unresolved format=csv hidden}

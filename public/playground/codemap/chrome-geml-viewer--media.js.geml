@@ -7,22 +7,25 @@ resolution-default = cpg
 
 # chrome-geml-viewer/media.js
 
-=== code {#timelineFor src=integrations/chrome-geml-viewer/src/media.js#L20-59 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media.js`/timelineFor()."}
+=== code {#timelineFor src=integrations/chrome-geml-viewer/src/media.js#L20-59 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/timelineFor()."}
 ===
 
-=== code {#pct .leaf src=integrations/chrome-geml-viewer/src/media.js#L62-62 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media.js`/pct."}
+=== code {#pct .leaf src=integrations/chrome-geml-viewer/src/media.js#L62-62 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/pct."}
 ===
 
-=== code {#clip src=integrations/chrome-geml-viewer/src/media.js#L68-95 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media.js`/clip()."}
+=== code {#tickStep src=integrations/chrome-geml-viewer/src/media.js#L68-74 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/tickStep()."}
 ===
 
-=== code {#trackEl src=integrations/chrome-geml-viewer/src/media.js#L97-122 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media.js`/trackEl()."}
+=== code {#clip src=integrations/chrome-geml-viewer/src/media.js#L80-107 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/clip()."}
 ===
 
-=== code {#timelineTrack src=integrations/chrome-geml-viewer/src/media.js#L125-125 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media.js`/timelineTrack()."}
+=== code {#trackEl src=integrations/chrome-geml-viewer/src/media.js#L109-137 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/trackEl()."}
 ===
 
-=== code {#overlayTrack src=integrations/chrome-geml-viewer/src/media.js#L131-131 anchor="scip-typescript npm geml-viewer 1.3.5 src/`media.js`/overlayTrack()."}
+=== code {#timelineTrack src=integrations/chrome-geml-viewer/src/media.js#L140-140 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/timelineTrack()."}
+===
+
+=== code {#overlayTrack src=integrations/chrome-geml-viewer/src/media.js#L146-146 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/overlayTrack()."}
 ===
 
 === table {#calls format=csv}
@@ -31,6 +34,7 @@ from,           to,           kind, confidence
 #clip,          #pct,         call,
 #clip,          #timelineFor, call,
 #trackEl,       #pct,         call,
+#trackEl,       #tickStep,    call,
 #trackEl,       #timelineFor, call,
 #timelineTrack, #trackEl,     call,
 #overlayTrack,  #trackEl,     call,
@@ -38,13 +42,14 @@ from,           to,           kind, confidence
 
 === table {#called-by format=csv}
 from,           to,           kind, site
-#clip,          #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:73
-#trackEl,       #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:104
-#clip,          #pct,         call, integrations/chrome-geml-viewer/src/media.js:77
-#clip,          #pct,         call, integrations/chrome-geml-viewer/src/media.js:78
-#trackEl,       #pct,         call, integrations/chrome-geml-viewer/src/media.js:115
-#timelineTrack, #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:125
-#overlayTrack,  #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:131
+#clip,          #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:85
+#trackEl,       #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:116
+#clip,          #pct,         call, integrations/chrome-geml-viewer/src/media.js:89
+#clip,          #pct,         call, integrations/chrome-geml-viewer/src/media.js:90
+#trackEl,       #pct,         call, integrations/chrome-geml-viewer/src/media.js:130
+#trackEl,       #tickStep,    call, integrations/chrome-geml-viewer/src/media.js:124
+#timelineTrack, #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:140
+#overlayTrack,  #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:146
 ===
 
 === table {#unresolved format=csv hidden}
@@ -55,7 +60,10 @@ from,         to
 #timelineFor, WeakMap.has
 #timelineFor, WeakMap.set
 #timelineFor, layoutDoc
+#tickStep,    Math.floor
+#tickStep,    Math.log10
+#tickStep,    Math.pow
 #clip,        Number.toFixed
-#trackEl,     Math.floor
 #trackEl,     Number.toFixed
+#trackEl,     NumberConstructor.isFinite
 ===

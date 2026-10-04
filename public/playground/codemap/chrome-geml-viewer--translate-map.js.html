@@ -130,7 +130,7 @@ sup.fn a { font-size:.75em; }
 </head>
 <body>
 <main>
-<figure class="code-graph"><div class="cg-mount" data-start="chrome-geml-viewer--translate-map.js.geml" data-graph="{&quot;start&quot;:&quot;chrome-geml-viewer--translate-map.js.geml&quot;,&quot;depth&quot;:6,&quot;roots&quot;:[&quot;chrome-geml-viewer--translate-map.js.geml#translateSliceWith&quot;],&quot;nodes&quot;:{&quot;chrome-geml-viewer--translate-map.js.geml#translateSliceWith&quot;:{&quot;n&quot;:&quot;translateSliceWith&quot;,&quot;doc&quot;:&quot;chrome-geml-viewer--translate-map.js.geml&quot;,&quot;src&quot;:&quot;integrations/chrome-geml-viewer/src/translate-map.js#L40-70&quot;},&quot;chrome-geml-viewer--translate-map.js.geml#collectTranslatable&quot;:{&quot;n&quot;:&quot;collectTranslatable&quot;,&quot;doc&quot;:&quot;chrome-geml-viewer--translate-map.js.geml&quot;,&quot;src&quot;:&quot;integrations/chrome-geml-viewer/src/translate-map.js#L24-31&quot;}},&quot;edges&quot;:[[&quot;chrome-geml-viewer--translate-map.js.geml#translateSliceWith&quot;,&quot;chrome-geml-viewer--translate-map.js.geml#collectTranslatable&quot;,&quot;call&quot;,&quot;&quot;]],&quot;module&quot;:&quot;chrome-geml-viewer/translate-map.js&quot;,&quot;style&quot;:{&quot;fold&quot;:1,&quot;depth&quot;:6,&quot;hideAccessors&quot;:true,&quot;palette&quot;:[&quot;#e3f2fd&quot;,&quot;#e8f5e9&quot;,&quot;#fff3e0&quot;,&quot;#f3e5f5&quot;,&quot;#e0f7fa&quot;,&quot;#fce4ec&quot;,&quot;#f1f8e9&quot;,&quot;#ede7f6&quot;,&quot;#fff8e1&quot;,&quot;#e0f2f1&quot;,&quot;#efebe9&quot;,&quot;#f9fbe7&quot;]}}"></div><figcaption>layered method flow — roots: in-degree-zero methods (no <code>entry</code> declared)</figcaption></figure>
+<figure class="code-graph"><div class="cg-mount" data-start="chrome-geml-viewer--translate-map.js.geml" data-graph="{&quot;start&quot;:&quot;chrome-geml-viewer--translate-map.js.geml&quot;,&quot;depth&quot;:6,&quot;roots&quot;:[&quot;chrome-geml-viewer--translate-map.js.geml#translateSliceWith&quot;],&quot;nodes&quot;:{&quot;chrome-geml-viewer--translate-map.js.geml#translateSliceWith&quot;:{&quot;n&quot;:&quot;translateSliceWith&quot;,&quot;doc&quot;:&quot;chrome-geml-viewer--translate-map.js.geml&quot;,&quot;src&quot;:&quot;integrations/chrome-geml-viewer/src/translate-map.js#L43-76&quot;},&quot;chrome-geml-viewer--translate-map.js.geml#collectTranslatable&quot;:{&quot;n&quot;:&quot;collectTranslatable&quot;,&quot;doc&quot;:&quot;chrome-geml-viewer--translate-map.js.geml&quot;,&quot;src&quot;:&quot;integrations/chrome-geml-viewer/src/translate-map.js#L24-31&quot;}},&quot;edges&quot;:[[&quot;chrome-geml-viewer--translate-map.js.geml#translateSliceWith&quot;,&quot;chrome-geml-viewer--translate-map.js.geml#collectTranslatable&quot;,&quot;call&quot;,&quot;&quot;]],&quot;module&quot;:&quot;chrome-geml-viewer/translate-map.js&quot;,&quot;style&quot;:{&quot;fold&quot;:1,&quot;depth&quot;:6,&quot;hideAccessors&quot;:true,&quot;palette&quot;:[&quot;#e3f2fd&quot;,&quot;#e8f5e9&quot;,&quot;#fff3e0&quot;,&quot;#f3e5f5&quot;,&quot;#e0f7fa&quot;,&quot;#fce4ec&quot;,&quot;#f1f8e9&quot;,&quot;#ede7f6&quot;,&quot;#fff8e1&quot;,&quot;#e0f2f1&quot;,&quot;#efebe9&quot;,&quot;#f9fbe7&quot;]}}"></div><figcaption>layered method flow — roots: in-degree-zero methods (no <code>entry</code> declared)</figcaption></figure>
 <h1 id="chrome-geml-viewertranslate-mapjs">chrome-geml-viewer/translate-map.js</h1>
 <pre id="collectTranslatable"><code></code></pre>
 <pre id="translateSliceWith"><code></code></pre>
@@ -138,7 +138,7 @@ sup.fn a { font-size:.75em; }
 <tr><td>#translateSliceWith</td><td>#collectTranslatable</td><td>call</td><td></td></tr>
 </tbody></table></div></figure>
 <figure class="table-figure" id="called-by"><div class="table-tools"><input class="table-filter" type="search" placeholder="Filter rows…" aria-label="Filter table rows"></div><div class="table-scroll"><table class="geml-table"><thead><tr><th>from</th><th>to</th><th>kind</th><th>site</th></tr></thead><tbody>
-<tr><td>#translateSliceWith</td><td>#collectTranslatable</td><td>call</td><td>integrations/chrome-geml-viewer/src/translate-map.js:41</td></tr>
+<tr><td>#translateSliceWith</td><td>#collectTranslatable</td><td>call</td><td>integrations/chrome-geml-viewer/src/translate-map.js:44</td></tr>
 </tbody></table></div></figure>
 </main>
 <footer class="geml-footer">Rendered from <code>chrome-geml-viewer--translate-map.js.geml</code> by the GEML runtime. Tables are sortable and filterable; the chart is inline SVG drawn from its bound table.</footer>
@@ -179,7 +179,7 @@ sup.fn a { font-size:.75em; }
   });
 })();
 </script>
-<script>(function codeGraphRuntime(root) {
+<script>(function codeGraphRuntime(root, host) {
     // 显示期旋钮（计划 D）：随 data-graph 一起送来，来源是 `_index/style.geml`。
     // 每个回退值逐一等于反转之前写死在这里的那个，所以**没有 style.geml 的旧页面
     // 行为不变** —— 这是不替换渲染器、只反转控制权的全部要点。
@@ -902,6 +902,8 @@ sup.fn a { font-size:.75em; }
             // test as written and then executes once the browser normalises it.
             // Normalise first, judge second, and return the NORMALISED value: handing
             // the sink the raw string would give it bytes that were never checked.
+            // A `\` is a `/` to the URL parser on http(s) and file pages, so `\\host/`
+            // and `/\host/` are the `//host/` network path too.
             function relOnly(u) {
                 var raw = String(u == null ? "" : u).replace(/[\t\n\r]/g, "");
                 // Trim C0-and-space by scan, not by /^[\x00-\x20]+|[\x00-\x20]+$/ — an
@@ -915,7 +917,7 @@ sup.fn a { font-size:.75em; }
                 var s = raw.slice(a, b);
                 if (!s)
                     return "";
-                return /^[a-zA-Z][a-zA-Z0-9+.\-]*:/.test(s) || s.slice(0, 2) === "//" ? "" : s;
+                return /^[a-zA-Z][a-zA-Z0-9+.\-]*:/.test(s) || /^[\/\\]{2}/.test(s) ? "" : s;
             }
             var navBase = relOnly(String(mount.getAttribute("data-src") || data.start || "").replace(/[^\/]*$/, ""));
             // A live mount (viewer/playground/served page) navigates IN PLACE over
@@ -1219,7 +1221,9 @@ sup.fn a { font-size:.75em; }
             // a script tag is not). Picking a hit opens its FOCUSED call graph (B)
             // in place on a served page; on a static page (no live loader) it
             // navigates to the node's document (A). Alt-click always just locates.
-            if (typeof location !== "undefined") { // browser only — skipped in the fake-DOM runtime test
+            var srvSearch = typeof location !== "undefined" && /^https?:$/.test(location.protocol);
+            // browser only — skipped in the fake-DOM runtime test
+            if (typeof location !== "undefined" && (srvSearch || !(host && host.noScriptIndex))) {
                 var searchWrap = document.createElement("span");
                 searchWrap.className = "cg-search-wrap";
                 var searchBox = document.createElement("input");
@@ -1233,7 +1237,6 @@ sup.fn a { font-size:.75em; }
                 searchWrap.appendChild(searchBox);
                 searchWrap.appendChild(searchMenu);
                 bar.appendChild(searchWrap);
-                var srvSearch = /^https?:$/.test(location.protocol);
                 function withIndex(cb) {
                     if (window.__gemlSearch)
                         return cb(window.__gemlSearch);
