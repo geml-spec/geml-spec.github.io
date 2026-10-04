@@ -8,43 +8,46 @@ resolution-default = cpg
 
 # geml-parser/selector.ts
 
-=== code {#sha8 src=geml-parser/src/selector.ts#L100-102 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/sha8()."}
+=== code {#sha8 src=geml-parser/src/selector.ts#L103-105 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/sha8()."}
 ===
 
-=== code {#parseCoordPath src=geml-parser/src/selector.ts#L125-137 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/parseCoordPath()."}
+=== code {#parseCoordPath src=geml-parser/src/selector.ts#L128-140 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/parseCoordPath()."}
 ===
 
-=== code {#parseSelector src=geml-parser/src/selector.ts#L144-203 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/parseSelector()."}
+=== code {#parseSelector src=geml-parser/src/selector.ts#L147-206 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/parseSelector()."}
 ===
 
-=== code {#atKeyOf src=geml-parser/src/selector.ts#L210-213 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/atKeyOf()."}
+=== code {#atKeyOf src=geml-parser/src/selector.ts#L213-216 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/atKeyOf()."}
 ===
 
-=== code {#keyForm src=geml-parser/src/selector.ts#L220-256 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/keyForm()."}
+=== code {#keyForm src=geml-parser/src/selector.ts#L223-259 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/keyForm()."}
 ===
 
-=== code {#addressUnits src=geml-parser/src/selector.ts#L269-278 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/addressUnits()."}
+=== code {#addressUnits src=geml-parser/src/selector.ts#L272-281 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/addressUnits()."}
 ===
 
-=== code {#tallyOf src=geml-parser/src/selector.ts#L283-296 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/tallyOf()."}
+=== code {#nameKey src=geml-parser/src/selector.ts#L286-286 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/nameKey."}
 ===
 
-=== code {#shortestAddress src=geml-parser/src/selector.ts#L302-316 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/shortestAddress()."}
+=== code {#tallyOf src=geml-parser/src/selector.ts#L289-304 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/tallyOf()."}
 ===
 
-=== code {#matchContent src=geml-parser/src/selector.ts#L328-335 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchContent()."}
+=== code {#shortestAddress src=geml-parser/src/selector.ts#L310-330 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/shortestAddress()."}
 ===
 
-=== code {#discoveryHint .leaf src=geml-parser/src/selector.ts#L340-342 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/discoveryHint()."}
+=== code {#matchContent src=geml-parser/src/selector.ts#L342-349 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchContent()."}
 ===
 
-=== code {#matchLine .leaf src=geml-parser/src/selector.ts#L352-361 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchLine()."}
+=== code {#discoveryHint .leaf src=geml-parser/src/selector.ts#L354-356 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/discoveryHint()."}
 ===
 
-=== code {#matchType src=geml-parser/src/selector.ts#L366-368 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchType()."}
+=== code {#matchLine .leaf src=geml-parser/src/selector.ts#L366-375 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchLine()."}
 ===
 
-=== code {#matchAttr src=geml-parser/src/selector.ts#L375-385 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchAttr()."}
+=== code {#matchType src=geml-parser/src/selector.ts#L380-382 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchType()."}
+===
+
+=== code {#matchAttr src=geml-parser/src/selector.ts#L389-399 anchor="scip-typescript npm @geml/geml 1.12.2 src/`selector.ts`/matchAttr()."}
 ===
 
 === table {#calls format=csv}
@@ -57,26 +60,32 @@ from,             to,                                    kind, confidence
 #keyForm,         geml-parser--attrs.ts.geml#parseAttrs, call,
 #keyForm,         geml-parser--attrs.ts.geml#tokenize,   call,
 #addressUnits,    #sha8,                                 call,
+#tallyOf,         #nameKey,                              call,
+#tallyOf,         #nameKey,                              call,
+#shortestAddress, #nameKey,                              call,
 #shortestAddress, #tallyOf,                              call,
 ===
 
 === table {#called-by format=csv}
 from,                                        to,               kind, site
-#addressUnits,                               #sha8,            call, geml-parser/src/selector.ts:273
-geml-parser--geml.ts.geml#validateCoordRef,  #parseCoordPath,  call, geml-parser/src/geml.ts:2685
-geml-parser--geml.ts.geml#embedCoordinate,   #parseCoordPath,  call, geml-parser/src/geml.ts:3661
-#parseSelector,                              #parseCoordPath,  call, geml-parser/src/selector.ts:184
+#addressUnits,                               #sha8,            call, geml-parser/src/selector.ts:276
+geml-parser--geml.ts.geml#validateCoordRef,  #parseCoordPath,  call, geml-parser/src/geml.ts:2832
+geml-parser--geml.ts.geml#embedCoordinate,   #parseCoordPath,  call, geml-parser/src/geml.ts:3819
+#parseSelector,                              #parseCoordPath,  call, geml-parser/src/selector.ts:187
 geml-parser--cli.ts.geml#runGet,             #parseSelector,   call, geml-parser/src/cli.ts:1337
 geml-parser--verbs.ts.geml#selectUnits,      #parseSelector,   call, geml-parser/src/verbs.ts:472
 geml-parser--verbs.ts.geml#get,              #parseSelector,   call, geml-parser/src/verbs.ts:631
 geml-parser--verbs.ts.geml#resolveSetTarget, #parseSelector,   call, geml-parser/src/verbs.ts:1188
 geml-parser--verbs.ts.geml#set,              #parseSelector,   call, geml-parser/src/verbs.ts:1360
-#keyForm,                                    #atKeyOf,         call, geml-parser/src/selector.ts:232
-#parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:158
-#parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:190
-#parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:199
-geml-parser--geml.ts.geml#addressedUnits,    #addressUnits,    call, geml-parser/src/geml.ts:3881
-#shortestAddress,                            #tallyOf,         call, geml-parser/src/selector.ts:306
+#keyForm,                                    #atKeyOf,         call, geml-parser/src/selector.ts:235
+#parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:161
+#parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:193
+#parseSelector,                              #keyForm,         call, geml-parser/src/selector.ts:202
+geml-parser--geml.ts.geml#addressedUnits,    #addressUnits,    call, geml-parser/src/geml.ts:4042
+#tallyOf,                                    #nameKey,         call, geml-parser/src/selector.ts:298
+#tallyOf,                                    #nameKey,         call, geml-parser/src/selector.ts:298
+#shortestAddress,                            #nameKey,         call, geml-parser/src/selector.ts:318
+#shortestAddress,                            #tallyOf,         call, geml-parser/src/selector.ts:312
 geml-parser--verbs.ts.geml#list,             #shortestAddress, call, geml-parser/src/verbs.ts:393
 geml-parser--verbs.ts.geml#findInSource,     #shortestAddress, call, geml-parser/src/verbs.ts:782
 geml-parser--verbs.ts.geml#replace,          #shortestAddress, call, geml-parser/src/verbs.ts:1105
@@ -125,7 +134,9 @@ from,             to
 #addressUnits,    Map.get
 #addressUnits,    Map.set
 #addressUnits,    String.replace
+#nameKey,         String.normalize
 #tallyOf,         Map.get
+#tallyOf,         Map.has
 #tallyOf,         Map.set
 #tallyOf,         WeakMap.get
 #tallyOf,         WeakMap.set

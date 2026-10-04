@@ -645,6 +645,7 @@ from,               to,                                                   kind, 
 #spliceSpan,        #walkOf,                                              call,
 #spliceSpan,        #walkOf,                                              call,
 #spliceSpan,        #walkOf,                                              call,
+#spliceSpan,        #walkOf,                                              call,
 #spliceSpan,        geml-parser--geml.ts.geml#addressedUnits,             call,
 #spliceSpan,        geml-parser--geml.ts.geml#addressedUnits,             call,
 #spliceSpan,        geml-parser--geml.ts.geml#nameKey,                    call,
@@ -675,6 +676,8 @@ from,               to,                                                   kind, 
 #revert,            #VerbContext-docOpts,                                 call,
 #revert,            #VerbContext-docOpts,                                 call,
 #revert,            #VerbContext-note,                                    call,
+#revert,            #walkOf,                                              call,
+#revert,            #walkOf,                                              call,
 #revert,            #walkOf,                                              call,
 #revert,            #walkOf,                                              call,
 #revert,            #walkOf,                                              call,
@@ -868,12 +871,15 @@ geml-parser--cli.ts.geml#runRevert,        #HistoryReader-firstChanged, call, ge
 #rename,                                   #walkOf,                     call, geml-parser/src/verbs.ts:1799
 #rewriteId,                                #walkOf,                     call, geml-parser/src/verbs.ts:1832
 #spliceBlock,                              #walkOf,                     call, geml-parser/src/verbs.ts:1895
+#spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2044
 #spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2073
 #spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2076
 #spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2076
 #spliceSpan,                               #walkOf,                     call, geml-parser/src/verbs.ts:2117
 #revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2173
+#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2175
 #revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2182
+#revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2184
 #revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2234
 #revert,                                   #walkOf,                     call, geml-parser/src/verbs.ts:2260
 #resurrectPosition,                        #walkOf,                     call, geml-parser/src/verbs.ts:2295

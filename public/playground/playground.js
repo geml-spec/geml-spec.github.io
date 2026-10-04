@@ -298254,11 +298254,14 @@ ${isHandDrawn ? "" : `
     return /^=+$/.test(t4) && t4.length === openLen;
   }
   function headingId(explicit, rawText, ctx) {
-    let id38 = explicit ?? slug(rawText);
+    const written = explicit === "" ? void 0 : explicit;
+    let id38 = written ?? slug(rawText);
+    if (id38 === "")
+      return void 0;
     if (!ctx.markdown)
       return id38;
     const s2 = ctx.headingSlugs ??= { used: /* @__PURE__ */ new Set(), next: /* @__PURE__ */ new Map() };
-    if (explicit === void 0 && s2.used.has(nameKey(id38))) {
+    if (written === void 0 && s2.used.has(nameKey(id38))) {
       const base = id38;
       let n2 = s2.next.get(nameKey(base)) ?? 0;
       do {
@@ -298428,6 +298431,9 @@ ${isHandDrawn ? "" : `
       i5++;
     }
     return out;
+  }
+  function idOf(a2) {
+    return a2?.id === "" ? void 0 : a2?.id;
   }
   function registerId(ctx, id38, line2) {
     const key = nameKey(id38);
@@ -298795,7 +298801,8 @@ ${isHandDrawn ? "" : `
     const openLineNo = base + i5 + 1;
     reportOddNames(attrs, openLineNo, ctx.diags);
     reportDuplicateNames(attrs, openLineNo, ctx.diags);
-    const { body, end, closed } = scanFenceBody(lines, i5 + consumed, base, openLen, attrs.id, type3, openLineNo, ctx);
+    const id38 = idOf(attrs);
+    const { body, end, closed } = scanFenceBody(lines, i5 + consumed, base, openLen, id38, type3, openLineNo, ctx);
     const mode = bodyModeFor(type3, attrs, openLineNo, ctx);
     const block2 = {
       kind: "block",
@@ -298806,9 +298813,9 @@ ${isHandDrawn ? "" : `
     };
     if (type3 === "text" || ctx.vocab.prose.has(type3))
       block2.prose = true;
-    if (attrs.id !== void 0) {
-      block2.id = attrs.id;
-      registerId(ctx, attrs.id, openLineNo);
+    if (id38 !== void 0) {
+      block2.id = id38;
+      registerId(ctx, id38, openLineNo);
     }
     if (attrs.attrs["hidden"] === true)
       block2.hidden = true;
@@ -298925,6 +298932,24 @@ ${isHandDrawn ? "" : `
     }
     return runs;
   }
+  var FOOTNOTE_DEF = /^\[\^([^\]]+)\]:[ \t]?(.*)$/;
+  function opensBlock(l4) {
+    return matchHeading(l4) !== null || MD_FENCE_OPEN.test(l4) || FOOTNOTE_DEF.test(l4) || /^={3,}/.test(l4) || /^ {0,3}>/.test(l4) || LIST_ITEM.test(l4) || /^ {0,3}([-*_])([ \t]*\1){2,}[ \t]*$/.test(l4) || /^[ \t]*%%/.test(l4) || /^ {0,3}</.test(l4);
+  }
+  function footnoteEnd(lines, i5) {
+    let end = i5 + 1;
+    for (let j3 = i5 + 1; j3 < lines.length; j3++) {
+      const l4 = lines[j3];
+      if (l4.trim() === "")
+        continue;
+      if (/^(?: {4}| {0,3}\t)/.test(l4) || j3 === end && !opensBlock(l4)) {
+        end = j3 + 1;
+        continue;
+      }
+      break;
+    }
+    return end;
+  }
   function shieldFor(lines, markdown) {
     if (!markdown)
       return backtickShield(lines);
@@ -298934,6 +298959,117 @@ ${isHandDrawn ? "" : `
         out.add(k3);
     return out;
   }
+  var NO_SETEXT = /* @__PURE__ */ new Map();
+  var MATH_FENCE = /^ {0,3}\$\$[ \t]*$/;
+  var HTML_RAW_OPEN = /^ {0,3}<(?:script|pre|style|textarea)(?:[ \t>]|$)/i;
+  var HTML_RAW_CLOSE = /<\/(?:script|pre|style|textarea)>/i;
+  var HTML_BLOCK_TAG = /^ {0,3}<\/?(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)(?:[ \t]|\/?>|$)/i;
+  var HTML_LONE_TAG = /^ {0,3}(?:<[A-Za-z][A-Za-z0-9-]*(?:[ \t]+[A-Za-z_:][\w.:-]*(?:[ \t]*=[ \t]*(?:[^\s"'=<>`]+|'[^']*'|"[^"]*"))?)*[ \t]*\/?>|<\/[A-Za-z][A-Za-z0-9-]*[ \t]*>)[ \t]*$/;
+  var SETEXT_UNDERLINE = /^ {0,3}(=+|-+)[ \t]*$/;
+  var THEMATIC_BREAK = /^ {0,3}([-*_])(?:[ \t]*\1){2,}[ \t]*$/;
+  function markdownBlockRuns(lines) {
+    const runs = [];
+    const blank = (l4) => l4 === void 0 || l4.trim() === "";
+    const until = (from2, test) => {
+      for (let j3 = from2; j3 < lines.length; j3++)
+        if (test(lines[j3]))
+          return j3 + 1;
+      return -1;
+    };
+    const toBlank = (from2) => {
+      let j3 = from2 + 1;
+      while (j3 < lines.length && !blank(lines[j3]))
+        j3++;
+      return j3;
+    };
+    let i5 = 0;
+    while (i5 < lines.length) {
+      const l4 = lines[i5];
+      let end = -1;
+      if (MATH_FENCE.test(l4))
+        end = until(i5 + 1, (x6) => MATH_FENCE.test(x6));
+      else if (HTML_RAW_OPEN.test(l4))
+        end = until(i5, (x6) => HTML_RAW_CLOSE.test(x6));
+      else if (/^ {0,3}<!--/.test(l4))
+        end = until(i5, (x6) => x6.includes("-->"));
+      else if (/^ {0,3}<\?/.test(l4))
+        end = until(i5, (x6) => x6.includes("?>"));
+      else if (/^ {0,3}<!\[CDATA\[/.test(l4))
+        end = until(i5, (x6) => x6.includes("]]>"));
+      else if (/^ {0,3}<![A-Za-z]/.test(l4))
+        end = until(i5, (x6) => x6.includes(">"));
+      else if (HTML_BLOCK_TAG.test(l4) || HTML_LONE_TAG.test(l4) && blank(lines[i5 - 1]))
+        end = toBlank(i5);
+      if (end > i5) {
+        runs.push({ start: i5, end });
+        i5 = end;
+        continue;
+      }
+      i5++;
+    }
+    return runs;
+  }
+  function structureFor(lines, markdown, known) {
+    if (!markdown)
+      return { shield: backtickShield(lines), setext: NO_SETEXT };
+    const code = shieldFor(lines, true);
+    const shield = new Set(code);
+    for (const r2 of markdownBlockRuns(lines))
+      for (let k4 = r2.start; k4 < r2.end; k4++)
+        if (!code.has(k4))
+          shield.add(k4);
+    const textual = /* @__PURE__ */ new Set();
+    lines.forEach((l4, k4) => {
+      if (shield.has(k4))
+        return;
+      const open3 = FENCE_OPEN.exec(l4);
+      if (open3 && !known(open3[2])) {
+        shield.add(k4);
+        textual.add(k4);
+      }
+    });
+    const setext = /* @__PURE__ */ new Map();
+    let start2 = -1;
+    let lazy = false;
+    let k3 = 0;
+    if (/^---[ \t]*$/.test(lines[0] ?? "")) {
+      const close3 = lines.findIndex((l4, j3) => j3 > 0 && /^(---|\.\.\.)[ \t]*$/.test(l4));
+      if (close3 > 0)
+        k3 = close3 + 1;
+    }
+    for (; k3 < lines.length; k3++) {
+      const l4 = lines[k3];
+      if (l4.trim() === "") {
+        start2 = -1;
+        lazy = false;
+        continue;
+      }
+      const u2 = shield.has(k3) ? null : SETEXT_UNDERLINE.exec(l4);
+      if (u2 && start2 >= 0) {
+        const text5 = lines.slice(start2, k3).map((x6) => x6.trim()).join(" ");
+        const match3 = matchHeading(`${u2[1][0] === "=" ? "#" : "##"} ${text5}`);
+        if (match3)
+          setext.set(start2, { match: match3, end: k3 + 1 });
+        start2 = -1;
+        continue;
+      }
+      const plain = textual.has(k3) || !shield.has(k3) && matchHeading(l4) === null && !/^={3,}/.test(l4) && !MD_FENCE_OPEN.test(l4) && !FOOTNOTE_DEF.test(l4) && !/^[ \t]*%%/.test(l4) && !THEMATIC_BREAK.test(l4);
+      if (!plain) {
+        start2 = -1;
+        lazy = false;
+        continue;
+      }
+      if (LIST_ITEM.test(l4) || /^ {0,3}>/.test(l4)) {
+        start2 = -1;
+        lazy = true;
+        continue;
+      }
+      if (start2 < 0 && !lazy)
+        start2 = k3;
+    }
+    return { shield, setext };
+  }
+  var knownTo = (ctx) => (type3) => REGISTRY.has(type3) || ctx.vocab.types.has(type3);
   function scanProse(lines, base, ctx) {
     const blocks2 = [];
     let para = [];
@@ -298961,7 +299097,7 @@ ${isHandDrawn ? "" : `
   function scanBlocks(lines, base, ctx, depth = 0) {
     const blocks2 = [];
     const diags = ctx.diags;
-    const shielded = shieldFor(lines, ctx.markdown);
+    const { shield: shielded, setext } = structureFor(lines, ctx.markdown, knownTo(ctx));
     const codeRunAt = /* @__PURE__ */ new Map();
     if (ctx.markdown)
       for (const r2 of markdownCodeRuns(lines))
@@ -298993,7 +299129,8 @@ ${isHandDrawn ? "" : `
         i5 = next3;
         continue;
       }
-      const h2 = shielded.has(i5) ? null : matchHeading(line2);
+      const st2 = setext.get(i5);
+      const h2 = st2?.match ?? (shielded.has(i5) ? null : matchHeading(line2));
       if (h2) {
         const lineNo = base + i5 + 1;
         const level = h2[1].length;
@@ -299003,7 +299140,8 @@ ${isHandDrawn ? "" : `
         reportDuplicateNames(a2, lineNo, diags);
         const text6 = interpolate(rawText, lineNo, ctx);
         const id38 = headingId(a2.id, rawText, ctx);
-        registerId(ctx, id38, lineNo);
+        if (id38 !== void 0)
+          registerId(ctx, id38, lineNo);
         if (h2[3] === void 0) {
           const { group: group2, unclosed } = lastAttrObjectLike(rawText);
           const wrote = (inner3) => parseAttrs(`{${inner3}}`).id;
@@ -299038,7 +299176,7 @@ ${isHandDrawn ? "" : `
         if (ctx.markdown)
           registerGithubAnchor(ctx, h2, block2.inlines, lineNo);
         blocks2.push(block2);
-        i5 += consumed;
+        i5 = st2 !== void 0 ? st2.end : i5 + consumed;
         continue;
       }
       if (!shielded.has(i5) && LIST_ITEM.test(line2)) {
@@ -299052,7 +299190,8 @@ ${isHandDrawn ? "" : `
       const para = [];
       while (i5 < lines.length && lines[i5].trim() !== "" && // A Markdown code run is handed over whole at the top of the loop, so a
       // paragraph stops at one (a fence interrupts a paragraph in CommonMark).
-      !codeRunAt.has(i5) && // 遮蔽区内一律当正文吃下去。漏掉这一条，被遮的栅栏行没有任何构造消费它，
+      !codeRunAt.has(i5) && // So does a setext heading, which the top of the loop reads whole.
+      !setext.has(i5) && // 遮蔽区内一律当正文吃下去。漏掉这一条，被遮的栅栏行没有任何构造消费它，
       // i 不前进 —— 死循环。
       (shielded.has(i5) || !/^[ \t]*%%/.test(lines[i5]) && !FENCE_OPEN.test(lines[i5]) && matchHeading(lines[i5]) === null && !LIST_ITEM.test(lines[i5]))) {
         para.push(lines[i5]);
@@ -299715,7 +299854,7 @@ ${isHandDrawn ? "" : `
     const meta3 = /* @__PURE__ */ new Map();
     const firstLine = definedAt ?? /* @__PURE__ */ new Map();
     const walk2 = (ls, base, depth) => {
-      const shielded = shieldFor(ls, markdown);
+      const shielded = structureFor(ls, markdown, (t4) => REGISTRY.has(t4)).shield;
       for (let i5 = 0; i5 < ls.length; i5++) {
         if (shielded.has(i5))
           continue;
@@ -300378,7 +300517,7 @@ ${isHandDrawn ? "" : `
   }
   function fenceClose(lines, i5, open3, consumed = 1) {
     const openLen = open3[1].length;
-    const id38 = open3[3] ? parseAttrs(open3[3]).id : void 0;
+    const id38 = idOf(open3[3] ? parseAttrs(open3[3]) : void 0);
     const labeled = id38 !== void 0 ? labeledClose(id38) : null;
     for (let j3 = i5 + consumed; j3 < lines.length; j3++) {
       if (isCloseFence(lines[j3], openLen) || labeled && labeled.test(lines[j3]))
@@ -300386,10 +300525,17 @@ ${isHandDrawn ? "" : `
     }
     return { end: lines.length, closed: false };
   }
-  function sectionEnd(lines, i5, level, consumed, shielded) {
+  function sectionEnd(lines, i5, level, consumed, shielded, setext = NO_SETEXT) {
     let j3 = i5 + consumed;
     while (j3 < lines.length) {
       const { line: line2, consumed: c3 } = foldFence(lines, j3);
+      const st2 = setext.get(j3);
+      if (st2 !== void 0) {
+        if (st2.match[1].length <= level)
+          return j3;
+        j3 = st2.end;
+        continue;
+      }
       const open3 = shielded.has(j3) ? null : FENCE_OPEN.exec(line2);
       if (open3) {
         j3 = fenceClose(lines, j3, open3, c3).end;
@@ -300415,7 +300561,7 @@ ${isHandDrawn ? "" : `
       if (!out.has(id38))
         out.set(id38, { start: start2, end });
     };
-    const shielded = shieldFor(lines, ctx.markdown);
+    const { shield: shielded, setext } = structureFor(lines, ctx.markdown, knownTo(ctx));
     let i5 = 0;
     while (i5 < lines.length) {
       const { line: line2, consumed } = foldFence(lines, i5);
@@ -300423,11 +300569,12 @@ ${isHandDrawn ? "" : `
         i5++;
         continue;
       }
-      const fndef = shielded.has(i5) ? null : /^\[\^([^\]]+)\]:[ \t]?(.*)$/.exec(line2);
+      const fndef = !ctx.markdown || shielded.has(i5) ? null : FOOTNOTE_DEF.exec(line2);
       if (fndef) {
-        add3(fndef[1].trim(), base + i5, base + i5 + 1);
-        units?.push({ span: { start: base + i5, end: base + i5 + 1 }, kind: "footnote", id: fndef[1].trim() });
-        i5++;
+        const end = footnoteEnd(lines, i5);
+        add3(fndef[1].trim(), base + i5, base + end);
+        units?.push({ span: { start: base + i5, end: base + end }, kind: "footnote", id: fndef[1].trim() });
+        i5 = end;
         continue;
       }
       if (/^[ \t]*%%/.test(line2)) {
@@ -300438,7 +300585,7 @@ ${isHandDrawn ? "" : `
       if (open3) {
         const type3 = open3[2];
         const a2 = open3[3] ? parseAttrs(open3[3]) : void 0;
-        const id38 = a2?.id;
+        const id38 = idOf(a2);
         const { end, closed } = fenceClose(lines, i5, open3, consumed);
         if (id38 !== void 0)
           add3(id38, base + i5, base + end);
@@ -300451,13 +300598,16 @@ ${isHandDrawn ? "" : `
         i5 = end;
         continue;
       }
-      const h2 = shielded.has(i5) ? null : matchHeading(line2);
+      const st2 = setext.get(i5);
+      const h2 = st2?.match ?? (shielded.has(i5) ? null : matchHeading(line2));
       if (h2) {
+        const used = st2 !== void 0 ? st2.end - i5 : consumed;
         const hid = idOfHeading(h2[3], h2[2], base + i5 + 1, ctx);
-        const hend = base + sectionEnd(lines, i5, h2[1].length, consumed, shielded);
-        add3(hid, base + i5, hend);
-        units?.push({ span: { start: base + i5, end: hend }, kind: "heading", id: hid, level: h2[1].length, text: h2[2], ...keysOf(h2[3] ? parseAttrs(h2[3]) : void 0) });
-        i5 += consumed;
+        const hend = base + sectionEnd(lines, i5, h2[1].length, used, shielded, setext);
+        if (hid !== void 0)
+          add3(hid, base + i5, hend);
+        units?.push({ span: { start: base + i5, end: hend }, kind: "heading", ...hid !== void 0 ? { id: hid } : {}, level: h2[1].length, text: h2[2], ...keysOf(h2[3] ? parseAttrs(h2[3]) : void 0), ...used > 1 && st2 !== void 0 ? { head: used } : {} });
+        i5 += used;
         continue;
       }
       i5++;
@@ -300608,7 +300758,7 @@ ${isHandDrawn ? "" : `
     const lineCount = lines.length;
     const metaSolo = units.filter((u2) => u2.type === "meta").length === 1;
     const anchor2 = (u2) => u2 === null ? null : { ...u2.id !== void 0 ? { id: u2.id } : u2.type === "meta" && metaSolo ? { id: "meta" } : {} };
-    const children2 = /* @__PURE__ */ new Map();
+    const children2 = /* @__PURE__ */ new Map([[null, []]]);
     const stack = [];
     for (const u2 of units) {
       while (stack.length > 0 && u2.span.start >= stack[stack.length - 1].span.end)
@@ -300620,7 +300770,7 @@ ${isHandDrawn ? "" : `
     }
     const runs = [];
     for (const [container2, kids] of children2) {
-      const bodyStart = container2 === null ? 0 : container2.body?.start ?? container2.span.start + 1;
+      const bodyStart = container2 === null ? 0 : container2.body?.start ?? container2.span.start + (container2.head ?? 1);
       const bodyEnd = container2 === null ? lineCount : container2.body?.end ?? container2.span.end;
       const siblings2 = kids;
       const gaps = [];
@@ -300677,23 +300827,33 @@ ${isHandDrawn ? "" : `
   function splitLines(source) {
     return source.split(/(?<=\n|\r(?!\n))/);
   }
-  function narrowToHead(span) {
-    return { start: span.start, end: span.start + 1 };
+  function narrowToHead(span, source, o2 = {}) {
+    return { start: span.start, end: span.start + headLines(source, span.start, o2) };
+  }
+  var lastHeads = null;
+  function headLines(source, start2, o2) {
+    if (source === void 0 || o2.markdown !== true)
+      return 1;
+    if (lastHeads?.source !== source) {
+      lastHeads = { source, setext: structureFor(normalizeSource(source).split("\n"), true, (t4) => REGISTRY.has(t4)).setext };
+    }
+    const st2 = lastHeads.setext.get(start2);
+    return st2 === void 0 ? 1 : st2.end - start2;
   }
   function closeFenceLine(lines, span) {
     const open3 = FENCE_OPEN.exec(stripEol(lines[span.start] ?? ""));
     if (!open3)
       return null;
     const lastText = trimSpaceTabEnd(stripEol(lines[span.end - 1] ?? ""));
-    const bid = open3[3] ? parseAttrs(open3[3]).id : void 0;
+    const bid = idOf(open3[3] ? parseAttrs(open3[3]) : void 0);
     const labeled = bid !== void 0 && labeledClose(bid).test(lastText);
     return isCloseFence(lastText, open3[1].length) || labeled ? lines[span.end - 1] ?? "" : null;
   }
-  function narrowToBody(lines, span) {
-    return { start: span.start + 1, end: closeFenceLine(lines, span) !== null ? span.end - 1 : span.end };
+  function narrowToBody(lines, span, source, o2 = {}) {
+    return { start: span.start + headLines(source, span.start, o2), end: closeFenceLine(lines, span) !== null ? span.end - 1 : span.end };
   }
   function narrowToIntro(source, span, o2 = {}) {
-    const body = narrowToBody(splitLines(source), span);
+    const body = narrowToBody(splitLines(source), span, source, o2);
     let end = body.end;
     for (const a2 of addressedUnits(source, o2)) {
       const u2 = a2.unit;
@@ -300708,7 +300868,7 @@ ${isHandDrawn ? "" : `
   }
   function sliceUnit(source, span, part = "whole", o2 = {}) {
     const lines = splitLines(source);
-    const s2 = part === "head" ? narrowToHead(span) : part === "body" ? narrowToBody(lines, span) : part === "intro" ? narrowToIntro(source, span, o2) : span;
+    const s2 = part === "head" ? narrowToHead(span, source, o2) : part === "body" ? narrowToBody(lines, span, source, o2) : part === "intro" ? narrowToIntro(source, span, o2) : span;
     return lines.slice(s2.start, s2.end).join("");
   }
   function findBlockSite(blocks2, id38) {

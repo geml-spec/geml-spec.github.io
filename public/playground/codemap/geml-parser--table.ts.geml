@@ -193,9 +193,9 @@ from,                                          to,                kind, site
 #parseVisual,                                  #alignOf,          call, geml-parser/src/table.ts:120
 geml-parser--coord.ts.geml#replaceField,       #whiteSpaceBounds, call, geml-parser/src/coord.ts:220
 #trimWhiteSpace,                               #whiteSpaceBounds, call, geml-parser/src/table.ts:86
-geml-parser--geml.ts.geml#slug,                #trimWhiteSpace,   call, geml-parser/src/geml.ts:800
-geml-parser--geml.ts.geml#foldFence,           #trimWhiteSpace,   call, geml-parser/src/geml.ts:3406
-geml-parser--geml.ts.geml#continuations,       #trimWhiteSpace,   call, geml-parser/src/geml.ts:3426
+geml-parser--geml.ts.geml#slug,                #trimWhiteSpace,   call, geml-parser/src/geml.ts:807
+geml-parser--geml.ts.geml#foldFence,           #trimWhiteSpace,   call, geml-parser/src/geml.ts:3553
+geml-parser--geml.ts.geml#continuations,       #trimWhiteSpace,   call, geml-parser/src/geml.ts:3573
 #splitPipes,                                   #trimWhiteSpace,   call, geml-parser/src/table.ts:93
 #splitPipes,                                   #trimWhiteSpace,   call, geml-parser/src/table.ts:100
 #splitPipes,                                   #trimWhiteSpace,   call, geml-parser/src/table.ts:103
@@ -233,11 +233,11 @@ geml-parser--coord.ts.geml#writeTable,         #escapeCellPipes,  call, geml-par
 #groupView,                                    #evalExpr,         call, geml-parser/src/table.ts:850
 #parseTable,                                   #tooLarge,         call, geml-parser/src/table.ts:412
 #deriveView,                                   #tooLarge,         call, geml-parser/src/table.ts:988
-geml-parser--geml.ts.geml#readFormOptionsBody, #parseTable,       call, geml-parser/src/geml.ts:1261
-geml-parser--geml.ts.geml#readTableBody,       #parseTable,       call, geml-parser/src/geml.ts:1277
-geml-parser--geml.ts.geml#chartSourceTable,    #parseTable,       call, geml-parser/src/geml.ts:1869
-geml-parser--geml.ts.geml#resolveTableSources, #parseTable,       call, geml-parser/src/geml.ts:2274
-geml-parser--geml.ts.geml#resolveViewSources,  #parseTable,       call, geml-parser/src/geml.ts:2462
+geml-parser--geml.ts.geml#readFormOptionsBody, #parseTable,       call, geml-parser/src/geml.ts:1273
+geml-parser--geml.ts.geml#readTableBody,       #parseTable,       call, geml-parser/src/geml.ts:1289
+geml-parser--geml.ts.geml#chartSourceTable,    #parseTable,       call, geml-parser/src/geml.ts:2014
+geml-parser--geml.ts.geml#resolveTableSources, #parseTable,       call, geml-parser/src/geml.ts:2419
+geml-parser--geml.ts.geml#resolveViewSources,  #parseTable,       call, geml-parser/src/geml.ts:2607
 #applyDerivations,                             #columnRef,        call, geml-parser/src/table.ts:473
 #aggregateValue,                               #columnRef,        call, geml-parser/src/table.ts:774
 #groupView,                                    #columnRef,        call, geml-parser/src/table.ts:830
@@ -268,7 +268,7 @@ geml-parser--geml.ts.geml#resolveViewSources,  #parseTable,       call, geml-par
 #deriveView,                                   #columnName,       call, geml-parser/src/table.ts:977
 #deriveView,                                   #orderView,        call, geml-parser/src/table.ts:1029
 #deriveView,                                   #selectView,       call, geml-parser/src/table.ts:1042
-geml-parser--geml.ts.geml#resolveViewSources,  #deriveView,       call, geml-parser/src/geml.ts:2519
+geml-parser--geml.ts.geml#resolveViewSources,  #deriveView,       call, geml-parser/src/geml.ts:2664
 #applyDerivations,                             #ensureCell,       call, geml-parser/src/table.ts:572
 #applyDerivations,                             #ensureCell,       call, geml-parser/src/table.ts:584
 ===

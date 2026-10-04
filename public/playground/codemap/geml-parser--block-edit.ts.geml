@@ -17,16 +17,16 @@ resolution-default = cpg
 === code {#trimSpaceTabEnd src=geml-parser/src/block-edit.ts#L36-44 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/trimSpaceTabEnd()."}
 ===
 
-=== code {#rewriteBraces src=geml-parser/src/block-edit.ts#L51-57 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/rewriteBraces()."}
+=== code {#rewriteBraces src=geml-parser/src/block-edit.ts#L51-59 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/rewriteBraces()."}
 ===
 
-=== code {#rewriteHead src=geml-parser/src/block-edit.ts#L62-73 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/rewriteHead()."}
+=== code {#rewriteHead src=geml-parser/src/block-edit.ts#L64-75 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/rewriteHead()."}
 ===
 
-=== code {#findHead src=geml-parser/src/block-edit.ts#L79-87 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/findHead()."}
+=== code {#findHead src=geml-parser/src/block-edit.ts#L81-89 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/findHead()."}
 ===
 
-=== code {#normalizeBlockId src=geml-parser/src/block-edit.ts#L98-128 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/normalizeBlockId()."}
+=== code {#normalizeBlockId src=geml-parser/src/block-edit.ts#L100-131 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/normalizeBlockId()."}
 ===
 
 === table {#calls format=csv}
@@ -45,14 +45,14 @@ from,              to,                                    kind, confidence
 
 === table {#called-by format=csv}
 from,                              to,                kind, site
-#normalizeBlockId,                 #splitLines,       call, geml-parser/src/block-edit.ts:99
-#findHead,                         #stripEnding,      call, geml-parser/src/block-edit.ts:81
-#normalizeBlockId,                 #stripEnding,      call, geml-parser/src/block-edit.ts:103
-#normalizeBlockId,                 #stripEnding,      call, geml-parser/src/block-edit.ts:117
-#normalizeBlockId,                 #trimSpaceTabEnd,  call, geml-parser/src/block-edit.ts:118
-#rewriteHead,                      #rewriteBraces,    call, geml-parser/src/block-edit.ts:65
-#normalizeBlockId,                 #rewriteHead,      call, geml-parser/src/block-edit.ts:105
-#normalizeBlockId,                 #findHead,         call, geml-parser/src/block-edit.ts:100
+#normalizeBlockId,                 #splitLines,       call, geml-parser/src/block-edit.ts:101
+#findHead,                         #stripEnding,      call, geml-parser/src/block-edit.ts:83
+#normalizeBlockId,                 #stripEnding,      call, geml-parser/src/block-edit.ts:105
+#normalizeBlockId,                 #stripEnding,      call, geml-parser/src/block-edit.ts:120
+#normalizeBlockId,                 #trimSpaceTabEnd,  call, geml-parser/src/block-edit.ts:121
+#rewriteHead,                      #rewriteBraces,    call, geml-parser/src/block-edit.ts:67
+#normalizeBlockId,                 #rewriteHead,      call, geml-parser/src/block-edit.ts:107
+#normalizeBlockId,                 #findHead,         call, geml-parser/src/block-edit.ts:102
 geml-parser--verbs.ts.geml#set,    #normalizeBlockId, call, geml-parser/src/verbs.ts:1440
 geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2233
 geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2237
