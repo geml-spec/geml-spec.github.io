@@ -1,0 +1,80 @@
+=== meta
+profile = "geml-codemap/v1"
+module = chrome-geml-viewer/media-playlist.js
+src = integrations/chrome-geml-viewer/src/media-playlist.js
+resolution-default = cpg
+===
+
+# chrome-geml-viewer/media-playlist.js
+
+=== code {#primaryOf .leaf src=integrations/chrome-geml-viewer/src/media-playlist.js#L13-24 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/primaryOf()."}
+===
+
+=== code {#firstTimeline src=integrations/chrome-geml-viewer/src/media-playlist.js#L27-37 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/firstTimeline()."}
+===
+
+=== code {#seconds src=integrations/chrome-geml-viewer/src/media-playlist.js#L39-42 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/seconds."}
+===
+
+=== code {#titleOf src=integrations/chrome-geml-viewer/src/media-playlist.js#L45-50 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/titleOf()."}
+===
+
+=== code {#playlist src=integrations/chrome-geml-viewer/src/media-playlist.js#L52-123 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/playlist()."}
+===
+
+=== code {#drivePlaylist src=integrations/chrome-geml-viewer/src/media-playlist.js#L136-299 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/drivePlaylist()."}
+===
+
+=== code {#playlistLive src=integrations/chrome-geml-viewer/src/media-playlist.js#L301-305 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/playlistLive()."}
+===
+
+=== table {#calls format=csv}
+from,           to,                                                kind, confidence
+#firstTimeline, #primaryOf,                                        call,
+#playlist,      #firstTimeline,                                    call,
+#playlist,      #primaryOf,                                        call,
+#playlist,      #seconds,                                          call,
+#playlist,      #seconds,                                          call,
+#playlist,      #titleOf,                                          call,
+#playlist,      chrome-geml-viewer--media-player.js.geml#assetUrl, call,
+#playlist,      chrome-geml-viewer--media-player.js.geml#findRef,  call,
+#playlistLive,  #drivePlaylist,                                    call,
+#playlistLive,  #playlist,                                         call,
+===
+
+=== table {#called-by format=csv}
+from,           to,             kind, site
+#firstTimeline, #primaryOf,     call, integrations/chrome-geml-viewer/src/media-playlist.js:32
+#playlist,      #primaryOf,     call, integrations/chrome-geml-viewer/src/media-playlist.js:61
+#playlist,      #firstTimeline, call, integrations/chrome-geml-viewer/src/media-playlist.js:62
+#playlist,      #seconds,       call, integrations/chrome-geml-viewer/src/media-playlist.js:73
+#playlist,      #seconds,       call, integrations/chrome-geml-viewer/src/media-playlist.js:73
+#playlist,      #titleOf,       call, integrations/chrome-geml-viewer/src/media-playlist.js:73
+#playlistLive,  #playlist,      call, integrations/chrome-geml-viewer/src/media-playlist.js:302
+#playlistLive,  #drivePlaylist, call, integrations/chrome-geml-viewer/src/media-playlist.js:303
+===
+
+=== table {#unresolved format=csv hidden}
+from,           to
+#seconds,       NumberConstructor.isFinite
+#titleOf,       Array.pop
+#titleOf,       ArrayConstructor.isArray
+#titleOf,       String.replace
+#titleOf,       String.split
+#playlist,      Array.push
+#drivePlaylist, Array.filter
+#drivePlaylist, Array.find
+#drivePlaylist, Array.forEach
+#drivePlaylist, Array.includes
+#drivePlaylist, Array.indexOf
+#drivePlaylist, Array.lastIndexOf
+#drivePlaylist, Array.map
+#drivePlaylist, Array.pop
+#drivePlaylist, Array.push
+#drivePlaylist, Array.reverse
+#drivePlaylist, Array.splice
+#drivePlaylist, Array.unshift
+#drivePlaylist, ArrayConstructor.from
+#drivePlaylist, Math.floor
+#drivePlaylist, Math.random
+===

@@ -1050,6 +1050,13 @@
       "id": "checkReservedMetaId"
     }
   ],
+  "childBlocks": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`media-check.ts`/childBlocks.",
+      "doc": "geml-parser--media-check.ts.geml",
+      "id": "childBlocks"
+    }
+  ],
   "classAttr": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`render.ts`/classAttr().",
@@ -1653,6 +1660,13 @@
       "id": "drivePlayer"
     }
   ],
+  "drivePlaylist": [
+    {
+      "anchor": "scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/drivePlaylist().",
+      "doc": "chrome-geml-viewer--media-playlist.js.geml",
+      "id": "drivePlaylist"
+    }
+  ],
   "duplicateNames": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`attrs.ts`/duplicateNames().",
@@ -2124,6 +2138,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`history.ts`/firstChangedContent().",
       "doc": "geml-parser--history.ts.geml",
       "id": "firstChangedContent"
+    }
+  ],
+  "firstTimeline": [
+    {
+      "anchor": "scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/firstTimeline().",
+      "doc": "chrome-geml-viewer--media-playlist.js.geml",
+      "id": "firstTimeline"
     }
   ],
   "flag": [
@@ -2876,11 +2897,18 @@
       "id": "keysOf"
     }
   ],
-  "kindFromExt": [
+  "kindOfAsset": [
     {
-      "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`media-verbs.ts`/kindFromExt.",
-      "doc": "geml-parser--media-verbs.ts.geml",
-      "id": "kindFromExt"
+      "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`media-check.ts`/kindOfAsset.",
+      "doc": "geml-parser--media-check.ts.geml",
+      "id": "kindOfAsset"
+    }
+  ],
+  "kindOfFile": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`media-check.ts`/kindOfFile.",
+      "doc": "geml-parser--media-check.ts.geml",
+      "id": "kindOfFile"
     }
   ],
   "knownProfileCode": [
@@ -4141,6 +4169,20 @@
       "id": "playerLive"
     }
   ],
+  "playlist": [
+    {
+      "anchor": "scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/playlist().",
+      "doc": "chrome-geml-viewer--media-playlist.js.geml",
+      "id": "playlist"
+    }
+  ],
+  "playlistLive": [
+    {
+      "anchor": "scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/playlistLive().",
+      "doc": "chrome-geml-viewer--media-playlist.js.geml",
+      "id": "playlistLive"
+    }
+  ],
   "positionals": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`cli.ts`/positionals().",
@@ -4153,6 +4195,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/predated().",
       "doc": "geml-parser--verbs.ts.geml",
       "id": "predated"
+    }
+  ],
+  "primaryOf": [
+    {
+      "anchor": "scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/primaryOf().",
+      "doc": "chrome-geml-viewer--media-playlist.js.geml",
+      "id": "primaryOf"
     }
   ],
   "probeDuration": [
@@ -5354,6 +5403,13 @@
       "id": "scopesOf"
     }
   ],
+  "seconds": [
+    {
+      "anchor": "scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/seconds.",
+      "doc": "chrome-geml-viewer--media-playlist.js.geml",
+      "id": "seconds"
+    }
+  ],
   "sectionEnd": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`geml.ts`/sectionEnd().",
@@ -6003,6 +6059,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.2 src/`render.ts`/RenderCtx#titleHeading().",
       "doc": "geml-parser--render.ts.geml",
       "id": "RenderCtx-titleHeading"
+    }
+  ],
+  "titleOf": [
+    {
+      "anchor": "scip-typescript npm geml-viewer 1.3.6 src/`media-playlist.js`/titleOf().",
+      "doc": "chrome-geml-viewer--media-playlist.js.geml",
+      "id": "titleOf"
     }
   ],
   "toLf": [

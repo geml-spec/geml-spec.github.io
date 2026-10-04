@@ -2,6 +2,7 @@
 profile = "geml-codemap/v1"
 module = chrome-geml-viewer/media-player.js
 src = integrations/chrome-geml-viewer/src/media-player.js
+entry = #assetUrl #findRef
 resolution-default = cpg
 ===
 
@@ -49,17 +50,19 @@ from,        to,          kind, confidence
 ===
 
 === table {#called-by format=csv}
-from,        to,          kind, site
-#player,     #assetUrl,   call, integrations/chrome-geml-viewer/src/media-player.js:146
-#findRef,    #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:58
-#findRef,    #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:63
-#timelineOf, #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:93
-#player,     #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:138
-#player,     #dbToGain,   call, integrations/chrome-geml-viewer/src/media-player.js:159
-#player,     #textOf,     call, integrations/chrome-geml-viewer/src/media-player.js:140
-#player,     #timelineOf, call, integrations/chrome-geml-viewer/src/media-player.js:116
-#player,     #fmt,        call, integrations/chrome-geml-viewer/src/media-player.js:195
-#playerLive, #player,     call, integrations/chrome-geml-viewer/src/media-player.js:210
+from,                                                to,          kind, site
+#player,                                             #assetUrl,   call, integrations/chrome-geml-viewer/src/media-player.js:146
+chrome-geml-viewer--media-playlist.js.geml#playlist, #assetUrl,   call, integrations/chrome-geml-viewer/src/media-playlist.js:71
+#findRef,                                            #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:58
+#findRef,                                            #blockById,  call, integrations/chrome-geml-viewer/src/media-player.js:63
+#timelineOf,                                         #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:93
+#player,                                             #findRef,    call, integrations/chrome-geml-viewer/src/media-player.js:138
+chrome-geml-viewer--media-playlist.js.geml#playlist, #findRef,    call, integrations/chrome-geml-viewer/src/media-playlist.js:66
+#player,                                             #dbToGain,   call, integrations/chrome-geml-viewer/src/media-player.js:159
+#player,                                             #textOf,     call, integrations/chrome-geml-viewer/src/media-player.js:140
+#player,                                             #timelineOf, call, integrations/chrome-geml-viewer/src/media-player.js:116
+#player,                                             #fmt,        call, integrations/chrome-geml-viewer/src/media-player.js:195
+#playerLive,                                         #player,     call, integrations/chrome-geml-viewer/src/media-player.js:210
 ===
 
 === table {#unresolved format=csv hidden}

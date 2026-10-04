@@ -72,16 +72,16 @@ from,                                         to,               kind, site
 #layerSpec,                                   #num,             call, geml-parser/src/media-compose.ts:97
 #layerSpec,                                   #num,             call, geml-parser/src/media-compose.ts:98
 #layerSpec,                                   #num,             call, geml-parser/src/media-compose.ts:99
-geml-parser--media-check.ts.geml#compText,    #parsePoints,     call, geml-parser/src/media-check.ts:153
+geml-parser--media-check.ts.geml#compText,    #parsePoints,     call, geml-parser/src/media-check.ts:164
 #layerSpec,                                   #parsePoints,     call, geml-parser/src/media-compose.ts:96
-geml-parser--media-check.ts.geml#checkMedia,  #parsePointNames, call, geml-parser/src/media-check.ts:466
+geml-parser--media-check.ts.geml#checkMedia,  #parsePointNames, call, geml-parser/src/media-check.ts:493
 #layerSpec,                                   #parseSize,       call, geml-parser/src/media-compose.ts:101
 #layerSpec,                                   #parseXywh,       call, geml-parser/src/media-compose.ts:100
-geml-parser--media-check.ts.geml#compText,    #parseEnd,        call, geml-parser/src/media-check.ts:148
-geml-parser--media-check.ts.geml#checkMedia,  #parseEnd,        call, geml-parser/src/media-check.ts:476
+geml-parser--media-check.ts.geml#compText,    #parseEnd,        call, geml-parser/src/media-check.ts:159
+geml-parser--media-check.ts.geml#checkMedia,  #parseEnd,        call, geml-parser/src/media-check.ts:503
 geml-parser--media-verbs.ts.geml#composePlan, #parseEnd,        call, geml-parser/src/media-verbs.ts:623
 geml-parser--media-verbs.ts.geml#composePlan, #parseEnd,        call, geml-parser/src/media-verbs.ts:624
-geml-parser--media-check.ts.geml#checkMedia,  #layerSpec,       call, geml-parser/src/media-check.ts:459
+geml-parser--media-check.ts.geml#checkMedia,  #layerSpec,       call, geml-parser/src/media-check.ts:486
 geml-parser--media-verbs.ts.geml#composePlan, #layerSpec,       call, geml-parser/src/media-verbs.ts:616
 #scaleOf,                                     #widthOf,         call, geml-parser/src/media-compose.ts:112
 #localPoint,                                  #widthOf,         call, geml-parser/src/media-compose.ts:122
@@ -92,7 +92,7 @@ geml-parser--media-verbs.ts.geml#composePlan, #layerSpec,       call, geml-parse
 #solveLayout,                                 #canvasPoint,     call, geml-parser/src/media-compose.ts:172
 #solveLayout,                                 #canvasPoint,     call, geml-parser/src/media-compose.ts:188
 #solveLayout,                                 #canvasPoint,     call, geml-parser/src/media-compose.ts:189
-geml-parser--media-check.ts.geml#checkMedia,  #solveLayout,     call, geml-parser/src/media-check.ts:495
+geml-parser--media-check.ts.geml#checkMedia,  #solveLayout,     call, geml-parser/src/media-check.ts:522
 geml-parser--media-verbs.ts.geml#composePlan, #solveLayout,     call, geml-parser/src/media-verbs.ts:633
 ===
 

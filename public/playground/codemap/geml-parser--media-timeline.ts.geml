@@ -26,7 +26,7 @@ resolution-default = cpg
 === code {#layoutDoc src=geml-parser/src/media-timeline.ts#L115-121 anchor="scip-typescript npm @geml/geml 1.12.2 src/`media-timeline.ts`/layoutDoc()."}
 ===
 
-=== code {#layoutOne src=geml-parser/src/media-timeline.ts#L123-226 anchor="scip-typescript npm @geml/geml 1.12.2 src/`media-timeline.ts`/layoutOne()."}
+=== code {#layoutOne src=geml-parser/src/media-timeline.ts#L123-225 anchor="scip-typescript npm @geml/geml 1.12.2 src/`media-timeline.ts`/layoutOne()."}
 ===
 
 === table {#calls format=csv}
@@ -52,23 +52,23 @@ from,       to,                              kind, confidence
 === table {#called-by format=csv}
 from,                                             to,                 kind, site
 #time,                                            #num,               call, geml-parser/src/media-timeline.ts:65
-#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:145
-#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:176
-#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:179
-#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:198
-#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:212
-#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:218
-geml-parser--media-check.ts.geml#checkMedia,      #timecodeToSeconds, call, geml-parser/src/media-check.ts:670
+#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:144
+#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:175
+#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:178
+#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:197
+#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:211
+#layoutOne,                                       #num,               call, geml-parser/src/media-timeline.ts:217
+geml-parser--media-check.ts.geml#checkMedia,      #timecodeToSeconds, call, geml-parser/src/media-check.ts:696
 #time,                                            #timecodeToSeconds, call, geml-parser/src/media-timeline.ts:64
+#layoutOne,                                       #time,              call, geml-parser/src/media-timeline.ts:142
 #layoutOne,                                       #time,              call, geml-parser/src/media-timeline.ts:143
-#layoutOne,                                       #time,              call, geml-parser/src/media-timeline.ts:144
+#layoutOne,                                       #time,              call, geml-parser/src/media-timeline.ts:176
 #layoutOne,                                       #time,              call, geml-parser/src/media-timeline.ts:177
-#layoutOne,                                       #time,              call, geml-parser/src/media-timeline.ts:178
 geml-parser--media-verbs.ts.geml#exportTimeline,  #layout,            call, geml-parser/src/media-verbs.ts:306
 geml-parser--media-verbs.ts.geml#buildPlan,       #layout,            call, geml-parser/src/media-verbs.ts:491
 geml-parser--media-verbs.ts.geml#lay,             #layout,            call, geml-parser/src/media-verbs.ts:731
-geml-parser--media-verbs.ts.geml#importSubtitles, #layout,            call, geml-parser/src/media-verbs.ts:930
-geml-parser--media-check.ts.geml#checkMedia,      #layoutsOf,         call, geml-parser/src/media-check.ts:709
+geml-parser--media-verbs.ts.geml#importSubtitles, #layout,            call, geml-parser/src/media-verbs.ts:922
+geml-parser--media-check.ts.geml#checkMedia,      #layoutsOf,         call, geml-parser/src/media-check.ts:735
 #layoutDoc,                                       #layoutsOf,         call, geml-parser/src/media-timeline.ts:119
 #layout,                                          #layoutDoc,         call, geml-parser/src/media-timeline.ts:90
 #layoutsOf,                                       #layoutOne,         call, geml-parser/src/media-timeline.ts:106
@@ -87,6 +87,7 @@ from,               to
 #layoutOne,         Array.find
 #layoutOne,         Array.push
 #layoutOne,         Array.reduce
+#layoutOne,         Array.some
 #layoutOne,         Array.sort
 #layoutOne,         Map.get
 #layoutOne,         Map.set

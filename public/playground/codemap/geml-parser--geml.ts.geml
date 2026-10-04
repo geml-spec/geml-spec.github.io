@@ -1075,11 +1075,11 @@ geml-parser--graph-style.ts.geml#parseGraphStyle,    #parse,                    
 geml-parser--mcp-core.ts.geml#applyWrite,            #parse,                      call, geml-parser/src/mcp-core.ts:127
 geml-parser--mcp-core.ts.geml#applyWrite,            #parse,                      call, geml-parser/src/mcp-core.ts:160
 geml-parser--mcp-core.ts.geml#toolsFor,              #parse,                      call, geml-parser/src/mcp-core.ts:382
-geml-parser--media-check.ts.geml#checkMedia,         #parse,                      call, geml-parser/src/media-check.ts:207
-geml-parser--media-check.ts.geml#promptTextOf,       #parse,                      call, geml-parser/src/media-check.ts:734
+geml-parser--media-check.ts.geml#checkMedia,         #parse,                      call, geml-parser/src/media-check.ts:218
+geml-parser--media-check.ts.geml#promptTextOf,       #parse,                      call, geml-parser/src/media-check.ts:760
 geml-parser--media-timeline.ts.geml#layout,          #parse,                      call, geml-parser/src/media-timeline.ts:90
 geml-parser--media-verbs.ts.geml#loadProject,        #parse,                      call, geml-parser/src/media-verbs.ts:50
-geml-parser--media-verbs.ts.geml#idsTaken,           #parse,                      call, geml-parser/src/media-verbs.ts:974
+geml-parser--media-verbs.ts.geml#idsTaken,           #parse,                      call, geml-parser/src/media-verbs.ts:966
 geml-parser--verbs.ts.geml#resolveSelector,          #parse,                      call, geml-parser/src/verbs.ts:276
 geml-parser--verbs.ts.geml#list,                     #parse,                      call, geml-parser/src/verbs.ts:361
 geml-parser--verbs.ts.geml#reservedMeta,             #parse,                      call, geml-parser/src/verbs.ts:574

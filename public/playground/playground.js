@@ -28722,7 +28722,7 @@
   });
 
   // node_modules/d3-time/src/second.js
-  var second, seconds;
+  var second, seconds2;
   var init_second = __esm({
     "node_modules/d3-time/src/second.js"() {
       init_define_process_argv();
@@ -28737,7 +28737,7 @@
       }, (date2) => {
         return date2.getUTCSeconds();
       });
-      seconds = second.range;
+      seconds2 = second.range;
     }
   });
 
@@ -297431,7 +297431,7 @@ ${isHandDrawn ? "" : `
       since: "1.10.3",
       // 六个 meta 键都不带 `media-` 前缀，违反命名约定；`fps` 和 `aspect` 尤其是
       // 第二份 profile 会想要的通用词。登记以让测试拦得住新增的同类。
-      metaKeys: ["tracks", "primary", "fps", "aspect", "target-duration", "episode"],
+      metaKeys: ["aspect", "target-duration", "episode"],
       diagnostics: MEDIA_SEVERITY,
       types: ["media", "media-asset", "media-clip", "media-text", "media-comp", "media-layer", "media-interaction"],
       // `media-interaction` 也是散文：头行是几何（谁的哪个点碰谁的哪个点），body 是这一步发生了
@@ -304323,19 +304323,9 @@ ${isHandDrawn ? "" : `
       cfg[k3] = String(v3);
     const fps = Number(cfg["fps"] ?? "") || void 0;
     const problems = [];
-    const own = [];
-    const walk2 = (bs) => {
-      for (const b3 of bs)
-        if (b3.kind === "block") {
-          if (b3.type === "media-clip" && b3.id !== void 0)
-            own.push(b3);
-          if (b3.children)
-            walk2(b3.children);
-        }
-    };
-    if (media.children)
-      walk2(media.children);
-    if (own.length === 0 && cfg["src"] !== void 0) {
+    const own = (media.children ?? []).filter((b3) => b3.kind === "block" && b3.type === "media-clip" && b3.id !== void 0);
+    const body = (media.children ?? []).some((b3) => b3.kind !== "hidden");
+    if (!body && cfg["src"] !== void 0) {
       const kind = opts.kindOf?.(cfg["src"]) ?? "video";
       const inPt = time(cfg["in"], fps) ?? 0;
       const outPt = time(cfg["out"], fps);
@@ -304765,6 +304755,279 @@ ${isHandDrawn ? "" : `
     return el2;
   }
 
+  // src/media-playlist.js
+  init_define_process_argv();
+  function primaryOf(b3) {
+    if (!b3 || b3.kind !== "block" || b3.type !== "media" || typeof b3.attrs?.tracks !== "string") return null;
+    const tracks = b3.attrs.tracks.split(/[\s,]+/).filter(Boolean).map((t4) => {
+      const i5 = t4.indexOf(":");
+      return { name: i5 < 0 ? t4 : t4.slice(0, i5), kind: i5 < 0 ? "" : t4.slice(i5 + 1) };
+    });
+    const primary = typeof b3.attrs.primary === "string" ? b3.attrs.primary : tracks[0]?.name;
+    const kind = tracks.find((t4) => t4.name === primary)?.kind ?? "";
+    const clips = (b3.children || []).filter((c3) => c3.kind === "block" && c3.type === "media-clip" && c3.attrs?.track === primary);
+    return clips.length > 0 ? { kind, clips } : null;
+  }
+  function firstTimeline(doc) {
+    let out = null;
+    (function walk2(bs) {
+      for (const b3 of bs || []) {
+        if (out) return;
+        out = primaryOf(b3);
+        if (!out && b3.kind === "block" && b3.children) walk2(b3.children);
+      }
+    })(doc && doc.children);
+    return out;
+  }
+  var seconds = (v3) => {
+    const n2 = Number(v3);
+    return Number.isFinite(n2) && n2 >= 0 ? n2 : null;
+  };
+  function titleOf(asset, file) {
+    const note3 = (Array.isArray(asset.raw) ? asset.raw : []).find((l4) => l4.trim() !== "");
+    if (note3) return note3.trim();
+    const name = String(file).split("/").pop() || String(file);
+    return name.replace(/\.[^.]+$/, "");
+  }
+  function playlist(block2, params, ctx) {
+    const dom = ctx.dom;
+    const entries2 = [];
+    for (const e3 of ctx.corpus || []) entries2.push(e3 && e3.doc ? e3 : { path: "", doc: e3 });
+    const el2 = dom.createElement("div");
+    el2.className = "geml-playlist";
+    let found = primaryOf(block2);
+    for (const e3 of entries2) {
+      if (found) break;
+      found = firstTimeline(e3.doc);
+    }
+    const items = [];
+    if (found && (found.kind === "audio" || found.kind === "video")) {
+      for (const c3 of found.clips) {
+        const hit = findRef(entries2, c3.attrs.src);
+        if (hit === null) continue;
+        const file = hit.block.attrs ? hit.block.attrs.src : void 0;
+        if (typeof file !== "string") continue;
+        const url = assetUrl(file, hit.path, ctx.docUrl);
+        if (url === null) continue;
+        items.push({ id: c3.id, url, title: titleOf(hit.block, file), in: seconds(c3.attrs.in), out: seconds(c3.attrs.out) });
+      }
+    }
+    if (items.length === 0) {
+      el2.className += " geml-playlist-empty";
+      el2.textContent = "\u8FD9\u4EFD\u6587\u6863\u91CC\u6CA1\u6709\u53EF\u64AD\u7684\u66F2\u76EE";
+      return el2;
+    }
+    el2.setAttribute("data-shuffle", params?.shuffle === "on" ? "on" : "off");
+    el2.setAttribute("data-repeat", params?.repeat === "all" || params?.repeat === "one" ? params.repeat : "off");
+    const media = dom.createElement(found.kind === "video" ? "video" : "audio");
+    media.className = "geml-playlist-media";
+    media.setAttribute("controls", "");
+    media.setAttribute("preload", "none");
+    media.setAttribute("playsinline", "");
+    el2.appendChild(media);
+    const bar = dom.createElement("div");
+    bar.className = "geml-playlist-transport";
+    for (const [cls, label, text5] of [["geml-prev", "\u4E0A\u4E00\u9996", "\u23EE"], ["geml-next", "\u4E0B\u4E00\u9996", "\u23ED"], ["geml-shuffle", "\u968F\u673A\u64AD\u653E", "\u{1F500}"], ["geml-repeat", "\u91CD\u590D\u64AD\u653E", "\u{1F501}"]]) {
+      const b3 = dom.createElement("button");
+      b3.type = "button";
+      b3.className = cls;
+      b3.setAttribute("aria-label", label);
+      b3.textContent = text5;
+      bar.appendChild(b3);
+    }
+    el2.appendChild(bar);
+    const list = dom.createElement("ol");
+    list.className = "geml-playlist-items";
+    for (const it of items) {
+      const li = dom.createElement("li");
+      li.setAttribute("data-src", it.url);
+      if (it.id) li.setAttribute("data-clip", it.id);
+      if (it.in !== null) li.setAttribute("data-in", String(it.in));
+      if (it.out !== null) li.setAttribute("data-out", String(it.out));
+      const b3 = dom.createElement("button");
+      b3.type = "button";
+      b3.className = "geml-playlist-item";
+      b3.textContent = it.title;
+      li.appendChild(b3);
+      list.appendChild(li);
+    }
+    el2.appendChild(list);
+    return el2;
+  }
+  function drivePlaylist(el2, random2) {
+    if (!el2 || el2.__gemlDriven) return;
+    el2.__gemlDriven = true;
+    const media = el2.querySelector(".geml-playlist-media");
+    const items = Array.from(el2.querySelectorAll(".geml-playlist-items > li"));
+    if (!media || items.length === 0) return;
+    const rand = typeof random2 === "function" ? random2 : Math.random;
+    const n2 = items.length;
+    const shuffleBtn = el2.querySelector(".geml-shuffle");
+    const repeatBtn = el2.querySelector(".geml-repeat");
+    let shuffled = el2.getAttribute("data-shuffle") === "on";
+    let repeat = el2.getAttribute("data-repeat") || "off";
+    let at3 = -1;
+    let queue = [];
+    let history = [];
+    let done = false;
+    const num3 = (li, k3) => {
+      const v3 = li.getAttribute(k3);
+      return v3 === null ? null : Number(v3);
+    };
+    const show2 = () => {
+      el2.setAttribute("data-shuffle", shuffled ? "on" : "off");
+      el2.setAttribute("data-repeat", repeat);
+      if (shuffleBtn) shuffleBtn.setAttribute("aria-pressed", shuffled ? "true" : "false");
+      if (repeatBtn) {
+        repeatBtn.setAttribute("data-mode", repeat);
+        repeatBtn.setAttribute("aria-pressed", repeat === "off" ? "false" : "true");
+        repeatBtn.setAttribute("aria-label", repeat === "one" ? "\u5355\u66F2\u91CD\u590D" : repeat === "all" ? "\u5168\u90E8\u91CD\u590D" : "\u4E0D\u91CD\u590D");
+      }
+    };
+    const shuffle = (list) => {
+      for (let k3 = list.length - 1; k3 > 0; k3--) {
+        const j3 = Math.floor(rand() * (k3 + 1));
+        const t4 = list[k3];
+        list[k3] = list[j3];
+        list[j3] = t4;
+      }
+      return list;
+    };
+    const all = () => items.map((_3, k3) => k3);
+    const play2 = () => {
+      if (typeof media.play !== "function") return;
+      const p3 = media.play();
+      if (p3 && typeof p3.catch === "function") p3.catch(() => {
+      });
+    };
+    const stop5 = () => {
+      done = true;
+      if (typeof media.pause === "function") media.pause();
+    };
+    const select = (i5, go) => {
+      if (i5 < 0 || i5 >= n2) return;
+      at3 = i5;
+      done = false;
+      items.forEach((li, k3) => {
+        if (k3 === i5) li.setAttribute("aria-current", "true");
+        else li.removeAttribute("aria-current");
+      });
+      media.setAttribute("preload", go ? "auto" : "none");
+      media.setAttribute("src", items[i5].getAttribute("data-src"));
+      if (go) play2();
+    };
+    const again = () => {
+      media.currentTime = num3(items[at3], "data-in") ?? 0;
+      play2();
+    };
+    const took = (i5) => {
+      const k3 = queue.indexOf(i5);
+      if (k3 >= 0) queue.splice(k3, 1);
+      if (history[history.length - 1] !== i5) history.push(i5);
+    };
+    const forward = (auto) => {
+      if (!shuffled) {
+        if (at3 + 1 < n2) select(at3 + 1, true);
+        else if (auto && repeat !== "all") stop5();
+        else select(0, true);
+        return;
+      }
+      const next3 = queue.find((k3) => k3 !== at3);
+      if (next3 !== void 0) {
+        took(next3);
+        select(next3, true);
+        return;
+      }
+      if (auto && repeat !== "all") stop5();
+      else newRound();
+    };
+    const newRound = () => {
+      queue = shuffle(all());
+      history = at3 >= 0 ? [at3] : [];
+      if (n2 > 1 && queue[0] === at3) queue.push(queue.shift());
+      took(queue[0]);
+      select(history[history.length - 1], true);
+    };
+    const back = () => {
+      if (!shuffled) {
+        select(at3 > 0 ? at3 - 1 : n2 - 1, true);
+        return;
+      }
+      if (history.length > 1 && history[history.length - 1] === at3) {
+        queue.unshift(history.pop());
+        select(history[history.length - 1], true);
+        return;
+      }
+      const prev2 = [...queue].reverse().find((k3) => k3 !== at3);
+      if (prev2 === void 0) {
+        again();
+        return;
+      }
+      queue.splice(queue.lastIndexOf(prev2), 1);
+      if (history[history.length - 1] === at3 && !queue.includes(at3)) queue.unshift(at3);
+      history = [prev2];
+      select(prev2, true);
+    };
+    const reshuffle = () => {
+      queue = shuffle(all().filter((k3) => k3 !== at3));
+      history = at3 >= 0 && !media.paused ? [at3] : [];
+      if (history.length === 0 && at3 >= 0) queue.unshift(at3);
+    };
+    items.forEach((li, i5) => li.querySelector("button")?.addEventListener("click", () => {
+      if (shuffled) took(i5);
+      select(i5, true);
+    }));
+    el2.querySelector(".geml-next")?.addEventListener("click", () => forward(false));
+    el2.querySelector(".geml-prev")?.addEventListener("click", back);
+    shuffleBtn?.addEventListener("click", () => {
+      shuffled = !shuffled;
+      if (shuffled) reshuffle();
+      show2();
+    });
+    repeatBtn?.addEventListener("click", () => {
+      repeat = repeat === "off" ? "all" : repeat === "all" ? "one" : "off";
+      show2();
+    });
+    media.addEventListener("loadedmetadata", () => {
+      const start2 = at3 < 0 ? null : num3(items[at3], "data-in");
+      if (start2 !== null) media.currentTime = start2;
+    });
+    media.addEventListener("play", () => {
+      if (done) {
+        done = false;
+        if (shuffled) newRound();
+        else select(0, true);
+        return;
+      }
+      if (at3 < 0) return;
+      const start2 = num3(items[at3], "data-in") ?? 0;
+      const end = num3(items[at3], "data-out");
+      if (end !== null && media.currentTime >= end || media.currentTime < start2) media.currentTime = start2;
+      if (shuffled) took(at3);
+    });
+    const ended = () => {
+      if (repeat === "one") again();
+      else forward(true);
+    };
+    media.addEventListener("ended", ended);
+    media.addEventListener("timeupdate", () => {
+      const end = at3 < 0 ? null : num3(items[at3], "data-out");
+      if (end !== null && media.currentTime >= end) ended();
+    });
+    if (shuffled) {
+      queue = shuffle(all());
+      select(queue[0], false);
+    } else {
+      select(0, false);
+    }
+    show2();
+  }
+  function playlistLive(block2, params, ctx) {
+    const el2 = playlist(block2, params, ctx);
+    if (typeof window !== "undefined") drivePlaylist(el2);
+    return el2;
+  }
+
   // src/media.js
   var cache = /* @__PURE__ */ new WeakMap();
   function timelineFor(ctx) {
@@ -304871,6 +305134,7 @@ ${isHandDrawn ? "" : `
   var MEDIA_COMPONENTS = {
     clip: clip2,
     player: playerLive,
+    playlist: playlistLive,
     "timeline-track": timelineTrack,
     "overlay-track": overlayTrack
   };
@@ -305131,7 +305395,7 @@ ${isHandDrawn ? "" : `
   }
 
   // src/geml.css
-  var geml_default = '/* GEML Viewer \u2014 document styling. Scoped under .geml-doc so it never leaks. */\n\n.geml-body {\n  margin: 0;\n  background: #fbfbfa;\n  color: #1f2328;\n  font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;\n}\n\n.geml-doc {\n  max-width: 860px;\n  margin: 0 auto;\n  padding: 48px 24px 96px;\n}\n\n.geml-doc h1, .geml-doc h2, .geml-doc h3,\n.geml-doc h4, .geml-doc h5, .geml-doc h6 {\n  line-height: 1.25;\n  margin: 1.8em 0 0.6em;\n  font-weight: 600;\n}\n.geml-doc h1 { font-size: 2em; margin-top: 0; }\n.geml-doc h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid #e6e6e3; }\n.geml-doc h3 { font-size: 1.25em; }\n.geml-doc h4 { font-size: 1.05em; }\n\n.geml-doc p { margin: 0 0 1em; }\n.geml-doc a { color: #0969da; text-decoration: none; }\n.geml-doc a:hover { text-decoration: underline; }\n.geml-doc a.geml-broken { color: #cf222e; text-decoration: underline wavy; }\n\n.geml-doc em { font-style: italic; }\n.geml-doc strong { font-weight: 600; }\n.geml-doc del { color: #6e7781; }\n\n.geml-doc code {\n  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;\n  font-size: 0.9em;\n  background: #eff1f3;\n  border-radius: 4px;\n  padding: 0.15em 0.4em;\n}\n\n.geml-doc pre {\n  background: #f6f8fa;\n  border: 1px solid #e6e6e3;\n  border-radius: 8px;\n  padding: 14px 16px;\n  overflow-x: auto;\n  line-height: 1.5;\n}\n.geml-doc pre code { background: none; padding: 0; font-size: 0.875em; }\n\n/* code/diagram block with a small type tag in the corner */\n.geml-block { position: relative; margin: 0 0 1.2em; }\n.geml-tag {\n  position: absolute; top: 8px; right: 10px;\n  font: 11px/1 ui-monospace, monospace;\n  color: #6e7781; background: #fff; border: 1px solid #e6e6e3;\n  border-radius: 4px; padding: 2px 6px; user-select: none;\n}\n\n/* data block (GEP-0005): external-source / empty notes under the preview */\n.geml-data-note {\n  margin: 0 0 0.4em; font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n}\n\n/* The rest of a long data block: present, collapsed. Styled like the note it\n   replaced, so a page that used to end in "\u2026 13 more line(s)" now ends in the\n   same grey line \u2014 except it opens. No resource of any kind: this renders under\n   `default-src \'none\'`, so the marker is the system disclosure triangle. */\n.geml-data-more > summary {\n  font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n  cursor: pointer; user-select: none; margin: 0.4em 0;\n}\n.geml-data-more > pre { margin: 0.4em 0 0; }\n\n.geml-doc ul, .geml-doc ol { margin: 0 0 1em; padding-left: 1.6em; }\n.geml-doc li { margin: 0.2em 0; }\n\n.geml-doc blockquote.geml-note {\n  margin: 0 0 1.2em; padding: 0.5em 1em;\n  border-left: 4px solid #0969da; background: #f3f7fd; border-radius: 0 6px 6px 0;\n}\n.geml-doc blockquote.geml-note > :last-child { margin-bottom: 0; }\n\n/* Tables */\n.geml-doc table { border-collapse: collapse; margin: 0 0 1.2em; font-size: 0.95em; width: auto; }\n.geml-doc caption { caption-side: top; text-align: left; color: #6e7781; padding-bottom: 6px; font-size: 0.9em; }\n.geml-doc th, .geml-doc td { border: 1px solid #d0d7de; padding: 6px 12px; text-align: left; }\n.geml-doc thead th { background: #f6f8fa; }\n.geml-doc td.geml-num { text-align: right; font-variant-numeric: tabular-nums; }\n.geml-doc td.geml-computed { background: #f3fbf4; }\n.geml-doc tr.geml-summary td { font-weight: 600; border-top: 2px solid #afb8c1; background: #fafbfc; }\n\n/* Charts (geml-chart) and diagrams */\n.geml-chart, .geml-diagram { margin: 0 0 1.4em; text-align: center; }\n.geml-chart svg { max-width: 100%; height: auto; }\n.geml-d2 svg { max-width: 100%; height: auto; }\n.geml-d2-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-graphviz svg { max-width: 100%; height: auto; }\n.geml-graphviz-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-chart-legend { font-size: 0.85em; color: #57606a; margin-top: 6px; }\n.geml-chart-legend span { margin: 0 8px; }\n.geml-chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }\n\n/* Diagnostics banner */\n.geml-diag {\n  max-width: 860px; margin: 0 auto 12px; padding: 10px 14px;\n  border-radius: 8px; font-size: 0.9em;\n}\n.geml-diag-error { background: #fff0ef; border: 1px solid #ffcecb; color: #82071e; }\n.geml-diag-warn { background: #fff8c5; border: 1px solid #f0e3a1; color: #6b5e16; }\n.geml-diag ul { margin: 6px 0 0; padding-left: 1.4em; }\n.geml-diag code { background: rgba(0,0,0,0.05); }\n\n.katex-display { overflow-x: auto; overflow-y: hidden; }\n\n/* Task-list items (- [ ] / - [x]). Native disabled checkboxes render an ugly\n   grey, so we draw our own with appearance:none \u2014 a clean empty box for open,\n   a solid green box with a white tick for done.\n   The tick is a centred text glyph, NOT a background image: raw.githubusercontent.com\n   serves `Content-Security-Policy: default-src \'none\'`, which strips data-URI\n   images \u2014 so an SVG-background tick vanishes in the browser extension. A "\u2713"\n   glyph needs no resource, survives the CSP, and flex-centres exactly. */\n.geml-doc li.geml-task { list-style: none; }\n.geml-doc li.geml-task > input[type="checkbox"] {\n  appearance: none; -webkit-appearance: none;\n  width: 1.1em; height: 1.1em; margin: 0 0.5em 0 0; vertical-align: -0.2em;\n  border: 1.5px solid #c8ccd0; border-radius: 4px; background: #fff;\n  position: relative; opacity: 1; cursor: default; box-sizing: border-box;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked {\n  background-color: #1f883d; border-color: #1f883d;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked::after {\n  content: "\u2713";\n  position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n  display: flex; align-items: center; justify-content: center;\n  color: #fff; font-size: 0.8em; line-height: 1; font-weight: 700;\n}\n\n/* geml-code-graph (GEP-0003): layered method flow. Pure CSS only \u2014 this file\n   is injected under strict page CSPs (default-src \'none\'), so no resources. */\n.geml-doc .code-graph, .code-graph { margin: 0 0 1.4em; }\n/* The graph is the widest artifact in the document: let it break out of the\n   860px reading column and take the viewport, centred, leaving the prose\n   around it untouched. .geml-doc is `margin: 0 auto`, so negative inline\n   margins land centred; a transform would instead become the containing block\n   for the fullscreen overlay below. */\n@media (min-width: 900px) { .geml-doc .code-graph { margin-inline: calc((100% - min(96vw, 1600px)) / 2); } }\n.cg-mount { border: 1px solid #e6e6e3; border-radius: 8px; padding: 10px 12px; background: #fff; color: #6e7781; font-size: .85em; }\n.cg-scroll { overflow: auto; max-height: 84vh; }\n.cg-svg { display: block; }\n/* Fullscreen. The button and the class come from the parser\'s codeGraphRuntime,\n   which this bundle imports, so these rules are what make it do anything: one\n   class covers both the native Fullscreen API and the fixed-overlay fallback.\n   :fullscreen is deliberately absent from the selectors \u2014 a browser that\n   doesn\'t know it would drop the whole rule. The stage carries its own flex\n   here because the non-fullscreen sheet doesn\'t style it, and the z-index has\n   to beat the host page, not merely our own stacking context. */\n.cg-mount.cg-full { position: fixed; inset: 0; z-index: 2147483000; margin: 0; border: 0; border-radius: 0; padding: 10px 14px; background: #fff; display: flex; flex-direction: column; }\n.cg-mount.cg-full > .cg-bar, .cg-mount.cg-full > .cg-legend, .cg-mount.cg-full > .cg-groups { flex: 0 0 auto; }\n.cg-mount.cg-full .cg-stage { display: flex; gap: 10px; align-items: flex-start; flex: 1 1 auto; min-height: 0; }\n.cg-mount.cg-full .cg-stage .cg-scroll { flex: 1 1 auto; min-width: 0; }\n.cg-mount.cg-full .cg-scroll { min-height: 0; max-height: none; height: 100%; }\n.cg-mount.cg-full .cg-src-body { max-height: none; }\n.cg-mount.cg-full .cg-frame { flex: 1 1 auto; height: auto; }\n.cg-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .82em; color: #6e7781; margin-bottom: 6px; }\n.cg-bar button { font: inherit; padding: 1px 8px; border: 1px solid #d0d7de; border-radius: 5px; background: transparent; cursor: pointer; }\n.cg-crumb .cg-seg { border: 0; border-radius: 0; padding: 0; background: none; color: #0969da; cursor: pointer; font: inherit; }\n.cg-crumb .cg-seg:hover { text-decoration: underline; }\n.cg-legend { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-size: .75em; color: #6e7781; margin-top: 6px; }\n.cg-upbtn circle { fill: #fff; stroke: #94a3b8; }\n.cg-upbtn text { font-size: 11px; fill: #57606a; }\n.cg-upbtn:hover circle { stroke: #2563eb; }\n.cg-upbtn:hover text { fill: #2563eb; }\n.cg-groups { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: .75em; color: #6e7781; }\n.cg-chip { display: inline-flex; align-items: center; gap: 4px; }\n.cg-chip i { width: 10px; height: 10px; border-radius: 2px; border: 1px solid #94a3b8; display: inline-block; }\n.cg-note { font-size: .8em; color: #9a6700; }\n.cg-frame { display: block; width: 100%; height: 84vh; border: 0; background: #fff; }\n.cg-flash { color: #b42318; }\n.cg-n rect { fill: #eef2f7; stroke: #94a3b8; }\n.cg-n text { font-size: 12px; fill: #1f2328; font-family: ui-monospace, Consolas, monospace; }\n.cg-n { cursor: pointer; }\n.cg-n.root rect { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; }\n.cg-n.leaf { opacity: .45; }\n.cg-n.test rect { stroke-dasharray: 3 2; }\n.cg-n.grp rect { stroke-width: 1.8; }\n.cg-e { fill: none; stroke: #94a3b8; stroke-width: .9; }\n.cg-e.cand { stroke-dasharray: 2 3; }\n.cg-e.back { stroke: #dc2626; stroke-dasharray: 5 3; }\n.cg-e.soft { opacity: .55; }\n/* hover: the caller cone lights up, the rest dims */\n.cg-svg.hl .cg-n { opacity: .22; }\n.cg-svg.hl .cg-e { opacity: .1; }\n.cg-svg.hl .cg-n.hl { opacity: 1; }\n.cg-svg.hl .cg-e.hl { opacity: 1; stroke-width: 1.6; }\n\n/* Transclusion (=== embed). Borrowed content is marked by a left rule; a\n   refused embed keeps its target link plus a visible note (S7 \u2014 never a\n   silent blank). Pure CSS only: this sheet is injected on pages that may run\n   under `default-src \'none\'`, so it must load zero resources. */\n.geml-transclusion { border-left: 3px solid #d8dee4; padding-left: 12px; margin: 12px 0; }\n.geml-transclusion-unexpanded { color: #57606a; }\n.geml-transclusion-note { color: #6e7781; font-size: 0.85em; margin-left: 6px; }\n.geml-transclusion-error { background: #fff0ef; border: 1px solid #ffcecb; border-left: 3px solid #82071e; color: #82071e; padding: 6px 10px; }\n\n/* Single-block focus (URL #id): a bar noting the narrowed view + the way back. */\n.geml-focus-banner {\n  margin: 0 0 1.2em; padding: 8px 12px;\n  background: #fff8e6; border: 1px solid #f0e0a8; border-radius: 6px;\n  color: #6e5c1f; font-size: 0.9em;\n}\n.geml-focus-banner a.geml-focus-full { color: #0969da; text-decoration: none; }\n.geml-focus-banner a.geml-focus-full:hover { text-decoration: underline; }\n\n/* GEP 0010 \u2014 the affordance for a translation model that is not downloaded yet.\n   Chrome will only fetch one under a user activation, so the click is not a\n   nicety: it is the gesture the API requires, and the moment the reader agrees\n   to the download. */\n.geml-translate-offer { margin: 0 0 .5rem; }\n.geml-translate-offer button {\n  font: inherit; font-size: .85em; padding: .2em .6em; cursor: pointer;\n  border: 1px solid currentColor; border-radius: .25em;\n  background: transparent; color: inherit; opacity: .75;\n}\n.geml-translate-offer button:hover:not(:disabled) { opacity: 1; }\n.geml-translate-offer button:disabled { cursor: progress; opacity: .55; }\n/* A refusal the reader can see: the page is showing its source, and silence\n   would be indistinguishable from a document that was always in that language. */\n.geml-translate-refused { font-size: .8em; opacity: .65; font-style: italic; }\n\n/* Freeze what the page is showing. Fixed rather than in the flow because the\n   viewer injects into someone else\'s document and owns no header to sit in. */\n.geml-export-btn {\n  position: fixed; right: 1rem; bottom: 1rem; z-index: 9;\n  font: inherit; font-size: .85em; padding: .4rem .75rem;\n  border: 1px solid currentColor; border-radius: 6px;\n  background: Canvas; color: inherit; cursor: pointer; opacity: .55;\n}\n.geml-export-btn:hover:not(:disabled) { opacity: 1; }\n.geml-export-btn:disabled { cursor: progress; opacity: .35; }\n\n/* The source/translation switch rides at the end of its section\'s heading:\n   small, quiet, and out of the reading line. Sized in em so it shrinks with the\n   heading it hangs off rather than being one fixed size on an h1 and an h4. */\n.geml-source-toggle {\n  font: inherit; font-size: .6em; font-weight: 400; vertical-align: middle;\n  margin-left: .6em; padding: .1em .45em;\n  border: 1px solid currentColor; border-radius: 4px;\n  background: transparent; color: inherit; cursor: pointer; opacity: .4;\n}\n.geml-source-toggle:hover { opacity: .85; }\n\n/* geml-form/v1\uFF08GEP-0008\uFF09\u7684\u63A7\u4EF6\u3002\u53EA\u753B\uFF0C\u4E0D\u6821\u9A8C \u2014\u2014 \u7EA6\u675F\u662F\u58F0\u660E\uFF0C\u5904\u7406\u5668\u624D\u6267\u884C\u3002 */\n.geml-form { display: flex; flex-direction: column; gap: 12px; }\n.geml-form-group { border: 1px solid currentColor; border-radius: 6px; padding: 12px; }\n.geml-form-field { display: flex; flex-direction: column; gap: 4px; }\n.geml-form-field[data-type="boolean"] { flex-direction: row; align-items: center; gap: 8px; }\n.geml-form-label { font-size: .9em; opacity: .85; }\n.geml-form-required { color: #f85149; margin-left: 2px; }\n.geml-form-control { font: inherit; color: inherit; background: transparent;\n  border: 1px solid currentColor; border-radius: 6px; padding: 5px 8px; max-width: 100%; }\n.geml-form-control:hover, .geml-form-control:focus { outline: none; border-color: currentColor; opacity: 1; }\nselect.geml-form-control { cursor: pointer; }\n.geml-form-desc { margin: 0; font-size: .85em; opacity: .7; }\n\n/* ---- \u9875\u9762\u5E03\u5C40\uFF08geml-style\uFF09\u3002\u53EA\u6709\u5BB9\u5668\u7684 flex \u4E0E\u51E0\u6761\u4E0D\u5E26\u4EFB\u4F55\u8272\u503C\u3001\u5C3A\u5BF8\u7684\u901A\u7528\u89C4\u5219\uFF1A\n   \u989C\u8272\u3001\u95F4\u8DDD\u3001\u5B57\u53F7\u5168\u90E8\u6765\u81EA\u6837\u5F0F\u8868\uFF08cssForPage \u751F\u6210\uFF09\u3002\u6CE8\u5165\u9875\u9762\u7684 CSS \u4E0D\u5F97\u52A0\u8F7D\u4EFB\u4F55\u8D44\u6E90\u3002 */\n.geml-page { margin: 0; }\n.geml-frame { display: flex; min-width: 0; min-height: 0; position: relative; }\n/* \u8F74\u7684\u9ED8\u8BA4\u653E\u8FDB\u4E00\u4E2A\u533F\u540D @layer\uFF1A\u672A\u5206\u5C42\u7684\u89C4\u5219\u4E00\u5F8B\u8D62\u8FC7\u5206\u5C42\u7684\uFF0C\u4E0E\u7279\u5F02\u6027\u65E0\u5173\u3002\n   cssForPage \u53D1\u51FA\u7684\u662F `.geml-f-x` / `.geml-b-x` \u5355\u7C7B\uFF080,1,0\uFF09\uFF0C\u800C\u8FD9\u91CC\u662F\u7C7B+\u5C5E\u6027\n   \uFF080,2,0\uFF09\u2014\u2014 \u4E0D\u5206\u5C42\u7684\u8BDD\uFF0C`item-align` \u5728\u6A2A\u6392\u5BB9\u5668\u4E0A\u3001`grow` \u5728\u6A2A\u6392\u91CC\u7684\u5757\u4E0A\u90FD\u4F1A\n   \u88AB\u8FD9\u4E24\u6761\u9759\u9ED8\u538B\u6B7B\uFF08\u5B9E\u6D4B\uFF1Aalign-items \u4ECD\u662F stretch\u3001flex-grow \u4ECD\u662F 0\uFF09\u3002\n   \u5BBF\u4E3B\u7684\u9ED8\u8BA4\u5FC5\u987B\u8BA9\u4F4D\u7ED9\u6837\u5F0F\u8868\u8BF4\u7684\u8BDD\uFF0C\u8FD9\u662F\u4E00\u6574\u7C7B\u95EE\u9898\uFF0C\u4E0D\u662F\u67D0\u4E2A\u8BCD\u7684\u95EE\u9898\u3002\n   `align-items: stretch` \u540C\u65F6\u88AB\u5220\u6389\uFF1Aflex \u5BB9\u5668\u4E0D\u5199\u5B83\u65F6\u8BA1\u7B97\u503C\u5C31\u662F `normal`\uFF0C\n   \u884C\u4E3A\u5B8C\u5168\u76F8\u540C\uFF0C\u5B83\u552F\u4E00\u7684\u4F5C\u7528\u662F\u538B\u4F4F `item-align`\u3002 */\n@layer {\n  .geml-frame[data-axis="column"] { flex-direction: column; }\n  .geml-frame[data-axis="row"] { flex-direction: row; }\n  .geml-frame[data-axis="row"] > .geml-placed { flex: 0 0 auto; }\n}\n.geml-placed { min-width: 0; box-sizing: border-box; }\n.geml-placed[role="button"], .geml-frame[role="button"] { cursor: pointer; }\n.geml-page button { color: inherit; font: inherit; }\n/* \u94FE\u63A5**\u4E0D\u5265**\uFF1AHTML \u7684\u9ED8\u8BA4\u662F\u84DD\u8272\u5E26\u4E0B\u5212\u7EBF\uFF0C\u53BB\u6389\u662F\u5916\u89C2\u51B3\u5B9A\uFF0C\u7531\u6837\u5F0F\u8868\u7528 `color` \u548C\n   `underline=no` \u8BF4\u3002\u5BBF\u4E3B\u5265\u6389\u7684\u90A3\u4E00\u7248\u8FDE\u5D4C\u8FDB\u6765\u7684\u6587\u7AE0\u91CC\u7684\u94FE\u63A5\u90FD\u4E00\u8D77\u5265\u4E86 \u2014\u2014 \u6B63\u6587\u91CC\u7684\u94FE\u63A5\n   \u548C\u6B63\u6587\u7684\u5B57\u4E00\u6A21\u4E00\u6837\uFF0C\u770B\u4E0D\u51FA\u662F\u94FE\u63A5\uFF0C\u800C\u6CA1\u6709\u4EBA\u8981\u6C42\u8FC7\u8FD9\u4E2A\u3002 */\n.geml-page img { vertical-align: middle; }\n.geml-page .text > p { margin: 0; }\n/* \u6761\u76EE\u672C\u8EAB\uFF1A\u6CBF\u8F74\u6392\u7684\u4E00\u6761\u5C31\u662F\u4E00\u884C\u3002`gap` \u7531\u6837\u5F0F\u8868\u7ED9\uFF08cssForPage \u540C\u65F6\u843D\u5230\u5BB9\u5668\u548C\u6761\u76EE\u4E0A\uFF09\uFF0C\n   \u8FD9\u91CC\u53EA\u6709\u300C\u6761\u76EE\u662F\u4EC0\u4E48\u5F62\u72B6\u300D\uFF0C\u6CA1\u6709\u4EFB\u4F55\u957F\u5EA6\u3002 */\n.geml-items > li { display: inline-flex; align-items: center; white-space: nowrap; }\n/* \u6811\u53EA\u6709\u4E00\u4E2A\u6807\u8BB0\uFF1A`summary` \u7684\u5C55\u5F00\u4E09\u89D2\u3002`li` \u81EA\u5DF1\u7684\u9879\u76EE\u7B26\u53F7\u8981\u53BB\u6389 \u2014\u2014 \u4E00\u884C\u4E24\u4E2A\u6807\u8BB0\n   \uFF08\u2022 \u548C \u25BE\uFF09\u662F\u4E24\u5957\u673A\u5236\u649E\u5728\u4E00\u8D77\uFF0C\u4E0D\u662F\u7248\u9762\u9009\u62E9\u3002\u7F29\u8FDB\u7528 em\uFF0C\u8DDF\u7740\u6837\u5F0F\u8868\u8BBE\u7684\u5B57\u53F7\u8D70\uFF0C\n   \u5BBF\u4E3B\u91CC\u56E0\u6B64\u6CA1\u6709\u9875\u9762\u5E38\u91CF\uFF1B\u771F\u9700\u8981\u6309\u9875\u5B9A\u7F29\u8FDB\u65F6\u5B83\u662F tree \u7684\u7EC4\u4EF6\u53C2\u6570\uFF08\xA712.3 \u70B9\u540D\u7684 `indent`\uFF09\uFF0C\n   \u4E0D\u662F\u5185\u542B\u8BCD\uFF0C\u7B49\u7B2C\u4E00\u4E2A\u771F\u5B9E\u9700\u6C42\u518D\u52A0\u3002\n   list-style \u662F\u7EE7\u627F\u5C5E\u6027\uFF0C\u6240\u4EE5 summary \u8981\u628A\u4E09\u89D2\u8981\u56DE\u6765\uFF0C\u5426\u5219\u8FDE\u5B83\u4E00\u8D77\u6CA1\u4E86\u3002 */\n.geml-tree, .geml-tree ul { list-style: none; margin: 0; padding-left: 0; }\n.geml-tree summary { cursor: pointer; list-style: revert; }\n.geml-segments { display: inline-flex; }\n.geml-segments button { border: 0; background: none; cursor: pointer; }\n.geml-segments button[aria-pressed="true"] { background: Canvas; font-weight: 500; }\n.geml-source { width: 100%; box-sizing: border-box; min-height: 60vh; font-family: ui-monospace, monospace; }\n/* `fade-out=<\u79D2>` \u7528\u7684\u52A8\u753B\u3002\u6DE1\u5B8C\u4E4B\u540E visibility: hidden\uFF0C\u4E8E\u662F\u5B83\u65E2\u770B\u4E0D\u89C1\u4E5F\u6321\u4E0D\u4F4F\u70B9\u51FB\u3002\n   \u65F6\u957F\u7531\u6837\u5F0F\u8868\u7ED9\uFF0C\u8FD9\u91CC\u53EA\u6709\u5F62\u72B6\u3002\u8BFB\u8005\u8981\u6C42\u51CF\u5C11\u52A8\u6001\u6548\u679C\u65F6\u76F4\u63A5\u8DF3\u5230\u7EC8\u70B9 \u2014\u2014 \u63D0\u793A\u4E00\u95EA\u800C\u8FC7\uFF0C\u4E0D\u662F\u5185\u5BB9\u3002 */\n@keyframes geml-fade { to { opacity: 0; visibility: hidden; } }\n@keyframes geml-fade-in { from { opacity: 0; } to { opacity: 1; } }\n@media (prefers-reduced-motion: reduce) {\n  .geml-page .geml-frame, .geml-page .geml-placed { animation-duration: 1ms !important; }\n}\n.geml-page .geml-form-field { display: contents; }\n.geml-page .geml-form-control { border: 0; padding: 0; outline: none; width: 100%; }\n\n/* geml-media\uFF1A\u65F6\u95F4\u7EBF\u3002frame \u7EC4\u4EF6\u53EA\u80FD\u7ED9\u533A\u5757\u6DFB\u4E2A\u5144\u5F1F\u8282\u70B9\uFF0C\u5305\u4E0D\u4F4F\u69FD\u4F4D\u91CC\u7684\u5757 \u2014\u2014\n   \u6240\u4EE5\u5B9A\u4F4D\u4E0A\u4E0B\u6587\u5FC5\u987B\u662F frame \u533A\u5757\u672C\u8EAB\uFF0C\u7531\u5B83\u7684 data-component \u8BA4\u4EBA\u3002\u7247\u6BB5\u7684\n   left/width \u662F\u7EC4\u4EF6\u6309\u65F6\u95F4\u7B97\u51FA\u6765\u7684\u767E\u5206\u6BD4\uFF0C\u8FD9\u91CC\u53EA\u8D1F\u8D23\u8BA9\u5B83\u4EEC\u6709\u5904\u53EF\u843D\u3002 */\n[data-component="timeline-track"],\n[data-component="overlay-track"] { position: relative; }\n.geml-clip { position: absolute; box-sizing: border-box; overflow: hidden; }\n.geml-track-ruler { position: absolute; inset: 0 0 auto 0; }\n.geml-tick { position: absolute; }\n\n/* geml-media/v1 \xB7 \u64AD\u653E\u5668\uFF08media-player.js\uFF09\u3002\u4E00\u884C\u5916\u90E8\u8D44\u6E90\u90FD\u6CA1\u6709 \u2014\u2014 viewer \u8DD1\u5728\n   default-src \'none\' \u7684\u9875\u9762\u4E0A\uFF0C\u6837\u5F0F\u8868\u91CC\u51FA\u73B0\u4EFB\u4F55 url() \u90FD\u4F1A\u88AB CSP \u6321\u4E0B\u3002 */\n.geml-player { display: flex; flex-direction: column; gap: 8px; }\n.geml-player-empty { opacity: .7; font-style: italic; }\n.geml-stage {\n  position: relative;\n  width: 100%;\n  aspect-ratio: 16 / 9;\n  background: #000;\n  overflow: hidden;\n  border-radius: 6px;\n}\n.geml-layer-video {\n  position: absolute;\n  inset: 0;\n  width: 100%;\n  height: 100%;\n  object-fit: contain;\n}\n/* \u58F0\u97F3\u8F68\u6CA1\u6709\u753B\u9762\uFF0C\u4F46\u8981\u7559\u5728 DOM \u91CC\u8BA9\u65F6\u949F\u63A8\u5B83 */\n.geml-layer-audio { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }\n.geml-caption {\n  position: absolute;\n  left: 0; right: 0; bottom: 6%;\n  padding: 0 8%;\n  text-align: center;\n  color: #fff;\n  text-shadow: 0 1px 3px rgba(0, 0, 0, .9);\n  line-height: 1.4;\n  pointer-events: none;\n}\n.geml-transport { display: flex; align-items: center; gap: 10px; }\n.geml-play {\n  width: 2.2em; height: 2.2em;\n  border: 1px solid currentColor;\n  border-radius: 50%;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  line-height: 1;\n  cursor: pointer;\n}\n.geml-seek { flex: 1; min-width: 0; }\n.geml-clock {\n  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n  opacity: .75;\n  min-width: 9ch;\n  text-align: right;\n}\n';
+  var geml_default = '/* GEML Viewer \u2014 document styling. Scoped under .geml-doc so it never leaks. */\n\n.geml-body {\n  margin: 0;\n  background: #fbfbfa;\n  color: #1f2328;\n  font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;\n}\n\n.geml-doc {\n  max-width: 860px;\n  margin: 0 auto;\n  padding: 48px 24px 96px;\n}\n\n.geml-doc h1, .geml-doc h2, .geml-doc h3,\n.geml-doc h4, .geml-doc h5, .geml-doc h6 {\n  line-height: 1.25;\n  margin: 1.8em 0 0.6em;\n  font-weight: 600;\n}\n.geml-doc h1 { font-size: 2em; margin-top: 0; }\n.geml-doc h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid #e6e6e3; }\n.geml-doc h3 { font-size: 1.25em; }\n.geml-doc h4 { font-size: 1.05em; }\n\n.geml-doc p { margin: 0 0 1em; }\n.geml-doc a { color: #0969da; text-decoration: none; }\n.geml-doc a:hover { text-decoration: underline; }\n.geml-doc a.geml-broken { color: #cf222e; text-decoration: underline wavy; }\n\n.geml-doc em { font-style: italic; }\n.geml-doc strong { font-weight: 600; }\n.geml-doc del { color: #6e7781; }\n\n.geml-doc code {\n  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;\n  font-size: 0.9em;\n  background: #eff1f3;\n  border-radius: 4px;\n  padding: 0.15em 0.4em;\n}\n\n.geml-doc pre {\n  background: #f6f8fa;\n  border: 1px solid #e6e6e3;\n  border-radius: 8px;\n  padding: 14px 16px;\n  overflow-x: auto;\n  line-height: 1.5;\n}\n.geml-doc pre code { background: none; padding: 0; font-size: 0.875em; }\n\n/* code/diagram block with a small type tag in the corner */\n.geml-block { position: relative; margin: 0 0 1.2em; }\n.geml-tag {\n  position: absolute; top: 8px; right: 10px;\n  font: 11px/1 ui-monospace, monospace;\n  color: #6e7781; background: #fff; border: 1px solid #e6e6e3;\n  border-radius: 4px; padding: 2px 6px; user-select: none;\n}\n\n/* data block (GEP-0005): external-source / empty notes under the preview */\n.geml-data-note {\n  margin: 0 0 0.4em; font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n}\n\n/* The rest of a long data block: present, collapsed. Styled like the note it\n   replaced, so a page that used to end in "\u2026 13 more line(s)" now ends in the\n   same grey line \u2014 except it opens. No resource of any kind: this renders under\n   `default-src \'none\'`, so the marker is the system disclosure triangle. */\n.geml-data-more > summary {\n  font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n  cursor: pointer; user-select: none; margin: 0.4em 0;\n}\n.geml-data-more > pre { margin: 0.4em 0 0; }\n\n.geml-doc ul, .geml-doc ol { margin: 0 0 1em; padding-left: 1.6em; }\n.geml-doc li { margin: 0.2em 0; }\n\n.geml-doc blockquote.geml-note {\n  margin: 0 0 1.2em; padding: 0.5em 1em;\n  border-left: 4px solid #0969da; background: #f3f7fd; border-radius: 0 6px 6px 0;\n}\n.geml-doc blockquote.geml-note > :last-child { margin-bottom: 0; }\n\n/* Tables */\n.geml-doc table { border-collapse: collapse; margin: 0 0 1.2em; font-size: 0.95em; width: auto; }\n.geml-doc caption { caption-side: top; text-align: left; color: #6e7781; padding-bottom: 6px; font-size: 0.9em; }\n.geml-doc th, .geml-doc td { border: 1px solid #d0d7de; padding: 6px 12px; text-align: left; }\n.geml-doc thead th { background: #f6f8fa; }\n.geml-doc td.geml-num { text-align: right; font-variant-numeric: tabular-nums; }\n.geml-doc td.geml-computed { background: #f3fbf4; }\n.geml-doc tr.geml-summary td { font-weight: 600; border-top: 2px solid #afb8c1; background: #fafbfc; }\n\n/* Charts (geml-chart) and diagrams */\n.geml-chart, .geml-diagram { margin: 0 0 1.4em; text-align: center; }\n.geml-chart svg { max-width: 100%; height: auto; }\n.geml-d2 svg { max-width: 100%; height: auto; }\n.geml-d2-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-graphviz svg { max-width: 100%; height: auto; }\n.geml-graphviz-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-chart-legend { font-size: 0.85em; color: #57606a; margin-top: 6px; }\n.geml-chart-legend span { margin: 0 8px; }\n.geml-chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }\n\n/* Diagnostics banner */\n.geml-diag {\n  max-width: 860px; margin: 0 auto 12px; padding: 10px 14px;\n  border-radius: 8px; font-size: 0.9em;\n}\n.geml-diag-error { background: #fff0ef; border: 1px solid #ffcecb; color: #82071e; }\n.geml-diag-warn { background: #fff8c5; border: 1px solid #f0e3a1; color: #6b5e16; }\n.geml-diag ul { margin: 6px 0 0; padding-left: 1.4em; }\n.geml-diag code { background: rgba(0,0,0,0.05); }\n\n.katex-display { overflow-x: auto; overflow-y: hidden; }\n\n/* Task-list items (- [ ] / - [x]). Native disabled checkboxes render an ugly\n   grey, so we draw our own with appearance:none \u2014 a clean empty box for open,\n   a solid green box with a white tick for done.\n   The tick is a centred text glyph, NOT a background image: raw.githubusercontent.com\n   serves `Content-Security-Policy: default-src \'none\'`, which strips data-URI\n   images \u2014 so an SVG-background tick vanishes in the browser extension. A "\u2713"\n   glyph needs no resource, survives the CSP, and flex-centres exactly. */\n.geml-doc li.geml-task { list-style: none; }\n.geml-doc li.geml-task > input[type="checkbox"] {\n  appearance: none; -webkit-appearance: none;\n  width: 1.1em; height: 1.1em; margin: 0 0.5em 0 0; vertical-align: -0.2em;\n  border: 1.5px solid #c8ccd0; border-radius: 4px; background: #fff;\n  position: relative; opacity: 1; cursor: default; box-sizing: border-box;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked {\n  background-color: #1f883d; border-color: #1f883d;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked::after {\n  content: "\u2713";\n  position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n  display: flex; align-items: center; justify-content: center;\n  color: #fff; font-size: 0.8em; line-height: 1; font-weight: 700;\n}\n\n/* geml-code-graph (GEP-0003): layered method flow. Pure CSS only \u2014 this file\n   is injected under strict page CSPs (default-src \'none\'), so no resources. */\n.geml-doc .code-graph, .code-graph { margin: 0 0 1.4em; }\n/* The graph is the widest artifact in the document: let it break out of the\n   860px reading column and take the viewport, centred, leaving the prose\n   around it untouched. .geml-doc is `margin: 0 auto`, so negative inline\n   margins land centred; a transform would instead become the containing block\n   for the fullscreen overlay below. */\n@media (min-width: 900px) { .geml-doc .code-graph { margin-inline: calc((100% - min(96vw, 1600px)) / 2); } }\n.cg-mount { border: 1px solid #e6e6e3; border-radius: 8px; padding: 10px 12px; background: #fff; color: #6e7781; font-size: .85em; }\n.cg-scroll { overflow: auto; max-height: 84vh; }\n.cg-svg { display: block; }\n/* Fullscreen. The button and the class come from the parser\'s codeGraphRuntime,\n   which this bundle imports, so these rules are what make it do anything: one\n   class covers both the native Fullscreen API and the fixed-overlay fallback.\n   :fullscreen is deliberately absent from the selectors \u2014 a browser that\n   doesn\'t know it would drop the whole rule. The stage carries its own flex\n   here because the non-fullscreen sheet doesn\'t style it, and the z-index has\n   to beat the host page, not merely our own stacking context. */\n.cg-mount.cg-full { position: fixed; inset: 0; z-index: 2147483000; margin: 0; border: 0; border-radius: 0; padding: 10px 14px; background: #fff; display: flex; flex-direction: column; }\n.cg-mount.cg-full > .cg-bar, .cg-mount.cg-full > .cg-legend, .cg-mount.cg-full > .cg-groups { flex: 0 0 auto; }\n.cg-mount.cg-full .cg-stage { display: flex; gap: 10px; align-items: flex-start; flex: 1 1 auto; min-height: 0; }\n.cg-mount.cg-full .cg-stage .cg-scroll { flex: 1 1 auto; min-width: 0; }\n.cg-mount.cg-full .cg-scroll { min-height: 0; max-height: none; height: 100%; }\n.cg-mount.cg-full .cg-src-body { max-height: none; }\n.cg-mount.cg-full .cg-frame { flex: 1 1 auto; height: auto; }\n.cg-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .82em; color: #6e7781; margin-bottom: 6px; }\n.cg-bar button { font: inherit; padding: 1px 8px; border: 1px solid #d0d7de; border-radius: 5px; background: transparent; cursor: pointer; }\n.cg-crumb .cg-seg { border: 0; border-radius: 0; padding: 0; background: none; color: #0969da; cursor: pointer; font: inherit; }\n.cg-crumb .cg-seg:hover { text-decoration: underline; }\n.cg-legend { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-size: .75em; color: #6e7781; margin-top: 6px; }\n.cg-upbtn circle { fill: #fff; stroke: #94a3b8; }\n.cg-upbtn text { font-size: 11px; fill: #57606a; }\n.cg-upbtn:hover circle { stroke: #2563eb; }\n.cg-upbtn:hover text { fill: #2563eb; }\n.cg-groups { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: .75em; color: #6e7781; }\n.cg-chip { display: inline-flex; align-items: center; gap: 4px; }\n.cg-chip i { width: 10px; height: 10px; border-radius: 2px; border: 1px solid #94a3b8; display: inline-block; }\n.cg-note { font-size: .8em; color: #9a6700; }\n.cg-frame { display: block; width: 100%; height: 84vh; border: 0; background: #fff; }\n.cg-flash { color: #b42318; }\n.cg-n rect { fill: #eef2f7; stroke: #94a3b8; }\n.cg-n text { font-size: 12px; fill: #1f2328; font-family: ui-monospace, Consolas, monospace; }\n.cg-n { cursor: pointer; }\n.cg-n.root rect { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; }\n.cg-n.leaf { opacity: .45; }\n.cg-n.test rect { stroke-dasharray: 3 2; }\n.cg-n.grp rect { stroke-width: 1.8; }\n.cg-e { fill: none; stroke: #94a3b8; stroke-width: .9; }\n.cg-e.cand { stroke-dasharray: 2 3; }\n.cg-e.back { stroke: #dc2626; stroke-dasharray: 5 3; }\n.cg-e.soft { opacity: .55; }\n/* hover: the caller cone lights up, the rest dims */\n.cg-svg.hl .cg-n { opacity: .22; }\n.cg-svg.hl .cg-e { opacity: .1; }\n.cg-svg.hl .cg-n.hl { opacity: 1; }\n.cg-svg.hl .cg-e.hl { opacity: 1; stroke-width: 1.6; }\n\n/* Transclusion (=== embed). Borrowed content is marked by a left rule; a\n   refused embed keeps its target link plus a visible note (S7 \u2014 never a\n   silent blank). Pure CSS only: this sheet is injected on pages that may run\n   under `default-src \'none\'`, so it must load zero resources. */\n.geml-transclusion { border-left: 3px solid #d8dee4; padding-left: 12px; margin: 12px 0; }\n.geml-transclusion-unexpanded { color: #57606a; }\n.geml-transclusion-note { color: #6e7781; font-size: 0.85em; margin-left: 6px; }\n.geml-transclusion-error { background: #fff0ef; border: 1px solid #ffcecb; border-left: 3px solid #82071e; color: #82071e; padding: 6px 10px; }\n\n/* Single-block focus (URL #id): a bar noting the narrowed view + the way back. */\n.geml-focus-banner {\n  margin: 0 0 1.2em; padding: 8px 12px;\n  background: #fff8e6; border: 1px solid #f0e0a8; border-radius: 6px;\n  color: #6e5c1f; font-size: 0.9em;\n}\n.geml-focus-banner a.geml-focus-full { color: #0969da; text-decoration: none; }\n.geml-focus-banner a.geml-focus-full:hover { text-decoration: underline; }\n\n/* GEP 0010 \u2014 the affordance for a translation model that is not downloaded yet.\n   Chrome will only fetch one under a user activation, so the click is not a\n   nicety: it is the gesture the API requires, and the moment the reader agrees\n   to the download. */\n.geml-translate-offer { margin: 0 0 .5rem; }\n.geml-translate-offer button {\n  font: inherit; font-size: .85em; padding: .2em .6em; cursor: pointer;\n  border: 1px solid currentColor; border-radius: .25em;\n  background: transparent; color: inherit; opacity: .75;\n}\n.geml-translate-offer button:hover:not(:disabled) { opacity: 1; }\n.geml-translate-offer button:disabled { cursor: progress; opacity: .55; }\n/* A refusal the reader can see: the page is showing its source, and silence\n   would be indistinguishable from a document that was always in that language. */\n.geml-translate-refused { font-size: .8em; opacity: .65; font-style: italic; }\n\n/* Freeze what the page is showing. Fixed rather than in the flow because the\n   viewer injects into someone else\'s document and owns no header to sit in. */\n.geml-export-btn {\n  position: fixed; right: 1rem; bottom: 1rem; z-index: 9;\n  font: inherit; font-size: .85em; padding: .4rem .75rem;\n  border: 1px solid currentColor; border-radius: 6px;\n  background: Canvas; color: inherit; cursor: pointer; opacity: .55;\n}\n.geml-export-btn:hover:not(:disabled) { opacity: 1; }\n.geml-export-btn:disabled { cursor: progress; opacity: .35; }\n\n/* The source/translation switch rides at the end of its section\'s heading:\n   small, quiet, and out of the reading line. Sized in em so it shrinks with the\n   heading it hangs off rather than being one fixed size on an h1 and an h4. */\n.geml-source-toggle {\n  font: inherit; font-size: .6em; font-weight: 400; vertical-align: middle;\n  margin-left: .6em; padding: .1em .45em;\n  border: 1px solid currentColor; border-radius: 4px;\n  background: transparent; color: inherit; cursor: pointer; opacity: .4;\n}\n.geml-source-toggle:hover { opacity: .85; }\n\n/* geml-form/v1\uFF08GEP-0008\uFF09\u7684\u63A7\u4EF6\u3002\u53EA\u753B\uFF0C\u4E0D\u6821\u9A8C \u2014\u2014 \u7EA6\u675F\u662F\u58F0\u660E\uFF0C\u5904\u7406\u5668\u624D\u6267\u884C\u3002 */\n.geml-form { display: flex; flex-direction: column; gap: 12px; }\n.geml-form-group { border: 1px solid currentColor; border-radius: 6px; padding: 12px; }\n.geml-form-field { display: flex; flex-direction: column; gap: 4px; }\n.geml-form-field[data-type="boolean"] { flex-direction: row; align-items: center; gap: 8px; }\n.geml-form-label { font-size: .9em; opacity: .85; }\n.geml-form-required { color: #f85149; margin-left: 2px; }\n.geml-form-control { font: inherit; color: inherit; background: transparent;\n  border: 1px solid currentColor; border-radius: 6px; padding: 5px 8px; max-width: 100%; }\n.geml-form-control:hover, .geml-form-control:focus { outline: none; border-color: currentColor; opacity: 1; }\nselect.geml-form-control { cursor: pointer; }\n.geml-form-desc { margin: 0; font-size: .85em; opacity: .7; }\n\n/* ---- \u9875\u9762\u5E03\u5C40\uFF08geml-style\uFF09\u3002\u53EA\u6709\u5BB9\u5668\u7684 flex \u4E0E\u51E0\u6761\u4E0D\u5E26\u4EFB\u4F55\u8272\u503C\u3001\u5C3A\u5BF8\u7684\u901A\u7528\u89C4\u5219\uFF1A\n   \u989C\u8272\u3001\u95F4\u8DDD\u3001\u5B57\u53F7\u5168\u90E8\u6765\u81EA\u6837\u5F0F\u8868\uFF08cssForPage \u751F\u6210\uFF09\u3002\u6CE8\u5165\u9875\u9762\u7684 CSS \u4E0D\u5F97\u52A0\u8F7D\u4EFB\u4F55\u8D44\u6E90\u3002 */\n.geml-page { margin: 0; }\n.geml-frame { display: flex; min-width: 0; min-height: 0; position: relative; }\n/* \u8F74\u7684\u9ED8\u8BA4\u653E\u8FDB\u4E00\u4E2A\u533F\u540D @layer\uFF1A\u672A\u5206\u5C42\u7684\u89C4\u5219\u4E00\u5F8B\u8D62\u8FC7\u5206\u5C42\u7684\uFF0C\u4E0E\u7279\u5F02\u6027\u65E0\u5173\u3002\n   cssForPage \u53D1\u51FA\u7684\u662F `.geml-f-x` / `.geml-b-x` \u5355\u7C7B\uFF080,1,0\uFF09\uFF0C\u800C\u8FD9\u91CC\u662F\u7C7B+\u5C5E\u6027\n   \uFF080,2,0\uFF09\u2014\u2014 \u4E0D\u5206\u5C42\u7684\u8BDD\uFF0C`item-align` \u5728\u6A2A\u6392\u5BB9\u5668\u4E0A\u3001`grow` \u5728\u6A2A\u6392\u91CC\u7684\u5757\u4E0A\u90FD\u4F1A\n   \u88AB\u8FD9\u4E24\u6761\u9759\u9ED8\u538B\u6B7B\uFF08\u5B9E\u6D4B\uFF1Aalign-items \u4ECD\u662F stretch\u3001flex-grow \u4ECD\u662F 0\uFF09\u3002\n   \u5BBF\u4E3B\u7684\u9ED8\u8BA4\u5FC5\u987B\u8BA9\u4F4D\u7ED9\u6837\u5F0F\u8868\u8BF4\u7684\u8BDD\uFF0C\u8FD9\u662F\u4E00\u6574\u7C7B\u95EE\u9898\uFF0C\u4E0D\u662F\u67D0\u4E2A\u8BCD\u7684\u95EE\u9898\u3002\n   `align-items: stretch` \u540C\u65F6\u88AB\u5220\u6389\uFF1Aflex \u5BB9\u5668\u4E0D\u5199\u5B83\u65F6\u8BA1\u7B97\u503C\u5C31\u662F `normal`\uFF0C\n   \u884C\u4E3A\u5B8C\u5168\u76F8\u540C\uFF0C\u5B83\u552F\u4E00\u7684\u4F5C\u7528\u662F\u538B\u4F4F `item-align`\u3002 */\n@layer {\n  .geml-frame[data-axis="column"] { flex-direction: column; }\n  .geml-frame[data-axis="row"] { flex-direction: row; }\n  .geml-frame[data-axis="row"] > .geml-placed { flex: 0 0 auto; }\n}\n.geml-placed { min-width: 0; box-sizing: border-box; }\n.geml-placed[role="button"], .geml-frame[role="button"] { cursor: pointer; }\n.geml-page button { color: inherit; font: inherit; }\n/* \u94FE\u63A5**\u4E0D\u5265**\uFF1AHTML \u7684\u9ED8\u8BA4\u662F\u84DD\u8272\u5E26\u4E0B\u5212\u7EBF\uFF0C\u53BB\u6389\u662F\u5916\u89C2\u51B3\u5B9A\uFF0C\u7531\u6837\u5F0F\u8868\u7528 `color` \u548C\n   `underline=no` \u8BF4\u3002\u5BBF\u4E3B\u5265\u6389\u7684\u90A3\u4E00\u7248\u8FDE\u5D4C\u8FDB\u6765\u7684\u6587\u7AE0\u91CC\u7684\u94FE\u63A5\u90FD\u4E00\u8D77\u5265\u4E86 \u2014\u2014 \u6B63\u6587\u91CC\u7684\u94FE\u63A5\n   \u548C\u6B63\u6587\u7684\u5B57\u4E00\u6A21\u4E00\u6837\uFF0C\u770B\u4E0D\u51FA\u662F\u94FE\u63A5\uFF0C\u800C\u6CA1\u6709\u4EBA\u8981\u6C42\u8FC7\u8FD9\u4E2A\u3002 */\n.geml-page img { vertical-align: middle; }\n.geml-page .text > p { margin: 0; }\n/* \u6761\u76EE\u672C\u8EAB\uFF1A\u6CBF\u8F74\u6392\u7684\u4E00\u6761\u5C31\u662F\u4E00\u884C\u3002`gap` \u7531\u6837\u5F0F\u8868\u7ED9\uFF08cssForPage \u540C\u65F6\u843D\u5230\u5BB9\u5668\u548C\u6761\u76EE\u4E0A\uFF09\uFF0C\n   \u8FD9\u91CC\u53EA\u6709\u300C\u6761\u76EE\u662F\u4EC0\u4E48\u5F62\u72B6\u300D\uFF0C\u6CA1\u6709\u4EFB\u4F55\u957F\u5EA6\u3002 */\n.geml-items > li { display: inline-flex; align-items: center; white-space: nowrap; }\n/* \u6811\u53EA\u6709\u4E00\u4E2A\u6807\u8BB0\uFF1A`summary` \u7684\u5C55\u5F00\u4E09\u89D2\u3002`li` \u81EA\u5DF1\u7684\u9879\u76EE\u7B26\u53F7\u8981\u53BB\u6389 \u2014\u2014 \u4E00\u884C\u4E24\u4E2A\u6807\u8BB0\n   \uFF08\u2022 \u548C \u25BE\uFF09\u662F\u4E24\u5957\u673A\u5236\u649E\u5728\u4E00\u8D77\uFF0C\u4E0D\u662F\u7248\u9762\u9009\u62E9\u3002\u7F29\u8FDB\u7528 em\uFF0C\u8DDF\u7740\u6837\u5F0F\u8868\u8BBE\u7684\u5B57\u53F7\u8D70\uFF0C\n   \u5BBF\u4E3B\u91CC\u56E0\u6B64\u6CA1\u6709\u9875\u9762\u5E38\u91CF\uFF1B\u771F\u9700\u8981\u6309\u9875\u5B9A\u7F29\u8FDB\u65F6\u5B83\u662F tree \u7684\u7EC4\u4EF6\u53C2\u6570\uFF08\xA712.3 \u70B9\u540D\u7684 `indent`\uFF09\uFF0C\n   \u4E0D\u662F\u5185\u542B\u8BCD\uFF0C\u7B49\u7B2C\u4E00\u4E2A\u771F\u5B9E\u9700\u6C42\u518D\u52A0\u3002\n   list-style \u662F\u7EE7\u627F\u5C5E\u6027\uFF0C\u6240\u4EE5 summary \u8981\u628A\u4E09\u89D2\u8981\u56DE\u6765\uFF0C\u5426\u5219\u8FDE\u5B83\u4E00\u8D77\u6CA1\u4E86\u3002 */\n.geml-tree, .geml-tree ul { list-style: none; margin: 0; padding-left: 0; }\n.geml-tree summary { cursor: pointer; list-style: revert; }\n.geml-segments { display: inline-flex; }\n.geml-segments button { border: 0; background: none; cursor: pointer; }\n.geml-segments button[aria-pressed="true"] { background: Canvas; font-weight: 500; }\n.geml-source { width: 100%; box-sizing: border-box; min-height: 60vh; font-family: ui-monospace, monospace; }\n/* `fade-out=<\u79D2>` \u7528\u7684\u52A8\u753B\u3002\u6DE1\u5B8C\u4E4B\u540E visibility: hidden\uFF0C\u4E8E\u662F\u5B83\u65E2\u770B\u4E0D\u89C1\u4E5F\u6321\u4E0D\u4F4F\u70B9\u51FB\u3002\n   \u65F6\u957F\u7531\u6837\u5F0F\u8868\u7ED9\uFF0C\u8FD9\u91CC\u53EA\u6709\u5F62\u72B6\u3002\u8BFB\u8005\u8981\u6C42\u51CF\u5C11\u52A8\u6001\u6548\u679C\u65F6\u76F4\u63A5\u8DF3\u5230\u7EC8\u70B9 \u2014\u2014 \u63D0\u793A\u4E00\u95EA\u800C\u8FC7\uFF0C\u4E0D\u662F\u5185\u5BB9\u3002 */\n@keyframes geml-fade { to { opacity: 0; visibility: hidden; } }\n@keyframes geml-fade-in { from { opacity: 0; } to { opacity: 1; } }\n@media (prefers-reduced-motion: reduce) {\n  .geml-page .geml-frame, .geml-page .geml-placed { animation-duration: 1ms !important; }\n}\n.geml-page .geml-form-field { display: contents; }\n.geml-page .geml-form-control { border: 0; padding: 0; outline: none; width: 100%; }\n\n/* geml-media\uFF1A\u65F6\u95F4\u7EBF\u3002frame \u7EC4\u4EF6\u53EA\u80FD\u7ED9\u533A\u5757\u6DFB\u4E2A\u5144\u5F1F\u8282\u70B9\uFF0C\u5305\u4E0D\u4F4F\u69FD\u4F4D\u91CC\u7684\u5757 \u2014\u2014\n   \u6240\u4EE5\u5B9A\u4F4D\u4E0A\u4E0B\u6587\u5FC5\u987B\u662F frame \u533A\u5757\u672C\u8EAB\uFF0C\u7531\u5B83\u7684 data-component \u8BA4\u4EBA\u3002\u7247\u6BB5\u7684\n   left/width \u662F\u7EC4\u4EF6\u6309\u65F6\u95F4\u7B97\u51FA\u6765\u7684\u767E\u5206\u6BD4\uFF0C\u8FD9\u91CC\u53EA\u8D1F\u8D23\u8BA9\u5B83\u4EEC\u6709\u5904\u53EF\u843D\u3002 */\n[data-component="timeline-track"],\n[data-component="overlay-track"] { position: relative; }\n.geml-clip { position: absolute; box-sizing: border-box; overflow: hidden; }\n.geml-track-ruler { position: absolute; inset: 0 0 auto 0; }\n.geml-tick { position: absolute; }\n\n/* geml-media/v1 \xB7 \u64AD\u653E\u5668\uFF08media-player.js\uFF09\u3002\u4E00\u884C\u5916\u90E8\u8D44\u6E90\u90FD\u6CA1\u6709 \u2014\u2014 viewer \u8DD1\u5728\n   default-src \'none\' \u7684\u9875\u9762\u4E0A\uFF0C\u6837\u5F0F\u8868\u91CC\u51FA\u73B0\u4EFB\u4F55 url() \u90FD\u4F1A\u88AB CSP \u6321\u4E0B\u3002 */\n.geml-player { display: flex; flex-direction: column; gap: 8px; }\n.geml-player-empty { opacity: .7; font-style: italic; }\n.geml-stage {\n  position: relative;\n  width: 100%;\n  aspect-ratio: 16 / 9;\n  background: #000;\n  overflow: hidden;\n  border-radius: 6px;\n}\n.geml-layer-video {\n  position: absolute;\n  inset: 0;\n  width: 100%;\n  height: 100%;\n  object-fit: contain;\n}\n/* \u58F0\u97F3\u8F68\u6CA1\u6709\u753B\u9762\uFF0C\u4F46\u8981\u7559\u5728 DOM \u91CC\u8BA9\u65F6\u949F\u63A8\u5B83 */\n.geml-layer-audio { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }\n.geml-caption {\n  position: absolute;\n  left: 0; right: 0; bottom: 6%;\n  padding: 0 8%;\n  text-align: center;\n  color: #fff;\n  text-shadow: 0 1px 3px rgba(0, 0, 0, .9);\n  line-height: 1.4;\n  pointer-events: none;\n}\n.geml-transport { display: flex; align-items: center; gap: 10px; }\n.geml-play {\n  width: 2.2em; height: 2.2em;\n  border: 1px solid currentColor;\n  border-radius: 50%;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  line-height: 1;\n  cursor: pointer;\n}\n.geml-seek { flex: 1; min-width: 0; }\n.geml-clock {\n  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n  opacity: .75;\n  min-width: 9ch;\n  text-align: right;\n}\n\n/* geml-media/v1 \xB7 \u6B4C\u5355\uFF08media-playlist.js\uFF09\u3002\u53EA\u51FA\u7ED3\u6784\uFF1A\u4E00\u4E2A\u5A92\u4F53\u5143\u7D20\u3001\u4E0A\u4E00\u9996/\u4E0B\u4E00\u9996\u3001\n   \u66F2\u76EE\u5217\u8868\uFF1B\u6B63\u5728\u653E\u7684\u90A3\u9996\u7531 aria-current \u6807\u51FA\u3002\u989C\u8272\u5B57\u53F7\u5F52\u6837\u5F0F\u8868\u3002 */\n.geml-playlist { display: flex; flex-direction: column; gap: 8px; }\n.geml-playlist-empty { opacity: .7; font-style: italic; }\n.geml-playlist-media { width: 100%; }\nvideo.geml-playlist-media { background: #000; border-radius: 6px; }\n.geml-playlist-transport { display: flex; gap: 8px; }\n.geml-playlist-transport button,\n.geml-playlist-item {\n  border: 0;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  cursor: pointer;\n}\n/* \u968F\u673A\u3001\u91CD\u590D\uFF1A\u6CA1\u6309\u4E0B\u662F\u534A\u900F\u660E\uFF1B\u5355\u66F2\u91CD\u590D\u5728\u6309\u94AE\u4E0A\u6807\u4E00\u4E2A 1 */\n.geml-shuffle, .geml-repeat { opacity: .45; }\n.geml-shuffle[aria-pressed="true"], .geml-repeat[aria-pressed="true"] { opacity: 1; }\n.geml-repeat[data-mode="one"]::after { content: "1"; font-size: .7em; vertical-align: super; }\n.geml-playlist-items { margin: 0; padding-left: 2em; }\n.geml-playlist-items > li { padding: 2px 0; }\n.geml-playlist-item { width: 100%; padding: 4px 6px; text-align: left; border-radius: 4px; }\n.geml-playlist-item:hover { background: rgba(127, 127, 127, .15); }\n.geml-playlist-items > li[aria-current="true"] { font-weight: 600; }\n.geml-playlist-items > li[aria-current="true"] .geml-playlist-item { background: rgba(127, 127, 127, .22); }\n';
 
   // node_modules/katex/dist/katex.mjs
   init_define_process_argv();

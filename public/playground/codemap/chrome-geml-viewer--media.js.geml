@@ -7,25 +7,25 @@ resolution-default = cpg
 
 # chrome-geml-viewer/media.js
 
-=== code {#timelineFor src=integrations/chrome-geml-viewer/src/media.js#L20-59 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/timelineFor()."}
+=== code {#timelineFor src=integrations/chrome-geml-viewer/src/media.js#L21-60 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/timelineFor()."}
 ===
 
-=== code {#pct .leaf src=integrations/chrome-geml-viewer/src/media.js#L62-62 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/pct."}
+=== code {#pct .leaf src=integrations/chrome-geml-viewer/src/media.js#L63-63 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/pct."}
 ===
 
-=== code {#tickStep src=integrations/chrome-geml-viewer/src/media.js#L68-74 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/tickStep()."}
+=== code {#tickStep src=integrations/chrome-geml-viewer/src/media.js#L69-75 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/tickStep()."}
 ===
 
-=== code {#clip src=integrations/chrome-geml-viewer/src/media.js#L80-107 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/clip()."}
+=== code {#clip src=integrations/chrome-geml-viewer/src/media.js#L81-108 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/clip()."}
 ===
 
-=== code {#trackEl src=integrations/chrome-geml-viewer/src/media.js#L109-137 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/trackEl()."}
+=== code {#trackEl src=integrations/chrome-geml-viewer/src/media.js#L110-138 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/trackEl()."}
 ===
 
-=== code {#timelineTrack src=integrations/chrome-geml-viewer/src/media.js#L140-140 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/timelineTrack()."}
+=== code {#timelineTrack src=integrations/chrome-geml-viewer/src/media.js#L141-141 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/timelineTrack()."}
 ===
 
-=== code {#overlayTrack src=integrations/chrome-geml-viewer/src/media.js#L146-146 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/overlayTrack()."}
+=== code {#overlayTrack src=integrations/chrome-geml-viewer/src/media.js#L147-147 anchor="scip-typescript npm geml-viewer 1.3.6 src/`media.js`/overlayTrack()."}
 ===
 
 === table {#calls format=csv}
@@ -42,14 +42,14 @@ from,           to,           kind, confidence
 
 === table {#called-by format=csv}
 from,           to,           kind, site
-#clip,          #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:85
-#trackEl,       #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:116
-#clip,          #pct,         call, integrations/chrome-geml-viewer/src/media.js:89
+#clip,          #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:86
+#trackEl,       #timelineFor, call, integrations/chrome-geml-viewer/src/media.js:117
 #clip,          #pct,         call, integrations/chrome-geml-viewer/src/media.js:90
-#trackEl,       #pct,         call, integrations/chrome-geml-viewer/src/media.js:130
-#trackEl,       #tickStep,    call, integrations/chrome-geml-viewer/src/media.js:124
-#timelineTrack, #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:140
-#overlayTrack,  #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:146
+#clip,          #pct,         call, integrations/chrome-geml-viewer/src/media.js:91
+#trackEl,       #pct,         call, integrations/chrome-geml-viewer/src/media.js:131
+#trackEl,       #tickStep,    call, integrations/chrome-geml-viewer/src/media.js:125
+#timelineTrack, #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:141
+#overlayTrack,  #trackEl,     call, integrations/chrome-geml-viewer/src/media.js:147
 ===
 
 === table {#unresolved format=csv hidden}
