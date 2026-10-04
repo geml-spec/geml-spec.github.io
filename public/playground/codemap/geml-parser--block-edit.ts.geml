@@ -8,25 +8,25 @@ resolution-default = cpg
 
 # geml-parser/block-edit.ts
 
-=== code {#splitLines src=geml-parser/src/block-edit.ts#L23-25 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/splitLines()."}
+=== code {#splitLines src=geml-parser/src/block-edit.ts#L23-25 anchor="scip-typescript npm @geml/geml 1.12.3 src/`block-edit.ts`/splitLines()."}
 ===
 
-=== code {#stripEnding src=geml-parser/src/block-edit.ts#L28-30 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/stripEnding()."}
+=== code {#stripEnding src=geml-parser/src/block-edit.ts#L28-30 anchor="scip-typescript npm @geml/geml 1.12.3 src/`block-edit.ts`/stripEnding()."}
 ===
 
-=== code {#trimSpaceTabEnd src=geml-parser/src/block-edit.ts#L36-44 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/trimSpaceTabEnd()."}
+=== code {#trimSpaceTabEnd src=geml-parser/src/block-edit.ts#L36-44 anchor="scip-typescript npm @geml/geml 1.12.3 src/`block-edit.ts`/trimSpaceTabEnd()."}
 ===
 
-=== code {#rewriteBraces src=geml-parser/src/block-edit.ts#L51-59 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/rewriteBraces()."}
+=== code {#rewriteBraces src=geml-parser/src/block-edit.ts#L51-59 anchor="scip-typescript npm @geml/geml 1.12.3 src/`block-edit.ts`/rewriteBraces()."}
 ===
 
-=== code {#rewriteHead src=geml-parser/src/block-edit.ts#L64-75 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/rewriteHead()."}
+=== code {#rewriteHead src=geml-parser/src/block-edit.ts#L64-75 anchor="scip-typescript npm @geml/geml 1.12.3 src/`block-edit.ts`/rewriteHead()."}
 ===
 
-=== code {#findHead src=geml-parser/src/block-edit.ts#L81-89 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/findHead()."}
+=== code {#findHead src=geml-parser/src/block-edit.ts#L81-89 anchor="scip-typescript npm @geml/geml 1.12.3 src/`block-edit.ts`/findHead()."}
 ===
 
-=== code {#normalizeBlockId src=geml-parser/src/block-edit.ts#L100-131 anchor="scip-typescript npm @geml/geml 1.12.2 src/`block-edit.ts`/normalizeBlockId()."}
+=== code {#normalizeBlockId src=geml-parser/src/block-edit.ts#L100-131 anchor="scip-typescript npm @geml/geml 1.12.3 src/`block-edit.ts`/normalizeBlockId()."}
 ===
 
 === table {#calls format=csv}

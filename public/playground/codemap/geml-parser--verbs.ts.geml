@@ -8,220 +8,220 @@ resolution-default = cpg
 
 # geml-parser/verbs.ts
 
-=== code {#VerbError-new .leaf name="VerbError.new" src=geml-parser/src/verbs.ts#L58-60 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/VerbError#`<constructor>`()."}
+=== code {#VerbError-new .leaf name="VerbError.new" src=geml-parser/src/verbs.ts#L58-60 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/VerbError#`<constructor>`()."}
 ===
 
-=== code {#ViewError-new .leaf name="ViewError.new" src=geml-parser/src/verbs.ts#L68-68 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/ViewError#`<constructor>`()."}
+=== code {#ViewError-new .leaf name="ViewError.new" src=geml-parser/src/verbs.ts#L68-68 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/ViewError#`<constructor>`()."}
 ===
 
-=== code {#FileAccess-readConfined .leaf name="FileAccess.readConfined" src=geml-parser/src/verbs.ts#L89-89 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/FileAccess#readConfined()."}
+=== code {#FileAccess-readConfined .leaf name="FileAccess.readConfined" src=geml-parser/src/verbs.ts#L89-89 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/FileAccess#readConfined()."}
 ===
 
-=== code {#FileAccess-shownPath .leaf name="FileAccess.shownPath" src=geml-parser/src/verbs.ts#L91-91 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/FileAccess#shownPath()."}
+=== code {#FileAccess-shownPath .leaf name="FileAccess.shownPath" src=geml-parser/src/verbs.ts#L91-91 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/FileAccess#shownPath()."}
 ===
 
-=== code {#VerbContext-docOpts .leaf name="VerbContext.docOpts" src=geml-parser/src/verbs.ts#L96-96 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/VerbContext#docOpts()."}
+=== code {#VerbContext-docOpts .leaf name="VerbContext.docOpts" src=geml-parser/src/verbs.ts#L96-96 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/VerbContext#docOpts()."}
 ===
 
-=== code {#VerbContext-note .leaf name="VerbContext.note" src=geml-parser/src/verbs.ts#L98-98 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/VerbContext#note()."}
+=== code {#VerbContext-note .leaf name="VerbContext.note" src=geml-parser/src/verbs.ts#L98-98 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/VerbContext#note()."}
 ===
 
-=== code {#HistoryReader-resolve .leaf name="HistoryReader.resolve" src=geml-parser/src/verbs.ts#L113-113 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/HistoryReader#resolve()."}
+=== code {#HistoryReader-resolve .leaf name="HistoryReader.resolve" src=geml-parser/src/verbs.ts#L113-113 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/HistoryReader#resolve()."}
 ===
 
-=== code {#HistoryReader-firstChanged .leaf name="HistoryReader.firstChanged" src=geml-parser/src/verbs.ts#L114-114 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/HistoryReader#firstChanged()."}
+=== code {#HistoryReader-firstChanged .leaf name="HistoryReader.firstChanged" src=geml-parser/src/verbs.ts#L114-114 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/HistoryReader#firstChanged()."}
 ===
 
-=== code {#fail src=geml-parser/src/verbs.ts#L117-117 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/fail()."}
+=== code {#fail src=geml-parser/src/verbs.ts#L117-117 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/fail()."}
 ===
 
-=== code {#refuseBroken src=geml-parser/src/verbs.ts#L118-118 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/refuseBroken()."}
+=== code {#refuseBroken src=geml-parser/src/verbs.ts#L118-118 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/refuseBroken()."}
 ===
 
-=== code {#baseName src=geml-parser/src/verbs.ts#L123-126 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/baseName()."}
+=== code {#baseName src=geml-parser/src/verbs.ts#L123-126 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/baseName()."}
 ===
 
-=== code {#walkOf src=geml-parser/src/verbs.ts#L131-131 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/walkOf."}
+=== code {#walkOf src=geml-parser/src/verbs.ts#L131-131 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/walkOf."}
 ===
 
-=== code {#selfOf src=geml-parser/src/verbs.ts#L132-132 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/selfOf."}
+=== code {#selfOf src=geml-parser/src/verbs.ts#L132-132 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/selfOf."}
 ===
 
-=== code {#whereOf .leaf src=geml-parser/src/verbs.ts#L133-133 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/whereOf."}
+=== code {#whereOf .leaf src=geml-parser/src/verbs.ts#L133-133 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/whereOf."}
 ===
 
-=== code {#filesOf src=geml-parser/src/verbs.ts#L152-158 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/filesOf()."}
+=== code {#filesOf src=geml-parser/src/verbs.ts#L152-158 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/filesOf()."}
 ===
 
-=== code {#oneHop src=geml-parser/src/verbs.ts#L162-195 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/oneHop()."}
+=== code {#oneHop src=geml-parser/src/verbs.ts#L162-195 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/oneHop()."}
 ===
 
-=== code {#viewResolve src=geml-parser/src/verbs.ts#L197-230 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/viewResolve()."}
+=== code {#viewResolve src=geml-parser/src/verbs.ts#L197-230 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/viewResolve()."}
 ===
 
-=== code {#embedSrcOf src=geml-parser/src/verbs.ts#L234-239 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/embedSrcOf()."}
+=== code {#embedSrcOf src=geml-parser/src/verbs.ts#L234-239 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/embedSrcOf()."}
 ===
 
-=== code {#resolveSelector src=geml-parser/src/verbs.ts#L266-305 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/resolveSelector()."}
+=== code {#resolveSelector src=geml-parser/src/verbs.ts#L266-305 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/resolveSelector()."}
 ===
 
-=== code {#columns src=geml-parser/src/verbs.ts#L314-330 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/columns()."}
+=== code {#columns src=geml-parser/src/verbs.ts#L314-330 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/columns()."}
 ===
 
-=== code {#pad src=geml-parser/src/verbs.ts#L331-333 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/pad()."}
+=== code {#pad src=geml-parser/src/verbs.ts#L331-333 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/pad()."}
 ===
 
-=== code {#scopesOf src=geml-parser/src/verbs.ts#L345-347 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/scopesOf()."}
+=== code {#scopesOf src=geml-parser/src/verbs.ts#L345-347 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/scopesOf()."}
 ===
 
-=== code {#insideAny src=geml-parser/src/verbs.ts#L351-353 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/insideAny()."}
+=== code {#insideAny src=geml-parser/src/verbs.ts#L351-353 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/insideAny()."}
 ===
 
-=== code {#list src=geml-parser/src/verbs.ts#L355-440 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/list()."}
+=== code {#list src=geml-parser/src/verbs.ts#L355-440 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/list()."}
 ===
 
-=== code {#blocksOfType src=geml-parser/src/verbs.ts#L446-458 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/blocksOfType()."}
+=== code {#blocksOfType src=geml-parser/src/verbs.ts#L446-458 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/blocksOfType()."}
 ===
 
-=== code {#typeIndex src=geml-parser/src/verbs.ts#L461-463 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/typeIndex()."}
+=== code {#typeIndex src=geml-parser/src/verbs.ts#L461-463 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/typeIndex()."}
 ===
 
-=== code {#selectUnits src=geml-parser/src/verbs.ts#L471-565 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/selectUnits()."}
+=== code {#selectUnits src=geml-parser/src/verbs.ts#L471-565 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/selectUnits()."}
 ===
 
-=== code {#reservedMeta src=geml-parser/src/verbs.ts#L572-579 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/reservedMeta()."}
+=== code {#reservedMeta src=geml-parser/src/verbs.ts#L572-579 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/reservedMeta()."}
 ===
 
-=== code {#unitNode src=geml-parser/src/verbs.ts#L584-597 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/unitNode()."}
+=== code {#unitNode src=geml-parser/src/verbs.ts#L584-597 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/unitNode()."}
 ===
 
-=== code {#reportMatches src=geml-parser/src/verbs.ts#L601-604 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/reportMatches()."}
+=== code {#reportMatches src=geml-parser/src/verbs.ts#L601-604 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/reportMatches()."}
 ===
 
-=== code {#get src=geml-parser/src/verbs.ts#L628-733 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/get()."}
+=== code {#get src=geml-parser/src/verbs.ts#L628-733 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/get()."}
 ===
 
-=== code {#findInSource src=geml-parser/src/verbs.ts#L746-798 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/findInSource()."}
+=== code {#findInSource src=geml-parser/src/verbs.ts#L746-798 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/findInSource()."}
 ===
 
-=== code {#formatFindRows src=geml-parser/src/verbs.ts#L801-811 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/formatFindRows()."}
+=== code {#formatFindRows src=geml-parser/src/verbs.ts#L801-811 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/formatFindRows()."}
 ===
 
-=== code {#check src=geml-parser/src/verbs.ts#L818-820 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/check()."}
+=== code {#check src=geml-parser/src/verbs.ts#L818-820 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/check()."}
 ===
 
-=== code {#loadModelJson src=geml-parser/src/verbs.ts#L851-865 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/loadModelJson()."}
+=== code {#loadModelJson src=geml-parser/src/verbs.ts#L851-865 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/loadModelJson()."}
 ===
 
-=== code {#transform src=geml-parser/src/verbs.ts#L872-1033 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/transform()."}
+=== code {#transform src=geml-parser/src/verbs.ts#L872-1033 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/transform()."}
 ===
 
-=== code {#replace src=geml-parser/src/verbs.ts#L1044-1133 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/replace()."}
+=== code {#replace src=geml-parser/src/verbs.ts#L1044-1133 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/replace()."}
 ===
 
-=== code {#extractBlock src=geml-parser/src/verbs.ts#L1154-1171 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/extractBlock()."}
+=== code {#extractBlock src=geml-parser/src/verbs.ts#L1154-1171 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/extractBlock()."}
 ===
 
-=== code {#contentText .leaf src=geml-parser/src/verbs.ts#L1174-1176 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/contentText()."}
+=== code {#contentText .leaf src=geml-parser/src/verbs.ts#L1174-1176 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/contentText()."}
 ===
 
-=== code {#resolveSetTarget src=geml-parser/src/verbs.ts#L1186-1206 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/resolveSetTarget()."}
+=== code {#resolveSetTarget src=geml-parser/src/verbs.ts#L1186-1206 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/resolveSetTarget()."}
 ===
 
-=== code {#idInPlace src=geml-parser/src/verbs.ts#L1214-1221 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/idInPlace()."}
+=== code {#idInPlace src=geml-parser/src/verbs.ts#L1214-1221 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/idInPlace()."}
 ===
 
-=== code {#gemlSyntaxIn src=geml-parser/src/verbs.ts#L1229-1242 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/gemlSyntaxIn()."}
+=== code {#gemlSyntaxIn src=geml-parser/src/verbs.ts#L1229-1242 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/gemlSyntaxIn()."}
 ===
 
-=== code {#headingAttrObject src=geml-parser/src/verbs.ts#L1246-1251 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/headingAttrObject()."}
+=== code {#headingAttrObject src=geml-parser/src/verbs.ts#L1246-1251 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/headingAttrObject()."}
 ===
 
-=== code {#asMarkdown src=geml-parser/src/verbs.ts#L1260-1271 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/asMarkdown()."}
+=== code {#asMarkdown src=geml-parser/src/verbs.ts#L1260-1271 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/asMarkdown()."}
 ===
 
-=== code {#declaresId src=geml-parser/src/verbs.ts#L1274-1277 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/declaresId()."}
+=== code {#declaresId src=geml-parser/src/verbs.ts#L1274-1277 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/declaresId()."}
 ===
 
-=== code {#relinkMarkdown src=geml-parser/src/verbs.ts#L1285-1324 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/relinkMarkdown()."}
+=== code {#relinkMarkdown src=geml-parser/src/verbs.ts#L1285-1324 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/relinkMarkdown()."}
 ===
 
-=== code {#reportNewAddress src=geml-parser/src/verbs.ts#L1326-1330 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/reportNewAddress()."}
+=== code {#reportNewAddress src=geml-parser/src/verbs.ts#L1326-1330 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/reportNewAddress()."}
 ===
 
-=== code {#set src=geml-parser/src/verbs.ts#L1350-1444 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/set()."}
+=== code {#set src=geml-parser/src/verbs.ts#L1350-1444 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/set()."}
 ===
 
-=== code {#setIntro src=geml-parser/src/verbs.ts#L1453-1477 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/setIntro()."}
+=== code {#setIntro src=geml-parser/src/verbs.ts#L1453-1477 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/setIntro()."}
 ===
 
-=== code {#setBody src=geml-parser/src/verbs.ts#L1483-1515 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/setBody()."}
+=== code {#setBody src=geml-parser/src/verbs.ts#L1483-1515 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/setBody()."}
 ===
 
-=== code {#setMeta src=geml-parser/src/verbs.ts#L1525-1569 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/setMeta()."}
+=== code {#setMeta src=geml-parser/src/verbs.ts#L1525-1569 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/setMeta()."}
 ===
 
-=== code {#setCoord src=geml-parser/src/verbs.ts#L1575-1615 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/setCoord()."}
+=== code {#setCoord src=geml-parser/src/verbs.ts#L1575-1615 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/setCoord()."}
 ===
 
-=== code {#add src=geml-parser/src/verbs.ts#L1635-1664 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/add()."}
+=== code {#add src=geml-parser/src/verbs.ts#L1635-1664 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/add()."}
 ===
 
-=== code {#insertFragment src=geml-parser/src/verbs.ts#L1671-1700 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/insertFragment()."}
+=== code {#insertFragment src=geml-parser/src/verbs.ts#L1671-1700 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/insertFragment()."}
 ===
 
-=== code {#del src=geml-parser/src/verbs.ts#L1720-1758 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/del()."}
+=== code {#del src=geml-parser/src/verbs.ts#L1720-1758 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/del()."}
 ===
 
-=== code {#rename src=geml-parser/src/verbs.ts#L1780-1820 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/rename()."}
+=== code {#rename src=geml-parser/src/verbs.ts#L1780-1820 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/rename()."}
 ===
 
-=== code {#rewriteId src=geml-parser/src/verbs.ts#L1830-1849 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/rewriteId()."}
+=== code {#rewriteId src=geml-parser/src/verbs.ts#L1830-1849 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/rewriteId()."}
 ===
 
-=== code {#bodyRange src=geml-parser/src/verbs.ts#L1858-1869 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/bodyRange()."}
+=== code {#bodyRange src=geml-parser/src/verbs.ts#L1858-1869 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/bodyRange()."}
 ===
 
-=== code {#contentShape src=geml-parser/src/verbs.ts#L1875-1886 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/contentShape()."}
+=== code {#contentShape src=geml-parser/src/verbs.ts#L1875-1886 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/contentShape()."}
 ===
 
-=== code {#spliceBlock src=geml-parser/src/verbs.ts#L1894-1898 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/spliceBlock()."}
+=== code {#spliceBlock src=geml-parser/src/verbs.ts#L1894-1898 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/spliceBlock()."}
 ===
 
-=== code {#countBlockUnits src=geml-parser/src/verbs.ts#L1903-1907 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/countBlockUnits()."}
+=== code {#countBlockUnits src=geml-parser/src/verbs.ts#L1903-1907 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/countBlockUnits()."}
 ===
 
-=== code {#forgives src=geml-parser/src/verbs.ts#L1935-1935 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/forgives."}
+=== code {#forgives src=geml-parser/src/verbs.ts#L1935-1935 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/forgives."}
 ===
 
-=== code {#errorKey .leaf src=geml-parser/src/verbs.ts#L1944-1944 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/errorKey."}
+=== code {#errorKey .leaf src=geml-parser/src/verbs.ts#L1944-1944 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/errorKey."}
 ===
 
-=== code {#predated src=geml-parser/src/verbs.ts#L1945-1948 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/predated()."}
+=== code {#predated src=geml-parser/src/verbs.ts#L1945-1948 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/predated()."}
 ===
 
-=== code {#onDisk src=geml-parser/src/verbs.ts#L1956-1967 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/onDisk()."}
+=== code {#onDisk src=geml-parser/src/verbs.ts#L1956-1967 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/onDisk()."}
 ===
 
-=== code {#refuseWrite src=geml-parser/src/verbs.ts#L1971-1974 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/refuseWrite()."}
+=== code {#refuseWrite src=geml-parser/src/verbs.ts#L1971-1974 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/refuseWrite()."}
 ===
 
-=== code {#refusalProse src=geml-parser/src/verbs.ts#L1978-1988 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/refusalProse()."}
+=== code {#refusalProse src=geml-parser/src/verbs.ts#L1978-1988 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/refusalProse()."}
 ===
 
-=== code {#errorsAdded src=geml-parser/src/verbs.ts#L1990-2000 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/errorsAdded()."}
+=== code {#errorsAdded src=geml-parser/src/verbs.ts#L1990-2000 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/errorsAdded()."}
 ===
 
-=== code {#introduced src=geml-parser/src/verbs.ts#L2005-2022 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/introduced()."}
+=== code {#introduced src=geml-parser/src/verbs.ts#L2005-2022 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/introduced()."}
 ===
 
-=== code {#spliceSpan src=geml-parser/src/verbs.ts#L2028-2124 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/spliceSpan()."}
+=== code {#spliceSpan src=geml-parser/src/verbs.ts#L2028-2124 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/spliceSpan()."}
 ===
 
-=== code {#revert src=geml-parser/src/verbs.ts#L2157-2282 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/revert()."}
+=== code {#revert src=geml-parser/src/verbs.ts#L2157-2282 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/revert()."}
 ===
 
-=== code {#resurrectPosition src=geml-parser/src/verbs.ts#L2290-2320 anchor="scip-typescript npm @geml/geml 1.12.2 src/`verbs.ts`/resurrectPosition()."}
+=== code {#resurrectPosition src=geml-parser/src/verbs.ts#L2290-2320 anchor="scip-typescript npm @geml/geml 1.12.3 src/`verbs.ts`/resurrectPosition()."}
 ===
 
 === table {#calls format=csv}
