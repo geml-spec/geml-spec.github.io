@@ -1,0 +1,10 @@
+=== meta
+title = "Playlist view"
+profile = "geml-style/v1"
+===
+
+=== style-screen {#radio axis=column slots="media"}
+===
+
+=== style-rule {#as-playlist match="media" component=playlist}
+===

@@ -1,0 +1,20 @@
+=== meta
+title = "Late-night playlist"
+profile = "geml-media/v1"
+===
+
+==== media {#late-night tracks="music:audio"}
+
+=== media-clip {#t1 track=music src=library.geml#night-train}
+===
+
+=== media-clip {#t2 track=music src=library.geml#rain}
+===
+
+=== media-clip {#t3 track=music src=library.geml#dawn-chorus}
+===
+
+=== media-clip {#t4 track=music src=library.geml#harbor-lights}
+===
+
+====

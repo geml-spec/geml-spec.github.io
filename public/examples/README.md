@@ -9,6 +9,7 @@ editable tour is the [playground](../playground/).
 | `style-demo/` | a whole page laid out from a document by `geml-style/v1` — see below |
 | `geml-media-demo/` | a 10-second cut built from one document by `geml media build`; its README walks through it |
 | `geml-media-explainer/` | a 36-second episode made end to end with `geml-media`; its README tells how |
+| `geml-media-playlist/` | four tracks played one after another, with shuffle and repeat: a `geml-media` timeline under a stylesheet rule `component=playlist`. `play.html` is that panel written out by geml's `media-page.mjs`; the music is synthesized by ffmpeg |
 | `translate-demo/` | a translation with `geml-translator/v1`: `translated.geml` holds no translated text — it embeds `source.geml` block by block (Chinese by default, the command kept as written, one line in Japanese, one in French) and the viewer translates it on open |
 | `showcase.geml` | one document with a computed table, four charts, a Mermaid flow and math |
 | `render.html` | draws one of these documents with the viewer's own code, as the extension would: `render.html?doc=/examples/showcase.geml`. The demo pages frame it, so nothing needs installing |

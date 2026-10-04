@@ -33,6 +33,7 @@
   display: block; width: 100%; height: 78vh; min-height: 480px;
   border: 1px solid var(--vp-c-divider); border-radius: 8px; background: #fff;
 }
+.demo-frame-short { height: 340px; min-height: 0; background: #0b0d10; }
 .demo-video { display: block; max-width: 100%; max-height: 78vh; margin: 0 auto; border-radius: 8px; background: #000; }
 /* A long source scrolls inside its tab rather than stretching the page. */
 .demo-page .vp-code-group div[class*='language-'] pre { max-height: 70vh; overflow: auto; }

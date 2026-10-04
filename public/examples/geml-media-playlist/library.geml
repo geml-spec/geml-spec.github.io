@@ -1,0 +1,24 @@
+=== meta
+title = "Late-night library"
+profile = "geml-media/v1"
+===
+
+Four pieces made for this demo by ffmpeg's expression synthesizer: no samples,
+no recordings, nothing anyone else owns. Each asset's first body line is the
+title the playlist shows.
+
+=== media-asset {#night-train src=music/01-night-train.mp3 sha256="fe0e2571648a5bf8d6ff6a02960863bc55d3f612ed25484559ad06e28076b789" origin=generated}
+Night Train
+===
+
+=== media-asset {#rain src=music/02-rain.mp3 sha256="435918cd508b30b2671ff454f7a4cf9514ac00848d6efa92bb6b0102590df777" origin=generated}
+Rain on the Window
+===
+
+=== media-asset {#dawn-chorus src=music/03-dawn-chorus.mp3 sha256="6c249f04a66e426d0e7cf379b0ad9f937ef46d23302ee76ca358b40bd9232a9b" origin=generated}
+Dawn Chorus
+===
+
+=== media-asset {#harbor-lights src=music/04-harbor-lights.mp3 sha256="25fadbc1636f5d404d3848eb4b4ea6cb551f5f2cb19cf913c351f36638b7e2d2" origin=generated}
+Harbor Lights
+===
