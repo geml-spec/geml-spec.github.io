@@ -45,7 +45,7 @@ geml-parser--table.ts.geml#parseTable,            #coerce,         call, geml-pa
 geml-parser--selector.ts.geml#keyForm,            #tokenize,       call, geml-parser/src/selector.ts:229
 geml-parser--block-edit.ts.geml#rewriteBraces,    #parseAttrs,     call, geml-parser/src/block-edit.ts:52
 geml-parser--block-edit.ts.geml#normalizeBlockId, #parseAttrs,     call, geml-parser/src/block-edit.ts:116
-geml-parser--cli.ts.geml#runGet,                  #parseAttrs,     call, geml-parser/src/cli.ts:1337
+geml-parser--cli.ts.geml#runGet,                  #parseAttrs,     call, geml-parser/src/cli.ts:1339
 geml-parser--geml.ts.geml#readFencedBlock,        #parseAttrs,     call, geml-parser/src/geml.ts:1451
 geml-parser--geml.ts.geml#scanBlocks,             #parseAttrs,     call, geml-parser/src/geml.ts:1817
 geml-parser--geml.ts.geml#scanBlocks,             #parseAttrs,     call, geml-parser/src/geml.ts:1832
