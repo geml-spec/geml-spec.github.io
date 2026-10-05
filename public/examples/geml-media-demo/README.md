@@ -11,8 +11,8 @@ cd public/examples/geml-media-demo
 ## 最快出片
 
 **前置**：`ffmpeg` 和 `ffprobe` 在 PATH 上（出片、读素材时长都要它）。
-命令行 `geml` 来自 `npm i -g @geml/geml`；在本仓库里也可以用
-`node ../../geml-parser/dist/cli.js` 代替下面所有的 `geml`。
+命令行 `geml` 来自 `npm i -g @geml/geml`；在一个构建过的 geml 检出里，也可以用
+`node <geml 检出>/geml-parser/dist/geml.js` 代替下面所有的 `geml`。
 
 ```bash
 geml media build ep01/ep01-cut.geml --out ep01.mp4 --root . --burn-subs
@@ -32,7 +32,7 @@ geml media build ep01/ep01-cut.geml --out ep01.mp4 --root . --burn-subs
 不编码、秒开、能拖进度条：
 
 ```bash
-node ../../integrations/chrome-geml-viewer/tools/media-page.mjs . ep01/ep01-cut.geml
+geml media export ep01/ep01-cut.geml --to player -o play.html --root .
 ```
 
 写出 `play.html`，双击就是这条片子的播放面：画面按时间切，配音落在第 4.4 秒，

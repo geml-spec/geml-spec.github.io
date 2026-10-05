@@ -135,4 +135,4 @@ Doc-as-a-Base 不是要创造一个沉重的系统，而是用极简的约定，
 ---
 
 * 项目仓库：[github.com/geml-spec/geml](https://github.com/geml-spec/geml)  
-* 规范与宣言全文：[The GEML Manifesto](https://github.com/geml-spec/geml/blob/main/docs/MANIFESTO.md)
+* 规范与宣言全文：[The GEML Manifesto](/manifesto-cn)

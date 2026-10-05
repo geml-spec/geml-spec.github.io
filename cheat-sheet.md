@@ -145,7 +145,7 @@ geml replace doc 'old' 'new' [--within '#id']
 geml add     doc --before|--after '#id' --in file | --append
 geml delete  doc '#id'
 geml rename  doc '#old' '#new'                # updates every reference
-geml check   doc [--root dir] [--json] [--severity error] [--only code]   # exit 1 on any error
+geml check   doc [--root dir] [--json] [--severity <code>=<level>] [--only code]   # exit 1 on any error
 geml history save doc -m "msg" | get | restore | verify
 geml revert  doc '#id' --rev changed          # this block's previous distinct version
 geml doc.geml --to md|html|geml [-o out] [--root dir]   # project; losses are reported

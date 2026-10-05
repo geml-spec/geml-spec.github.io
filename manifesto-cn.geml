@@ -6,7 +6,7 @@ source       = "manifesto.geml"
 glossary     = "#not-translated-terms"
 ===
 
-%% 定译取自 docs/MANIFESTO_CN.md 的实际用词，不是新造的译名。
+%% 定译取自 manifesto-cn.md 的实际用词，不是新造的译名。
 === table {#not-translated-terms hidden}
 | term | zh-cn |
 |---|---|
@@ -16,5 +16,5 @@ glossary     = "#not-translated-terms"
 | REST | REST |
 ===
 
-=== embed {src=MANIFESTO.geml}
+=== embed {src=manifesto.geml}
 ===

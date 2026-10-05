@@ -136,4 +136,4 @@ Give every paragraph a name. Give every modification a boundary.
 ---
 
 * Repository: [github.com/geml-spec/geml](https://github.com/geml-spec/geml)  
-* Full Specification & Manifesto: [The GEML Manifesto](https://github.com/geml-spec/geml/blob/main/docs/MANIFESTO.md)
+* Full Specification & Manifesto: [The GEML Manifesto](/manifesto)

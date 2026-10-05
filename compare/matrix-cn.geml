@@ -1,7 +1,7 @@
 === meta
 profile      = "geml-translator/v1"
 translate-to = "zh-cn"
-source       = "COMPARISON.geml"
+source       = "matrix.geml"
 glossary     = "#not-translated-terms"
 ===
 
@@ -22,5 +22,5 @@ glossary     = "#not-translated-terms"
 | Pandoc | Pandoc |
 ===
 
-=== embed {src=COMPARISON.geml}
+=== embed {src=matrix.geml}
 ===

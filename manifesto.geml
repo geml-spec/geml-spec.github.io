@@ -5,7 +5,7 @@
 A design manifesto for the document protocol of the human–AI co-writing era.
 ===
 
-*English | [中文](https://github.com/geml-spec/geml/blob/main/docs/MANIFESTO_CN.md)*
+*English | [中文](https://geml-spec.github.io/manifesto-cn)*
 
 
 ## I. Origin
@@ -82,7 +82,7 @@ A claim must be checkable, or it is a slogan. The four claims map to four laws, 
 3. **The Law of Validation**: **cross-block references are checked at build time; a bad write is stopped before it lands.** The write itself is defended: one more gate on the write path, with no waiting for human review to intervene.
 4. **The Law of Rollback**: **when something goes wrong, it must be possible to revert only the block that went wrong.** With the companion `.gemlhistory`, a bad change is reverted atomically for a single block, touching nothing else. An agent's long-term memory is, by nature, the history of its short-term memory. Git — built on files and commits — is too heavy an operation here and structurally cannot offer block granularity. That is not a flaw in Git; it lives at a different layer.
 
-Addressing, projection, validation, rollback — each is a solved problem somewhere: databases have primary keys, XML has XInclude, schemas validate, Git keeps history. What is uncommon is not any one of them, but holding all four inside one human-readable plain text. (For the format-by-format breakdown, see the [capability matrix](https://github.com/geml-spec/geml/blob/main/docs/comparisons/COMPARISON.md).)
+Addressing, projection, validation, rollback — each is a solved problem somewhere: databases have primary keys, XML has XInclude, schemas validate, Git keeps history. What is uncommon is not any one of them, but holding all four inside one human-readable plain text. (For the format-by-format breakdown, see the [capability matrix](https://geml-spec.github.io/compare/matrix).)
 
 One more thing follows the four — not a fifth law, but what the four hand you once they hold: **context is a scarce resource**. Fetching one block instead of the whole document looks like an efficiency detail on paper; inside an agent's multi-turn loop it decides where the model's attention lands and how much budget the round has left. What addressing saves is not bandwidth — it is the room the model has to think.
 

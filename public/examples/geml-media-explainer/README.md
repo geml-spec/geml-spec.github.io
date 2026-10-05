@@ -7,7 +7,9 @@
 它**自己也是用 geml-media 做的**——每个镜头是一个 `media-asset`，时间线是 `media-clip`，
 旁白、配乐、画面都带生成记录，成片由 `geml media build` 出。
 
-设计：[`docs/design/specs/2026-09-27-geml-media-explainer-design.md`](../../docs/design/specs/2026-09-27-geml-media-explainer-design.md)。
+设计：[`docs/design/specs/2026-09-27-geml-media-explainer-design.md`](https://github.com/geml-spec/geml/blob/main/docs/design/specs/2026-09-27-geml-media-explainer-design.md)（在 geml 仓库里）。
+
+`tools/` 下的脚本调用 geml CLI：设了 `GEML_CLI`（指向某个 `geml.js`）就用它，否则用 `npm i -g @geml/geml` 装的全局版本。
 
 ## 片子讲什么
 

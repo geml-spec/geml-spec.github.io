@@ -2,7 +2,7 @@
 title = "GEML — the full tour"
 author = "the GEML team"
 spec = "1.0"
-parser = "1.10.1"
+parser = "1.12.3"
 ===
 
 # {{title}} {#top}

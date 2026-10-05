@@ -10,7 +10,7 @@ head:
 hero:
   name: GEML
   text: A lightweight, Agent-Native markup language
-  tagline: Plain text people read. Blocks with names that agents get, set, add and delete — and a write that would break the document is refused. Works on the Markdown you already have.
+  tagline: Plain text people read. Blocks with names that agents get, set, add and delete, each with its own history to revert — and a write that would break the document is refused. Works on the Markdown you already have.
   image:
     light: /logo/geml-logo-light.svg
     dark: /logo/geml-logo-dark.svg
@@ -29,7 +29,7 @@ hero:
 
 features:
   - title: Specified
-    details: A 1.0 specification, a conformance suite of 197 cases, and CI that checks the specification — itself a GEML document — on every push.
+    details: A 1.0 specification, a conformance suite of 429 cases, and CI that checks the specification — itself a GEML document — on every push.
     link: https://github.com/geml-spec/geml/blob/main/spec/GEML-spec.md
     linkText: Read the spec
   - title: Verbs, not rewrites
@@ -149,7 +149,7 @@ Read `.geml` in the browser with the [Chrome extension](https://chromewebstore.g
 - **On Markdown, addressing stops at headings.** Cells, views and bound charts need `.geml`.
 - **Validation stops broken structure, not bad prose.** A mangled paragraph with valid links passes `check`; that is what `revert` is for.
 - **Not a database.** No index, no transactions. It borrows a database's operations, not its runtime.
-- **Young.** Spec 1.0 is stable and self-hosted; one reference implementation exists, and a second independent one is what the project most wants.
+- **Young.** Spec 1.0 is stable and self-hosted. Besides the reference parser there is one independent implementation, [geml-parser-rs](https://github.com/geml-spec/geml/tree/main/geml-parser-rs) (Rust + WebAssembly), written from the specification and its conformance suite alone; it passes all 429 cases.
 
 ## Influences
 

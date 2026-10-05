@@ -1,22 +1,25 @@
 ---
 title: "Addressing benchmark: what one edit costs an agent"
-description: "Same documents, same 47 edits: pointing at the place costs 13,109 bytes in Markdown and 611 in GEML, 21.45× less. One command reproduces it."
+description: "Same document, same 11 edits: pointing at the place costs 790 bytes in Markdown and 240 in GEML, 3.29× less, at geml 31fb510b. The figure moves with the corpus; the page says how much and why."
 ---
 
 # What one edit costs: the addressing benchmark
 
-> **The headline: saying WHERE a change goes costs 21× more in Markdown.**
+> **Measured at geml `31fb510b` (2026-10-05): saying WHERE a change goes costs
+> 3.29× more in Markdown.**
 >
-> Same documents, same 47 edits. Pointing at a place in Markdown means quoting
-> the text back — 13,109 bytes. In GEML it means writing an address — 611 bytes.
+> Same document, same 11 edits. Pointing at a place in Markdown means quoting
+> the text back — 790 bytes. In GEML it means writing an address — 240 bytes.
 > The replacement content is identical in both and is excluded from that figure,
-> so the whole **21.45×** is what the format charges to say where.
+> so the whole ratio is what the format charges to say where.
 
-This is not a number quoted from a one-off measurement. One command reproduces it:
-
-```sh
-GEML_SRC=../geml node benchmarks/addressing-cost.mjs
-```
+**This figure moves with the corpus, and by a lot.** The corpus is the live
+specification, sampled every Nth block, so an edit to the specification changes
+which blocks are sampled. One documentation commit apart, `187efa3c` gave
+**14.49×** — 3,929 of its 4,347 Markdown bytes were one sampled 4 KB table that
+had to be quoted back — and `31fb510b` gives **3.29×**, with that table no
+longer in the sample. GEML comes out ahead on every run; how far ahead depends
+on whether a large block lands in the sample. Quote the figure with its commit.
 
 ## Why measure this
 
@@ -40,7 +43,7 @@ the original.
 
 | | |
 |---|---|
-| **Corpus** | Four documents that exist in this repository in **both formats**: the specification and the history specification, English and Chinese, 16.8 KB to 70.6 KB. Same content, same heading count. Arm A edits the Markdown, arm B the GEML, so neither arm gets the easier document |
+| **Corpus** | Documents the geml repository keeps in **both formats**, so arm A edits the Markdown and arm B the GEML and neither arm gets the easier document. Today that is one: the English specification (`GEML-spec.md` / `GEML-spec.geml`). The Chinese `.geml` is now a translation projection whose blocks are not literally in the Chinese Markdown (its 13 sampled blocks are skipped), and the history specification became a profile with no `.geml` rendering |
 | **Sampling** | Mechanical: every Nth addressable block, about twelve per document, **nothing hand-picked**. The only exclusion is the document-level H1 — its "block" is the whole file, and nobody edits a document as a single operation |
 | **The job** | "Replace the content of block B." The editor knows **what** to change, not **where** it is, so both arms must find it first. The search phrase comes from one rule — B's first line of twelve characters or more — and **both arms search for the same phrase** |
 | **Arm A (Markdown)** | `grep -n` to locate → `sed -n '<hit>,+45p'` for a 46-line window → (a second read when the block does not fit) → write a unique `old_string`, then the new content |
@@ -59,51 +62,41 @@ a flattering case:
 
 ## Results
 
-47 edits across 4 documents:
+11 edits on `GEML-spec.md`, at two commits one documentation change apart:
 
-| | Markdown | GEML | ratio |
-|---|---:|---:|---:|
-| **Saying where (bytes written)** | **13,109** | **611** | **21.45×** |
-| Bytes read | 107,861 | 44,155 | 2.44× |
-| Median read per edit | 2,124 | 565 | 3.76× |
-| Round trips | 103 | 94 | 1.10× |
+| | Markdown | GEML | ratio at `31fb510b` | ratio at `187efa3c` |
+|---|---:|---:|---:|---:|
+| **Saying where (bytes written)** | **790** | **240** | **3.29×** | 14.49× (4,347 / 300) |
+| Bytes read | 58,838 | 32,336 | 1.82× | 1.53× |
+| Median read per edit | 3,379 | 2,140 | 1.58× | 2.40× |
+| Round trips | 25 | 22 | 1.14× | 1.18× |
 
-- **GEML costs more on 0 of 47 edits.** Not one exception.
-- **The 46-line window did not contain the block on 9 of 47 (19%).** Markdown
-  then needs a second read — and how big to make the window was a guess in the
-  first place: too small misses content, too large reads it for nothing.
-- Per-edit read ratio: min 1.41× · median 3.10× · max 18.12×.
+(The Markdown and GEML columns are the `31fb510b` run.)
 
-Each document computed on its own, so the result is not carried by one of them:
-
-| document | n | read | saying where |
-|---|---:|---:|---:|
-| GEML-spec_CN.md | 12 | 2.13× | 10.7× |
-| GEML-spec.md | 11 | 2.91× | 11.0× |
-| GEML-history-spec_CN.md | 12 | 2.41× | 25.6× |
-| GEML-history-spec.md | 12 | 2.30× | 32.7× |
-
-### A corroboration
-
-Arm A's median read per edit is **2,124 bytes**. A completely separate
-measurement — counting, line by line, an agent's session log from a full day of
-real document editing — came to **2,133 bytes**. Different corpus, different
-method, within **0.4%**. The procedure above reproduces real behaviour rather
-than a model built to look good.
+- **GEML costs more on 1 of 11 edits at `31fb510b`** — by 0.3% (per-edit ratio
+  0.997×); on 0 of 11 at `187efa3c`.
+- **The 46-line window did not contain the block on 3 of 11** (4 of 11 at
+  `187efa3c`). Markdown then needs a second read — and how big to make the
+  window was a guess in the first place: too small misses content, too large
+  reads it for nothing.
+- Per-edit read ratio at `31fb510b`: min 1.00× · median 1.97× · max 6.98×. The
+  median is the steadiest number here: 1.98× at `187efa3c`.
 
 ## What this does **not** show
 
-- **Round trips barely move** (1.10×). `find` + `get` is two calls; `grep` +
+- **Round trips barely move** (1.14×). `find` + `get` is two calls; `grep` +
   `sed` is two calls. GEML saves what each call carries, not how many there are.
-- **Smaller blocks widen the gap.** These documents are specifications, so their
-  blocks are large. Documents with smaller blocks read better than this; a few
-  very large blocks read worse. The median (3.10×) describes a typical edit
-  better than the total (2.44×).
+- **Smaller blocks widen the gap.** The specification's blocks are large.
+  Documents with smaller blocks read better than this; a few very large blocks
+  read worse. The median per-edit ratio (1.97×) describes a typical edit better
+  than the total.
 - **It does not measure writing.** Writing a paragraph well means understanding
   its surroundings, and that cost is the same in both formats. This measures
   finding the paragraph and pointing at it.
-- **Four documents, 47 edits**, all from this repository. More corpus would make
-  it firmer; the script takes a different corpus without modification.
+- **One document, 11 edits**, from the geml repository. That is a small sample,
+  which is exactly why "saying where" swings with one large block. More corpus
+  would make it firmer; the script takes a different corpus without
+  modification.
 
 ## Why the gap is widest on "saying where"
 
@@ -112,7 +105,9 @@ Because that is where the two formats do genuinely different things.
 Markdown offers no alternative: for a replacement to land in the right place,
 the quoted text must be long enough to be unique — a short quote collides with
 the same wording elsewhere and the edit lands in the wrong paragraph. The longer
-the document and the more its phrasing repeats, the longer the quote must be.
+the document and the more its phrasing repeats, the longer the quote must be —
+and a table has to be quoted far enough to be unique, which is how one table
+carried most of the `187efa3c` figure.
 
 In GEML that step is an address: `#3-blocks`, or `=== table@412f8f61`. An
 address does not grow with the content, or with the document.
@@ -122,18 +117,19 @@ token, is the expensive direction.
 
 ## Reproducing it
 
+The script lives in this site's repository and reads a built geml checkout:
+
 ```sh
-git clone https://github.com/geml-spec/geml && cd geml
-cd geml-parser && npm install && npm run build && cd ..
+git clone https://github.com/geml-spec/geml
+(cd geml/geml-parser && npm install && npm run build)
+git clone https://github.com/geml-spec/geml-spec.github.io && cd geml-spec.github.io
 GEML_SRC=../geml node benchmarks/addressing-cost.mjs
 GEML_SRC=../geml node benchmarks/addressing-cost.mjs --json > result.json   # per-edit rows
 ```
 
-The figures here are from geml-spec `0c6be2c`. Both arms run for real against
-the four documents in the repository, so re-running after a change to the spec
-or the CLI moves the last digit — `107,889 → 107,861` is one spec revision's 28
-bytes. Neither the order of magnitude nor the conclusion moves with it; quote a
-figure only after running it yourself.
+To reproduce the figures above, check geml out at the commit first
+(`git -C ../geml checkout 31fb510b`, then rebuild). On any other commit the
+numbers will differ — by how much is the point of the section at the top.
 
 The script, the corpus and the sampling rule are all in the repository. To run
 it against your own documents, change `PAIRS` at the top: it needs the same

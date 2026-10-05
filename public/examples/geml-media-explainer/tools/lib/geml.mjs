@@ -7,13 +7,22 @@
 // 会派生出同一个 id 而撞车（设计 §10 待办 #8）。
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** 讲解片目录。每个函数都收一个 root，缺省是它；测试传临时副本。 */
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const CLI = process.env.GEML_CLI ?? resolve(ROOT, "../../geml-parser/dist/geml.js");
+// The CLI: GEML_CLI if set; else a geml checkout's build two levels up (where
+// this directory sat before the site moved out of the geml repository); else
+// the globally installed `npm i -g @geml/geml`.
+const CLI = process.env.GEML_CLI ?? [resolve(ROOT, "../../geml-parser/dist/geml.js"), globalCli()].find((p) => p && existsSync(p))
+  ?? resolve(ROOT, "../../geml-parser/dist/geml.js");
+
+function globalCli() {
+  const r = spawnSync("npm root -g", { encoding: "utf8", shell: true });
+  return r.status === 0 ? join(r.stdout.trim(), "@geml", "geml", "dist", "geml.js") : undefined;
+}
 export const FFMPEG = process.env.FFMPEG ?? "ffmpeg";
 export const FFPROBE = process.env.FFPROBE ?? "ffprobe";
 /** 每个镜头渲这几种语言；时间线也是每种语言一份。 */

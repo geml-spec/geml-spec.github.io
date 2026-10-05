@@ -553,7 +553,6 @@ fin   ; 财务
       <dl class="decision">
         <dt>规则</dt><dd><code>form-group</code> 就是重复组：零到多条，每条是它子字段值的一组；<code>required</code> 表示至少一条。只放在 form 直接子层，里面只放 form-field，开一个新作用域。<code>multiple</code> 只用在标量字段上表示多值，不是 form-group 的属性。非重复的复合分组不定义：纯视觉分组用体内标题。</dd>
         <dt>不嵌套</dt><dd>form-group 不能再放 form-group，放了是 error。三个试验表单里零实例；不嵌套则 id 作用域固定为 form、group 两层，地址最多三段，围栏最多五杠，解析器和所有下游工具都不用处理递归作用域。Drawbacks 第 1 条「非扁平 id 空间」的代价因此有界。等第一个嵌套实例出现再开。</dd>
-        <dt>代价</dt><dd class="amber">解析器的 id 作用域从「一层」改成「递归」，实现后最难改。围栏因为选项表外移反而少了一层。</dd>
       </dl>
     </figure>
 

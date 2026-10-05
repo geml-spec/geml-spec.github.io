@@ -1,15 +1,16 @@
 ---
 title: "Mixed-toolchain benchmark: a real day of agent edits"
-description: "14 edits from one real day, each given to the GEML verb built for it: 3.65× less reading and 7× fewer bytes spent saying where. None had to leave GEML."
+description: "8 replayable edits from one real day, each given to the GEML verb built for it: 3.36× less reading and 12.38× fewer bytes spent saying where, at geml 31fb510b. None had to leave GEML."
 ---
 
 # A real day of editing: the mixed-toolchain benchmark
 
-> **The headline: giving each of the day's 14 edits to the GEML verb built for
-> it cut the reading by 3.65× and the bytes spent saying WHERE by 7×.**
+> **Measured at geml `31fb510b` (2026-10-05): giving each of the day's 8
+> replayable edits to the GEML verb built for it cut the reading by 3.36× and the
+> bytes spent saying WHERE by 12.38×.**
 >
-> The 4 that had to be understood before they could be made went to `find` +
-> `get`, and they accounted for half the day's reading. The 10 whose old text
+> The 3 that had to be understood before they could be made went to `find` +
+> `get`, and they accounted for 81% of the day's reading. The 5 whose old text
 > was already known went to `replace`, which reads nothing at all. **Not one of
 > them had to leave GEML.**
 
@@ -18,11 +19,8 @@ one measures a single edit's ceiling on a controlled corpus, this one asks what
 **a full day of real work** looks like once each edit is done with the tool that
 suits it.
 
-To reproduce:
-
-```sh
-GEML_SRC=../geml node benchmarks/real-session-replay.mjs
-```
+To reproduce, see [Reproducing it](#reproducing-it) — the script lives in this
+site's repository and reads a built geml checkout.
 
 ## The premise: an agent is not confined to GEML
 
@@ -51,19 +49,21 @@ Those 33 edits were made with two tools:
 | node script (batched) | 19 | several `s.replace('old','new')` in one script — **blind, no reading** |
 | `Write` | 2 | whole-file write |
 
-**14 are replayable.** The other 19 put text into the document that is no longer
-there — it was itself rewritten later the same day, so **neither tool could
-locate it**. That is the ceiling of replaying history, not a thumb on the scale.
+**8 are replayable** at `31fb510b`. Of the other 25, 22 put text into the
+document that is no longer there — it was itself rewritten later, so **neither
+tool could locate it** — and 3 have no phrase to search for. That is the ceiling
+of replaying history, not a thumb on the scale, and it shrinks as `README_CN.md`
+keeps changing: `187efa3c` replays 9.
 
 ## The split, fixed before running
 
 **Nothing here picks whichever tool turned out cheaper.** The division is the
 agent's own choice, recorded at the time:
 
-- the 4 edits it made **one at a time, after reading** → `geml find` +
-  `geml get`: locate by content, read exactly that block.
-- the 10 edits it made as **batched replacements** → `geml replace`, which
-  needs no read at all.
+- the 3 replayable edits it made **one at a time, after reading** →
+  `geml find` + `geml get`: locate by content, read exactly that block.
+- the 5 replayable edits it made as **batched replacements** → `geml replace`,
+  which needs no read at all.
 
 **The second route is new**, and it is why these figures differ from earlier
 runs. The rule used to leave batched edits on the original commands because GEML
@@ -84,28 +84,29 @@ each edit searches for the text that edit landed and reads the block it lands in
 
 | | all Markdown (what happened) | mixed | ratio |
 |---|---:|---:|---:|
-| Bytes read | 21,732 | 5,953 | **3.65×** |
-| **Saying where (bytes written)** | **2,971** | **424** | **7.01×** |
+| Bytes read | 10,681 | 3,178 | **3.36×** |
+| **Saying where (bytes written)** | **2,537** | **205** | **12.38×** |
+
+(geml `31fb510b`. At `187efa3c`, with 9 edits replayable: 3.23× and 11.60×.)
 
 Where it comes from:
 
 | | n | read | saying where |
 |---|---:|---|---|
-| batched replacement (via `replace`) | 10 | **10,755 → 1,230** | the old text is written either way |
-| **needs an address (`find` + `get`)** | **4** | **10,977 → 4,723** | **2,582 → 35** |
+| batched replacement (via `replace`) | 5 | **2,070 → 1,265** | the old text is written either way |
+| **needs an address (`find` + `get`)** | **3** | **8,611 → 1,913** | **2,386 → 54** |
 
-**That is the point: those 4 edits are a quarter of the 14, and 51% of
-everything the day read.** The edits that must be understood before they can be
-made are few and expensive. GEML touches only them, and the day's total falls by
-almost a third.
+**That is the point: those 3 edits are 3 of the 8, and 81% of everything the
+day read.** The edits that must be understood before they can be made are few
+and expensive, and that is where GEML's saving lands.
 
 ### For contrast: what this looked like before `replace`
 
-The same edits came to **1.40×** when GEML had no `replace`, because the batched
-ten had to leave it and the 10,755 bytes they read on the original commands
-counted in full.
+The same edits come to **2.68×** if GEML has no `replace`, because the batched
+five have to leave it and the 2,070 bytes they read on the original commands
+count in full.
 
-**The distance from 1.40× to 3.65× is what one verb was worth.** It did not make
+**The distance from 2.68× to 3.36× is what one verb was worth.** It did not make
 GEML better at swapping strings — `sed` was always good at that. It meant those
 ten edits no longer had to leave, and leaving costs more than bytes: a write made
 outside is not re-parsed, not reported, not in the history, and nothing catches
@@ -114,7 +115,7 @@ it when it breaks something.
 ## The one-time cost
 
 Moving a Markdown document to GEML is not free, and the script pays it in the
-open: **10 raw `<a id="…"></a>` anchors are folded into heading ids**. The
+open: **12 raw `<a id="…"></a>` anchors are folded into heading ids**. The
 Chinese README names its sections with HTML tags today because Markdown offers
 no other way; in GEML a heading carries its own id. The step is automatic, but
 it is real conversion work.
@@ -123,24 +124,29 @@ it is real conversion work.
 
 - **Not "GEML is cheaper at everything."** What it saves is READING. `replace`
   says where with the old text exactly as the script did, so that column costs
-  the same on both sides — the 7.01× comes entirely from the other 4 edits.
-- **One document, 14 replayable edits.** That is the sample replaying real
-  history can yield; for a larger controlled sample see the
-  [addressing benchmark](./addressing-cost.md) (4 documents, 47 edits).
+  the same on both sides — the 12.38× comes entirely from the other 3 edits.
+- **One document, 8 replayable edits.** That is the sample replaying real
+  history can yield, and it is small enough that one edit moves the ratios; for
+  a controlled sample see the [addressing benchmark](./addressing-cost.md).
 - **It does not measure writing.** Writing a paragraph well means understanding
   its surroundings, and that costs the same either way.
 - **The figures move with the corpus.** This reads the real `README_CN.md` in
-  this repository, so editing it changes them; run it yourself before quoting a
-  precise value.
+  the geml repository, so editing it changes them; quote a figure with its
+  commit.
 
 ## Reproducing it
 
+The script lives in this site's repository and reads a built geml checkout:
+
 ```sh
-git clone https://github.com/geml-spec/geml && cd geml
-cd geml-parser && npm install && npm run build && cd ..
+git clone https://github.com/geml-spec/geml
+(cd geml/geml-parser && npm install && npm run build)
+git clone https://github.com/geml-spec/geml-spec.github.io && cd geml-spec.github.io
 GEML_SRC=../geml node benchmarks/real-session-replay.mjs
 GEML_SRC=../geml node benchmarks/real-session-replay.mjs --json > result.json   # per-edit rows
 ```
+
+To reproduce the figures above, check geml out at `31fb510b` first and rebuild.
 
 `benchmarks/real-session-edits.json` is the frozen baseline dataset and can
 be audited row by row. The GEML side is executed on every run, so the numbers

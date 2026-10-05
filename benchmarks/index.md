@@ -5,17 +5,23 @@ description: "Two reproducible benchmarks of agent document editing: the cost of
 
 # Benchmarks
 
-Two reproducible benchmarks of what an AI agent spends editing documents. The
-[addressing benchmark](./addressing-cost): on the same documents and the same 47
-edits, saying where an edit goes costs 13,109 bytes in Markdown and 611 in GEML,
-21.45× less. The [mixed-toolchain benchmark](./mixed-toolchain): giving each of a
-real day's 14 edits to the GEML verb built for it cut the reading by 3.65× and
-the bytes spent saying where by 7×.
+Two reproducible benchmarks of what an AI agent spends editing documents, both
+measured at geml `31fb510b` (2026-10-05). The
+[addressing benchmark](./addressing-cost): on the same document and the same 11
+edits, saying where an edit goes costs 790 bytes in Markdown and 240 in GEML,
+3.29× less — a figure that swings with the corpus (14.49× one documentation
+commit earlier), as the page explains. The
+[mixed-toolchain benchmark](./mixed-toolchain): giving each of a real day's 8
+replayable edits to the GEML verb built for it cut the reading by 3.36× and the
+bytes spent saying where by 12.38×.
 
 | script | what it measures |
 |---|---|
-| `addressing-cost.mjs` | One edit's cost, on a controlled corpus: four documents this repository keeps as both Markdown and GEML, ~12 blocks sampled from each, both arms executed for real. |
+| `addressing-cost.mjs` | One edit's cost, on a controlled corpus: the documents the geml repository keeps as both Markdown and GEML (today, the English specification), ~12 blocks sampled from each, both arms executed for real. |
 | `real-session-replay.mjs` | A full day of real editing, with each edit done the way that suits it — mechanical bulk replacement left on the original commands, edits that need an address moved to GEML. |
+
+Run them from this site's repository root, with `GEML_SRC` pointing at a built
+geml checkout (`git clone https://github.com/geml-spec/geml && (cd geml/geml-parser && npm install && npm run build)`):
 
 ```sh
 GEML_SRC=../geml node benchmarks/addressing-cost.mjs

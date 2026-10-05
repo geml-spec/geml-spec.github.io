@@ -283,11 +283,14 @@ audience had left, and the good parts largely lived in Saxon-EE.
 > position.**
 
 For GEML the lesson is not "don't charge" (GEML is MIT + CC-BY). It is the mirror
-form: **GEML currently has one implementation.** A single implementation and a
-single commercial implementation pose the same class of risk to the question *can
-this format exist independently of one supplier?* — which is why
-[`GOVERNANCE.md`](https://github.com/geml-spec/geml/blob/main/GOVERNANCE.md) treats a second independent implementation as
-an acceptance criterion rather than a nice-to-have.
+form: a single implementation and a single commercial implementation pose the
+same class of risk to the question *can this format exist independently of one
+supplier?* That is why **GEML now has a second, independent implementation**:
+[geml-parser-rs](https://github.com/geml-spec/geml/tree/main/geml-parser-rs)
+(Rust + WebAssembly), written from the specification and its conformance suite
+alone, passes all 429 conformance cases. And it is why
+[`GOVERNANCE.md`](https://github.com/geml-spec/geml/blob/main/GOVERNANCE.md) makes the conformance suite, not the
+reference parser, the contract an implementation has to meet.
 
 ---
 

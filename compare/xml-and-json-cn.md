@@ -178,7 +178,7 @@ XSLT 不是被「太啰嗦」杀死的。真正的死因有五条，按杀伤力
 
 > **一个标准，如果它最好的实现要付费，它就已经丢掉了默认位置。**
 
-这条对 GEML 的意义不在「别收费」（GEML 是 MIT + CC-BY），而在它的镜像形式：**GEML 目前只有一个实现。** 单一实现与单一商业实现，在「这个格式能不能脱离特定供应方存在」这个问题上，是同一类风险。这也是 `GOVERNANCE.md` 把「第二个独立实现」定为验收标准、而不是锦上添花的原因。
+这条对 GEML 的意义不在「别收费」（GEML 是 MIT + CC-BY），而在它的镜像形式：单一实现与单一商业实现，在「这个格式能不能脱离特定供应方存在」这个问题上，是同一类风险。所以 **GEML 现在有了第二个独立实现**：[geml-parser-rs](https://github.com/geml-spec/geml/tree/main/geml-parser-rs)（Rust + WebAssembly），只依据规范和一致性测试套件写成，通过全部 429 个一致性用例。也所以 [`GOVERNANCE.md`](https://github.com/geml-spec/geml/blob/main/GOVERNANCE.md) 把一致性测试套件、而不是参考解析器，定为一个实现必须满足的契约。
 
 ---
 
