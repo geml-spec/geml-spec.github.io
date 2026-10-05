@@ -54,10 +54,10 @@ from,                              to,                kind, site
 #normalizeBlockId,                 #rewriteHead,      call, geml-parser/src/block-edit.ts:107
 #normalizeBlockId,                 #findHead,         call, geml-parser/src/block-edit.ts:102
 geml-parser--verbs.ts.geml#set,    #normalizeBlockId, call, geml-parser/src/verbs.ts:1440
-geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2233
-geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2237
-geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2259
-geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2263
+geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2244
+geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2248
+geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2270
+geml-parser--verbs.ts.geml#revert, #normalizeBlockId, call, geml-parser/src/verbs.ts:2274
 ===
 
 === table {#unresolved format=csv hidden}

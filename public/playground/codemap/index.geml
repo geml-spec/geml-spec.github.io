@@ -1,7 +1,7 @@
 === meta
 profile = "geml-codemap/v1"
 repo = geml
-commit = 31fb510
+commit = 6905b7a
 container = file
 entry = chrome-geml-viewer--content.js.geml#main
 resolution-default = cpg
@@ -13,7 +13,7 @@ resolution-default = cpg
 module,                                  doc,                                           methods, entries, tests
 geml-parser/geml.ts,                     geml-parser--geml.ts.geml,                     138,     28,      0
 geml-parser/verbs.ts,                    geml-parser--verbs.ts.geml,                    72,      21,      0
-geml-parser/cli.ts,                      geml-parser--cli.ts.geml,                      49,      0,       0
+geml-parser/cli.ts,                      geml-parser--cli.ts.geml,                      50,      0,       0
 geml-parser/render.ts,                   geml-parser--render.ts.geml,                   48,      8,       0
 geml-parser/history.ts,                  geml-parser--history.ts.geml,                  39,      7,       0
 geml-parser/table.ts,                    geml-parser--table.ts.geml,                    35,      5,       0
@@ -25,8 +25,8 @@ geml-parser/style-resolve.ts,            geml-parser--style-resolve.ts.geml,    
 geml-parser/inline.ts,                   geml-parser--inline.ts.geml,                   27,      6,       0
 geml-parser/edn.ts,                      geml-parser--edn.ts.geml,                      21,      2,       0
 geml-parser/style-selector.ts,           geml-parser--style-selector.ts.geml,           21,      8,       0
+geml-parser/to-md.ts,                    geml-parser--to-md.ts.geml,                    21,      1,       0
 chrome-geml-viewer/transclude.js,        chrome-geml-viewer--transclude.js.geml,        20,      1,       0
-geml-parser/to-md.ts,                    geml-parser--to-md.ts.geml,                    19,      1,       0
 geml-parser/mcp.ts,                      geml-parser--mcp.ts.geml,                      16,      0,       0
 geml-parser/media-check.ts,              geml-parser--media-check.ts.geml,              16,      6,       0
 geml-parser/serialize.ts,                geml-parser--serialize.ts.geml,                16,      1,       0
