@@ -16,6 +16,14 @@
 /* Hero: the name is the wordmark, the text line is the one-sentence definition. */
 .VPHero .name { font-weight: 800; letter-spacing: -0.02em; }
 .VPHero .text { font-weight: 600; }
+/* The definition is a full sentence, twice the length of a slogan: a step down
+   from the name, so it runs to three lines rather than six. */
+.VPHero .heading .text { margin-top: 8px; font-size: 26px; line-height: 34px; letter-spacing: -0.2px; }
+@media (min-width: 640px) { .VPHero .heading .text { font-size: 34px; line-height: 42px; } }
+@media (min-width: 960px) { .VPHero .heading .text { font-size: 40px; line-height: 48px; } }
+/* hero.lede (theme/index.ts): the longer description, under the tagline. */
+.hero-lede { margin: 16px auto 0; max-width: 576px; font-size: 16px; line-height: 26px; color: var(--vp-c-text-2); }
+@media (min-width: 960px) { .VPHero.has-image .hero-lede { margin-left: 0; margin-right: 0; } }
 
 /* The construct → syntax table on the home page and the cheat sheet. */
 .vp-doc table code { white-space: nowrap; }

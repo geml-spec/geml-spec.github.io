@@ -228,7 +228,7 @@ export default defineConfig({
     outline: [2, 3],
     footer: {
       message: 'Code MIT · Specification CC BY 4.0',
-      copyright: 'GEML — a lightweight, Agent-Native markup language',
+      copyright: 'GEML — a lightweight markup language with uniform, addressable blocks and standard verbs',
     },
   },
 })
