@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEML × Carve 对照</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<style>
+/* Layout: a provenance dossier — verdict first, then paired evidence in two lanes (Carve violet / GEML teal), ancestors in ochre. */
+:root{
+  --bg:#F3F5F2; --surface:#FFFFFF; --sunk:#E9EDE9; --ink:#1A211F; --muted:#56635E; --line:#D5DCD7;
+  --geml:#0D6C63; --geml-soft:#DBEEEA; --carve:#7449AE; --carve-soft:#ECE3F7;
+  --anc:#85651A; --anc-soft:#F2E9D1; --homo:#2C5BA3; --homo-soft:#DFE8F6;
+  --bad:#B0373A; --bad-soft:#F7E0E0; --ok:#24774A; --ok-soft:#DCEFE3;
+  --f-display:"Noto Serif SC","Songti SC","STSong",Georgia,serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111514; --surface:#191E1D; --sunk:#0C0F0E; --ink:#E4EAE7; --muted:#9AA7A2; --line:#2B3331;
+  --geml:#55C4B7; --geml-soft:#13302C; --carve:#BB9DEA; --carve-soft:#28203A;
+  --anc:#D9B866; --anc-soft:#2D2614; --homo:#8FB2EE; --homo-soft:#18233A;
+  --bad:#EE8686; --bad-soft:#3A1C1E; --ok:#7CCB9C; --ok-soft:#15301F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111514; --surface:#191E1D; --sunk:#0C0F0E; --ink:#E4EAE7; --muted:#9AA7A2; --line:#2B3331;
+  --geml:#55C4B7; --geml-soft:#13302C; --carve:#BB9DEA; --carve-soft:#28203A;
+  --anc:#D9B866; --anc-soft:#2D2614; --homo:#8FB2EE; --homo-soft:#18233A;
+  --bad:#EE8686; --bad-soft:#3A1C1E; --ok:#7CCB9C; --ok-soft:#15301F; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.7 var(--f-body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.25;margin:0}
+h1{font-size:clamp(30px,5vw,48px);font-weight:900;letter-spacing:.01em}
+h2{font-size:clamp(22px,3vw,28px);font-weight:900;margin-bottom:6px}
+h3{font-size:18px;font-weight:600}
+p{margin:0}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+a{color:var(--homo)}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17px;max-width:68ch;color:var(--ink)}
+.muted{color:var(--muted)}
+.sec{margin-top:56px;display:grid;gap:16px}
+.sec>header{display:grid;gap:6px;max-width:75ch}
+.tagC,.tagG{font:700 11px/1 var(--f-mono);padding:4px 7px;border-radius:4px;letter-spacing:.04em;white-space:nowrap}
+.tagC{background:var(--carve-soft);color:var(--carve)}
+.tagG{background:var(--geml-soft);color:var(--geml)}
+
+/* hero */
+.hero{display:grid;gap:18px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.hero .q{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:baseline}
+.answer{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:6px}
+.ans{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 16px 14px;display:grid;gap:6px;align-content:start}
+.ans b{font-family:var(--f-display);font-size:17px;font-weight:900;line-height:1.35}
+.ans p{color:var(--muted);font-size:14px}
+.ans .k{font:700 26px/1 var(--f-mono);color:var(--geml)}
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.nav a{font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--surface)}
+.nav a:hover,.nav a:focus-visible{border-color:var(--geml);outline:none}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+thead th{font:600 12px/1.4 var(--f-body);color:var(--muted);background:var(--sunk);position:sticky;top:0;letter-spacing:.04em}
+tbody tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+td.c code{color:var(--carve)} td.g code{color:var(--geml)}
+td.c,td.g{min-width:170px}
+td.note{color:var(--muted);min-width:240px}
+tr.grp td{background:var(--sunk);font:700 12px/1.4 var(--f-body);letter-spacing:.08em;color:var(--muted);padding-block:6px}
+.v{display:inline-block;font:600 12px/1.2 var(--f-body);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.v-anc{background:var(--anc-soft);color:var(--anc)}
+.v-homo{background:var(--homo-soft);color:var(--homo)}
+.v-div{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
+.v-c{background:var(--carve-soft);color:var(--carve)}
+.v-g{background:var(--geml-soft);color:var(--geml)}
+.none{color:var(--muted);font-style:italic}
+
+/* filter */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters button{font:500 13px/1 var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.filters button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.filters button:focus-visible{outline:2px solid var(--geml);outline-offset:2px}
+.filters .n{font-family:var(--f-mono);font-size:12px;opacity:.75}
+
+/* legend + tally */
+.tally{display:flex;flex-wrap:wrap;gap:10px}
+.tally div{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+
+/* philosophy */
+.phil td:first-child{font-weight:700;white-space:nowrap}
+
+/* probes */
+.probes{display:grid;gap:18px}
+.probe{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.probe>header{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;padding:14px 16px;border-bottom:1px solid var(--line)}
+.probe>header h3{font-size:17px}
+.probe>header p{color:var(--muted);font-size:14px;flex-basis:100%}
+.lanes{display:grid;grid-template-columns:1fr 1fr}
+.lane{min-width:0;padding:12px 16px 16px;display:grid;gap:8px;align-content:start}
+.lane+.lane{border-left:1px solid var(--line)}
+.lane h4{margin:0;display:flex;gap:8px;align-items:center;font:600 13px/1.3 var(--f-body)}
+pre{margin:0;background:var(--sunk);border-radius:8px;padding:10px 12px;overflow-x:auto;font:12.5px/1.55 var(--f-mono);white-space:pre}
+pre.out{border-left:3px solid var(--line)}
+pre.err{border-left-color:var(--bad)}
+pre.pass{border-left-color:var(--ok)}
+.res{font:600 12.5px/1.4 var(--f-body);display:inline-flex;gap:6px;align-items:center;padding:3px 8px;border-radius:6px;width:fit-content}
+.res.bad{background:var(--bad-soft);color:var(--bad)}
+.res.good{background:var(--ok-soft);color:var(--ok)}
+.res.meh{background:var(--sunk);color:var(--muted)}
+.lab{font:500 11px/1 var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:760px){.lanes{grid-template-columns:1fr}.lane+.lane{border-left:0;border-top:1px solid var(--line)}}
+
+/* lists of strengths */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card h3{display:flex;gap:10px;align-items:center}
+.card ol{margin:0;padding-left:20px;display:grid;gap:10px}
+.card li{padding-left:2px}
+.card li b{display:block}
+.card li span{color:var(--muted);font-size:14px}
+.card.g{border-top:3px solid var(--geml)} .card.c{border-top:3px solid var(--carve)}
+
+/* timeline */
+.tl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tl svg{display:block;min-width:900px;width:100%;height:auto}
+.tl text{font-family:var(--f-body);font-size:11px;fill:var(--ink)}
+.tl .ax{fill:var(--muted);font-family:var(--f-mono);font-size:10.5px}
+.tl .gl{stroke:var(--line)}
+.tl .dc{fill:var(--carve)} .tl .dg{fill:var(--geml)}
+.tl .lc{stroke:var(--carve)} .tl .lg{stroke:var(--geml)}
+.tl .lane-c{fill:var(--carve)} .tl .lane-g{fill:var(--geml)}
+
+.facts{display:grid;gap:8px;font-size:14px}
+.facts li{color:var(--ink)}
+.small{font-size:13px;color:var(--muted)}
+footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:grid;gap:6px}
+@media (prefers-reduced-motion:no-preference){.filters button{transition:background .15s,color .15s}}
+
+.axis{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.axis ul{margin:0;padding-left:18px;display:grid;gap:9px}
+.axis li b{display:block}
+.axis li span{color:var(--muted);font-size:14px}
+.evo{list-style:none;margin:0;padding:0 0 0 18px;display:grid;gap:12px;border-left:2px solid var(--line)}
+.evo li{position:relative;display:grid;gap:2px}
+.evo li::before{content:"";position:absolute;left:-26px;top:.4em;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--geml)}
+.evo li.turn::before{background:var(--geml)}
+.evo time{font:600 12px/1.3 var(--f-mono);color:var(--geml)}
+.evo li span{color:var(--muted);font-size:14px}
+.vs{font-size:13.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.cwrap{display:grid;gap:10px;margin-top:4px}
+.cfig{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:14px;align-items:stretch}
+@media (max-width:920px){.cfig{grid-template-columns:1fr}}
+.cfig>div{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:10px;align-content:start}
+.cfig>div.core{border:2px solid var(--geml);background:var(--geml-soft)}
+.cfig ul{margin:0;padding-left:18px;display:grid;gap:7px;font-size:14px}
+.cfig .box{font-family:var(--f-display);font-weight:900;font-size:20px;color:var(--geml)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.compat{margin:0;padding:10px 14px;border-left:3px solid var(--geml);background:var(--surface);border-radius:0 8px 8px 0;font-size:14px}
+.chips code{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:12.5px;color:var(--geml)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="hero">
+  <div class="eyebrow">独立性对照 · 两种标记语言 · 2026-10-06 实测 · <a href="geml-vs-carve.html">English</a> · <a href="/illustrated/">全部图解</a> · <a href="/">GEML 首页</a></div>
+  <div class="q"><h1>GEML 与 Carve：一个为排版，一个为 agent</h1><span class="tagC">Carve .crv</span><span class="tagG">GEML .geml</span></div>
+  <p class="lede">两种语言都诞生于 2026 年，都想在 Markdown 之后再走一步，但方向不同：Carve 为排版和展现优化，追求更丰富的表现力；GEML 为 agent 优化，追求更强的元素操纵能力，它更像一个容器：用同一套地址和标准动作，容纳并操纵文档内外的各种文本形式。本页把它们的 82 个语法构造和每一项能力逐一摆在一起，标出各自的设计来源，再用两边的官方解析器跑同一批输入。两者写法相同的地方只有 13 条，全部来自更早的公共来源；其余部分各自成体系。</p>
+  <div class="answer">
+    <div class="ans"><span class="k">13</span><b>写法相同的 13 条，都来自公共来源</b><p>ATX 标题、<code>[t](url)</code>、<code>![](src)</code>、<code>`code`</code>、<code>[^id]</code>、<code>- [ ]</code>、<code>{#id .class k=v}</code>、<code>%%</code> 等，分别来自 Markdown（2004）、PHP Markdown Extra、GFM、Pandoc、Obsidian/Mermaid、CommonMark。</p></div>
+    <div class="ans"><span class="k">29 · 11</span><b>各自的独有写法互不重叠</b><p>Carve 独有 29 条：<code>/斜体/</code> <code>*粗体*</code> <code>_下划线_</code> <code>=高亮=</code>、<code>|=</code> 表头、<code>^</code> 题注、<code>:::</code> 容器、<code>&lt;/#id&gt;</code>、CriticMarkup 等。GEML 独有 11 条：类型块原语、数据形态表格、<code>view</code>、<code>data</code>、块内坐标、带标签闭合等。同一段文本两边的解析结果完全不同（实测 P7）。</p></div>
+    <div class="ans"><span class="k">两个方向</span><b>一个为排版，一个为 agent</b><p>Carve 是 Djot 的继任者，力气花在内联表现、表格版式、题注编号和多种输出上。GEML 的力气花在地址、按块读写、写入护栏、块级历史和引用校验上，让 agent 能精确、安全地改动文档里的任何一个元素。</p></div>
+    <div class="ans"><span class="k">相反</span><b>关键设计决定方向相反</b><p>Carve 否决了 <code>{{name}}</code> 变量，GEML 把 <code>{{key}}</code> 放进核心；Carve 让找不到目标的引用原样留给宿主，GEML 规定它是构建错误；Carve 默认放行 <code>=html</code>，GEML 没有 HTML 通道。</p></div>
+    <div class="ans"><span class="k">09-30</span><b>两个项目何时知道对方</b><p>Carve 的仓库里没有任何关于 GEML 的记录。GEML 第一次记下 Carve 是 09-30 的一份同类项目调研，那时 GEML 的核心设计都已上线一到三个月。</p></div>
+    <div class="ans"><span class="k">229</span><b>profile 与 view 都是一步步重构出来的</b><p>profile 从写进核心规范，到 08-31 抽成应用层机制，六个 profile 累计 229 次提交；view 从 table 的计算属性拆成独立的块。详见第五节。</p></div>
+  </div>
+  <nav class="nav" aria-label="页面目录">
+    <a href="#philosophy">设计方向</a><a href="#syntax">语法逐项</a><a href="#probes">同输入实测</a><a href="#capabilities">能力逐项</a><a href="#evolution">设计演进</a><a href="#strengths">各自所长</a><a href="#timeline">时间线</a><a href="#evidence">来源与复核</a>
+  </nav>
+</section>
+
+<!-- ============ PHILOSOPHY ============ -->
+<section class="sec" id="philosophy">
+  <header><div class="eyebrow">一 · 设计方向</div><h2>一个为排版，一个为 agent</h2>
+  <p class="muted">Carve 想让文档呈现得更好，GEML 想让 agent 能精确、安全地改动文档里的每一个元素。左右两栏是两边各自投入最多的地方；下表是由此带来的设计取舍，每一行都引自两边各自的文档或首个提交。</p></header>
+  <div class="axis">
+    <div class="card c"><h3><span class="tagC">Carve</span>为排版与展现优化</h3>
+      <p class="small">投入集中在「一份文档能呈现得多好」。</p>
+      <ul>
+        <li><b>内联表现力</b><span>下划线、高亮、上下标、粗斜体、语义 span（kbd、abbr、time）、语言标注、提及与标签。</span></li>
+        <li><b>排版细节</b><span>智能标点（破折号、省略号、箭头、©）、不换行空格、诗歌行块、续接标记。</span></li>
+        <li><b>表格版式</b><span>合并单元格、水平与垂直两轴对齐、续行、表头与表尾行数。</span></li>
+        <li><b>题注与编号</b><span>图、表、代码清单、公式的题注，<code>Figure #</code> 自动编号，复合图面板。</span></li>
+        <li><b>编辑痕迹</b><span>CriticMarkup 的插入、删除、替换与批注。</span></li>
+        <li><b>多种输出</b><span>HTML、Markdown、纯文本、ANSI 终端，并报告每种输出丢了什么。</span></li>
+      </ul></div>
+    <div class="card g"><h3><span class="tagG">GEML</span>为 agent 操纵元素优化</h3>
+      <p class="small">投入集中在「一个程序能多精确、多安全地改动文档里的一个元素」。</p>
+      <ul>
+        <li><b>一切皆有地址</b><span>显式 id、标题推导 id、两块之间散文的派生地址、内容地址 <code>@&lt;hex&gt;</code>、块内坐标 <code>#t[2]["Q1"]</code>、行号选择 <code>L27-58</code>。</span></li>
+        <li><b>按地址读写</b><span><code>get / set / add / delete / rename / revert</code> 只动目标块；实测改一格，400 字节里 399 字节原样不动（P9）。</span></li>
+        <li><b>写入有护栏</b><span>每次写入前整份重查，结果不能解析就拒绝；<code>#id@&lt;hex&gt;</code> 拦住基于过期内容的写入；<code>rename</code> 同步改掉全部引用。</span></li>
+        <li><b>改坏能退</b><span><code>.gemlhistory</code> 版本链，单块回滚，整链可重算校验。</span></li>
+        <li><b>引用是契约</b><span>八类引用在构建期校验，agent 改完一块立刻知道有没有弄断别处（P1、P3–P6）。</span></li>
+        <li><b>数据可推导</b><span><code>table</code>、<code>view</code>、<code>data</code> 与绑定的图表：改一个数，汇总和图跟着变。</span></li>
+        <li><b>给 agent 的接口</b><span>MCP 的 11 个读写工具与 agent 技能；读一块只占一块的上下文（实测 133 B / 400 B）。</span></li>
+      </ul></div>
+  </div>
+  <div class="cwrap">
+    <h3>GEML 更像一个容器</h3>
+    <p class="muted">同一套地址和标准动作，既作用于文档里的各种文本形式，也伸到文档外的文件、数据、代码库和其他文档。</p>
+    <div class="cfig" role="group" aria-label="GEML 作为容器：文档内容纳的形式、统一的动作与地址、文档外的引用">
+      <div><div class="lab">文档内 · 容纳的文本形式</div>
+        <ul>
+          <li><code>=== code</code> 任意编程语言，原样保存</li>
+          <li><code>=== math</code> TeX 公式</li>
+          <li><code>=== diagram</code> mermaid、vega-lite 等外部 DSL</li>
+          <li><code>=== table</code> 管道表、CSV、TSV</li>
+          <li><code>=== data</code> JSON、JSONL（YAML、TOML、EDN 已预留）</li>
+          <li><code>=== meta</code> 带类型的键值</li>
+          <li><code>=== note</code>、<code>=== text</code> 流式正文</li>
+          <li>不认识的类型：告警，正文原样保留</li>
+        </ul></div>
+      <div class="core">
+        <div class="box">GEML 文档</div>
+        <p class="small">一种围栏 <code>=== type {attrs}</code>，由类型注册表决定正文按 raw、flow 还是键值来读。</p>
+        <div class="lab">同一套标准动作</div>
+        <div class="chips"><code>list</code><code>find</code><code>get</code><code>set</code><code>add</code><code>delete</code><code>rename</code><code>revert</code><code>check</code><code>history</code><code>to</code></div>
+        <div class="lab">同一套地址</div>
+        <div class="chips"><code>#id</code><code>## 标题</code><code>=== type</code><code>@&lt;hex&gt;</code><code>L27-58</code><code>#t[2]["Q1"]</code><code>{lang=py}</code><code>--within</code></div>
+        <p class="small">命令行、MCP（工具名就是命令路径，07-29 起）和各 profile 的动词共用这一套。</p></div>
+      <div><div class="lab">文档外 · 伸出去的引用</div>
+        <ul>
+          <li><code>code src=f.py#L10-20</code> 源码文件的一段，行范围越界即报错</li>
+          <li><code>table src=data.csv</code> 本地或 http(s) 的数据文件</li>
+          <li><code>data src=log.jsonl#L1-500</code> JSON、JSONL、YAML 文件的一段</li>
+          <li><code>data=</code> 图表取数：CSV、JSON，或另一份文档里的表</li>
+          <li><code>embed src=doc.geml#id</code>、<code>[[doc.geml#id]]</code> 其他文档里的块；<code>get --view</code> 可直接读穿嵌入</li>
+          <li>profile 伸得更远：codemap 把整个代码库写成文档，media 管音视频素材，translator 让另一种语言的文档成为投影</li>
+        </ul></div>
+    </div>
+    <p class="compat"><b>向下兼容 Markdown</b>：内联写法沿用 Markdown；<code>.md</code> 文件不必转换就能 list、find、get、set，写进去的仍是 Markdown 语法（10-02）；需要时一条 <code>geml notes.md</code> 就能转成 GEML。</p>
+    <p class="vs"><span class="tagC">Carve</span> 的模型是「一份标记文档渲染成多种输出」。引入处理器只收 Carve 或纯文本，由宿主在解析器之外展开，核心解析器不读文件；命令行的动作作用于整篇文档（render、fmt、lint、diff、merge、migrate、flatten），按块的读取与替换 10-05 才出现在它的 MCP 服务器中。</p>
+  </div>
+  <div class="tbl"><table class="phil">
+    <thead><tr><th>维度</th><th>Carve</th><th>GEML</th></tr></thead>
+    <tbody>
+      <tr><td>要解决的问题</td><td>作为 Djot 的继任者，修掉 Markdown 二十年来的歧义，让写作者好学好记（<code>docs/technical-rationale.md</code>）</td><td>让人和 AI agent 共写同一份文档：对人是纯文本，对机器可寻址、可校验、可版本化（初稿 §1「万物可寻址」）</td></tr>
+      <tr><td>自述的祖先</td><td>Djot、Org-mode（<code>/斜体/</code>）、Creole（<code>|=</code>）、AsciiDoc（提示框）、CriticMarkup（Init 提交 README）</td><td>Markdown/CommonMark、AsciiDoc、reStructuredText、Org-mode、MyST、Mermaid/Graphviz、TOML（06-17 初稿序言与提交说明），其中没有 Djot，也没有 Carve。属性写法另注明以 Pandoc 为祖先（06-18 <code>COMPARISON.md</code>）；10-01 网站的「影响来源」一节列入 Djot</td></tr>
+      <tr><td>与 Markdown 的关系</td><td>刻意改变含义：<code>*x*</code> 是粗体、<code>_x_</code> 是下划线；<code>.crv</code> 不能交给 Markdown 解析器</td><td>向下兼容 Markdown：内联沿用 Markdown；CLI 能直接对 <code>.md</code> 文件按块读写，不必转换，写入仍是 Markdown 语法</td></tr>
+      <tr><td>块的组织方式</td><td>每类内容一套专用语法：<code>```</code> 代码、<code>$$`</code> 数学、<code>:::</code> 容器、<code>|=</code> 表格、<code>^</code> 题注、<code>---</code> 前言</td><td>一个类型块原语 <code>=== type {attrs}</code> 承载代码、数学、表格、图、数据、注释、元数据，正文模式由类型注册表决定</td></tr>
+      <tr><td>外部内容</td><td>引入处理器只收 Carve 或纯文本，由宿主在解析器之外展开（<code>includes.md</code>）</td><td><code>src=</code> 指向源码行范围、CSV、JSON/JSONL/YAML 和其他文档里的块，本地来源在构建期校验</td></tr>
+      <tr><td>动作的单位</td><td>整篇文档：render、fmt、lint、diff、merge、migrate、flatten</td><td>地址选中的元素：块、整节、散文、行范围、单元格；同一套动词覆盖命令行、MCP 与 profile</td></tr>
+      <tr><td>引用找不到目标时</td><td>原样保留，交给宿主程序解决（<code>extension-contract.md</code> §12.4）</td><td>构建错误，文档不合格（规范 §5.2、§8）</td></tr>
+      <tr><td>变量 / 插值</td><td>列入「已否决语法」：把标记和模板混在一起（<code>dismissed-syntax.md</code>）</td><td><code>{{key}}</code> 是核心语法，取值来自 <code>=== meta</code>，拼错即报错</td></tr>
+      <tr><td>原始 HTML</td><td>裸 HTML 是字面文本；<code>```=html</code> 透传在 JS/Rust 实现中默认开启</td><td>完全没有 HTML 通道；文档是数据，从不是代码（规范 §9.1）</td></tr>
+      <tr><td>块的身份</td><td>作者写的 <code>{#id}</code> 加上会话级节点 id；后者「在源码里没有写法」，会话结束即失效（<code>ast-node-identity.md</code>）</td><td>写在源码里的 <code>#id</code>，加上由相邻块推导出的散文地址；它是读、写、校验、版本历史共用的键</td></tr>
+      <tr><td>元数据</td><td><code>---</code> YAML 前言，原样保存</td><td><code>=== meta</code> 键值块，值有类型（字符串/数字/布尔），多个 meta 合并，<code>#meta</code> 可寻址</td></tr>
+      <tr><td>历史</td><td>没有存储的历史；比较两个文件（<code>carve diff</code>）、三方合并（<code>carve merge</code>）</td><td><code>.gemlhistory</code> 旁车文件：只追加的版本链、哈希校验、单块回滚</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ SYNTAX ============ -->
+<section class="sec" id="syntax">
+  <header><div class="eyebrow">二 · 语法逐项</div><h2>每一个语法构造，两边各怎么写</h2>
+  <p class="muted">Carve 依据其规范仓库 HEAD <code>bb09baea</code>（2026-10-06）的 <code>docs/cheatsheet.md</code> 与 <code>resources/grammar.ebnf</code>；GEML 依据 <code>spec/GEML-spec.md</code> 附录 B 的语法清单及各节正文。点下面的按钮筛选。</p></header>
+  <div class="tally">
+    <div><span class="v v-anc">同源继承</span>两边写法相同，都来自更早的公共来源</div>
+    <div><span class="v v-homo">同形异义</span>符号或名字相同，含义不同</div>
+    <div><span class="v v-div">同题异解</span>同一需求，写法与设计不同</div>
+    <div><span class="v v-c">仅 Carve</span></div>
+    <div><span class="v v-g">仅 GEML</span></div>
+  </div>
+  <div class="filters" role="group" aria-label="按判定筛选">
+    <button type="button" data-f="all" aria-pressed="true">全部 <span class="n"></span></button>
+    <button type="button" data-f="anc">同源继承 <span class="n"></span></button>
+    <button type="button" data-f="homo">同形异义 <span class="n"></span></button>
+    <button type="button" data-f="div">同题异解 <span class="n"></span></button>
+    <button type="button" data-f="c">仅 Carve <span class="n"></span></button>
+    <button type="button" data-f="g">仅 GEML <span class="n"></span></button>
+  </div>
+  <div class="tbl"><table id="syn">
+    <thead><tr><th>构造</th><th>Carve</th><th>GEML</th><th>判定</th><th>说明 / 公共来源</th></tr></thead>
+    <tbody>
+<tr class="grp"><td colspan="5">行内</td></tr>
+<tr data-v="div"><td>斜体</td><td class="c"><code>/x/</code></td><td class="g"><code>*x*</code></td><td><span class="v v-div">同题异解</span></td><td class="note">Carve 取自 Org-mode；GEML 沿用 Markdown</td></tr>
+<tr data-v="homo"><td>粗体</td><td class="c"><code>*x*</code></td><td class="g"><code>**x**</code></td><td><span class="v v-homo">同形异义</span></td><td class="note"><code>*x*</code> 在 Carve 是粗体，在 GEML 是斜体（实测 P7）</td></tr>
+<tr data-v="c"><td>粗斜体</td><td class="c"><code>/*x*/</code></td><td class="g none">无专门写法</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Carve 自创</td></tr>
+<tr data-v="c"><td>下划线</td><td class="c"><code>_x_</code></td><td class="g none">无；<code>_x_</code> 原样输出</td><td><span class="v v-c">仅 Carve</span></td><td class="note">实测 P7</td></tr>
+<tr data-v="div"><td>删除线</td><td class="c"><code>~x~</code></td><td class="g"><code>~~x~~</code></td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 用 GFM 写法；Carve 的单波浪线在 GEML 里不是语法</td></tr>
+<tr data-v="c"><td>高亮</td><td class="c"><code>=x=</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Init 时为 <code>==x==</code>，06-11 改单字符</td></tr>
+<tr data-v="c"><td>上标 / 下标</td><td class="c"><code>{^x^}</code> <code>{,x,}</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">花括号强制形式来自 Djot</td></tr>
+<tr data-v="c"><td>词内强制定界</td><td class="c"><code>H{,2,}O</code> 等</td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Djot 式</td></tr>
+<tr data-v="anc"><td>行内代码</td><td class="c"><code>`x`</code></td><td class="g"><code>`x`</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">Markdown（2004）</td></tr>
+<tr data-v="c"><td>行内字面量</td><td class="c"><code>!`x`</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Carve 07-21 新增</td></tr>
+<tr data-v="div"><td>行内数学</td><td class="c"><code>$`x`</code></td><td class="g"><code>$x$</code></td><td><span class="v v-div">同题异解</span></td><td class="note">Carve 05-21 起改用 Djot 写法；GEML 用 LaTeX/Pandoc 的 <code>$…$</code></td></tr>
+<tr data-v="c"><td>原始行内输出</td><td class="c"><code>`x`{=html}</code></td><td class="g none">无，规范禁止</td><td><span class="v v-c">仅 Carve</span></td><td class="note">来自 Djot / Pandoc RawInline</td></tr>
+<tr data-v="anc"><td>链接</td><td class="c"><code>[t](url)</code></td><td class="g"><code>[t](url)</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">Markdown（2004）</td></tr>
+<tr data-v="c"><td>引用式链接</td><td class="c"><code>[t][ref]</code> + <code>[ref]: url</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Markdown 原有，GEML 未收</td></tr>
+<tr data-v="anc"><td>文内锚点链接</td><td class="c"><code>[t](#id)</code></td><td class="g"><code>[t](#id)</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">写法同为 Markdown；但只有 GEML 校验目标存在（实测 P1）</td></tr>
+<tr data-v="div"><td>自动取文字的交叉引用</td><td class="c"><code>&lt;/#id&gt;</code></td><td class="g"><code>[[#id]]</code></td><td><span class="v v-div">同题异解</span></td><td class="note">共同概念来自 LaTeX <code>\ref</code>、AsciiDoc <code>&lt;&lt;id&gt;&gt;</code>；GEML 初稿注明「这正是 AsciiDoc 有、HTML 从无的能力」</td></tr>
+<tr data-v="div"><td>跨文档引用</td><td class="c">普通链接 <code>[t](a.crv#id)</code>，不校验</td><td class="g"><code>[t](a.geml#id)</code> <code>[[a.geml#id]]</code>，校验</td><td><span class="v v-div">同题异解</span></td><td class="note">实测 P3：Carve 放过不存在的目标，GEML 报错</td></tr>
+<tr data-v="div"><td>维基式链接</td><td class="c"><code>[标题文字][]</code>；可选扩展 <code>[[Heading]]</code></td><td class="g"><code>[[#id]]</code>，指向 id 而非标题文字</td><td><span class="v v-div">同题异解</span></td><td class="note"><code>[[ ]]</code> 来自 MediaWiki / Obsidian / Logseq</td></tr>
+<tr data-v="anc"><td>图片 / 媒体</td><td class="c"><code>![alt](src)</code> 图片</td><td class="g"><code>![alt](src)</code> 图片、音频、视频，按扩展名推断</td><td><span class="v v-anc">同源继承</span></td><td class="note">Markdown；GEML 把它推广为就地媒体嵌入（06-17）</td></tr>
+<tr data-v="div"><td>行内内容投影</td><td class="c"><code>{{ path #id }}</code> 引入处理器，非核心</td><td class="g"><code>![[#id]]</code> 核心语法，投影一个 text 块</td><td><span class="v v-div">同题异解</span></td><td class="note"><code>![[ ]]</code> 是 Obsidian 的嵌入写法</td></tr>
+<tr data-v="anc"><td>脚注引用</td><td class="c"><code>[^l]</code>，定义 <code>[^l]: …</code>；行内 <code>^[…]</code></td><td class="g"><code>[^id]</code>，指向任意带该 id 的块</td><td><span class="v v-anc">同源继承</span></td><td class="note">PHP Markdown Extra（2005）；两边的定义方式不同</td></tr>
+<tr data-v="g"><td>元数据插值</td><td class="c none">已否决</td><td class="g"><code>{{key}}</code>，转义 <code>\{{</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">Carve 在 <code>dismissed-syntax.md</code> 中明确拒绝；GEML 06-18 加入，未定义的键是错误（实测 P5）</td></tr>
+<tr data-v="homo"><td><code>{{ … }}</code> 这对符号</td><td class="c">文件引入 <code>{{ path #id @lines:N-M }}</code></td><td class="g">元数据插值 <code>{{key}}</code></td><td><span class="v v-homo">同形异义</span></td><td class="note">Carve 要求括号内有空格，<code>{{path}}</code> 是普通文本；GEML 的 <code>{{key}}</code> 与 Mustache、Hugo 一类模板同形</td></tr>
+<tr data-v="c"><td>行内 span 与属性</td><td class="c"><code>[t]{.c}</code>、<code>/x/{.c}</code></td><td class="g none">仅链接与媒体可带属性</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Djot 的 span</td></tr>
+<tr data-v="c"><td>语义 span</td><td class="c"><code>[Tab]{kbd}</code> <code>{abbr=…}</code> <code>{time=…}</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Carve 自创</td></tr>
+<tr data-v="c"><td>语言标注</td><td class="c"><code>{:fr}</code> <code>{:}</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">BCP 47</td></tr>
+<tr data-v="c"><td>行内扩展</td><td class="c"><code>:name[x]{a}</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">形似 remark-directive</td></tr>
+<tr data-v="c"><td>符号</td><td class="c"><code>:rocket:</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Djot symbol</td></tr>
+<tr data-v="c"><td>提及 / 标签</td><td class="c"><code>@user</code> <code>#tag</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">社交平台惯例</td></tr>
+<tr data-v="c"><td>编辑批注</td><td class="c"><code>{+ +}</code> <code>{- -}</code> <code>{~a~&gt;b~}</code> <code>{#注#}</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">CriticMarkup</td></tr>
+<tr data-v="c"><td>智能排版</td><td class="c"><code>--</code> <code>...</code> <code>--&gt;</code> <code>(c)</code></td><td class="g none">不做替换</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Djot / SmartyPants</td></tr>
+<tr data-v="anc"><td>转义</td><td class="c"><code>\</code> + ASCII 标点</td><td class="g"><code>\</code> + ASCII 标点</td><td><span class="v v-anc">同源继承</span></td><td class="note">CommonMark（2014）</td></tr>
+<tr data-v="anc"><td>硬换行</td><td class="c">行尾 <code>\</code></td><td class="g">行尾 <code>\</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">CommonMark</td></tr>
+<tr data-v="c"><td>不换行空格</td><td class="c">行中 <code>\␠</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Djot</td></tr>
+
+<tr class="grp"><td colspan="5">块</td></tr>
+<tr data-v="anc"><td>标题</td><td class="c"><code>#</code>…<code>######</code></td><td class="g"><code>#</code>…<code>######</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">Markdown ATX 标题；两边都不收 setext</td></tr>
+<tr data-v="div"><td>标题显式 id</td><td class="c">写在上一行：<code>{#id}</code>⏎<code># 标题</code></td><td class="g">写在行尾：<code># 标题 {#id}</code></td><td><span class="v v-div">同题异解</span></td><td class="note">Carve 06-04 起删除了行尾写法；GEML 06-17 当天定为行尾（Pandoc / kramdown 风格）</td></tr>
+<tr data-v="div"><td>标题自动 id</td><td class="c">保留大小写：<code>id="Intro"</code></td><td class="g">规范化算法：小写、NFD、去变音、空白转 <code>-</code></td><td><span class="v v-div">同题异解</span></td><td class="note">实测 P1 输出 <code>&lt;section id="Intro"&gt;</code>；GEML 规范 §4 六步推导</td></tr>
+<tr data-v="g"><td>散文地址</td><td class="c none">无</td><td class="g"><code>#前-between-后</code>、<code>#容器-before-后</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">两块之间的散文由两端推导出唯一地址，插入新块后旧地址自动失效</td></tr>
+<tr data-v="anc"><td>段落 / 无序列表</td><td class="c"><code>-</code> <code>*</code></td><td class="g"><code>-</code> <code>*</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">Markdown</td></tr>
+<tr data-v="div"><td>有序列表</td><td class="c"><code>1.</code> <code>1)</code> <code>a.</code> <code>i.</code> 及自动编号 <code>.</code></td><td class="g"><code>1.</code></td><td><span class="v v-div">同题异解</span></td><td class="note">Carve 更丰富</td></tr>
+<tr data-v="anc"><td>任务列表</td><td class="c"><code>[ ]</code> <code>[x]</code> 外加 <code>[-] [&gt;] [?] [_]</code></td><td class="g"><code>[ ]</code> <code>[x]</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">GitHub（2013）；Carve 多出的状态取自 Org TODO</td></tr>
+<tr data-v="c"><td>引用块</td><td class="c"><code>&gt;</code>、<code>::: &gt;</code>，<code>^</code> 署名</td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">GEML 语法清单里没有引用块</td></tr>
+<tr data-v="c"><td>分隔线</td><td class="c"><code>---</code> <code>***</code> <code>___</code></td><td class="g none">刻意不设</td><td><span class="v v-c">仅 Carve</span></td><td class="note">GEML 06-17 选型说明：<code>-</code> 与分隔线、前言、setext、列表冲突，所以围栏改用 <code>=</code></td></tr>
+<tr data-v="div"><td>代码块</td><td class="c"><code>```lang "标题" [标签]</code></td><td class="g"><code>=== code {lang=… src=…}</code></td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 的反引号只作「护栏」，不开代码块</td></tr>
+<tr data-v="c"><td>原始块</td><td class="c"><code>```=html</code>，默认放行</td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">实测 P8：<code>&lt;script&gt;</code> 原样输出</td></tr>
+<tr data-v="div"><td>容器 / 提示框</td><td class="c"><code>::: note "标题"</code> … <code>:::</code></td><td class="g"><code>=== note</code> … <code>===</code></td><td><span class="v v-div">同题异解</span></td><td class="note"><code>:::</code> 是 Pandoc / MyST / Djot 的围栏；GEML 初稿用过 7 分钟，07:17 改成 <code>===</code></td></tr>
+<tr data-v="div"><td>围栏闭合与嵌套</td><td class="c">冒号数严格相等，内层多一个冒号</td><td class="g">等号数严格相等，外层更长</td><td><span class="v v-div">同题异解</span></td><td class="note">「等长闭合」是围栏的通行做法（CommonMark 代码围栏）</td></tr>
+<tr data-v="div"><td>未知类型</td><td class="c"><code>::: word</code> → <code>&lt;div class="word"&gt;</code></td><td class="g"><code>=== word</code> → 警告并保留正文</td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 初稿 §3 即定为前向兼容的告警</td></tr>
+<tr data-v="g"><td>统一的类型块原语</td><td class="c none">无</td><td class="g"><code>=== type {attrs}</code> + 类型注册表（raw / flow / 键值）</td><td><span class="v v-g">仅 GEML</span></td><td class="note">代码、数学、表格、视图、数据、图、嵌入、注释、文本、元数据共用一种围栏</td></tr>
+<tr data-v="c"><td>行块（诗歌）</td><td class="c"><code>::: |</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">reST / Djot</td></tr>
+<tr data-v="c"><td>定义列表</td><td class="c"><code>:: 术语</code> / <code>: 定义</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note"></td></tr>
+<tr data-v="c"><td>续接标记</td><td class="c">单独一行 <code>+</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">Carve 自创</td></tr>
+<tr data-v="div"><td>数学块</td><td class="c"><code>$$`…`</code></td><td class="g"><code>=== math</code></td><td><span class="v v-div">同题异解</span></td><td class="note"></td></tr>
+<tr data-v="anc"><td>注释行</td><td class="c"><code>%%</code>，另有 <code>%%%</code> 块、行尾 <code>%%</code>、<code>{% %}</code></td><td class="g">仅行首 <code>%%</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">Obsidian <code>%%…%%</code>、Mermaid <code>%%</code> 注释行（GEML 托管 Mermaid）。GEML 06-18 引入，用来替代被禁止的 <code>&lt;!-- --&gt;</code></td></tr>
+<tr data-v="g"><td>隐藏但参与校验的块</td><td class="c none">无</td><td class="g"><code>{hidden}</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">只给图表供数的源表：在模型里、受引用校验、不渲染</td></tr>
+<tr data-v="div"><td>元数据</td><td class="c"><code>---</code> YAML 前言（<code>---toml</code> <code>---json</code>）</td><td class="g"><code>=== meta</code> 键值，带类型、可合并、<code>#meta</code> 可寻址</td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 明确不支持 <code>---</code> 前言</td></tr>
+<tr data-v="div"><td>题注</td><td class="c">下一行 <code>^ 文字</code>，<code>Figure #</code> 自动编号</td><td class="g"><code>caption="…"</code> 属性</td><td><span class="v v-div">同题异解</span></td><td class="note">Carve 更强：编号、清单、公式题注</td></tr>
+<tr data-v="c"><td>复合图</td><td class="c"><code>::: figure</code>，面板 Figure 2a</td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note"></td></tr>
+<tr data-v="anc"><td>属性对象内容</td><td class="c"><code>{#id .class key=val}</code></td><td class="g"><code>{#id .class key=val}</code></td><td><span class="v v-anc">同源继承</span></td><td class="note">PHP Markdown Extra、kramdown、Pandoc、MyST 早已通行；GEML 06-17 初稿 EBNF 即有</td></tr>
+<tr data-v="div"><td>属性挂载位置</td><td class="c">块的上一行，可越过不可见块</td><td class="g">围栏行内 <code>=== t {…}</code>、标题行尾</td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 支持 <code>\</code> 续行把长属性拆行</td></tr>
+<tr data-v="div"><td>裸属性词</td><td class="c"><code>word</code> → <code>word=""</code></td><td class="g"><code>word</code> → 布尔 <code>true</code>；值分字符串/数字/布尔</td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 初稿待定项：借用 TOML 的类型纪律</td></tr>
+<tr data-v="c"><td>缩写定义</td><td class="c"><code>*[HTML]: …</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note">PHP Markdown Extra</td></tr>
+<tr data-v="div"><td>引入 / 嵌入</td><td class="c"><code>{{ path #id @lines:N-M @shift:N }}</code></td><td class="g"><code>=== embed {src=doc.geml#id}</code>；代码 <code>src=f#L10-20</code></td><td><span class="v v-div">同题异解</span></td><td class="note">Carve 参数更多；GEML 的越界行范围是错误（实测 P4）</td></tr>
+<tr data-v="c"><td>放置指令</td><td class="c"><code>::: toc</code> <code>::: footnotes</code> 等</td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note"></td></tr>
+<tr data-v="c"><td>标签页 / 引文</td><td class="c"><code>::: tab</code>、<code>[@key]</code>（可选）</td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note"></td></tr>
+
+<tr class="grp"><td colspan="5">表格</td></tr>
+<tr data-v="div"><td>表格外形</td><td class="c">裸管道表，<code>|=</code> 标表头</td><td class="g"><code>=== table</code> 内放 GFM 管道表</td><td><span class="v v-div">同题异解</span></td><td class="note"><code>|=</code> 来自 Creole；管道表来自 PHP Markdown Extra / GFM</td></tr>
+<tr data-v="div"><td>对齐</td><td class="c">粘连 <code>&lt; ~ &gt;</code>，垂直 <code>^ ~ v</code>，继承 <code>?</code></td><td class="g">GFM 分隔行 <code>:--:</code></td><td><span class="v v-div">同题异解</span></td><td class="note">Carve 更强</td></tr>
+<tr data-v="c"><td>合并单元格</td><td class="c"><code>^</code> 向上、<code>&lt;</code> 向左</td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note"></td></tr>
+<tr data-v="c"><td>续行 / 表头行数</td><td class="c"><code>+</code> 行、<code>{header-rows=N}</code></td><td class="g none">无</td><td><span class="v v-c">仅 Carve</span></td><td class="note"></td></tr>
+<tr data-v="g"><td>数据形态正文</td><td class="c none">无</td><td class="g"><code>format=csv|tsv</code> <code>header=</code> <code>delim=</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">06-17 初稿「表格双形态」</td></tr>
+<tr data-v="g"><td>外部数据源</td><td class="c none">无</td><td class="g"><code>src=data.csv</code> 或 http(s)</td><td><span class="v v-g">仅 GEML</span></td><td class="note"></td></tr>
+<tr data-v="g"><td>派生视图</td><td class="c none">无</td><td class="g"><code>=== view {src=#t compute=… summary=…}</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">计算列、汇总行、printf 显示格式（实测 P6）</td></tr>
+<tr data-v="g"><td>数据块</td><td class="c none">无</td><td class="g"><code>=== data {format=json|jsonl schema=…}</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">记录数组可直接喂给图表</td></tr>
+
+<tr class="grp"><td colspan="5">图形</td></tr>
+<tr data-v="div"><td>托管外部图形 DSL</td><td class="c"><code>```mermaid</code> 等，可选功能（06-21）</td><td class="g"><code>=== diagram {format=mermaid}</code>（06-17 初稿）</td><td><span class="v v-div">同题异解</span></td><td class="note">GitLab、GitHub、Obsidian 早有 mermaid 代码块；GEML 初稿原则「只托管不发明 DSL」</td></tr>
+<tr data-v="div"><td>图表</td><td class="c"><code>```chart</code> Chart.js JSON，数字写死在正文</td><td class="g"><code>format=geml-chart data=#表 x= y=</code>，按列校验</td><td><span class="v v-div">同题异解</span></td><td class="note">只有 GEML 的图表绑定文档里的数据（实测 P6）</td></tr>
+<tr data-v="g"><td>代码图</td><td class="c none">无</td><td class="g"><code>format=geml-code-graph</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">GEP-0002 / 0003（07-01）</td></tr>
+
+<tr class="grp"><td colspan="5">寻址</td></tr>
+<tr data-v="g"><td>带标签的闭合围栏</td><td class="c none">无；只能数冒号</td><td class="g"><code>=== #id</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">06-29 加入：闭合行点名要关的块，不必数等号</td></tr>
+<tr data-v="g"><td>块内坐标</td><td class="c none">无</td><td class="g"><code>#fy[2]</code> <code>#fy[2]["Q1"]</code> <code>#fy["Q1"]</code> <code>#fy[summary]</code></td><td><span class="v v-g">仅 GEML</span></td><td class="note">GEP-0011（09-03）：引用表格的一行、一格、一列，跨文档同样可用，并且受校验</td></tr>
+<tr data-v="div"><td>无 id 内容的地址</td><td class="c">AST 路径（JSON Pointer）、会话级节点 id</td><td class="g">内容地址 <code>@&lt;hex&gt;</code>（SHA-256 前 8 位）、散文派生地址</td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 的 <code>@&lt;hex&gt;</code> 08-04 加入，按内容取块；Carve 的路径随结构变动</td></tr>
+<tr data-v="div"><td>按类型 / 属性筛选块</td><td class="c"><code>carve_select_ast_nodes</code>（MCP，09-09）</td><td class="g"><code>'=== code {lang=py}'</code> <code>{.warn}</code> <code>--within</code>（09-30）</td><td><span class="v v-div">同题异解</span></td><td class="note">GEML 提交说明注明参照 mq 的查询语言</td></tr>
+
+<tr class="grp"><td colspan="5">字符层与文件</td></tr>
+<tr data-v="anc"><td>输入规范化</td><td class="c">去一个 BOM、换行统一、U+0000→U+FFFD</td><td class="g">同上（§0，07-25）</td><td><span class="v v-anc">同源继承</span></td><td class="note">CommonMark §2「Insecure characters」；GEML 加入的直接原因是一个 BOM 让 <code># 标题</code> 变成段落的 bug</td></tr>
+<tr data-v="div"><td>扩展名 / 媒体类型</td><td class="c"><code>.crv</code>，剪贴板 <code>text/x-carve</code></td><td class="g"><code>.geml</code>，<code>text/vnd.geml</code>（IANA 申请中）</td><td><span class="v v-div">同题异解</span></td><td class="note"></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ PROBES ============ -->
+<section class="sec" id="probes">
+  <header><div class="eyebrow">三 · 同输入实测</div><h2>同一份意图，两个官方解析器各跑一次</h2>
+  <p class="muted">Carve 用 npm 上的 <code>@markup-carve/carve@0.1.9</code>（<code>carve lint</code> 与渲染）；GEML 用 <code>geml 1.12.3</code>（<code>geml check</code>）。输出原样摘录，未改一字。</p></header>
+  <div class="probes">
+
+  <article class="probe">
+    <header><h3>P1 · 链接指向不存在的块</h3><p>两种链接都指向一个不存在的 <code>#budget</code>。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>See [the budget](#budget) and &lt;/#budget&gt;.</pre>
+<pre class="out err">$ carve lint p1.crv
+p1.crv:3:31 broken-crossref — Cross-reference &lt;/#budget&gt;
+has no matching heading id; it renders as the literal
+text "&lt;/#budget&gt;".</pre>
+        <span class="res meh">只报交叉引用；普通链接 <code>[…](#budget)</code> 没被发现，渲染退出码 0</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>See [the budget](#budget) and [[#budget]].</pre>
+<pre class="out err">$ geml check p1.geml
+error: unresolved reference `#budget` (line 3)
+error: unresolved reference `#budget` (line 3)
+2 error(s)</pre>
+        <span class="res good">两处都报，退出码 1</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P2 · 重复 id</h3><p>两个标题用了同一个 id。这一项两边都做到了。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre class="out err">p2.crv:5:1 duplicate-heading-id — Duplicate heading id "a"</pre>
+        <span class="res good">lint 报出；但渲染仍输出两个 <code>id="a"</code></span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre class="out err">error: duplicate id `#a` (first defined at line 1) (line 3)</pre>
+        <span class="res good">报错，退出码 1</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P3 · 跨文档引用，目标不存在</h3><p>另一份文档存在，但其中没有 <code>#nope</code>。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>See [x](other.crv#nope).</pre>
+<pre class="out pass">$ carve lint p3.crv      → 无输出，exit 0
+$ carve p3.crv
+&lt;p&gt;See &lt;a href="other.crv#nope"&gt;x&lt;/a&gt;.&lt;/p&gt;</pre>
+        <span class="res bad">未发现</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>See [x](other.geml#nope).</pre>
+<pre class="out err">error: unresolved reference `other.geml#nope` (line 3)
+1 error(s)</pre>
+        <span class="res good">报错</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P4 · 引用代码文件的行范围，文件已经变短</h3><p><code>code.txt</code> 只有 10 行，文档引用第 50–60 行。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>{{ code.txt @lines:50-60 }}</pre>
+<pre class="out">$ carve lint p4.crv      → 无输出，exit 0
+$ carve p4.crv           → stderr 警告，exit 0
+p4.crv:3:1 include-lines-out-of-range - Include line
+range for "code.txt" starts past end of file.
+&lt;p&gt;{{ code.txt &lt;span class="mention"&gt;&lt;strong&gt;@lines
+&lt;/strong&gt;&lt;/span&gt;:50-60 }}&lt;/p&gt;</pre>
+        <span class="res bad">仅警告；输出退化为字面文本，<code>@lines</code> 被当作 @提及</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>=== code {src=code.txt#L50-60}
+===</pre>
+<pre class="out err">error: code source `code.txt#L50-60`: the file has
+10 line(s), so lines 50-60 no longer exist — the range
+is stale (line 3)</pre>
+        <span class="res good">报错并说明范围已过期</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P5 · 元数据插值，有一个键拼错</h3><p><code>product</code> 写对了，<code>prodct</code> 拼错了。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>---
+product: Acme
+---
+Welcome to {{product}}, also {{prodct}}.</pre>
+<pre class="out pass">&lt;p&gt;Welcome to {{product}}, also {{prodct}}.&lt;/p&gt;</pre>
+        <span class="res meh">没有这项功能（设计上否决），两处都原样输出</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>=== meta
+product = "Acme"
+===
+Welcome to {{product}}, also {{prodct}}.</pre>
+<pre class="out err">error: unknown metadata reference `{{prodct}}` (line 5)</pre>
+        <span class="res good">拼错的键被拦下</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P6 · 图表与表格数据</h3><p>表格有 Q1、Q2 两列；一张图要画上半年合计，另一张图误写了不存在的 Q3。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>|= Region |= Q1 |= Q2 |
+| North | 10 | 12 |
+| South |  7 |  9 |
+^ Sales by region
+
+``` chart
+{"type":"bar","data":{"labels":["North","South"],
+ "datasets":[{"label":"Q3","data":[99,99]}]}}
+```</pre>
+<pre class="out pass">$ carve lint p6.crv      → 无输出，exit 0</pre>
+        <span class="res bad">图表数字手写在 JSON 里，与表格无关；写错列、写错数都无从发现</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>=== table {#sales}
+| Region | Q1 | Q2 |
+…
+===
+=== view {#sales-h1 src=#sales compute="H1 = Q1 + Q2"
+  summary="Region = 'Total'; …; H1 = sum(H1)"}
+===
+=== diagram {format=geml-chart data=#sales-h1 x=Region y=H1}
+===
+=== diagram {format=geml-chart data=#sales x=Region y=Q3}
+===</pre>
+<pre class="out err">error: chart: column `Q3` not found in table (line 16)</pre>
+<pre class="out pass">#sales-h1 计算结果：
+Region | Q1 | Q2 | H1
+North  | 10 | 12 | 22
+South  |  7 |  9 | 16
+Total  | 17 | 21 | 38</pre>
+        <span class="res good">图表绑定表格，列名校验；计算列与汇总行由视图推导</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P7 · 同一段 Markdown 文本</h3><p>把一行普通 Markdown 交给两边。这是 Carve 最有辨识度的部分。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>Plain *emphasis*, **strong** and _under_ with ~~strike~~.</pre>
+<pre class="out">&lt;p&gt;Plain &lt;strong&gt;emphasis&lt;/strong&gt;, **strong** and
+&lt;u&gt;under&lt;/u&gt; with ~~strike~~.&lt;/p&gt;</pre>
+        <span class="res meh"><code>*x*</code> 成了粗体，<code>_x_</code> 成了下划线，<code>**</code> 与 <code>~~</code> 不解析</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>Plain *emphasis*, **strong** and _under_ with ~~strike~~.</pre>
+<pre class="out">&lt;p&gt;Plain &lt;em&gt;emphasis&lt;/em&gt;, &lt;strong&gt;strong&lt;/strong&gt; and
+_under_ with &lt;del&gt;strike&lt;/del&gt;.&lt;/p&gt;</pre>
+        <span class="res meh">与 Markdown 一致</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P8 · 原始 HTML</h3><p>行内的 HTML 两边都转义为文本；不同在于专门的透传通道。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>```=html
+&lt;script&gt;alert(1)&lt;/script&gt;
+```</pre>
+<pre class="out">&lt;script&gt;alert(1)&lt;/script&gt;</pre>
+        <span class="res meh">默认透传（不可信输入需 <code>--safe</code>）</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre class="out">（语言里没有任何 HTML 透传构造）</pre>
+        <span class="res meh">规范 §9.1：文档是数据，从不是代码</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P9 · 改一个单元格，记下版本，再单独撤回这一块</h3><p>GEML 的核心用法。Carve 侧列出它最接近的三样工具。</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre class="out">$ carve diff before.crv after.crv
+changed  text at line 5 (value: "10" -&gt; "15")
+1 structural change</pre>
+        <span class="res meh">能比较两个现成文件（08-01）、三方合并（08-11）</span>
+<pre class="out">CLI 没有按 id 读或写一块的命令。
+carve-mcp 的 carve_get_block / carve_replace_source
+（按块读取与按字节替换）提交于 2026-10-05。
+没有任何存储的文档历史。</pre>
+        <span class="res bad">无版本链、无单块回滚</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre class="out">$ geml get doc.geml '#sales'          → 只取这一块
+$ geml history save doc.geml
+saved 20261006T020617Z-d1701a38
+$ … | geml set doc.geml '#sales' --body --in - -o doc.geml
+wrote doc.geml — 1 B changed, 399 B of 400 B untouched
+$ geml history save doc.geml
+$ geml doc.geml --to json              → 视图自动重算
+North | 15 | 12 | 27
+$ geml revert doc.geml '#sales'
+reverted #sales to 20261006T020617Z-d1701a38
+$ diff before.geml doc.geml            → 逐字节相同</pre>
+        <span class="res good">寻址读写自 07-01，版本旁车自 06-17</span></div>
+    </div>
+  </article>
+  </div>
+</section>
+
+<!-- ============ CAPABILITIES ============ -->
+<section class="sec" id="capabilities">
+  <header><div class="eyebrow">四 · 能力逐项</div><h2>工具链与能力，谁有、谁先、谁强</h2>
+  <p class="muted">日期为首次出现：仓库的服务器端创建时间，或首个包含该功能的提交。</p></header>
+  <div class="tbl"><table>
+    <thead><tr><th>能力</th><th>Carve</th><th>GEML</th><th>判定</th></tr></thead>
+    <tbody>
+<tr><td>引用的构建期校验</td><td class="c">lint 查 <code>&lt;/#id&gt;</code> 与重复 id；未解析的引用按设计留给宿主；不查跨文档</td><td class="g">规范硬性要求：链接、自动引用、跨文档、脚注、图表 <code>data=</code>、代码 <code>src</code> 行范围、<code>{{key}}</code>、<code>schema=</code> 全部校验（06-17 初稿 §8）</td><td><span class="v v-g">GEML 更强</span></td></tr>
+<tr><td>按 id 读取单块</td><td class="c">引入片段 <code>#id</code>（标题节 09-14 成为规范，任意块 10-05）；<code>carve_get_block</code>（10-05）</td><td class="g"><code>geml get #id</code>（07-01）；标题即整节；行号选择 <code>L27-58</code>；散文派生地址；直接读 <code>.md</code></td><td><span class="v v-g">GEML 先、更广</span></td></tr>
+<tr><td>按 id 写入单块</td><td class="c">字节偏移的源码补丁（09-07）；<code>carve_replace_source</code>（10-05）</td><td class="g"><code>set / add / delete / rename / revert</code>（07-01 起）；写入结果无法解析则拒绝；<code>rename</code> 同步改全部引用；内容地址 <code>@&lt;hex&gt;</code>（08-04），<code>#id</code> 加 <code>@&lt;hex&gt;</code> 作写入守卫（09-30）</td><td><span class="v v-g">GEML 先、更广</span></td></tr>
+<tr><td>文档版本历史</td><td class="c">没有存储的历史；<code>carve diff</code>（08-01）、三方 <code>carve merge</code>（08-11）、可逆 AST 补丁</td><td class="g"><code>.gemlhistory</code>（06-17）：只追加版本链、SHA-256 校验、<code>verify</code> 重算整链、单块回滚；无三方合并</td><td><span class="v v-div">各有所长</span></td></tr>
+<tr><td>文档内数据层</td><td class="c">无</td><td class="g">数据形态表格、外部 CSV、<code>view</code> 计算列与汇总、<code>data</code> JSON/JSONL、图表按列绑定</td><td><span class="v v-g">仅 GEML</span></td></tr>
+<tr><td>「profile」一词</td><td class="c">内容限制预设：full / article / comment / minimal，用于不可信输入（06-16）</td><td class="g">应用层词汇表：form、media、style、translator、codemap、history，带各自的规范与一致性测试</td><td><span class="v v-homo">同名异物</span></td></tr>
+<tr><td>翻译投影</td><td class="c">无（只有界面标签翻译）</td><td class="g">中文规范是 <code>geml-translator/v1</code> 投影，17 个 embed 指向英文块，随原文更新</td><td><span class="v v-g">仅 GEML</span></td></tr>
+<tr><td>代码依赖图</td><td class="c">无</td><td class="g">codemap：把调用图写成 GEML 文档，边是可校验引用（实测过 Flink 95,958 节点）</td><td><span class="v v-g">仅 GEML</span></td></tr>
+<tr><td>Agent 技能</td><td class="c"><code>carve-skill</code>（07-15）</td><td class="g">仓库内技能（06-18）；<code>geml skill install</code></td><td><span class="v v-g">GEML 先</span></td></tr>
+<tr><td>MCP 服务器</td><td class="c"><code>carve-mcp</code>（09-05）：解析、lint、迁移、AST 补丁；按块读写 10-05</td><td class="g"><code>geml mcp</code>（07-25）：11 个读写工具，写入前校验；代码图另加 4 个工具</td><td><span class="v v-g">GEML 先</span></td></tr>
+<tr><td>参考实现</td><td class="c">TypeScript、PHP（fork 自 djot-php）、Rust 三套逐字节一致（05-13）；WASM（06-01）；Go/Python/Ruby 绑定</td><td class="g">TypeScript（06-17）；Rust + WASM 第二实现（10-03）</td><td><span class="v v-c">Carve 更强</span></td></tr>
+<tr><td>一致性测试集</td><td class="c">2,223 对 <code>.crv</code>/<code>.html</code>（首批 05-13）</td><td class="g">语言中立套件（06-28）；06-17 初稿即写「仿 CommonMark / toml-test」</td><td><span class="v v-anc">通行做法</span></td></tr>
+<tr><td>编辑器</td><td class="c">VS Code、tree-sitter、LSP、Zed（06-01），IntelliJ、Vim、Emacs、Helix、Sublime、Obsidian（08-21）等</td><td class="g">VS Code、Obsidian（06-30），Chrome 查看器，Logseq 桥</td><td><span class="v v-c">Carve 更广</span></td></tr>
+<tr><td>格式桥</td><td class="c">导入 Markdown/HTML/Djot/BBCode；输出 HTML/Markdown/纯文本/ANSI/AST；损失报告；pandoc-carve</td><td class="g">Markdown → GEML；输出 HTML/Markdown/JSON/规范 GEML</td><td><span class="v v-c">Carve 更广</span></td></tr>
+<tr><td>框架集成</td><td class="c">WordPress、Laravel、Symfony、Hugo、Jekyll、Astro、MkDocs、Docusaurus 等 60 余仓库</td><td class="g">网站 playground</td><td><span class="v v-c">Carve 更广</span></td></tr>
+<tr><td>安全模型</td><td class="c">URL 黑名单、嵌套上限、放大预算、引入沙箱；<code>=html</code> 默认开</td><td class="g">§9：无 HTML 通道、资源上限、跨文档单层且受限、URL 协议白名单</td><td><span class="v v-div">取向不同</span></td></tr>
+<tr><td>格式化 / lint</td><td class="c"><code>carve fmt</code>（06-26）、约 45 条 lint 规则</td><td class="g"><code>--to geml</code> 规范重排（06-29）、附录 A 稳定诊断码</td><td><span class="v v-anc">通行做法</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ EVOLUTION ============ -->
+<section class="sec" id="evolution">
+  <header><div class="eyebrow">五 · 设计演进</div><h2>GEML 自己的几次重构</h2>
+  <p class="muted">GEML 的结构不是一次定型的。下面三次重构都由它自己的问题推动：第二个实现能否与参考实现对齐，以及一个不认识新语法的处理器会不会显示错误的内容。</p></header>
+  <div class="two">
+    <div class="card g"><h3>Profile：从写进核心，到应用层词汇表</h3>
+      <ol class="evo">
+        <li><time>06-17</time><b><code>.gemlhistory</code> 作为「配套规范」与核心规范并列</b><span>它的三种块类型在哪里都没有声明，7 个旁车文件累计报出 333 条去不掉的「未知块类型」警告。</span></li>
+        <li><time>07-01 起</time><b>代码图写进核心渲染器</b><span><code>geml-code-graph</code> 和规范自己的 <code>geml-chart</code>、<code>mermaid</code> 挂在同一条 if 链上；codemap、media、style 的命令各占一个 else-if；参考实现里还有一张规范没写的注册表在压掉诊断。</span></li>
+        <li><time>08-30</time><b>GEP-0008 先把 form 当作核心块类型提出</b></li>
+        <li class="turn"><time>08-31</time><b>§8.6 profile 机制（GEP-0009）</b><span>文档用 meta 里的 <code>profile</code> 声明词汇表；词汇表只许可名字，不得改变文档模型；禁止从扩展名推断；history 成为第一个 profile。一致性套件用一个谁都不认识的词汇表名来验证：不实现 profile 机制的第二个实现也能复现全部用例。</span></li>
+        <li><time>09-04 → 09-16</time><b>form、translator、media 进入 profile</b><span>form 改为 <code>geml-form/v1</code> 的 form-* 家族；09-07 translator，09-16 media。</span></li>
+        <li><time>09-17</time><b>profile 治理</b><span>命名、状态、检查、一致性测试。</span></li>
+        <li class="turn"><time>09-18</time><b>核心不再按名字认识任何词汇表</b><span>渲染、命令、meta 键三处改为查表，支持运行时注册。<code>render.ts</code> 的 2,894 行里有 1,683 行属于代码图，搬出后降到 1,125 行，没有图的页面小了 46%。</span></li>
+      </ol>
+      <p class="vs"><span class="tagC">Carve</span> 的 profile 从 Init 起就是另一回事：沿用 djot-php 的内容限制预设（full / article / comment / minimal），用于过滤不可信输入。</p></div>
+    <div class="card g"><h3>View：从 table 的属性，到独立的块</h3>
+      <ol class="evo">
+        <li><time>06-17</time><b>初稿把 <code>compute=</code> 写在 table 上</b><span>「表格双形态 + 可移植计算」。</span></li>
+        <li><time>06-18</time><b>加上 <code>summary</code> 汇总行与 printf 显示格式</b></li>
+        <li><time>09-03</time><b>GEP-0012 草案仍把 <code>where / order / limit / select</code> 放在 table 上</b></li>
+        <li class="turn"><time>09-04</time><b>改为独立的 <code>view</code> 块（parser 1.10.0）</b><span>理由经过逐项衡量：不认识 <code>where=</code> 或 <code>select=</code> 的处理器会显示作者想排除的行和列，这不是降级而是错误的渲染；没有正文的 view 被忽略时什么都不显示。<code>compute=</code>、<code>summary=</code> 和指向块的 <code>src=</code> 全部移到 view，table 只放事实，再带这些属性就报 <code>unknown-attribute</code>。规范自身的诊断从 6 个错误降到 4 个。</span></li>
+      </ol>
+      <h3>Output：从专用块，到通用嵌入</h3>
+      <ol class="evo">
+        <li><time>06-18</time><b><code>=== output</code> 保存代码块的运行结果</b><span>处理器从不执行，只保存，可用 <code>of=#id</code> 绑定代码块。</span></li>
+        <li class="turn"><time>07-31</time><b>撤回 output，改为 <code>=== embed {src=doc.geml#id}</code></b><span>任意块都能被嵌入，<code>src=</code> 与 <code>data=</code> 并成一条规则。</span></li>
+      </ol>
+      <p class="vs"><span class="tagC">Carve</span> 的表格没有计算能力，图表数据写在 JSON 里；它的引入处理器 <code>{{ path #id }}</code> 从 Init 起就是现在的写法，09-14 成为规范。</p></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Profile</th><th>做什么</th><th>首次提交</th><th class="num">提交数</th><th class="num">当前规范与代码行数</th></tr></thead>
+    <tbody>
+      <tr><td><code>geml-history/v1</code></td><td>块级版本旁车：修订、关键帧、内容块</td><td>06-17</td><td class="num">40</td><td class="num">2,680</td></tr>
+      <tr><td><code>geml-codemap/v1</code></td><td>把代码调用图写成可校验的 GEML 文档</td><td>07-01</td><td class="num">147</td><td class="num">9,705</td></tr>
+      <tr><td><code>geml-style/v1</code></td><td>样式表按选择器作用于文档，从不改动内容</td><td>08-30</td><td class="num">24</td><td class="num">7,382</td></tr>
+      <tr><td><code>geml-form/v1</code></td><td>块内可寻址的表单字段</td><td>08-30</td><td class="num">14</td><td class="num">1,592</td></tr>
+      <tr><td><code>geml-translator/v1</code></td><td>译文作为原文的投影，随原文更新</td><td>09-01</td><td class="num">17</td><td class="num">2,035</td></tr>
+      <tr><td><code>geml-media/v1</code></td><td>音视频素材、剪辑与生成谱系</td><td>09-15</td><td class="num">36</td><td class="num">6,685</td></tr>
+      <tr><td>profile 机制本身</td><td>§8.6、注册与治理</td><td>08-30</td><td class="num">27</td><td class="num">1,062</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">按各 profile 的规范、设计文档与源码路径统计，去重后共 229 次提交，约占全部 940 次非合并提交的四分之一。核心解析器里为 profile 所做的改动没有计入，所以这些数字是下限。</p>
+</section>
+
+<!-- ============ STRENGTHS ============ -->
+<section class="sec" id="strengths">
+  <header><div class="eyebrow">六 · 各自所长</div><h2>独创与更强之处</h2>
+  <p class="muted">只列有实测或规范条文支撑的项。两边的长处并排看，就是两种不同的设计目标。</p></header>
+  <div class="two">
+    <div class="card g"><h3><span class="tagG">GEML</span>独创或更强</h3>
+      <ol>
+        <li><b>一种围栏承载全部结构化内容</b><span><code>=== type {attrs}</code> 加类型注册表，正文按 raw / flow / 键值三种模式处理；06-17 初稿第一条设计目标。</span></li>
+        <li><b>引用是契约，不是建议</b><span>八类引用全部在构建时校验，断了就是错误。实测 P1、P3、P4、P5、P6 中 Carve 均放行。</span></li>
+        <li><b>每一块都有地址，并且可写</b><span>显式 id、标题推导、两块之间散文的推导地址；get / set / add / delete / rename / revert；写入前验证可解析。Carve 同类工具晚三个月，只有读取与替换。</span></li>
+        <li><b>块级版本历史</b><span><code>.gemlhistory</code> 哈希链，可校验、可单块回滚（实测 P9）。Carve 没有任何存储的历史。</span></li>
+        <li><b>文档里的数据关系层</b><span>表格的数据形态与外部源、<code>view</code> 推导、计算列和汇总行、<code>data</code> 块、按列校验的图表。Carve 的图表只能内嵌写死的 JSON。</span></li>
+        <li><b>元数据是带类型、可校验的值</b><span><code>=== meta</code> 与 <code>{{key}}</code>：这正是 Carve 明确否决的方向。</span></li>
+        <li><b>应用层词汇表与投影</b><span>form、media、style、translator、codemap 在核心之上扩展；中文规范本身就是英文规范的翻译投影。</span></li>
+        <li><b>向下兼容 Markdown</b><span><code>geml list / find / get / set</code> 直接作用于 Markdown 文件，写入仍是 Markdown 语法；需要时一条命令转成 GEML。</span></li>
+      </ol></div>
+    <div class="card c"><h3><span class="tagC">Carve</span>独创或更强</h3>
+      <ol>
+        <li><b>丰富的内联写法</b><span>斜体、粗体、下划线、高亮、上下标、CriticMarkup、智能排版、提及与标签、语义 span。</span></li>
+        <li><b>表格排版</b><span>合并单元格、两轴对齐、续行、表头与表尾行数。</span></li>
+        <li><b>题注与自动编号</b><span>图、表、代码清单、公式的 <code>^</code> 题注，<code>Figure #</code> 编号，复合图面板。</span></li>
+        <li><b>三套逐字节一致的实现</b><span>JS、PHP、Rust，外加 Go、Python、Ruby 绑定，2,223 对测试样例。</span></li>
+        <li><b>生态覆盖面</b><span>十余种编辑器、数十种框架与静态站点集成、PDF 与 LaTeX 输出。</span></li>
+        <li><b>格式桥与损失报告</b><span>从 HTML、Markdown、Djot、BBCode 导入；输出时报告丢失了什么。</span></li>
+        <li><b>不可信输入的内容限制</b><span>profile 预设、链接策略、安全模式。</span></li>
+        <li><b>三方合并</b><span><code>carve merge</code> 合并两条独立的 AST 修改。</span></li>
+      </ol></div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="sec" id="timeline">
+  <header><div class="eyebrow">七 · 时间线（辅助）</div><h2>关键功能各自何时出现</h2>
+  <p class="muted">Carve 先公开（05-13），GEML 首个提交在 06-17。两条线上的功能各按自己的路线展开。</p></header>
+  <div class="tl" role="img" aria-label="Carve 与 GEML 关键功能时间线，2026 年 3 月至 10 月">
+  <svg viewBox="0 0 1100 316" xmlns="http://www.w3.org/2000/svg">
+    <!-- scale: x = 60 + (day-of-year - 89) * 5.2 ; 03-30 = doy 89, 10-06 = doy 279 -->
+    <g class="ax">
+      <line class="gl" x1="60" x2="1048" y1="150" y2="150"/>
+      <line class="gl" x1="70" x2="70" y1="30" y2="284"/><text x="70" y="304" text-anchor="middle">4月</text>
+      <line class="gl" x1="226" x2="226" y1="30" y2="284"/><text x="226" y="304" text-anchor="middle">5月</text>
+      <line class="gl" x1="388" x2="388" y1="30" y2="284"/><text x="388" y="304" text-anchor="middle">6月</text>
+      <line class="gl" x1="544" x2="544" y1="30" y2="284"/><text x="544" y="304" text-anchor="middle">7月</text>
+      <line class="gl" x1="705" x2="705" y1="30" y2="284"/><text x="705" y="304" text-anchor="middle">8月</text>
+      <line class="gl" x1="866" x2="866" y1="30" y2="284"/><text x="866" y="304" text-anchor="middle">9月</text>
+      <line class="gl" x1="1022" x2="1022" y1="30" y2="284"/><text x="1022" y="304" text-anchor="middle">10月</text>
+    </g>
+    <text class="lane-c" x="8" y="64" style="font-weight:700">Carve</text>
+    <text class="lane-g" x="8" y="246" style="font-weight:700">GEML</text>
+    <!-- Carve events (above axis) -->
+    <g>
+      <circle class="dc" cx="60" cy="150" r="5"/><line class="lc" x1="60" x2="60" y1="145" y2="122"/><text x="64" y="118">03-30 Init（叫 Flow，仅本地时间戳）</text>
+      <circle class="dc" cx="289" cy="150" r="5"/><line class="lc" x1="289" x2="289" y1="145" y2="70"/><text x="293" y="66">05-13 公开·三实现·测试集</text>
+      <circle class="dc" cx="388" cy="150" r="4"/><line class="lc" x1="388" x2="388" y1="146" y2="96"/><text x="392" y="92">06-01 编辑器/LSP/WASM</text>
+      <circle class="dc" cx="492" cy="150" r="4"/><line class="lc" x1="492" x2="492" y1="146" y2="122"/><text x="496" y="118">06-21 图形/图表</text>
+      <circle class="dc" cx="616" cy="150" r="4"/><line class="lc" x1="616" x2="616" y1="146" y2="96"/><text x="620" y="92">07-15 carve-skill</text>
+      <circle class="dc" cx="705" cy="150" r="4"/><line class="lc" x1="705" x2="705" y1="146" y2="122"/><text x="709" y="118">08-01 diff · 08-11 merge</text>
+      <circle class="dc" cx="887" cy="150" r="4"/><line class="lc" x1="887" x2="887" y1="146" y2="122"/><text x="891" y="118">09-05 carve-mcp</text>
+      <circle class="dc" cx="1043" cy="150" r="5"/><line class="lc" x1="1043" x2="1043" y1="145" y2="96"/><text x="1039" y="92" text-anchor="end">10-05 按块读取/替换</text>
+    </g>
+    <!-- GEML events (below axis) -->
+    <g>
+      <circle class="dg" cx="471" cy="150" r="6"/><line class="lg" x1="471" x2="471" y1="156" y2="262"/><text x="475" y="272">06-17 初稿：=== 类型块、#id、[[#id]]、引用校验、.gemlhistory</text>
+      <circle class="dg" cx="476" cy="150" r="4"/><line class="lg" x1="476" x2="476" y1="154" y2="238"/><text x="480" y="248">06-18 {{key}} · %% · geml-chart · 技能</text>
+      <circle class="dg" cx="533" cy="150" r="4"/><line class="lg" x1="533" x2="533" y1="154" y2="214"/><text x="537" y="224">06-29 npm 1.0.0 · 07-01 get/set</text>
+      <circle class="dg" cx="668" cy="150" r="4"/><line class="lg" x1="668" x2="668" y1="154" y2="190"/><text x="672" y="200">07-25 MCP · 07-31 embed</text>
+      <circle class="dg" cx="726" cy="150" r="4"/><line class="lg" x1="726" x2="726" y1="154" y2="166"/><text x="730" y="176">08-05 data 块</text>
+      <circle class="dg" cx="882" cy="150" r="4"/><line class="lg" x1="882" x2="882" y1="154" y2="166"/><text x="886" y="176">09-04 view</text>
+      <circle class="dg" cx="1017" cy="150" r="4"/><line class="lg" x1="1017" x2="1017" y1="154" y2="190"/><text x="1013" y="200" text-anchor="end">09-30 首次记录 Carve</text>
+      <circle class="dg" cx="1032" cy="150" r="4"/><line class="lg" x1="1032" x2="1032" y1="154" y2="214"/><text x="1028" y="224" text-anchor="end">10-03 Rust + WASM</text>
+    </g>
+  </svg></div>
+</section>
+
+<!-- ============ EVIDENCE ============ -->
+<section class="sec" id="evidence">
+  <header><div class="eyebrow">八 · 来源与复核</div><h2>每条结论都能自己核对</h2></header>
+  <div class="two">
+    <div class="card"><h3>可复核的来源</h3>
+      <ul class="facts">
+        <li><b>GEML 首个公开提交</b> <code>geml-spec/geml@ace97761</code>，2026-06-17 07:10 UTC，说明写明「调研 HTML/Markdown/TOML/AsciiDoc/Org/rST/MyST 后提炼」。仓库服务器端创建于 06-17 12:35 UTC。</li>
+        <li><b>GEML 更早的草稿</b> <code>xiongjy2104/must-skills</code> 分支 <code>geml-spec-draft</code>：<code>df2fc31</code>（UTM 初稿，序言列出所融合的格式）、<code>619d33b</code>（07:17，<code>:::</code> 改 <code>===</code> 并附选型说明）、<code>93296fd</code>（07:34，改名 GEML）。</li>
+        <li><b>Carve</b> <code>markup-carve/carve</code>，HEAD <code>bb09baea</code>；首提交 <code>341c1f98</code>「Init.」；按块读写 <code>markup-carve/carve-mcp@35ac412</code>、<code>@a7bca51</code>（均为 2026-10-05）。</li>
+        <li><b>服务器端时间</b>：npm 记录 <code>@geml/geml</code> 1.0.0 发布于 2026-06-29 11:01 UTC，包内已有 <code>.gemlhistory</code>、<code>geml-chart</code>、<code>compute</code>、<code>{{key}}</code>、<code>=== meta</code>、<code>hidden</code>、<code>[[#id]]</code> 与跨文档断链报错。<code>@markup-carve/carve</code> 首次发布于 07-14。</li>
+        <li><b>双向互查</b>：Carve 全部分支历史与文件中没有 geml / General Expressive / gemlhistory。GEML 当前文件树中没有 carve；历史上它只出现在 09-30 的一份同类项目调研里（<code>c78b28d0</code>，10-01 移至网站），调研称 Carve 是功能上最接近的项目。两边公开的 issue 与 discussion 互无提及。</li>
+        <li><b>实测版本</b>：<code>@markup-carve/carve@0.1.9</code>（npm），<code>geml 1.12.3</code>。探针文件与命令即本页所示。</li>
+      </ul></div>
+    <div class="card"><h3>口径说明</h3>
+      <ul class="facts">
+        <li>Carve 公开早于 GEML：GitHub 仓库创建于 05-13，GEML 首个提交在 06-17。</li>
+        <li>Carve 03-30 的 Init 日期来自提交里的本地时间戳，GitHub 服务器端的创建日期是 05-13。GEML 的提交时间同理，服务器端佐证是仓库创建时间和 npm 发布时间。</li>
+        <li>Carve 的 npm 版本（0.1.9）可能落后于其规范仓库；10-05 才写进规范的「引入片段可选任意块」在该版本中还不生效。</li>
+        <li>两边都有按块读写：GEML 自 07-01 起以作者写的 <code>#id</code> 和内容地址为键；Carve 自 10-05 起在 MCP 中以选择器、字节范围和全文 sha256 为键。目标相近，键的设计不同。</li>
+      </ul></div>
+    <div class="card"><h3>两个项目何时知道对方</h3>
+      <ul class="facts">
+        <li>Carve 全部分支的历史与文件中没有 GEML 的任何记录。</li>
+        <li>GEML 第一次记录 Carve 是 09-30 的同类项目调研，同一份调研还比较了 Djot、VersaDok、Pandoc、MyST、Markdoc、mq 等。此时类型块、引用校验、按块读写、版本历史、数据层、MCP 都已上线一到三个月。</li>
+        <li>调研列出 Carve 有而 GEML 没有的两点：行内元素带 id、写入前核对预期哈希。行内 id 至今没有加入 GEML。</li>
+        <li>同日晚些时候，GEML 让 <code>#id</code> 与 08-04 起就有的内容地址 <code>@&lt;hex&gt;</code> 组合成写入守卫（<code>4ddb3eed</code>），提交说明注明参照 mq 的查询语言；这类带预期值的写入与 HTTP <code>If-Match</code> 同理。</li>
+      </ul></div>
+  </div>
+</section>
+
+<footer>
+  <div>对照范围：Carve 规范仓库全部文档与语法（含 <code>docs/cheatsheet.md</code>、<code>resources/grammar.ebnf</code>、<code>docs/extension-contract.md</code>、<code>docs/dismissed-syntax.md</code>）、carve-js、carve-rs、carve-mcp；GEML 规范 <code>spec/GEML-spec.md</code>、profiles、GEP 0001–0013、参考 CLI。</div>
+  <div>引用 Carve 文档处均为转述并标注文件名，原文以其仓库为准。</div>
+</footer>
+</div>
+
+<script>
+(function(){
+  var rows=[].slice.call(document.querySelectorAll('#syn tbody tr[data-v]'));
+  var grps=[].slice.call(document.querySelectorAll('#syn tbody tr.grp'));
+  var btns=[].slice.call(document.querySelectorAll('.filters button'));
+  function count(f){return f==='all'?rows.length:rows.filter(function(r){return r.dataset.v===f}).length}
+  btns.forEach(function(b){var n=b.querySelector('.n');if(n)n.textContent=count(b.dataset.f)});
+  function apply(f){
+    rows.forEach(function(r){r.hidden=!(f==='all'||r.dataset.v===f)});
+    grps.forEach(function(g){var el=g.nextElementSibling,any=false;
+      while(el&&!el.classList.contains('grp')){if(!el.hidden)any=true;el=el.nextElementSibling}
+      g.hidden=!any});
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.f===f))});
+    try{localStorage.setItem('gc-filter',f)}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.f)})});
+  var saved='all';try{saved=localStorage.getItem('gc-filter')||'all'}catch(e){}
+  apply(btns.some(function(b){return b.dataset.f===saved})?saved:'all');
+})();
+</script>
+</body>
+</html>

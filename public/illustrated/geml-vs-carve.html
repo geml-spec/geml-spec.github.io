@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEML × Carve Comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700;8..60,900&display=swap">
+<style>
+/* Layout: a provenance dossier — verdict first, then paired evidence in two lanes (Carve violet / GEML teal), ancestors in ochre. */
+:root{
+  --bg:#F3F5F2; --surface:#FFFFFF; --sunk:#E9EDE9; --ink:#1A211F; --muted:#56635E; --line:#D5DCD7;
+  --geml:#0D6C63; --geml-soft:#DBEEEA; --carve:#7449AE; --carve-soft:#ECE3F7;
+  --anc:#85651A; --anc-soft:#F2E9D1; --homo:#2C5BA3; --homo-soft:#DFE8F6;
+  --bad:#B0373A; --bad-soft:#F7E0E0; --ok:#24774A; --ok-soft:#DCEFE3;
+  --f-display:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --f-body:"IBM Plex Sans",system-ui,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111514; --surface:#191E1D; --sunk:#0C0F0E; --ink:#E4EAE7; --muted:#9AA7A2; --line:#2B3331;
+  --geml:#55C4B7; --geml-soft:#13302C; --carve:#BB9DEA; --carve-soft:#28203A;
+  --anc:#D9B866; --anc-soft:#2D2614; --homo:#8FB2EE; --homo-soft:#18233A;
+  --bad:#EE8686; --bad-soft:#3A1C1E; --ok:#7CCB9C; --ok-soft:#15301F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111514; --surface:#191E1D; --sunk:#0C0F0E; --ink:#E4EAE7; --muted:#9AA7A2; --line:#2B3331;
+  --geml:#55C4B7; --geml-soft:#13302C; --carve:#BB9DEA; --carve-soft:#28203A;
+  --anc:#D9B866; --anc-soft:#2D2614; --homo:#8FB2EE; --homo-soft:#18233A;
+  --bad:#EE8686; --bad-soft:#3A1C1E; --ok:#7CCB9C; --ok-soft:#15301F; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.7 var(--f-body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.25;margin:0}
+h1{font-size:clamp(30px,5vw,48px);font-weight:900;letter-spacing:.01em}
+h2{font-size:clamp(22px,3vw,28px);font-weight:900;margin-bottom:6px}
+h3{font-size:18px;font-weight:600}
+p{margin:0}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+a{color:var(--homo)}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17px;max-width:68ch;color:var(--ink)}
+.muted{color:var(--muted)}
+.sec{margin-top:56px;display:grid;gap:16px}
+.sec>header{display:grid;gap:6px;max-width:75ch}
+.tagC,.tagG{font:700 11px/1 var(--f-mono);padding:4px 7px;border-radius:4px;letter-spacing:.04em;white-space:nowrap}
+.tagC{background:var(--carve-soft);color:var(--carve)}
+.tagG{background:var(--geml-soft);color:var(--geml)}
+
+/* hero */
+.hero{display:grid;gap:18px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.hero .q{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:baseline}
+.answer{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:6px}
+.ans{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 16px 14px;display:grid;gap:6px;align-content:start}
+.ans b{font-family:var(--f-display);font-size:17px;font-weight:900;line-height:1.35}
+.ans p{color:var(--muted);font-size:14px}
+.ans .k{font:700 26px/1 var(--f-mono);color:var(--geml)}
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.nav a{font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--surface)}
+.nav a:hover,.nav a:focus-visible{border-color:var(--geml);outline:none}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+thead th{font:600 12px/1.4 var(--f-body);color:var(--muted);background:var(--sunk);position:sticky;top:0;letter-spacing:.04em}
+tbody tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+td.c code{color:var(--carve)} td.g code{color:var(--geml)}
+td.c,td.g{min-width:170px}
+td.note{color:var(--muted);min-width:240px}
+tr.grp td{background:var(--sunk);font:700 12px/1.4 var(--f-body);letter-spacing:.08em;color:var(--muted);padding-block:6px}
+.v{display:inline-block;font:600 12px/1.2 var(--f-body);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.v-anc{background:var(--anc-soft);color:var(--anc)}
+.v-homo{background:var(--homo-soft);color:var(--homo)}
+.v-div{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
+.v-c{background:var(--carve-soft);color:var(--carve)}
+.v-g{background:var(--geml-soft);color:var(--geml)}
+.none{color:var(--muted);font-style:italic}
+
+/* filter */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters button{font:500 13px/1 var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.filters button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.filters button:focus-visible{outline:2px solid var(--geml);outline-offset:2px}
+.filters .n{font-family:var(--f-mono);font-size:12px;opacity:.75}
+
+/* legend + tally */
+.tally{display:flex;flex-wrap:wrap;gap:10px}
+.tally div{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+
+/* philosophy */
+.phil td:first-child{font-weight:700;white-space:nowrap}
+
+/* probes */
+.probes{display:grid;gap:18px}
+.probe{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.probe>header{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;padding:14px 16px;border-bottom:1px solid var(--line)}
+.probe>header h3{font-size:17px}
+.probe>header p{color:var(--muted);font-size:14px;flex-basis:100%}
+.lanes{display:grid;grid-template-columns:1fr 1fr}
+.lane{min-width:0;padding:12px 16px 16px;display:grid;gap:8px;align-content:start}
+.lane+.lane{border-left:1px solid var(--line)}
+.lane h4{margin:0;display:flex;gap:8px;align-items:center;font:600 13px/1.3 var(--f-body)}
+pre{margin:0;background:var(--sunk);border-radius:8px;padding:10px 12px;overflow-x:auto;font:12.5px/1.55 var(--f-mono);white-space:pre}
+pre.out{border-left:3px solid var(--line)}
+pre.err{border-left-color:var(--bad)}
+pre.pass{border-left-color:var(--ok)}
+.res{font:600 12.5px/1.4 var(--f-body);display:inline-flex;gap:6px;align-items:center;padding:3px 8px;border-radius:6px;width:fit-content}
+.res.bad{background:var(--bad-soft);color:var(--bad)}
+.res.good{background:var(--ok-soft);color:var(--ok)}
+.res.meh{background:var(--sunk);color:var(--muted)}
+.lab{font:500 11px/1 var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:760px){.lanes{grid-template-columns:1fr}.lane+.lane{border-left:0;border-top:1px solid var(--line)}}
+
+/* lists of strengths */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.card h3{display:flex;gap:10px;align-items:center}
+.card ol{margin:0;padding-left:20px;display:grid;gap:10px}
+.card li{padding-left:2px}
+.card li b{display:block}
+.card li span{color:var(--muted);font-size:14px}
+.card.g{border-top:3px solid var(--geml)} .card.c{border-top:3px solid var(--carve)}
+
+/* timeline */
+.tl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tl svg{display:block;min-width:900px;width:100%;height:auto}
+.tl text{font-family:var(--f-body);font-size:11px;fill:var(--ink)}
+.tl .ax{fill:var(--muted);font-family:var(--f-mono);font-size:10.5px}
+.tl .gl{stroke:var(--line)}
+.tl .dc{fill:var(--carve)} .tl .dg{fill:var(--geml)}
+.tl .lc{stroke:var(--carve)} .tl .lg{stroke:var(--geml)}
+.tl .lane-c{fill:var(--carve)} .tl .lane-g{fill:var(--geml)}
+
+.facts{display:grid;gap:8px;font-size:14px}
+.facts li{color:var(--ink)}
+.small{font-size:13px;color:var(--muted)}
+footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:grid;gap:6px}
+@media (prefers-reduced-motion:no-preference){.filters button{transition:background .15s,color .15s}}
+
+.axis{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.axis ul{margin:0;padding-left:18px;display:grid;gap:9px}
+.axis li b{display:block}
+.axis li span{color:var(--muted);font-size:14px}
+.evo{list-style:none;margin:0;padding:0 0 0 18px;display:grid;gap:12px;border-left:2px solid var(--line)}
+.evo li{position:relative;display:grid;gap:2px}
+.evo li::before{content:"";position:absolute;left:-26px;top:.4em;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--geml)}
+.evo li.turn::before{background:var(--geml)}
+.evo time{font:600 12px/1.3 var(--f-mono);color:var(--geml)}
+.evo li span{color:var(--muted);font-size:14px}
+.vs{font-size:13.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.cwrap{display:grid;gap:10px;margin-top:4px}
+.cfig{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:14px;align-items:stretch}
+@media (max-width:920px){.cfig{grid-template-columns:1fr}}
+.cfig>div{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:10px;align-content:start}
+.cfig>div.core{border:2px solid var(--geml);background:var(--geml-soft)}
+.cfig ul{margin:0;padding-left:18px;display:grid;gap:7px;font-size:14px}
+.cfig .box{font-family:var(--f-display);font-weight:900;font-size:20px;color:var(--geml)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.compat{margin:0;padding:10px 14px;border-left:3px solid var(--geml);background:var(--surface);border-radius:0 8px 8px 0;font-size:14px}
+.chips code{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:12.5px;color:var(--geml)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="hero">
+  <div class="eyebrow">Independence comparison · two markup languages · measured 2026-10-06 · <a href="geml-vs-carve_CN.html">中文</a> · <a href="/illustrated/">all illustrated pages</a> · <a href="/">GEML home</a></div>
+  <div class="q"><h1>GEML and Carve: one built for typesetting, one for agents</h1><span class="tagC">Carve .crv</span><span class="tagG">GEML .geml</span></div>
+  <p class="lede">Both languages were born in 2026 and both set out to go one step past Markdown, in different directions: Carve optimizes for typesetting and presentation, for richer expression; GEML optimizes for agents, for stronger control over every element, and works more like a container: one set of addresses and standard actions holds and manipulates text forms inside the document and out. This page lines up their 82 syntactic constructs and every capability, marks where each design comes from, and runs the same inputs through both official parsers. The two share a spelling in only 13 places, all inherited from older public sources. Everything else is its own system, with different goals, trade-offs and capabilities.</p>
+  <div class="answer">
+    <div class="ans"><span class="k">13</span><b>13 shared spellings, all from common sources</b><p>ATX headings, <code>[t](url)</code>, <code>![](src)</code>, <code>`code`</code>, <code>[^id]</code>, <code>- [ ]</code>, <code>{#id .class k=v}</code>, <code>%%</code> and a few more, from Markdown (2004), PHP Markdown Extra, GFM, Pandoc, Obsidian/Mermaid and CommonMark.</p></div>
+    <div class="ans"><span class="k">29 · 11</span><b>Each language's own constructs stay its own</b><p>Carve alone has 29: <code>/italic/</code> <code>*bold*</code> <code>_underline_</code> <code>=highlight=</code>, <code>|=</code> header cells, <code>^</code> captions, <code>:::</code> containers, <code>&lt;/#id&gt;</code>, CriticMarkup and more. GEML alone has 11: the typed-block primitive, data-form tables, <code>view</code>, <code>data</code>, inner-unit coordinates, labeled closes and more. The same line of text parses completely differently in each (probe P7).</p></div>
+    <div class="ans"><span class="k">Two directions</span><b>One built for typesetting, one for agents</b><p>Carve succeeds Djot and spends its effort on inline expression, table layout, captions and numbering, and many output formats. GEML spends its effort on addresses, block-level reads and writes, guarded writes, block history and reference checking, so an agent can change any element of a document precisely and safely.</p></div>
+    <div class="ans"><span class="k">Opposite</span><b>Key design decisions point opposite ways</b><p>Carve rejected <code>{{name}}</code> variables; GEML puts <code>{{key}}</code> in the core. Carve leaves an unresolvable reference to the host; GEML makes it a build error. Carve passes <code>=html</code> through by default; GEML has no HTML channel at all.</p></div>
+    <div class="ans"><span class="k">09-30</span><b>When each project learned of the other</b><p>Carve's repository holds no record of GEML. GEML first noted Carve on 2026-09-30, in a survey of similar projects; by then every core part of GEML had been live for one to three months.</p></div>
+    <div class="ans"><span class="k">229</span><b>Profiles and views were redesigned step by step</b><p>Profiles went from hard-wired in the core spec to an application-layer mechanism on 08-31, with 229 commits across six profiles; view was split out of a table's computing attributes into a block of its own. See section 5.</p></div>
+  </div>
+  <nav class="nav" aria-label="Contents">
+    <a href="#philosophy">Design direction</a><a href="#syntax">Syntax</a><a href="#probes">Same-input runs</a><a href="#capabilities">Capabilities</a><a href="#evolution">Evolution</a><a href="#strengths">Strengths</a><a href="#timeline">Timeline</a><a href="#evidence">Sources</a>
+  </nav>
+</section>
+
+<!-- ============ PHILOSOPHY ============ -->
+<section class="sec" id="philosophy">
+  <header><div class="eyebrow">1 · Design direction</div><h2>One built for typesetting, one for agents</h2>
+  <p class="muted">Carve wants a document to look better; GEML wants an agent to change any element of a document precisely and safely. The two columns show where each puts most of its effort; the table shows the trade-offs that follow, each row taken from the project's own documents or first commit.</p></header>
+  <div class="axis">
+    <div class="card c"><h3><span class="tagC">Carve</span>Built for typesetting and presentation</h3>
+      <p class="small">Its effort goes into how well a document can look.</p>
+      <ul>
+        <li><b>Inline expressiveness</b><span>Underline, highlight, super- and subscript, bold italic, semantic spans (kbd, abbr, time), language tags, mentions and tags.</span></li>
+        <li><b>Typographic detail</b><span>Smart punctuation (dashes, ellipses, arrows, ©), no-break spaces, verse line blocks, continuation markers.</span></li>
+        <li><b>Table layout</b><span>Merged cells, horizontal and vertical alignment, continuation rows, header and footer row counts.</span></li>
+        <li><b>Captions and numbering</b><span>Captions for figures, tables, listings and equations, <code>Figure #</code> numbering, composite figure panels.</span></li>
+        <li><b>Editorial marks</b><span>CriticMarkup insertions, deletions, substitutions and comments.</span></li>
+        <li><b>Many outputs</b><span>HTML, Markdown, plain text and ANSI terminal output, each with a report of what it dropped.</span></li>
+      </ul></div>
+    <div class="card g"><h3><span class="tagG">GEML</span>Built for agents that manipulate elements</h3>
+      <p class="small">Its effort goes into how precisely and safely a program can change one element of a document.</p>
+      <ul>
+        <li><b>Everything has an address</b><span>Explicit ids, derived heading ids, derived addresses for prose between blocks, content addresses <code>@&lt;hex&gt;</code>, inner-unit coordinates <code>#t[2]["Q1"]</code>, line selectors <code>L27-58</code>.</span></li>
+        <li><b>Read and write by address</b><span><code>get / set / add / delete / rename / revert</code> touch only the target block; changing one cell left 399 of 400 bytes untouched (P9).</span></li>
+        <li><b>Guarded writes</b><span>Every write rechecks the whole document and is refused if the result would not parse; <code>#id@&lt;hex&gt;</code> stops a write based on stale content; <code>rename</code> updates every reference.</span></li>
+        <li><b>Undo what broke</b><span>A <code>.gemlhistory</code> revision chain, single-block revert, a chain that can be rehashed and verified.</span></li>
+        <li><b>References are a contract</b><span>Eight kinds of reference are checked at build time, so an agent that edits one block learns at once whether it broke another (P1, P3–P6).</span></li>
+        <li><b>Data that derives</b><span><code>table</code>, <code>view</code>, <code>data</code> and the charts bound to them: change one number and the totals and the chart follow.</span></li>
+        <li><b>An interface for agents</b><span>11 read/write MCP tools and an agent skill; reading one block costs one block of context (measured 133 B of 400 B).</span></li>
+      </ul></div>
+  </div>
+  <div class="cwrap">
+    <h3>GEML works more like a container</h3>
+    <p class="muted">One set of addresses and standard actions reaches the text forms inside a document and the files, data, codebases and other documents outside it.</p>
+    <div class="cfig" role="group" aria-label="GEML as a container: forms held inside the document, shared actions and addresses, references reaching outside">
+      <div><div class="lab">Inside the document · forms it holds</div>
+        <ul>
+          <li><code>=== code</code> any programming language, kept verbatim</li>
+          <li><code>=== math</code> TeX</li>
+          <li><code>=== diagram</code> external DSLs such as mermaid and vega-lite</li>
+          <li><code>=== table</code> pipe grid, CSV, TSV</li>
+          <li><code>=== data</code> JSON, JSONL (YAML, TOML, EDN reserved)</li>
+          <li><code>=== meta</code> typed key-value pairs</li>
+          <li><code>=== note</code>, <code>=== text</code> flow prose</li>
+          <li>An unknown type: a warning, with the body kept verbatim</li>
+        </ul></div>
+      <div class="core">
+        <div class="box">A GEML document</div>
+        <p class="small">One fence, <code>=== type {attrs}</code>; a type registry decides whether a body is read as raw, flow or key-value.</p>
+        <div class="lab">One set of standard actions</div>
+        <div class="chips"><code>list</code><code>find</code><code>get</code><code>set</code><code>add</code><code>delete</code><code>rename</code><code>revert</code><code>check</code><code>history</code><code>to</code></div>
+        <div class="lab">One set of addresses</div>
+        <div class="chips"><code>#id</code><code>## Heading</code><code>=== type</code><code>@&lt;hex&gt;</code><code>L27-58</code><code>#t[2]["Q1"]</code><code>{lang=py}</code><code>--within</code></div>
+        <p class="small">The command line, MCP (each tool name is its command path, since 07-29) and every profile's verbs share this one set.</p></div>
+      <div><div class="lab">Outside the document · references that reach out</div>
+        <ul>
+          <li><code>code src=f.py#L10-20</code> a span of a source file; an out-of-range span is an error</li>
+          <li><code>table src=data.csv</code> a local or http(s) data file</li>
+          <li><code>data src=log.jsonl#L1-500</code> a span of a JSON, JSONL or YAML file</li>
+          <li><code>data=</code> chart data from CSV, JSON, or a table in another document</li>
+          <li><code>embed src=doc.geml#id</code>, <code>[[doc.geml#id]]</code> blocks in other documents; <code>get --view</code> reads straight through an embed</li>
+          <li>Profiles reach further: codemap writes a whole codebase as documents, media manages audio and video assets, translator makes a document in another language a projection</li>
+        </ul></div>
+    </div>
+    <p class="compat"><b>Backward compatible with Markdown</b>: inline syntax follows Markdown; <code>.md</code> files can be listed, searched, read and written with no conversion, and what is written stays Markdown (10-02); when needed, <code>geml notes.md</code> converts one to GEML in a single command.</p>
+    <p class="vs"><span class="tagC">Carve</span>'s model is one markup document rendered to many outputs. Its include processor takes only Carve or plain text and is expanded by the host outside the parser, which does no file I/O; its command-line actions work on whole documents (render, fmt, lint, diff, merge, migrate, flatten), and block-level read and replace arrived in its MCP server on 10-05.</p>
+  </div>
+  <div class="tbl"><table class="phil">
+    <thead><tr><th>Aspect</th><th>Carve</th><th>GEML</th></tr></thead>
+    <tbody>
+      <tr><td>Problem it solves</td><td>A successor to Djot that removes Markdown's twenty years of ambiguity and is easy for writers to learn and remember (<code>docs/technical-rationale.md</code>)</td><td>Let people and AI agents co-write one document: plain text for people, addressable, verifiable and versioned for machines (first draft §1, "addressable everything")</td></tr>
+      <tr><td>Stated ancestry</td><td>Djot, Org-mode (<code>/italic/</code>), Creole (<code>|=</code>), AsciiDoc (admonitions), CriticMarkup (Init commit README)</td><td>Markdown/CommonMark, AsciiDoc, reStructuredText, Org-mode, MyST, Mermaid/Graphviz, TOML (2026-06-17 draft preface and commit message); neither Djot nor Carve is among them. Attribute syntax credited to Pandoc as its ancestor (<code>COMPARISON.md</code>, 06-18); the website's "Influences" section (10-01) adds djot</td></tr>
+      <tr><td>Relation to Markdown</td><td>Deliberately changes meanings: <code>*x*</code> is bold, <code>_x_</code> is underline; a <code>.crv</code> file must not go to a Markdown parser</td><td>Backward compatible with Markdown: keeps its inline syntax, and the CLI reads and writes blocks in a <code>.md</code> file directly, with no conversion, writing Markdown back</td></tr>
+      <tr><td>Block model</td><td>A dedicated syntax per kind of content: <code>```</code> code, <code>$$`</code> math, <code>:::</code> containers, <code>|=</code> tables, <code>^</code> captions, <code>---</code> frontmatter</td><td>One typed-block primitive, <code>=== type {attrs}</code>, carries code, math, tables, diagrams, data, notes and metadata; a type registry decides how the body is read</td></tr>
+      <tr><td>External content</td><td>The include processor takes only Carve or plain text, expanded by the host outside the parser (<code>includes.md</code>)</td><td><code>src=</code> reaches source-file line spans, CSV, JSON/JSONL/YAML and blocks in other documents; local sources are checked at build time</td></tr>
+      <tr><td>Unit of action</td><td>The whole document: render, fmt, lint, diff, merge, migrate, flatten</td><td>The element an address selects: a block, a section, prose, a line span, a cell; one set of verbs across the command line, MCP and profiles</td></tr>
+      <tr><td>Unresolvable reference</td><td>Kept as written and left for the host to resolve (<code>extension-contract.md</code> §12.4)</td><td>A build error; the document does not conform (spec §5.2, §8)</td></tr>
+      <tr><td>Variables / interpolation</td><td>Listed under dismissed syntax: it mixes markup with templating (<code>dismissed-syntax.md</code>)</td><td><code>{{key}}</code> is core syntax, valued from <code>=== meta</code>; a misspelled key is an error</td></tr>
+      <tr><td>Raw HTML</td><td>Bare HTML is literal text; <code>```=html</code> passthrough is on by default in the JS and Rust engines</td><td>No HTML channel at all; documents are data, never code (spec §9.1)</td></tr>
+      <tr><td>Block identity</td><td>Author-written <code>{#id}</code> plus session-scoped node ids, which have no spelling in the source and end with the session (<code>ast-node-identity.md</code>)</td><td>An <code>#id</code> written in the source, plus prose addresses derived from neighbouring blocks; the same key serves reads, writes, checks and history</td></tr>
+      <tr><td>Metadata</td><td><code>---</code> YAML frontmatter, kept raw</td><td><code>=== meta</code> key-value blocks with typed values (string, number, boolean); several merge; <code>#meta</code> is addressable</td></tr>
+      <tr><td>History</td><td>No stored history; compares two files (<code>carve diff</code>) and merges three ways (<code>carve merge</code>)</td><td>A <code>.gemlhistory</code> sidecar: an append-only revision chain, hash-verified, with single-block revert</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ SYNTAX ============ -->
+<section class="sec" id="syntax">
+  <header><div class="eyebrow">2 · Syntax</div><h2>Every construct, as each language spells it</h2>
+  <p class="muted">Carve per its spec repository at HEAD <code>bb09baea</code> (2026-10-06): <code>docs/cheatsheet.md</code> and <code>resources/grammar.ebnf</code>. GEML per <code>spec/GEML-spec.md</code>, Appendix B and the sections it cites. Use the buttons to filter.</p></header>
+  <div class="tally">
+    <div><span class="v v-anc">Shared heritage</span>same spelling in both, from an older public source</div>
+    <div><span class="v v-homo">Same form, different meaning</span></div>
+    <div><span class="v v-div">Same need, different design</span></div>
+    <div><span class="v v-c">Carve only</span></div>
+    <div><span class="v v-g">GEML only</span></div>
+  </div>
+  <div class="filters" role="group" aria-label="Filter by verdict">
+    <button type="button" data-f="all" aria-pressed="true">All <span class="n"></span></button>
+    <button type="button" data-f="anc">Shared heritage <span class="n"></span></button>
+    <button type="button" data-f="homo">Same form, different meaning <span class="n"></span></button>
+    <button type="button" data-f="div">Different design <span class="n"></span></button>
+    <button type="button" data-f="c">Carve only <span class="n"></span></button>
+    <button type="button" data-f="g">GEML only <span class="n"></span></button>
+  </div>
+  <div class="tbl"><table id="syn">
+    <thead><tr><th>Construct</th><th>Carve</th><th>GEML</th><th>Verdict</th><th>Notes / common source</th></tr></thead>
+    <tbody>
+<tr class="grp"><td colspan="5">Inline</td></tr>
+<tr data-v="div"><td>Italic</td><td class="c"><code>/x/</code></td><td class="g"><code>*x*</code></td><td><span class="v v-div">Different design</span></td><td class="note">Carve takes it from Org-mode; GEML keeps Markdown</td></tr>
+<tr data-v="homo"><td>Bold</td><td class="c"><code>*x*</code></td><td class="g"><code>**x**</code></td><td><span class="v v-homo">Same form, different meaning</span></td><td class="note"><code>*x*</code> is bold in Carve and italic in GEML (probe P7)</td></tr>
+<tr data-v="c"><td>Bold italic</td><td class="c"><code>/*x*/</code></td><td class="g none">no dedicated form</td><td><span class="v v-c">Carve only</span></td><td class="note">Carve's own</td></tr>
+<tr data-v="c"><td>Underline</td><td class="c"><code>_x_</code></td><td class="g none">none; <code>_x_</code> stays literal</td><td><span class="v v-c">Carve only</span></td><td class="note">Probe P7</td></tr>
+<tr data-v="div"><td>Strikethrough</td><td class="c"><code>~x~</code></td><td class="g"><code>~~x~~</code></td><td><span class="v v-div">Different design</span></td><td class="note">GEML uses the GFM spelling; a single tilde is not syntax in GEML</td></tr>
+<tr data-v="c"><td>Highlight</td><td class="c"><code>=x=</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note"><code>==x==</code> in Init; single character since 06-11</td></tr>
+<tr data-v="c"><td>Superscript / subscript</td><td class="c"><code>{^x^}</code> <code>{,x,}</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Braced forced form from Djot</td></tr>
+<tr data-v="c"><td>Intraword forced delimiters</td><td class="c"><code>H{,2,}O</code> etc.</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Djot style</td></tr>
+<tr data-v="anc"><td>Code span</td><td class="c"><code>`x`</code></td><td class="g"><code>`x`</code></td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Markdown (2004)</td></tr>
+<tr data-v="c"><td>Inline literal</td><td class="c"><code>!`x`</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Added to Carve 07-21</td></tr>
+<tr data-v="div"><td>Inline math</td><td class="c"><code>$`x`</code></td><td class="g"><code>$x$</code></td><td><span class="v v-div">Different design</span></td><td class="note">Carve moved to Djot's form on 05-21; GEML uses the LaTeX/Pandoc <code>$…$</code></td></tr>
+<tr data-v="c"><td>Raw inline output</td><td class="c"><code>`x`{=html}</code></td><td class="g none">none; the spec forbids it</td><td><span class="v v-c">Carve only</span></td><td class="note">From Djot / Pandoc RawInline</td></tr>
+<tr data-v="anc"><td>Link</td><td class="c"><code>[t](url)</code></td><td class="g"><code>[t](url)</code></td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Markdown (2004)</td></tr>
+<tr data-v="c"><td>Reference link</td><td class="c"><code>[t][ref]</code> + <code>[ref]: url</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Markdown has it; GEML left it out</td></tr>
+<tr data-v="anc"><td>In-document anchor link</td><td class="c"><code>[t](#id)</code></td><td class="g"><code>[t](#id)</code></td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Markdown spelling in both; only GEML checks that the target exists (probe P1)</td></tr>
+<tr data-v="div"><td>Cross-reference with automatic text</td><td class="c"><code>&lt;/#id&gt;</code></td><td class="g"><code>[[#id]]</code></td><td><span class="v v-div">Different design</span></td><td class="note">The concept is LaTeX <code>\ref</code> and AsciiDoc <code>&lt;&lt;id&gt;&gt;</code>; GEML's first draft cites AsciiDoc for it</td></tr>
+<tr data-v="div"><td>Cross-document reference</td><td class="c">a plain link <code>[t](a.crv#id)</code>, unchecked</td><td class="g"><code>[t](a.geml#id)</code> <code>[[a.geml#id]]</code>, checked</td><td><span class="v v-div">Different design</span></td><td class="note">Probe P3: Carve accepts a missing target; GEML reports it</td></tr>
+<tr data-v="div"><td>Wiki-style link</td><td class="c"><code>[Heading text][]</code>; optional extension <code>[[Heading]]</code></td><td class="g"><code>[[#id]]</code>, naming an id rather than heading text</td><td><span class="v v-div">Different design</span></td><td class="note"><code>[[ ]]</code> comes from MediaWiki / Obsidian / Logseq</td></tr>
+<tr data-v="anc"><td>Image / media</td><td class="c"><code>![alt](src)</code> image</td><td class="g"><code>![alt](src)</code> image, audio or video, inferred from the extension</td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Markdown; GEML widened it to in-place media (06-17)</td></tr>
+<tr data-v="div"><td>Inline content projection</td><td class="c"><code>{{ path #id }}</code> include processor, outside the core</td><td class="g"><code>![[#id]]</code> core syntax, projecting a text block</td><td><span class="v v-div">Different design</span></td><td class="note"><code>![[ ]]</code> is Obsidian's embed spelling</td></tr>
+<tr data-v="anc"><td>Footnote reference</td><td class="c"><code>[^l]</code>, defined by <code>[^l]: …</code>; inline <code>^[…]</code></td><td class="g"><code>[^id]</code>, pointing at any block with that id</td><td><span class="v v-anc">Shared heritage</span></td><td class="note">PHP Markdown Extra (2005); the definitions differ</td></tr>
+<tr data-v="g"><td>Metadata interpolation</td><td class="c none">dismissed</td><td class="g"><code>{{key}}</code>, escaped as <code>\{{</code></td><td><span class="v v-g">GEML only</span></td><td class="note">Carve rejects it in <code>dismissed-syntax.md</code>; GEML added it 06-18, and an undefined key is an error (probe P5)</td></tr>
+<tr data-v="homo"><td>The <code>{{ … }}</code> pair</td><td class="c">file include <code>{{ path #id @lines:N-M }}</code></td><td class="g">metadata interpolation <code>{{key}}</code></td><td><span class="v v-homo">Same form, different meaning</span></td><td class="note">Carve requires inner spaces, so <code>{{path}}</code> is plain text; GEML's <code>{{key}}</code> has the same shape as Mustache or Hugo templates</td></tr>
+<tr data-v="c"><td>Inline span and attributes</td><td class="c"><code>[t]{.c}</code>, <code>/x/{.c}</code></td><td class="g none">only links and media take attributes</td><td><span class="v v-c">Carve only</span></td><td class="note">Djot's span</td></tr>
+<tr data-v="c"><td>Semantic spans</td><td class="c"><code>[Tab]{kbd}</code> <code>{abbr=…}</code> <code>{time=…}</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Carve's own</td></tr>
+<tr data-v="c"><td>Language tag</td><td class="c"><code>{:fr}</code> <code>{:}</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">BCP 47</td></tr>
+<tr data-v="c"><td>Inline extension</td><td class="c"><code>:name[x]{a}</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Resembles remark-directive</td></tr>
+<tr data-v="c"><td>Symbol</td><td class="c"><code>:rocket:</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Djot symbol</td></tr>
+<tr data-v="c"><td>Mention / tag</td><td class="c"><code>@user</code> <code>#tag</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Social-platform convention</td></tr>
+<tr data-v="c"><td>Editorial marks</td><td class="c"><code>{+ +}</code> <code>{- -}</code> <code>{~a~&gt;b~}</code> <code>{#note#}</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">CriticMarkup</td></tr>
+<tr data-v="c"><td>Smart typography</td><td class="c"><code>--</code> <code>...</code> <code>--&gt;</code> <code>(c)</code></td><td class="g none">no substitution</td><td><span class="v v-c">Carve only</span></td><td class="note">Djot / SmartyPants</td></tr>
+<tr data-v="anc"><td>Escape</td><td class="c"><code>\</code> + ASCII punctuation</td><td class="g"><code>\</code> + ASCII punctuation</td><td><span class="v v-anc">Shared heritage</span></td><td class="note">CommonMark (2014)</td></tr>
+<tr data-v="anc"><td>Hard line break</td><td class="c"><code>\</code> at line end</td><td class="g"><code>\</code> at line end</td><td><span class="v v-anc">Shared heritage</span></td><td class="note">CommonMark</td></tr>
+<tr data-v="c"><td>No-break space</td><td class="c"><code>\␠</code> mid-line</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Djot</td></tr>
+
+<tr class="grp"><td colspan="5">Blocks</td></tr>
+<tr data-v="anc"><td>Heading</td><td class="c"><code>#</code>…<code>######</code></td><td class="g"><code>#</code>…<code>######</code></td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Markdown ATX headings; neither has setext</td></tr>
+<tr data-v="div"><td>Explicit heading id</td><td class="c">on the line above: <code>{#id}</code>⏎<code># Title</code></td><td class="g">at the line end: <code># Title {#id}</code></td><td><span class="v v-div">Different design</span></td><td class="note">Carve dropped the trailing form on 06-04; GEML settled on the line end on 06-17 (Pandoc / kramdown style)</td></tr>
+<tr data-v="div"><td>Automatic heading id</td><td class="c">keeps case: <code>id="Intro"</code></td><td class="g">normative derivation: lower-case, NFD, strip diacritics, whitespace to <code>-</code></td><td><span class="v v-div">Different design</span></td><td class="note">Probe P1 renders <code>&lt;section id="Intro"&gt;</code>; GEML spec §4 gives a six-step derivation</td></tr>
+<tr data-v="g"><td>Prose addresses</td><td class="c none">none</td><td class="g"><code>#prev-between-next</code>, <code>#container-before-next</code></td><td><span class="v v-g">GEML only</span></td><td class="note">Prose between two blocks gets a unique address from both ends; inserting a block makes the old address stop resolving</td></tr>
+<tr data-v="anc"><td>Paragraph / bullet list</td><td class="c"><code>-</code> <code>*</code></td><td class="g"><code>-</code> <code>*</code></td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Markdown</td></tr>
+<tr data-v="div"><td>Ordered list</td><td class="c"><code>1.</code> <code>1)</code> <code>a.</code> <code>i.</code> and auto-numbered <code>.</code></td><td class="g"><code>1.</code></td><td><span class="v v-div">Different design</span></td><td class="note">Carve's is richer</td></tr>
+<tr data-v="anc"><td>Task list</td><td class="c"><code>[ ]</code> <code>[x]</code> plus <code>[-] [&gt;] [?] [_]</code></td><td class="g"><code>[ ]</code> <code>[x]</code></td><td><span class="v v-anc">Shared heritage</span></td><td class="note">GitHub (2013); Carve's extra states come from Org TODO</td></tr>
+<tr data-v="c"><td>Block quote</td><td class="c"><code>&gt;</code>, <code>::: &gt;</code>, <code>^</code> attribution</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">GEML's syntax inventory has no block quote</td></tr>
+<tr data-v="c"><td>Thematic break</td><td class="c"><code>---</code> <code>***</code> <code>___</code></td><td class="g none">left out on purpose</td><td><span class="v v-c">Carve only</span></td><td class="note">GEML's 06-17 fence rationale: <code>-</code> clashes with breaks, frontmatter, setext and lists, so the fence uses <code>=</code></td></tr>
+<tr data-v="div"><td>Code block</td><td class="c"><code>```lang "Header" [Label]</code></td><td class="g"><code>=== code {lang=… src=…}</code></td><td><span class="v v-div">Different design</span></td><td class="note">In GEML a backtick run is only a shield and never opens a code block</td></tr>
+<tr data-v="c"><td>Raw block</td><td class="c"><code>```=html</code>, passed through by default</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Probe P8: <code>&lt;script&gt;</code> comes out unchanged</td></tr>
+<tr data-v="div"><td>Container / admonition</td><td class="c"><code>::: note "Title"</code> … <code>:::</code></td><td class="g"><code>=== note</code> … <code>===</code></td><td><span class="v v-div">Different design</span></td><td class="note"><code>:::</code> is the Pandoc / MyST / Djot fence; GEML's first draft used it for seven minutes and switched to <code>===</code> at 07:17</td></tr>
+<tr data-v="div"><td>Fence closing and nesting</td><td class="c">exact colon count; inner fences add a colon</td><td class="g">exact equals count; outer fences are longer</td><td><span class="v v-div">Different design</span></td><td class="note">Equal-length closing is the common fence rule (CommonMark code fences)</td></tr>
+<tr data-v="div"><td>Unknown type</td><td class="c"><code>::: word</code> → <code>&lt;div class="word"&gt;</code></td><td class="g"><code>=== word</code> → warning, body kept</td><td><span class="v v-div">Different design</span></td><td class="note">GEML's first draft (§3) already made it a forward-compatible warning</td></tr>
+<tr data-v="g"><td>One typed-block primitive</td><td class="c none">none</td><td class="g"><code>=== type {attrs}</code> + a type registry (raw / flow / key-value)</td><td><span class="v v-g">GEML only</span></td><td class="note">Code, math, tables, views, data, diagrams, embeds, notes, text and metadata share one fence</td></tr>
+<tr data-v="c"><td>Line block (verse)</td><td class="c"><code>::: |</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">reST / Djot</td></tr>
+<tr data-v="c"><td>Definition list</td><td class="c"><code>:: term</code> / <code>: definition</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note"></td></tr>
+<tr data-v="c"><td>Continuation marker</td><td class="c">a lone <code>+</code> line</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">Carve's own</td></tr>
+<tr data-v="div"><td>Display math</td><td class="c"><code>$$`…`</code></td><td class="g"><code>=== math</code></td><td><span class="v v-div">Different design</span></td><td class="note"></td></tr>
+<tr data-v="anc"><td>Comment line</td><td class="c"><code>%%</code>, plus <code>%%%</code> blocks, trailing <code>%%</code>, <code>{% %}</code></td><td class="g">line-start <code>%%</code> only</td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Obsidian <code>%%…%%</code> and Mermaid <code>%%</code> comment lines (GEML hosts Mermaid). GEML added it 06-18 to replace the forbidden <code>&lt;!-- --&gt;</code></td></tr>
+<tr data-v="g"><td>Hidden but checked block</td><td class="c none">none</td><td class="g"><code>{hidden}</code></td><td><span class="v v-g">GEML only</span></td><td class="note">A source table that only feeds a chart: in the model, reference-checked, not rendered</td></tr>
+<tr data-v="div"><td>Metadata</td><td class="c"><code>---</code> YAML frontmatter (<code>---toml</code> <code>---json</code>)</td><td class="g"><code>=== meta</code> key-value, typed, mergeable, addressable as <code>#meta</code></td><td><span class="v v-div">Different design</span></td><td class="note">GEML explicitly has no <code>---</code> frontmatter</td></tr>
+<tr data-v="div"><td>Caption</td><td class="c"><code>^ text</code> on the next line, auto-numbered <code>Figure #</code></td><td class="g"><code>caption="…"</code> attribute</td><td><span class="v v-div">Different design</span></td><td class="note">Carve's is stronger: numbering, listings, equation captions</td></tr>
+<tr data-v="c"><td>Composite figure</td><td class="c"><code>::: figure</code>, panels "Figure 2a"</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note"></td></tr>
+<tr data-v="anc"><td>Attribute object contents</td><td class="c"><code>{#id .class key=val}</code></td><td class="g"><code>{#id .class key=val}</code></td><td><span class="v v-anc">Shared heritage</span></td><td class="note">Long established in PHP Markdown Extra, kramdown, Pandoc and MyST; in GEML's 06-17 draft EBNF</td></tr>
+<tr data-v="div"><td>Where attributes attach</td><td class="c">the line above a block, floating past invisible blocks</td><td class="g">in the fence line <code>=== t {…}</code>, at a heading's line end</td><td><span class="v v-div">Different design</span></td><td class="note">GEML lets a long attribute object continue over lines with <code>\</code></td></tr>
+<tr data-v="div"><td>Bare attribute word</td><td class="c"><code>word</code> → <code>word=""</code></td><td class="g"><code>word</code> → boolean <code>true</code>; values are string, number or boolean</td><td><span class="v v-div">Different design</span></td><td class="note">An open question in GEML's first draft: borrow TOML's typing discipline</td></tr>
+<tr data-v="c"><td>Abbreviation definition</td><td class="c"><code>*[HTML]: …</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note">PHP Markdown Extra</td></tr>
+<tr data-v="div"><td>Include / embed</td><td class="c"><code>{{ path #id @lines:N-M @shift:N }}</code></td><td class="g"><code>=== embed {src=doc.geml#id}</code>; code <code>src=f#L10-20</code></td><td><span class="v v-div">Different design</span></td><td class="note">Carve has more parameters; in GEML an out-of-range line span is an error (probe P4)</td></tr>
+<tr data-v="c"><td>Placement directives</td><td class="c"><code>::: toc</code> <code>::: footnotes</code> etc.</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note"></td></tr>
+<tr data-v="c"><td>Tabs / citations</td><td class="c"><code>::: tab</code>, <code>[@key]</code> (optional)</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note"></td></tr>
+
+<tr class="grp"><td colspan="5">Tables</td></tr>
+<tr data-v="div"><td>Table shape</td><td class="c">a bare pipe table, <code>|=</code> marks header cells</td><td class="g">a GFM pipe table inside <code>=== table</code></td><td><span class="v v-div">Different design</span></td><td class="note"><code>|=</code> comes from Creole; pipe tables from PHP Markdown Extra / GFM</td></tr>
+<tr data-v="div"><td>Alignment</td><td class="c">glued <code>&lt; ~ &gt;</code>, vertical <code>^ ~ v</code>, inherit <code>?</code></td><td class="g">GFM delimiter row <code>:--:</code></td><td><span class="v v-div">Different design</span></td><td class="note">Carve's is stronger</td></tr>
+<tr data-v="c"><td>Merged cells</td><td class="c"><code>^</code> up, <code>&lt;</code> left</td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note"></td></tr>
+<tr data-v="c"><td>Continuation rows / header rows</td><td class="c"><code>+</code> rows, <code>{header-rows=N}</code></td><td class="g none">none</td><td><span class="v v-c">Carve only</span></td><td class="note"></td></tr>
+<tr data-v="g"><td>Data-form body</td><td class="c none">none</td><td class="g"><code>format=csv|tsv</code> <code>header=</code> <code>delim=</code></td><td><span class="v v-g">GEML only</span></td><td class="note">"Two table forms" in the 06-17 draft</td></tr>
+<tr data-v="g"><td>External data source</td><td class="c none">none</td><td class="g"><code>src=data.csv</code> or http(s)</td><td><span class="v v-g">GEML only</span></td><td class="note"></td></tr>
+<tr data-v="g"><td>Derived view</td><td class="c none">none</td><td class="g"><code>=== view {src=#t compute=… summary=…}</code></td><td><span class="v v-g">GEML only</span></td><td class="note">Computed columns, a summary row, printf display formats (probe P6)</td></tr>
+<tr data-v="g"><td>Data block</td><td class="c none">none</td><td class="g"><code>=== data {format=json|jsonl schema=…}</code></td><td><span class="v v-g">GEML only</span></td><td class="note">A record array can feed a chart directly</td></tr>
+
+<tr class="grp"><td colspan="5">Graphics</td></tr>
+<tr data-v="div"><td>Hosting an external diagram DSL</td><td class="c"><code>```mermaid</code> etc., optional feature (06-21)</td><td class="g"><code>=== diagram {format=mermaid}</code> (06-17 draft)</td><td><span class="v v-div">Different design</span></td><td class="note">GitLab, GitHub and Obsidian had mermaid code blocks first; GEML's draft rule is "host a DSL, never invent one"</td></tr>
+<tr data-v="div"><td>Charts</td><td class="c"><code>```chart</code> Chart.js JSON, numbers written into the body</td><td class="g"><code>format=geml-chart data=#table x= y=</code>, checked by column</td><td><span class="v v-div">Different design</span></td><td class="note">Only GEML's charts bind to data in the document (probe P6)</td></tr>
+<tr data-v="g"><td>Code graph</td><td class="c none">none</td><td class="g"><code>format=geml-code-graph</code></td><td><span class="v v-g">GEML only</span></td><td class="note">GEP-0002 / 0003 (07-01)</td></tr>
+
+<tr class="grp"><td colspan="5">Addressing</td></tr>
+<tr data-v="g"><td>Labeled closing fence</td><td class="c none">none; colons are counted</td><td class="g"><code>=== #id</code></td><td><span class="v v-g">GEML only</span></td><td class="note">Added 06-29: the closing line names the block it closes, so nothing has to be counted</td></tr>
+<tr data-v="g"><td>Inner-unit coordinates</td><td class="c none">none</td><td class="g"><code>#fy[2]</code> <code>#fy[2]["Q1"]</code> <code>#fy["Q1"]</code> <code>#fy[summary]</code></td><td><span class="v v-g">GEML only</span></td><td class="note">GEP-0011 (09-03): reference one row, cell or column of a table, across documents too, and have it checked</td></tr>
+<tr data-v="div"><td>Address for content without an id</td><td class="c">AST path (JSON Pointer), session-scoped node id</td><td class="g">content address <code>@&lt;hex&gt;</code> (first 8 hex of SHA-256), derived prose addresses</td><td><span class="v v-div">Different design</span></td><td class="note">GEML's <code>@&lt;hex&gt;</code> arrived 08-04 and finds a block by its content; Carve's paths move when the structure changes</td></tr>
+<tr data-v="div"><td>Selecting blocks by type / attribute</td><td class="c"><code>carve_select_ast_nodes</code> (MCP, 09-09)</td><td class="g"><code>'=== code {lang=py}'</code> <code>{.warn}</code> <code>--within</code> (09-30)</td><td><span class="v v-div">Different design</span></td><td class="note">GEML's commit message cites mq's query language</td></tr>
+
+<tr class="grp"><td colspan="5">Characters and files</td></tr>
+<tr data-v="anc"><td>Input normalization</td><td class="c">strip one BOM, unify line endings, U+0000→U+FFFD</td><td class="g">the same (§0, 07-25)</td><td><span class="v v-anc">Shared heritage</span></td><td class="note">CommonMark §2, "Insecure characters"; GEML added it after a bug where a BOM turned <code># Title</code> into a paragraph</td></tr>
+<tr data-v="div"><td>Extension / media type</td><td class="c"><code>.crv</code>, clipboard <code>text/x-carve</code></td><td class="g"><code>.geml</code>, <code>text/vnd.geml</code> (IANA registration pending)</td><td><span class="v v-div">Different design</span></td><td class="note"></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ PROBES ============ -->
+<section class="sec" id="probes">
+  <header><div class="eyebrow">3 · Same-input runs</div><h2>One intent, each official parser run once</h2>
+  <p class="muted">Carve: <code>@markup-carve/carve@0.1.9</code> from npm (<code>carve lint</code> and render). GEML: <code>geml 1.12.3</code> (<code>geml check</code>). Output is quoted verbatim.</p></header>
+  <div class="probes">
+
+  <article class="probe">
+    <header><h3>P1 · A link to a block that does not exist</h3><p>Both link forms point at a missing <code>#budget</code>.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>See [the budget](#budget) and &lt;/#budget&gt;.</pre>
+<pre class="out err">$ carve lint p1.crv
+p1.crv:3:31 broken-crossref — Cross-reference &lt;/#budget&gt;
+has no matching heading id; it renders as the literal
+text "&lt;/#budget&gt;".</pre>
+        <span class="res meh">Reports the cross-reference only; the plain link <code>[…](#budget)</code> passes, and render exits 0</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>See [the budget](#budget) and [[#budget]].</pre>
+<pre class="out err">$ geml check p1.geml
+error: unresolved reference `#budget` (line 3)
+error: unresolved reference `#budget` (line 3)
+2 error(s)</pre>
+        <span class="res good">Both reported, exit 1</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P2 · Duplicate id</h3><p>Two headings share an id. Both languages catch this one.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre class="out err">p2.crv:5:1 duplicate-heading-id — Duplicate heading id "a"</pre>
+        <span class="res good">Reported by lint; render still emits two <code>id="a"</code></span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre class="out err">error: duplicate id `#a` (first defined at line 1) (line 3)</pre>
+        <span class="res good">Error, exit 1</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P3 · A cross-document reference to a missing target</h3><p>The other document exists, but has no <code>#nope</code>.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>See [x](other.crv#nope).</pre>
+<pre class="out pass">$ carve lint p3.crv      → no output, exit 0
+$ carve p3.crv
+&lt;p&gt;See &lt;a href="other.crv#nope"&gt;x&lt;/a&gt;.&lt;/p&gt;</pre>
+        <span class="res bad">Not detected</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>See [x](other.geml#nope).</pre>
+<pre class="out err">error: unresolved reference `other.geml#nope` (line 3)
+1 error(s)</pre>
+        <span class="res good">Error</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P4 · A line range of a code file that has since shrunk</h3><p><code>code.txt</code> has 10 lines; the document cites lines 50–60.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>{{ code.txt @lines:50-60 }}</pre>
+<pre class="out">$ carve lint p4.crv      → no output, exit 0
+$ carve p4.crv           → warning on stderr, exit 0
+p4.crv:3:1 include-lines-out-of-range - Include line
+range for "code.txt" starts past end of file.
+&lt;p&gt;{{ code.txt &lt;span class="mention"&gt;&lt;strong&gt;@lines
+&lt;/strong&gt;&lt;/span&gt;:50-60 }}&lt;/p&gt;</pre>
+        <span class="res bad">A warning only; the output falls back to literal text, with <code>@lines</code> read as a mention</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>=== code {src=code.txt#L50-60}
+===</pre>
+<pre class="out err">error: code source `code.txt#L50-60`: the file has
+10 line(s), so lines 50-60 no longer exist — the range
+is stale (line 3)</pre>
+        <span class="res good">Error, naming the stale range</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P5 · Metadata interpolation with one misspelled key</h3><p><code>product</code> is right; <code>prodct</code> is a typo.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>---
+product: Acme
+---
+Welcome to {{product}}, also {{prodct}}.</pre>
+<pre class="out pass">&lt;p&gt;Welcome to {{product}}, also {{prodct}}.&lt;/p&gt;</pre>
+        <span class="res meh">Not a feature (dismissed by design); both stay literal</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>=== meta
+product = "Acme"
+===
+Welcome to {{product}}, also {{prodct}}.</pre>
+<pre class="out err">error: unknown metadata reference `{{prodct}}` (line 5)</pre>
+        <span class="res good">The misspelled key is caught</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P6 · Charts and table data</h3><p>The table has Q1 and Q2. One chart plots the first-half total; another names a Q3 column that does not exist.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>|= Region |= Q1 |= Q2 |
+| North | 10 | 12 |
+| South |  7 |  9 |
+^ Sales by region
+
+``` chart
+{"type":"bar","data":{"labels":["North","South"],
+ "datasets":[{"label":"Q3","data":[99,99]}]}}
+```</pre>
+<pre class="out pass">$ carve lint p6.crv      → no output, exit 0</pre>
+        <span class="res bad">The chart's numbers are typed into its JSON, unconnected to the table; a wrong column or number goes unnoticed</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>=== table {#sales}
+| Region | Q1 | Q2 |
+…
+===
+=== view {#sales-h1 src=#sales compute="H1 = Q1 + Q2"
+  summary="Region = 'Total'; …; H1 = sum(H1)"}
+===
+=== diagram {format=geml-chart data=#sales-h1 x=Region y=H1}
+===
+=== diagram {format=geml-chart data=#sales x=Region y=Q3}
+===</pre>
+<pre class="out err">error: chart: column `Q3` not found in table (line 16)</pre>
+<pre class="out pass">#sales-h1, as computed:
+Region | Q1 | Q2 | H1
+North  | 10 | 12 | 22
+South  |  7 |  9 | 16
+Total  | 17 | 21 | 38</pre>
+        <span class="res good">The chart binds to the table and its columns are checked; the view derives the computed column and the summary row</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P7 · The same line of Markdown</h3><p>One ordinary line of Markdown, given to both. This is Carve's most distinctive part.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>Plain *emphasis*, **strong** and _under_ with ~~strike~~.</pre>
+<pre class="out">&lt;p&gt;Plain &lt;strong&gt;emphasis&lt;/strong&gt;, **strong** and
+&lt;u&gt;under&lt;/u&gt; with ~~strike~~.&lt;/p&gt;</pre>
+        <span class="res meh"><code>*x*</code> becomes bold, <code>_x_</code> underline; <code>**</code> and <code>~~</code> are not parsed</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre>Plain *emphasis*, **strong** and _under_ with ~~strike~~.</pre>
+<pre class="out">&lt;p&gt;Plain &lt;em&gt;emphasis&lt;/em&gt;, &lt;strong&gt;strong&lt;/strong&gt; and
+_under_ with &lt;del&gt;strike&lt;/del&gt;.&lt;/p&gt;</pre>
+        <span class="res meh">Same as Markdown</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P8 · Raw HTML</h3><p>Both escape inline HTML as text; they differ on a dedicated passthrough channel.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre>```=html
+&lt;script&gt;alert(1)&lt;/script&gt;
+```</pre>
+<pre class="out">&lt;script&gt;alert(1)&lt;/script&gt;</pre>
+        <span class="res meh">Passed through by default (untrusted input needs <code>--safe</code>)</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre class="out">(the language has no HTML passthrough construct)</pre>
+        <span class="res meh">Spec §9.1: documents are data, never code</span></div>
+    </div>
+  </article>
+
+  <article class="probe">
+    <header><h3>P9 · Change one cell, record a revision, then revert just that block</h3><p>GEML's core workflow. The Carve side lists its three nearest tools.</p></header>
+    <div class="lanes">
+      <div class="lane"><h4><span class="tagC">Carve</span></h4>
+<pre class="out">$ carve diff before.crv after.crv
+changed  text at line 5 (value: "10" -&gt; "15")
+1 structural change</pre>
+        <span class="res meh">Compares two existing files (08-01) and merges three ways (08-11)</span>
+<pre class="out">The CLI has no command to read or write one block by id.
+carve-mcp's carve_get_block / carve_replace_source
+(block read and byte-range replace) were committed 2026-10-05.
+No stored document history of any kind.</pre>
+        <span class="res bad">No revision chain, no single-block revert</span></div>
+      <div class="lane"><h4><span class="tagG">GEML</span></h4>
+<pre class="out">$ geml get doc.geml '#sales'          → that block only
+$ geml history save doc.geml
+saved 20261006T020617Z-d1701a38
+$ … | geml set doc.geml '#sales' --body --in - -o doc.geml
+wrote doc.geml — 1 B changed, 399 B of 400 B untouched
+$ geml history save doc.geml
+$ geml doc.geml --to json              → the view recomputes
+North | 15 | 12 | 27
+$ geml revert doc.geml '#sales'
+reverted #sales to 20261006T020617Z-d1701a38
+$ diff before.geml doc.geml            → byte-identical</pre>
+        <span class="res good">Addressed reads and writes since 07-01; the history sidecar since 06-17</span></div>
+    </div>
+  </article>
+  </div>
+</section>
+
+<!-- ============ CAPABILITIES ============ -->
+<section class="sec" id="capabilities">
+  <header><div class="eyebrow">4 · Capabilities</div><h2>Tooling and capabilities: who has what, since when</h2>
+  <p class="muted">Dates are first appearances: a repository's server-side creation date, or the first commit carrying the feature.</p></header>
+  <div class="tbl"><table>
+    <thead><tr><th>Capability</th><th>Carve</th><th>GEML</th><th>Verdict</th></tr></thead>
+    <tbody>
+<tr><td>Build-time reference checking</td><td class="c">lint checks <code>&lt;/#id&gt;</code> and duplicate ids; unresolved references are left to the host by design; no cross-document checks</td><td class="g">Required by the spec: links, auto-references, cross-document references, footnotes, chart <code>data=</code>, code <code>src</code> line ranges, <code>{{key}}</code> and <code>schema=</code> are all checked (06-17 draft §8)</td><td><span class="v v-g">GEML stronger</span></td></tr>
+<tr><td>Read one block by id</td><td class="c">include fragment <code>#id</code> (heading sections normative 09-14, any block 10-05); <code>carve_get_block</code> (10-05)</td><td class="g"><code>geml get #id</code> (07-01); a heading means its section; line selectors <code>L27-58</code>; prose addresses; reads <code>.md</code> directly</td><td><span class="v v-g">GEML earlier, broader</span></td></tr>
+<tr><td>Write one block by id</td><td class="c">byte-offset source patches (09-07); <code>carve_replace_source</code> (10-05)</td><td class="g"><code>set / add / delete / rename / revert</code> (from 07-01); a write whose result would not parse is refused; <code>rename</code> updates every reference; content address <code>@&lt;hex&gt;</code> (08-04); <code>#id</code> plus <code>@&lt;hex&gt;</code> as a write guard (09-30)</td><td><span class="v v-g">GEML earlier, broader</span></td></tr>
+<tr><td>Document history</td><td class="c">No stored history; <code>carve diff</code> (08-01), three-way <code>carve merge</code> (08-11), reversible AST patches</td><td class="g"><code>.gemlhistory</code> (06-17): append-only revision chain, SHA-256 checks, <code>verify</code> rehashes the chain, single-block revert; no three-way merge</td><td><span class="v v-div">Each has strengths</span></td></tr>
+<tr><td>Data layer in the document</td><td class="c">none</td><td class="g">Data-form tables, external CSV, <code>view</code> computed columns and summaries, <code>data</code> JSON/JSONL, charts bound by column</td><td><span class="v v-g">GEML only</span></td></tr>
+<tr><td>The word "profile"</td><td class="c">Content-restriction presets: full / article / comment / minimal, for untrusted input (06-16)</td><td class="g">Application-layer vocabularies: form, media, style, translator, codemap, history, each with its own spec and conformance tests</td><td><span class="v v-homo">Same name, different thing</span></td></tr>
+<tr><td>Translation projection</td><td class="c">none (UI labels only)</td><td class="g">The Chinese spec is a <code>geml-translator/v1</code> projection: 17 embeds point at English blocks and follow their changes</td><td><span class="v v-g">GEML only</span></td></tr>
+<tr><td>Code dependency graph</td><td class="c">none</td><td class="g">codemap: a call graph written as GEML documents whose edges are checked references (run on Flink: 95,958 nodes)</td><td><span class="v v-g">GEML only</span></td></tr>
+<tr><td>Agent skill</td><td class="c"><code>carve-skill</code> (07-15)</td><td class="g">In-repo skill (06-18); <code>geml skill install</code></td><td><span class="v v-g">GEML earlier</span></td></tr>
+<tr><td>MCP server</td><td class="c"><code>carve-mcp</code> (09-05): parse, lint, migrate, AST patches; block read/replace on 10-05</td><td class="g"><code>geml mcp</code> (07-25): 11 read/write tools, every write validated first; 4 more tools for a code graph</td><td><span class="v v-g">GEML earlier</span></td></tr>
+<tr><td>Implementations</td><td class="c">TypeScript, PHP (forked from djot-php) and Rust, byte-identical (05-13); WASM (06-01); Go / Python / Ruby bindings</td><td class="g">TypeScript (06-17); a second implementation in Rust + WASM (10-03)</td><td><span class="v v-c">Carve stronger</span></td></tr>
+<tr><td>Conformance suite</td><td class="c">2,223 <code>.crv</code>/<code>.html</code> pairs (first batch 05-13)</td><td class="g">Language-neutral suite (06-28); the 06-17 draft already says "after CommonMark / toml-test"</td><td><span class="v v-anc">Common practice</span></td></tr>
+<tr><td>Editors</td><td class="c">VS Code, tree-sitter, LSP, Zed (06-01); IntelliJ, Vim, Emacs, Helix, Sublime, Obsidian (08-21) and more</td><td class="g">VS Code, Obsidian (06-30); a Chrome viewer; a Logseq bridge</td><td><span class="v v-c">Carve broader</span></td></tr>
+<tr><td>Format bridges</td><td class="c">Imports Markdown, HTML, Djot, BBCode; outputs HTML, Markdown, plain text, ANSI, AST; loss reports; pandoc-carve</td><td class="g">Markdown → GEML; outputs HTML, Markdown, JSON, canonical GEML</td><td><span class="v v-c">Carve broader</span></td></tr>
+<tr><td>Framework integrations</td><td class="c">WordPress, Laravel, Symfony, Hugo, Jekyll, Astro, MkDocs, Docusaurus and others across 60+ repositories</td><td class="g">The website playground</td><td><span class="v v-c">Carve broader</span></td></tr>
+<tr><td>Security model</td><td class="c">URL denylist, nesting cap, amplification budget, include sandbox; <code>=html</code> on by default</td><td class="g">§9: no HTML channel, resource limits, one-level confined cross-document resolution, URL scheme allowlist</td><td><span class="v v-div">Different stance</span></td></tr>
+<tr><td>Formatter / lint</td><td class="c"><code>carve fmt</code> (06-26), about 45 lint rules</td><td class="g"><code>--to geml</code> canonical output (06-29), Appendix A stable diagnostic codes</td><td><span class="v v-anc">Common practice</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ EVOLUTION ============ -->
+<section class="sec" id="evolution">
+  <header><div class="eyebrow">5 · Design evolution</div><h2>GEML's own redesigns</h2>
+  <p class="muted">GEML's structure was not fixed in one stroke. Each of the three redesigns below was driven by GEML's own problems: whether a second implementation could agree with the reference one, and whether a processor that does not know a new construct would show the wrong content.</p></header>
+  <div class="two">
+    <div class="card g"><h3>Profiles: from hard-wired into the core to application-layer vocabularies</h3>
+      <ol class="evo">
+        <li><time>06-17</time><b><code>.gemlhistory</code> as a "companion specification" beside the core</b><span>Its three block types were declared nowhere, so seven sidecars reported 333 "unknown block type" warnings that nothing could remove.</span></li>
+        <li><time>from 07-01</time><b>The code graph wired into the core renderer</b><span><code>geml-code-graph</code> sat on one if-chain beside the specification's own <code>geml-chart</code> and <code>mermaid</code>; codemap, media and style commands each had an else-if; and an unwritten registry in the reference implementation suppressed diagnostics.</span></li>
+        <li><time>08-30</time><b>GEP-0008 first proposes form as a core block type</b></li>
+        <li class="turn"><time>08-31</time><b>§8.6, the profile mechanism (GEP-0009)</b><span>A document declares vocabularies through the <code>profile</code> meta key; a vocabulary licenses names and must not change the document model; inference from a file extension is banned; history becomes the first profile. The conformance suite proves it with a vocabulary name nothing recognizes: a second implementation with no profile mechanism reproduces every case.</span></li>
+        <li><time>09-04 → 09-16</time><b>form, translator and media become profiles</b><span>form becomes the form-* family of <code>geml-form/v1</code>; translator on 09-07, media on 09-16.</span></li>
+        <li><time>09-17</time><b>Profile governance</b><span>Naming, state, checking, conformance tests.</span></li>
+        <li class="turn"><time>09-18</time><b>The core no longer knows any vocabulary by name</b><span>Rendering, commands and meta keys became table lookups, with runtime registration. 1,683 of <code>render.ts</code>'s 2,894 lines belonged to the code graph; once moved out, the file is 1,125 lines and a page with no diagram is 46% smaller.</span></li>
+      </ol>
+      <p class="vs"><span class="tagC">Carve</span>'s profiles have been something else since Init: djot-php's content-restriction presets (full / article / comment / minimal), for filtering untrusted input.</p></div>
+    <div class="card g"><h3>View: from table attributes to a block of its own</h3>
+      <ol class="evo">
+        <li><time>06-17</time><b>The first draft puts <code>compute=</code> on a table</b><span>"Two table forms plus portable computation".</span></li>
+        <li><time>06-18</time><b>A <code>summary</code> row and printf display formats are added</b></li>
+        <li><time>09-03</time><b>The GEP-0012 draft still puts <code>where / order / limit / select</code> on a table</b></li>
+        <li class="turn"><time>09-04</time><b>A separate <code>view</code> block instead (parser 1.10.0)</b><span>The reason was weighed attribute by attribute: a processor that does not know <code>where=</code> or <code>select=</code> shows the rows and columns the author excluded, which is a false render rather than a degraded one; an ignored view has no body and shows nothing. <code>compute=</code>, <code>summary=</code> and a <code>src=</code> naming a block all moved to view; a table holds facts only and reports <code>unknown-attribute</code> if it carries them. The spec's own diagnostics went from 6 errors to 4.</span></li>
+      </ol>
+      <h3>Output: from a dedicated block to general embedding</h3>
+      <ol class="evo">
+        <li><time>06-18</time><b><code>=== output</code> stores a code block's captured result</b><span>Never executed, only stored, optionally bound to its code block with <code>of=#id</code>.</span></li>
+        <li class="turn"><time>07-31</time><b>output withdrawn in favour of <code>=== embed {src=doc.geml#id}</code></b><span>Any block can be embedded, and <code>src=</code> and <code>data=</code> become one rule.</span></li>
+      </ol>
+      <p class="vs"><span class="tagC">Carve</span>'s tables do not compute, and its chart data lives in JSON; its include processor <code>{{ path #id }}</code> has had its current spelling since Init and became normative on 09-14.</p></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Profile</th><th>What it does</th><th>First commit</th><th class="num">Commits</th><th class="num">Spec and code lines today</th></tr></thead>
+    <tbody>
+      <tr><td><code>geml-history/v1</code></td><td>Block-level version sidecar: revisions, keyframes, blobs</td><td>06-17</td><td class="num">40</td><td class="num">2,680</td></tr>
+      <tr><td><code>geml-codemap/v1</code></td><td>A code call graph written as checkable GEML documents</td><td>07-01</td><td class="num">147</td><td class="num">9,705</td></tr>
+      <tr><td><code>geml-style/v1</code></td><td>Stylesheets that select into documents and never modify them</td><td>08-30</td><td class="num">24</td><td class="num">7,382</td></tr>
+      <tr><td><code>geml-form/v1</code></td><td>Form fields addressable inside their block</td><td>08-30</td><td class="num">14</td><td class="num">1,592</td></tr>
+      <tr><td><code>geml-translator/v1</code></td><td>A translation as a projection of its source, following its changes</td><td>09-01</td><td class="num">17</td><td class="num">2,035</td></tr>
+      <tr><td><code>geml-media/v1</code></td><td>Audio and video assets, edits and generation lineage</td><td>09-15</td><td class="num">36</td><td class="num">6,685</td></tr>
+      <tr><td>The profile mechanism itself</td><td>§8.6, registration and governance</td><td>08-30</td><td class="num">27</td><td class="num">1,062</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Counted over each profile's spec, design-document and source paths: 229 distinct commits, about a quarter of all 940 non-merge commits. Profile work inside the core parser is not counted, so these are lower bounds.</p>
+</section>
+
+<!-- ============ STRENGTHS ============ -->
+<section class="sec" id="strengths">
+  <header><div class="eyebrow">6 · Strengths</div><h2>What each does that the other does not, or does better</h2>
+  <p class="muted">Only items backed by a run above or by spec text. Side by side, the two lists describe two different goals.</p></header>
+  <div class="two">
+    <div class="card g"><h3><span class="tagG">GEML</span>Original or stronger</h3>
+      <ol>
+        <li><b>One fence for all structured content</b><span><code>=== type {attrs}</code> plus a type registry that reads a body as raw, flow or key-value; the first design goal of the 06-17 draft.</span></li>
+        <li><b>References are a contract</b><span>Eight kinds of reference are checked at build time, and a broken one is an error. In probes P1, P3, P4, P5 and P6, Carve lets the case through.</span></li>
+        <li><b>Every block has an address, and every address is writable</b><span>Explicit ids, derived heading ids, derived addresses for prose between blocks; get / set / add / delete / rename / revert; each write is checked to parse. Carve's comparable tools arrived three months later and cover read and replace.</span></li>
+        <li><b>Block-level history</b><span>A <code>.gemlhistory</code> hash chain that can be verified, with single-block revert (probe P9). Carve stores no document history.</span></li>
+        <li><b>A data layer inside the document</b><span>Data-form and externally sourced tables, derived views, computed columns and summary rows, <code>data</code> blocks, charts checked by column. Carve's charts embed fixed JSON.</span></li>
+        <li><b>Metadata as typed, checked values</b><span><code>=== meta</code> and <code>{{key}}</code>, the direction Carve explicitly dismissed.</span></li>
+        <li><b>Application-layer vocabularies and projections</b><span>form, media, style, translator and codemap extend the core; the Chinese spec is itself a translation projection of the English one.</span></li>
+        <li><b>Backward compatible with Markdown</b><span><code>geml list / find / get / set</code> work on Markdown files directly and write Markdown back; one command converts a file to GEML when needed.</span></li>
+      </ol></div>
+    <div class="card c"><h3><span class="tagC">Carve</span>Original or stronger</h3>
+      <ol>
+        <li><b>Rich inline writing</b><span>Italic, bold, underline, highlight, super- and subscript, CriticMarkup, smart typography, mentions and tags, semantic spans.</span></li>
+        <li><b>Table layout</b><span>Merged cells, two-axis alignment, continuation rows, header and footer row counts.</span></li>
+        <li><b>Captions and numbering</b><span><code>^</code> captions for figures, tables, listings and equations, <code>Figure #</code> numbering, composite figure panels.</span></li>
+        <li><b>Three byte-identical implementations</b><span>JS, PHP and Rust, plus Go, Python and Ruby bindings, against 2,223 test pairs.</span></li>
+        <li><b>Ecosystem reach</b><span>A dozen editors, dozens of framework and static-site integrations, PDF and LaTeX output.</span></li>
+        <li><b>Format bridges with loss reports</b><span>Imports HTML, Markdown, Djot and BBCode; reports what an output format dropped.</span></li>
+        <li><b>Content restriction for untrusted input</b><span>Profile presets, link policies, a safe mode.</span></li>
+        <li><b>Three-way merge</b><span><code>carve merge</code> combines two independent AST edits.</span></li>
+      </ol></div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="sec" id="timeline">
+  <header><div class="eyebrow">7 · Timeline</div><h2>When the key features appeared</h2>
+  <p class="muted">Carve went public first (05-13); GEML's first commit is 06-17. Each line develops along its own route.</p></header>
+  <div class="tl" role="img" aria-label="Timeline of key Carve and GEML features, March to October 2026">
+  <svg viewBox="0 0 1100 316" xmlns="http://www.w3.org/2000/svg">
+    <g class="ax">
+      <line class="gl" x1="60" x2="1048" y1="150" y2="150"/>
+      <line class="gl" x1="70" x2="70" y1="30" y2="284"/><text x="70" y="304" text-anchor="middle">Apr</text>
+      <line class="gl" x1="226" x2="226" y1="30" y2="284"/><text x="226" y="304" text-anchor="middle">May</text>
+      <line class="gl" x1="388" x2="388" y1="30" y2="284"/><text x="388" y="304" text-anchor="middle">Jun</text>
+      <line class="gl" x1="544" x2="544" y1="30" y2="284"/><text x="544" y="304" text-anchor="middle">Jul</text>
+      <line class="gl" x1="705" x2="705" y1="30" y2="284"/><text x="705" y="304" text-anchor="middle">Aug</text>
+      <line class="gl" x1="866" x2="866" y1="30" y2="284"/><text x="866" y="304" text-anchor="middle">Sep</text>
+      <line class="gl" x1="1022" x2="1022" y1="30" y2="284"/><text x="1022" y="304" text-anchor="middle">Oct</text>
+    </g>
+    <text class="lane-c" x="8" y="64" style="font-weight:700">Carve</text>
+    <text class="lane-g" x="8" y="246" style="font-weight:700">GEML</text>
+    <!-- Carve events (above axis) -->
+    <g>
+      <circle class="dc" cx="60" cy="150" r="5"/><line class="lc" x1="60" x2="60" y1="145" y2="122"/><text x="64" y="118">03-30 Init as Flow</text>
+      <circle class="dc" cx="289" cy="150" r="5"/><line class="lc" x1="289" x2="289" y1="145" y2="70"/><text x="293" y="66">05-13 public, 3 engines</text>
+      <circle class="dc" cx="388" cy="150" r="4"/><line class="lc" x1="388" x2="388" y1="146" y2="96"/><text x="392" y="92">06-01 editors · LSP · WASM</text>
+      <circle class="dc" cx="492" cy="150" r="4"/><line class="lc" x1="492" x2="492" y1="146" y2="122"/><text x="496" y="118">06-21 charts</text>
+      <circle class="dc" cx="616" cy="150" r="4"/><line class="lc" x1="616" x2="616" y1="146" y2="96"/><text x="620" y="92">07-15 carve-skill</text>
+      <circle class="dc" cx="705" cy="150" r="4"/><line class="lc" x1="705" x2="705" y1="146" y2="122"/><text x="709" y="118">08-01 diff · 08-11 merge</text>
+      <circle class="dc" cx="887" cy="150" r="4"/><line class="lc" x1="887" x2="887" y1="146" y2="122"/><text x="891" y="118">09-05 carve-mcp</text>
+      <circle class="dc" cx="1043" cy="150" r="5"/><line class="lc" x1="1043" x2="1043" y1="145" y2="96"/><text x="1039" y="92" text-anchor="end">10-05 block read/replace</text>
+    </g>
+    <!-- GEML events (below axis) -->
+    <g>
+      <circle class="dg" cx="471" cy="150" r="6"/><line class="lg" x1="471" x2="471" y1="156" y2="262"/><text x="475" y="272">06-17 first draft: === blocks, #id, [[#id]], reference checks, .gemlhistory</text>
+      <circle class="dg" cx="476" cy="150" r="4"/><line class="lg" x1="476" x2="476" y1="154" y2="238"/><text x="480" y="248">06-18 {{key}} · %% · geml-chart · skill</text>
+      <circle class="dg" cx="533" cy="150" r="4"/><line class="lg" x1="533" x2="533" y1="154" y2="214"/><text x="537" y="224">06-29 npm 1.0.0 · 07-01 get/set</text>
+      <circle class="dg" cx="668" cy="150" r="4"/><line class="lg" x1="668" x2="668" y1="154" y2="190"/><text x="672" y="200">07-25 MCP · 07-31 embed</text>
+      <circle class="dg" cx="726" cy="150" r="4"/><line class="lg" x1="726" x2="726" y1="154" y2="166"/><text x="730" y="176">08-05 data block</text>
+      <circle class="dg" cx="882" cy="150" r="4"/><line class="lg" x1="882" x2="882" y1="154" y2="166"/><text x="886" y="176">09-04 view</text>
+      <circle class="dg" cx="1017" cy="150" r="4"/><line class="lg" x1="1017" x2="1017" y1="154" y2="190"/><text x="1013" y="200" text-anchor="end">09-30 first note of Carve</text>
+      <circle class="dg" cx="1032" cy="150" r="4"/><line class="lg" x1="1032" x2="1032" y1="154" y2="214"/><text x="1028" y="224" text-anchor="end">10-03 Rust + WASM</text>
+    </g>
+  </svg></div>
+</section>
+
+<!-- ============ EVIDENCE ============ -->
+<section class="sec" id="evidence">
+  <header><div class="eyebrow">8 · Sources</div><h2>Every finding can be checked</h2></header>
+  <div class="two">
+    <div class="card"><h3>Where to check</h3>
+      <ul class="facts">
+        <li><b>GEML's first public commit</b> <code>geml-spec/geml@ace97761</code>, 2026-06-17 07:10 UTC; its message says the draft was distilled from a survey of HTML, Markdown, TOML, AsciiDoc, Org, rST and MyST. The repository was created server-side at 06-17 12:35 UTC.</li>
+        <li><b>GEML's earlier draft</b> <code>xiongjy2104/must-skills</code>, branch <code>geml-spec-draft</code>: <code>df2fc31</code> (the UTM draft; its preface names the formats it combines), <code>619d33b</code> (07:17, <code>:::</code> to <code>===</code> with a fence rationale), <code>93296fd</code> (07:34, renamed GEML).</li>
+        <li><b>Carve</b> <code>markup-carve/carve</code> at HEAD <code>bb09baea</code>; first commit <code>341c1f98</code> "Init."; block read and replace in <code>markup-carve/carve-mcp@35ac412</code> and <code>@a7bca51</code> (both 2026-10-05).</li>
+        <li><b>Server-side times</b>: npm records <code>@geml/geml</code> 1.0.0 as published 2026-06-29 11:01 UTC, and the package already contains <code>.gemlhistory</code>, <code>geml-chart</code>, <code>compute</code>, <code>{{key}}</code>, <code>=== meta</code>, <code>hidden</code>, <code>[[#id]]</code> and cross-document broken-link errors. <code>@markup-carve/carve</code> was first published 07-14.</li>
+        <li><b>Mutual search</b>: no branch history or file in Carve mentions geml, General Expressive or gemlhistory. GEML's current tree does not mention carve; historically it appears only in one 09-30 survey of similar projects (<code>c78b28d0</code>, moved to the website on 10-01), which calls Carve the closest project in features. Neither project's public issues or discussions mention the other.</li>
+        <li><b>Versions run</b>: <code>@markup-carve/carve@0.1.9</code> (npm), <code>geml 1.12.3</code>. The probe files and commands are as shown on this page.</li>
+      </ul></div>
+    <div class="card"><h3>Scope notes</h3>
+      <ul class="facts">
+        <li>Carve went public before GEML: its GitHub repository was created 05-13, and GEML's first commit is 06-17.</li>
+        <li>Carve's 03-30 Init date comes from the commit's own timestamp; GitHub's server-side creation date is 05-13. GEML's commit times are the same kind of evidence, corroborated server-side by the repository creation time and the npm publish time.</li>
+        <li>Carve's npm release (0.1.9) may trail its spec repository; "an include fragment may name any block", written into the spec on 10-05, does not yet work in that release.</li>
+        <li>Both now read and write single blocks: GEML since 07-01, keyed by author-written <code>#id</code> and content addresses; Carve since 10-05 in its MCP server, keyed by selectors, byte ranges and a whole-source sha256. Similar aims, different keys.</li>
+      </ul></div>
+    <div class="card"><h3>When each project learned of the other</h3>
+      <ul class="facts">
+        <li>No branch history or file in Carve records GEML.</li>
+        <li>GEML first recorded Carve in a 09-30 survey of similar projects that also covered Djot, VersaDok, Pandoc, MyST, Markdoc, mq and others. By then typed blocks, reference checks, block reads and writes, history, the data layer and MCP had been live for one to three months.</li>
+        <li>The survey listed two things Carve has and GEML lacks: ids on inline elements, and checking an expected hash before a write. Inline ids have not been added to GEML.</li>
+        <li>Later that day GEML combined <code>#id</code> with the content address <code>@&lt;hex&gt;</code> it had had since 08-04 into a write guard (<code>4ddb3eed</code>); the commit message cites mq's query language. A write with an expected value works like HTTP <code>If-Match</code>.</li>
+      </ul></div>
+  </div>
+</section>
+
+<footer>
+  <div>Scope: every document and grammar file in Carve's spec repository (including <code>docs/cheatsheet.md</code>, <code>resources/grammar.ebnf</code>, <code>docs/extension-contract.md</code>, <code>docs/dismissed-syntax.md</code>), carve-js, carve-rs and carve-mcp; GEML's <code>spec/GEML-spec.md</code>, profiles, GEPs 0001–0013 and the reference CLI.</div>
+  <div>Carve documents are paraphrased and cited by file name; their repository is the authority for the original wording.</div>
+</footer>
+</div>
+
+<script>
+(function(){
+  var rows=[].slice.call(document.querySelectorAll('#syn tbody tr[data-v]'));
+  var grps=[].slice.call(document.querySelectorAll('#syn tbody tr.grp'));
+  var btns=[].slice.call(document.querySelectorAll('.filters button'));
+  function count(f){return f==='all'?rows.length:rows.filter(function(r){return r.dataset.v===f}).length}
+  btns.forEach(function(b){var n=b.querySelector('.n');if(n)n.textContent=count(b.dataset.f)});
+  function apply(f){
+    rows.forEach(function(r){r.hidden=!(f==='all'||r.dataset.v===f)});
+    grps.forEach(function(g){var el=g.nextElementSibling,any=false;
+      while(el&&!el.classList.contains('grp')){if(!el.hidden)any=true;el=el.nextElementSibling}
+      g.hidden=!any});
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.f===f))});
+    try{localStorage.setItem('gc-filter',f)}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.f)})});
+  var saved='all';try{saved=localStorage.getItem('gc-filter')||'all'}catch(e){}
+  apply(btns.some(function(b){return b.dataset.f===saved})?saved:'all');
+})();
+</script>
+</body>
+</html>
