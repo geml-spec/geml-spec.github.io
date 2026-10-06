@@ -38,6 +38,37 @@
 /* A long source scrolls inside its tab rather than stretching the page. */
 .demo-page .vp-code-group div[class*='language-'] pre { max-height: 70vh; overflow: auto; }
 
+/* Nav bar, laid out as typespec.io's: the menu sits right beside the wordmark;
+   the theme switch, the social links and then the search box sit at the right
+   edge. The bar's children keep their DOM order, so the dividers VitePress draws
+   between neighbours would land in the wrong places: they go. */
+@media (min-width: 768px) {
+  .VPNavBar .content-body { justify-content: flex-start; }
+  .VPNavBar .content-body > .menu { order: 1; flex-grow: 1; }
+  .VPNavBar .content-body > .translations { order: 2; }
+  .VPNavBar .content-body > .appearance { order: 3; }
+  .VPNavBar .content-body > .social-links { order: 4; margin-right: 0; }
+  .VPNavBar .content-body > .search { order: 5; flex-grow: 0; padding-left: 16px; }
+  .VPNavBar .content-body > .extra { order: 6; }
+  .VPNavBar .content-body > .hamburger { order: 7; }
+  .VPNavBar .container .content-body > .translations::before,
+  .VPNavBar .container .content-body > .appearance::before,
+  .VPNavBar .container .content-body > .social-links::before { content: none; }
+  /* A box of its own width, "Search" on the left and the shortcut on the right. */
+  .VPNavBar .search .DocSearch-Button { width: 176px; justify-content: space-between; }
+}
+/* Until the bar is wide enough for the menu and a full box, search is an icon. */
+@media (min-width: 768px) and (max-width: 959px) {
+  .VPNavBar .content-body > .search { padding-left: 8px; }
+  /* and the menu items close up, so six of them fit beside the wordmark at 768px */
+  .VPNavBar .content-body .VPNavBarMenuLink,
+  .VPNavBar .content-body .VPNavBarMenu .VPFlyout .button { padding: 0 8px; }
+  .VPNavBar .search .DocSearch-Button { width: 40px; padding: 0; justify-content: center; }
+  .VPNavBar .search .DocSearch-Search-Icon { margin-right: 0; }
+  .VPNavBar .search .DocSearch-Button-Placeholder,
+  .VPNavBar .search .DocSearch-Button-Keys { display: none; }
+}
+
 /* The nav logo is the wordmark (geml-logo-*), drawn inside a quarter of padding
    on every side: size it so the letters are 24px tall and let the padding overhang. */
 .VPNavBarTitle .logo { height: 48px; margin: -12px 0 -12px -12px; }

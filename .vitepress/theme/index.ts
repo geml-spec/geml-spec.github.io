@@ -2,6 +2,7 @@ import DefaultTheme from 'vitepress/theme'
 import type { Theme } from 'vitepress'
 import { h } from 'vue'
 import { htmlLang } from '../lang'
+import HomeFooter from './HomeFooter.vue'
 import './custom.css'
 
 // The badges README.md opens with, under the home page's buttons, less Glama's: its
@@ -22,7 +23,10 @@ const badges = () =>
 
 export default {
   extends: DefaultTheme,
-  Layout: () => h(DefaultTheme.Layout, null, { 'home-hero-actions-after': badges }),
+  Layout: () => h(DefaultTheme.Layout, null, {
+    'home-hero-actions-after': badges,
+    'layout-bottom': () => h(HomeFooter),
+  }),
   enhanceApp({ router }) {
     if (typeof document === 'undefined') return
     // VitePress sets <html lang> to the site's `en` once the app mounts; a Chinese

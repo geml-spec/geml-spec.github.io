@@ -31,7 +31,7 @@ body
 | Reference | `[[#budget]]` — checked at build time; a missing target is an error |
 | Cross-document | `[[plan.geml#budget]]` |
 | Link | `[text](https://…)`, `[text](#budget)` |
-| Footnote | `[^src]` in prose, `[^src]: …` anywhere |
+| Footnote | `[^src]` in prose, `=== note {#src}` anywhere — any block with that id |
 | Rename with its references | `geml rename doc.geml '#old' '#new'` |
 
 ## Prose and headings

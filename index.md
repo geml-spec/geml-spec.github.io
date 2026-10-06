@@ -1,5 +1,6 @@
 ---
 layout: home
+footer: false
 title: GEML
 titleTemplate: A lightweight, Agent-Native markup language
 head:
@@ -53,7 +54,7 @@ title = "Budget plan"
 
 # Budget plan {#top}
 
-Prose with *emphasis*, a [[#fy25]] reference and a footnote[^1].
+Prose with *emphasis*, a [[#fy25]] reference and a footnote[^addr].
 
 === table {#fy25 format=csv header=1}
 Segment,  Q1, Q2, Q3, Q4
@@ -70,7 +71,9 @@ Platform,  5,  6,  7,  9
 === embed {src=#fy25}
 ===
 
-[^1]: Every block above has an address.
+=== note {#addr}
+Every block above has an address.
+===
 ```
 
 | Construct | Syntax |
@@ -87,7 +90,7 @@ Platform,  5,  6,  7,  9
 | Data | `=== data {format=json}` (also `jsonl`, `yaml`, `edn`) |
 | Chart bound to data | `=== diagram {format=geml-chart data=#id type=bar x=… y=…}` |
 | Meta value in prose | `{{title}}` |
-| Footnote | `[^note]` … `[^note]: text` |
+| Footnote | `[^note]` … `=== note {#note}` — any block with that id |
 | Hidden block · author note | `{hidden}` · a line starting with `%%` |
 | Prose as a block | `=== text {#id}` … `===` |
 | Vocabulary | `profile = "geml-media/v1"` in `=== meta` |
