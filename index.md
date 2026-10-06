@@ -12,8 +12,6 @@ hero:
   name: GEML
   text: A lightweight markup language with uniform, addressable blocks and standard verbs.
   tagline: Easy for humans to read, safe for agents to mutate.
-  # Under the tagline, smaller (theme/index.ts, HeroLede).
-  lede: Plain text people read. Blocks with names that agents get, set, add and delete, each with its own history to revert — and a write that would break the document is refused. Works on the Markdown you already have.
   image:
     light: /logo/geml-logo-light.svg
     dark: /logo/geml-logo-dark.svg

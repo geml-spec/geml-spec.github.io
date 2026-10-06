@@ -1,6 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
-import { useData, type Theme } from 'vitepress'
-import { defineComponent, h } from 'vue'
+import type { Theme } from 'vitepress'
+import { h } from 'vue'
 import { htmlLang } from '../lang'
 import HomeFooter from './HomeFooter.vue'
 import './custom.css'
@@ -21,20 +21,9 @@ const badges = () =>
       h('img', { src: b.src, alt: b.alt, height: 20, referrerpolicy: 'no-referrer' }),
     ])))
 
-// The hero's longer description (index.md, hero.lede), under the tagline and
-// smaller: the slogan is two short lines, the detail stays on the first screen.
-const HeroLede = defineComponent(() => {
-  const { frontmatter } = useData()
-  return () => {
-    const lede = frontmatter.value.hero?.lede
-    return lede ? h('p', { class: 'hero-lede' }, lede) : null
-  }
-})
-
 export default {
   extends: DefaultTheme,
   Layout: () => h(DefaultTheme.Layout, null, {
-    'home-hero-info-after': () => h(HeroLede),
     'home-hero-actions-after': badges,
     'layout-bottom': () => h(HomeFooter),
   }),
