@@ -1,0 +1,94 @@
+# GEML
+
+> GEML (General Expressive Markup Language) is a plain-text markup language in which every block has an address (`#id`) and is read and written with standard verbs: `list`, `find`, `get`, `set`, `add`, `delete`, `rename`, `revert`, `check`. The `geml` CLI and MCP server (npm package `@geml/geml`) apply those verbs to `.geml` files and to ordinary Markdown, and refuse any write that would leave the document broken.
+
+What to know first:
+
+- The verbs work on Markdown as it is. Every heading in a `.md` file is an address; nothing is converted and no new file appears.
+- `.geml` is its own language, not a Markdown dialect: one block shape, `=== type {#id key=value}` … `===`, with a normative 1.0 specification and a conformance suite. Use it when headings are too coarse: a table, one cell, a chart bound to data.
+- Read one block, not the whole file. Replace one block, do not rewrite the file. Take addresses from `geml list` or `geml find` instead of guessing them.
+- Every write is checked before it reaches disk. If the result would be broken (an unresolved reference, a duplicate id, a block that does not parse), the write is refused, the exit code is 1 and the file is unchanged.
+- `geml --help` is the authority on commands and flags. Do not use a verb it does not list.
+- Licence: code MIT, specification CC BY 4.0.
+
+## Install
+
+```sh
+npm i -g @geml/geml                  # Node 22+; installs the `geml` command
+npx -y @geml/geml skill install      # Claude Code: authoring skill + CLI + MCP server, user-global
+claude mcp add --scope user geml -- npx -y @geml/geml mcp --root .   # or any MCP client
+```
+
+The MCP server has eleven tools named after the verbs: `geml_list`, `geml_find`, `geml_get`, `geml_check`, `geml_history`, `geml_to`, `geml_set`, `geml_add`, `geml_delete`, `geml_rename`, `geml_revert`. A refused write returns its diagnostics and leaves the file unchanged. Every MCP write first saves a `.gemlhistory` revision, so `geml_revert` always has a version to return to.
+
+## Edit one block
+
+```sh
+geml list  doc.md                              # every block: address, kind, line range
+geml find  'a phrase' doc.md                   # the block that holds it: file<TAB>#address (exit 1 = no match)
+geml get   doc.md '#install' > block.md        # that block only; a heading's id gives its whole section
+geml set   doc.md '#install' --in - < block.md # replace it with stdin: heading line + body
+geml set   doc.md '#install' --body --in -     # replace only the body, keep the heading line
+geml check doc.md                              # diagnostics; exit 0 = no errors
+```
+
+- Quote selectors (`'#id'`): an unquoted `#` starts a shell comment.
+- `--in -` takes stdin as written. `--in FILE` instead takes the block with the same id out of FILE.
+- `L27` or `L27-58` selects the smallest block containing those lines, so a grep hit or a stack-trace line becomes an address.
+- If a document's relative links point above its own directory, pass `--root <repo>` on reads and writes. Without it, the write is refused.
+- A replacement that leaves blocks out removes them and names them on stderr. With the CLI, run `geml history save doc.md -m "msg"` before editing so that `geml revert doc.md '#id'` can undo one block; the MCP server saves the revision itself.
+
+## Write GEML
+
+```
+=== meta
+title = "Budget plan"
+===
+
+# Budget plan {#top}
+
+Prose with *emphasis* and a checked reference to [[#fy25]].
+
+=== table {#fy25 format=csv header=1}
+Segment, Q1, Q2
+Cloud,    8, 10
+===
+
+=== embed {src=#fy25}
+===
+
+=== code {#setup lang=sh}
+npm i -g @geml/geml
+===
+```
+
+- A fence is three or more `=`. Use a longer fence when the body contains a fence line.
+- A heading gets an id from its text (`## Cost model` → `#cost-model`) unless it carries `{#id}`.
+- `[[#id]]` and `[[other.geml#id]]` are references, checked when the document is validated. `=== embed {src=#id}` shows a block in a second place without copying it.
+- An unknown block type is a warning, not an error. Name your own types with a hyphen (`acme-invoice`).
+- Finish with `geml check file.geml` and stop at zero errors.
+
+## Docs
+
+The links below are raw Markdown.
+
+- [Cheat sheet](https://raw.githubusercontent.com/geml-spec/geml-spec.github.io/main/cheat-sheet.md): every construct, selector, verb and MCP tool on one page (7 KB). Read it before writing `.geml`.
+- [Specification](https://raw.githubusercontent.com/geml-spec/geml/main/spec/GEML-spec.md): normative, 130 KB. Do not load it whole: download it, run `geml list GEML-spec.md`, then `geml get GEML-spec.md '#31-grammar'` or whichever section you need. Diagnostic codes are in `#appendix-a-diagnostic-catalogue`.
+- [规范（中文）](https://raw.githubusercontent.com/geml-spec/geml/main/spec/GEML-spec_CN.md): the specification in Chinese.
+- [Claude Code & MCP guide](https://raw.githubusercontent.com/geml-spec/geml/main/docs/mcp-guide.md): setup, the eleven tools, and how a refused write is reported (12 KB).
+- [Profiles](https://raw.githubusercontent.com/geml-spec/geml/main/spec/profiles/README.md): how GEML is extended. The six vocabularies are codemap, history, style, form, media and translator; each has a one-page guide at `spec/profiles/geml-<name>/geml-<name>-guide.md` in the same repository.
+- [Writing a parser](https://raw.githubusercontent.com/geml-spec/geml/main/docs/WRITING-A-PARSER.md): what a second implementation must reproduce, and the conformance suite that checks it.
+- [Proposals (GEPs)](https://raw.githubusercontent.com/geml-spec/geml/main/spec/proposals/README.md): how the language changes.
+- [Changelog](https://raw.githubusercontent.com/geml-spec/geml/main/CHANGELOG.md): newest release first, 135 KB. Run `geml list CHANGELOG.md` and `get` only the release you need.
+
+## Optional
+
+- [Capability matrix](https://raw.githubusercontent.com/geml-spec/geml-spec.github.io/main/compare/matrix.md): GEML against Markdown, HTML, CommonMark, AsciiDoc, Org-mode and Pandoc.
+- [GEML vs CommonMark](https://raw.githubusercontent.com/geml-spec/geml-spec.github.io/main/compare/commonmark.md): every CommonMark construct and what GEML does with it.
+- [GEML vs XML and JSON](https://raw.githubusercontent.com/geml-spec/geml-spec.github.io/main/compare/xml-and-json.md): what XML promised for addressable documents, and where GEML differs.
+- [Benchmarks](https://raw.githubusercontent.com/geml-spec/geml-spec.github.io/main/benchmarks/index.md): what addressing by block saves an agent, measured and reproducible.
+- [Manifesto](https://raw.githubusercontent.com/geml-spec/geml-spec.github.io/main/manifesto.md): Doc-as-a-Base, the design principles and their limits.
+- [Why a new text format](https://raw.githubusercontent.com/geml-spec/geml-spec.github.io/main/blog/2026/08/03/why-do-we-need-a-new-text-format-in-the-era-of-llms.md): the case for GEML in one essay.
+- [Rust implementation](https://github.com/geml-spec/geml/tree/main/geml-parser-rs): an independent parser (Rust + WebAssembly), written from the specification and its conformance suite.
+- [Playground](https://geml-spec.github.io/playground/): interactive editor with live rendering; needs a browser with JavaScript.
+- [Source](https://github.com/geml-spec/geml): specification, parser, integrations, issues.
