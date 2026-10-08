@@ -2855,6 +2855,13 @@
       "id": "isDocumentPath"
     }
   ],
+  "isEscapable": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.4 src/`inline.ts`/isEscapable.",
+      "doc": "geml-parser--inline.ts.geml",
+      "id": "isEscapable"
+    }
+  ],
   "isMarkdownPath": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.4 src/`geml.ts`/isMarkdownPath().",

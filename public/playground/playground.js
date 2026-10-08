@@ -292778,7 +292778,7 @@ ${isHandDrawn ? "" : `
   // ../../geml-parser/dist/inline.js
   function backtickRun(s2, i5) {
     let n2 = 0;
-    while (s2[i5 + n2] === "`")
+    while (s2.charCodeAt(i5 + n2) === 96)
       n2++;
     return n2;
   }
@@ -292847,60 +292847,51 @@ ${isHandDrawn ? "" : `
     const m3 = /^(\S+)\s+(?:"[^"]*"|'[^']*'|\([^()]*\))$/.exec(d3);
     return m3 ? m3[1] : d3;
   }
-  var ESCAPABLE = /[!-/:-@[-`{-~]/;
+  var isEscapable = (c3) => c3 >= 33 && c3 <= 47 || c3 >= 58 && c3 <= 64 || c3 >= 91 && c3 <= 96 || c3 >= 123 && c3 <= 126;
   function pairsOf(s2) {
-    const br = new Int32Array(s2.length).fill(-1);
-    const lb = new Int32Array(s2.length).fill(-1);
-    const pa = new Int32Array(s2.length).fill(-1);
+    const n2 = s2.length;
+    const br = new Int32Array(n2).fill(-1);
+    const lb = new Int32Array(n2).fill(-1);
+    const pa = new Int32Array(n2).fill(-1);
     const bs = [], ls = [], ps = [];
-    for (let i5 = 0; i5 < s2.length; i5++) {
-      const c3 = s2[i5];
-      if (c3 === "[")
+    let lbFrom = 0, paFrom = 0;
+    for (let i5 = 0; i5 < n2; i5++) {
+      const c3 = s2.charCodeAt(i5);
+      if (c3 === 91)
         bs.push(i5);
-      else if (c3 === "]") {
+      else if (c3 === 93) {
         const j3 = bs.pop();
         if (j3 !== void 0)
           br[j3] = i5;
       }
-    }
-    for (let i5 = 0; i5 < s2.length; ) {
-      const c3 = s2[i5];
-      if (c3 === "\\" && ESCAPABLE.test(s2[i5 + 1] ?? "")) {
-        i5 += 2;
-        continue;
+      if (i5 >= lbFrom) {
+        if (c3 === 92 && isEscapable(s2.charCodeAt(i5 + 1)))
+          lbFrom = i5 + 2;
+        else if (c3 === 96) {
+          const k3 = backtickRun(s2, i5);
+          const close3 = findCodeSpanClose(s2, i5, k3);
+          lbFrom = close3 >= 0 ? close3 + k3 : i5 + k3;
+        } else if (c3 === 36) {
+          const close3 = s2.indexOf("$", i5 + 1);
+          lbFrom = close3 > i5 + 1 ? close3 + 1 : i5 + 1;
+        } else if (c3 === 91)
+          ls.push(i5);
+        else if (c3 === 93) {
+          const j3 = ls.pop();
+          if (j3 !== void 0)
+            lb[j3] = i5;
+        }
       }
-      if (c3 === "`") {
-        const n2 = backtickRun(s2, i5);
-        const close3 = findCodeSpanClose(s2, i5, n2);
-        i5 = close3 >= 0 ? close3 + n2 : i5 + n2;
-        continue;
-      }
-      if (c3 === "$") {
-        const close3 = s2.indexOf("$", i5 + 1);
-        i5 = close3 > i5 + 1 ? close3 + 1 : i5 + 1;
-        continue;
-      }
-      if (c3 === "[")
-        ls.push(i5);
-      else if (c3 === "]") {
-        const j3 = ls.pop();
-        if (j3 !== void 0)
-          lb[j3] = i5;
-      }
-      i5++;
-    }
-    for (let i5 = 0; i5 < s2.length; i5++) {
-      const c3 = s2[i5];
-      if (c3 === "\\") {
-        i5++;
-        continue;
-      }
-      if (c3 === "(")
-        ps.push(i5);
-      else if (c3 === ")") {
-        const j3 = ps.pop();
-        if (j3 !== void 0)
-          pa[j3] = i5;
+      if (i5 >= paFrom) {
+        if (c3 === 92)
+          paFrom = i5 + 2;
+        else if (c3 === 40)
+          ps.push(i5);
+        else if (c3 === 41) {
+          const j3 = ps.pop();
+          if (j3 !== void 0)
+            pa[j3] = i5;
+        }
       }
     }
     return { br, lb, pa, off: 0 };
@@ -292975,19 +292966,23 @@ ${isHandDrawn ? "" : `
   function scanAtoms(s2, line2, sink, depth, p3) {
     const out = [];
     const at3 = lineOf(s2, line2);
-    let buf = "";
-    const flush = () => {
-      if (buf) {
-        out.push(buf);
-        buf = "";
-      }
+    let textFrom = 0;
+    const flush = (to) => {
+      if (to > textFrom)
+        out.push(s2.slice(textFrom, to));
     };
     const atom2 = (node2, start2, end) => {
-      flush();
+      flush(start2);
       out.push({ node: node2, first: s2[start2], last: s2[end - 1] });
+      textFrom = end;
     };
     let i5 = 0;
     while (i5 < s2.length) {
+      const code = s2.charCodeAt(i5);
+      if (code !== 92 && code !== 96 && code !== 36 && code !== 91 && code !== 33) {
+        i5++;
+        continue;
+      }
       const c3 = s2[i5];
       if (c3 === "\\") {
         const next3 = s2[i5 + 1];
@@ -293002,7 +292997,6 @@ ${isHandDrawn ? "" : `
           i5 += 2;
           continue;
         }
-        buf += c3;
         i5++;
         continue;
       }
@@ -293014,7 +293008,6 @@ ${isHandDrawn ? "" : `
           i5 = close3 + n2;
           continue;
         }
-        buf += "`".repeat(n2);
         i5 += n2;
         continue;
       }
@@ -293025,7 +293018,6 @@ ${isHandDrawn ? "" : `
           i5 = close3 + 1;
           continue;
         }
-        buf += c3;
         i5++;
         continue;
       }
@@ -293149,10 +293141,9 @@ ${isHandDrawn ? "" : `
           continue;
         }
       }
-      buf += c3;
       i5++;
     }
-    flush();
+    flush(s2.length);
     return out;
   }
   var PUNCT = /[\p{P}\p{S}]/u;
@@ -293209,8 +293200,12 @@ ${isHandDrawn ? "" : `
           i5 = j3;
         } else {
           let j3 = i5;
-          while (j3 < s2.length && s2[j3] !== "*" && s2[j3] !== "~")
+          while (j3 < s2.length) {
+            const d3 = s2.charCodeAt(j3);
+            if (d3 === 42 || d3 === 126)
+              break;
             j3++;
+          }
           push3({ t: "text", v: s2.slice(i5, j3), prev: null, next: null });
           i5 = j3;
         }

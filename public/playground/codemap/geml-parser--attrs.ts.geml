@@ -57,8 +57,8 @@ geml-parser--geml.ts.geml#collectSpans,           #parseAttrs,     call, geml-pa
 geml-parser--geml.ts.geml#closeFenceLine,         #parseAttrs,     call, geml-parser/src/geml.ts:4230
 geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:199
 geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:211
-geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:308
-geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:312
+geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:310
+geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:314
 geml-parser--selector.ts.geml#keyForm,            #parseAttrs,     call, geml-parser/src/selector.ts:252
 geml-parser--verbs.ts.geml#embedSrcOf,            #parseAttrs,     call, geml-parser/src/verbs.ts:247
 geml-parser--verbs.ts.geml#selectUnits,           #parseAttrs,     call, geml-parser/src/verbs.ts:488
