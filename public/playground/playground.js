@@ -294507,7 +294507,7 @@ ${isHandDrawn ? "" : `
       this.line = line2;
     }
   };
-  function parseYaml(body) {
+  function parseYaml(body, numbers) {
     const lines = [];
     let sawDocStart = false;
     for (let i5 = 0; i5 < body.length; i5++) {
@@ -294545,7 +294545,7 @@ ${isHandDrawn ? "" : `
       if (NON_FINITE.test(t4)) {
         throw new Refusal("`.inf` and `.nan` are outside this subset \u2014 the value domain here has no infinity and no NaN", n2);
       }
-      if (/^\{.+\}$|^\[.+\]$/.test(t4)) {
+      if (/^[[{]/.test(t4)) {
         throw new Refusal("a flow collection is outside this subset \u2014 write it in block form (only `[]` and `{}` are read, as the empty sequence and map)", n2);
       }
     };
@@ -294585,6 +294585,8 @@ ${isHandDrawn ? "" : `
       }
       const q3 = quotedScalar(t4);
       const v3 = q3 === null ? plainScalar(t4) : q3;
+      if (typeof v3 === "number")
+        numbers?.push({ literal: t4, line: at3 });
       if (typeof v3 === "number" && !Number.isFinite(v3))
         throw new Refusal(`\`${t4}\` has no finite value \u2014 the value domain here has no infinity`, at3);
       return v3;
@@ -294698,8 +294700,10 @@ ${isHandDrawn ? "" : `
     text;
     i = 0;
     depth = 0;
-    constructor(text5) {
+    numbers;
+    constructor(text5, numbers) {
       this.text = text5;
+      this.numbers = numbers;
     }
     /** 0-based line of the current position, for diagnostics. */
     line(at3 = this.i) {
@@ -294925,8 +294929,10 @@ ${isHandDrawn ? "" : `
         this.refuse(`the ratio \`${t4}\` \u2014 a JSON number cannot hold it`, at3);
       if (/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(t4)) {
         const n2 = Number(t4);
-        if (Number.isFinite(n2))
+        if (Number.isFinite(n2)) {
+          this.numbers?.push({ literal: t4, line: this.line(at3) });
           return n2;
+        }
         this.refuse(`the number \`${t4}\` is not finite`, at3);
       }
       this.refuse(`the symbol \`${t4}\` \u2014 this reading has keywords, not symbols`, at3);
@@ -294950,8 +294956,8 @@ ${isHandDrawn ? "" : `
       return "a set or a tagged literal";
     return `the ${typeof v3} \`${String(v3)}\``;
   }
-  function parseEdn(body) {
-    const r2 = new Reader(body.join("\n"));
+  function parseEdn(body, numbers) {
+    const r2 = new Reader(body.join("\n"), numbers);
     try {
       const value2 = r2.value();
       r2.skip();
@@ -295049,6 +295055,53 @@ ${isHandDrawn ? "" : `
       i5++;
     }
     return null;
+  }
+  function decimalOf(literal) {
+    const m3 = /^([+-]?)(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/.exec(literal);
+    if (!m3 || m3[2] + (m3[3] ?? "") === "")
+      return null;
+    const all = m3[2] + (m3[3] ?? "");
+    const lead = all.replace(/^0+/, "");
+    if (lead === "")
+      return "0";
+    const digits = lead.replace(/0+$/, "");
+    const exp = BigInt(m3[4] ?? "0") - BigInt((m3[3] ?? "").length) + BigInt(lead.length - digits.length);
+    return `${m3[1] === "-" ? "-" : ""}${digits}e${exp}`;
+  }
+  function inexactNumber(literal, value2) {
+    if (!Number.isFinite(value2))
+      return null;
+    const shown = String(value2);
+    const radix = /^([+-]?)(0[xo][0-9a-fA-F]+)$/.exec(literal);
+    if (radix) {
+      const exact = Number.isInteger(value2) && BigInt(radix[2]) * (radix[1] === "-" ? -1n : 1n) === BigInt(value2);
+      return exact ? null : shown;
+    }
+    const written = decimalOf(literal);
+    return written === null || written === decimalOf(shown) ? null : shown;
+  }
+  function numberLiterals(text5) {
+    const out = [];
+    const NUM = /-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/y;
+    for (let i5 = 0; i5 < text5.length; i5++) {
+      const c3 = text5[i5];
+      if (c3 === '"') {
+        let j3 = i5 + 1;
+        while (j3 < text5.length && text5[j3] !== '"')
+          j3 += text5[j3] === "\\" ? 2 : 1;
+        i5 = j3;
+        continue;
+      }
+      if (c3 === "-" || c3 >= "0" && c3 <= "9") {
+        NUM.lastIndex = i5;
+        const m3 = NUM.exec(text5);
+        if (m3) {
+          out.push({ literal: m3[0], offset: i5 });
+          i5 += m3[0].length - 1;
+        }
+      }
+    }
+    return out;
   }
   function valueFault(v3) {
     if (typeof v3 === "number")
@@ -297708,7 +297761,7 @@ ${isHandDrawn ? "" : `
   }
   function serTypedBlock(b3) {
     let body;
-    if (b3.mode === "flow") {
+    if (b3.mode === "flow" || b3.mode === "prose") {
       body = (b3.children ?? []).map(serBlock).join("\n\n").split("\n");
     } else if (b3.mode === "data") {
       body = Object.entries(b3.data ?? {}).map(([k3, v3]) => `${k3} = ${serDataValue(v3)}`);
@@ -298012,6 +298065,15 @@ ${isHandDrawn ? "" : `
     const tooDeepAt = (line2) => {
       diags.push({ severity: "error", code: "data-parse", message: `data: nesting deeper than ${DATA_DEPTH} levels is outside what this processor reads`, line: line2 });
     };
+    const exactness = (literal, value2, line2) => {
+      const shown = inexactNumber(literal, value2);
+      if (shown !== null)
+        diags.push({ severity: "warning", code: "inexact-number", message: inexactMessage(literal, shown), line: line2 });
+    };
+    const numbersRead = (read) => {
+      for (const n2 of read)
+        exactness(n2.literal, Number(n2.literal), openLineNo + 1 + n2.line);
+    };
     if (fmt4 === "json") {
       const text5 = body.join("\n");
       let value2;
@@ -298027,8 +298089,11 @@ ${isHandDrawn ? "" : `
         return { diags };
       }
       const fault = iJsonFault(text5);
-      if (!fault)
+      if (!fault) {
+        for (const n2 of numberLiterals(text5))
+          exactness(n2.literal, Number(n2.literal), openLineNo + text5.slice(0, n2.offset).split("\n").length);
         return { value: value2, diags };
+      }
       outside(fault.why, openLineNo + text5.slice(0, fault.offset).split("\n").length);
     } else if (fmt4 === "jsonl") {
       const values2 = [];
@@ -298053,25 +298118,34 @@ ${isHandDrawn ? "" : `
         if (fault) {
           outside(`body line ${li + 1}: ${fault.why}`, openLineNo + 1 + li);
           ok = false;
+          continue;
         }
+        for (const n2 of numberLiterals(t4))
+          exactness(n2.literal, Number(n2.literal), openLineNo + 1 + li);
       }
       if (ok)
         return { value: values2, diags };
     } else if (fmt4 === "yaml") {
-      const r2 = parseYaml(body);
+      const read = [];
+      const r2 = parseYaml(body, read);
       if ("value" in r2) {
         const fault = valueFault(r2.value);
-        if (!fault)
+        if (!fault) {
+          numbersRead(read);
           return { value: r2.value, diags };
+        }
         outside(fault, openLineNo);
       } else
         diags.push({ severity: "error", code: "data-parse", message: `data: body is not YAML this processor reads (${r2.error})`, line: openLineNo + 1 + r2.line });
     } else if (fmt4 === "edn") {
-      const r2 = parseEdn(body);
+      const read = [];
+      const r2 = parseEdn(body, read);
       if ("value" in r2) {
         const fault = valueFault(r2.value);
-        if (!fault)
+        if (!fault) {
+          numbersRead(read);
           return { value: r2.value, diags };
+        }
         outside(fault, openLineNo);
       } else
         diags.push({ severity: "error", code: "data-parse", message: `data: body is not EDN this processor reads (${r2.error})`, line: openLineNo + 1 + r2.line });
@@ -298082,11 +298156,137 @@ ${isHandDrawn ? "" : `
     }
     return { diags };
   }
-  function jsonErrorLine(e3, text5, openLineNo) {
-    const m3 = /position (\d+)/.exec(e3 instanceof Error ? e3.message : "");
-    if (!m3)
-      return openLineNo;
-    return openLineNo + text5.slice(0, Number(m3[1])).split("\n").length;
+  function jsonErrorLine(_e2, text5, openLineNo) {
+    return openLineNo + text5.slice(0, jsonErrorOffset(text5)).split("\n").length;
+  }
+  function jsonErrorOffset(text5) {
+    const n2 = text5.length;
+    let i5 = 0;
+    let depth = 0;
+    const stop5 = () => {
+      throw new RangeError(String(i5));
+    };
+    const digit = () => (text5[i5] ?? "") >= "0" && (text5[i5] ?? "") <= "9";
+    const ws = () => {
+      while (i5 < n2 && (text5[i5] === " " || text5[i5] === "	" || text5[i5] === "\n" || text5[i5] === "\r"))
+        i5++;
+    };
+    const str4 = () => {
+      i5++;
+      while (i5 < n2) {
+        const c3 = text5[i5];
+        if (c3 === '"') {
+          i5++;
+          return;
+        }
+        if (c3 < " ")
+          stop5();
+        if (c3 === "\\") {
+          const e3 = text5[i5 + 1];
+          if (e3 === "u") {
+            for (let k3 = 2; k3 < 6; k3++)
+              if (!/[0-9a-fA-F]/.test(text5[i5 + k3] ?? "")) {
+                i5 += k3;
+                stop5();
+              }
+            i5 += 6;
+            continue;
+          }
+          if (e3 === void 0 || !'"\\/bfnrt'.includes(e3)) {
+            i5++;
+            stop5();
+          }
+          i5 += 2;
+          continue;
+        }
+        i5++;
+      }
+      stop5();
+    };
+    const num3 = () => {
+      if (text5[i5] === "-")
+        i5++;
+      if (text5[i5] === "0")
+        i5++;
+      else if (digit())
+        while (digit())
+          i5++;
+      else
+        stop5();
+      if (text5[i5] === ".") {
+        i5++;
+        if (!digit())
+          stop5();
+        while (digit())
+          i5++;
+      }
+      if (text5[i5] === "e" || text5[i5] === "E") {
+        i5++;
+        if (text5[i5] === "+" || text5[i5] === "-")
+          i5++;
+        if (!digit())
+          stop5();
+        while (digit())
+          i5++;
+      }
+    };
+    const value2 = () => {
+      ws();
+      const c3 = text5[i5];
+      if (c3 === "{" || c3 === "[") {
+        if (++depth > DATA_DEPTH)
+          stop5();
+        const close3 = c3 === "{" ? "}" : "]";
+        i5++;
+        ws();
+        if (text5[i5] === close3) {
+          i5++;
+          depth--;
+          return;
+        }
+        for (; ; ) {
+          if (c3 === "{") {
+            ws();
+            if (text5[i5] !== '"')
+              stop5();
+            str4();
+            ws();
+            if (text5[i5] !== ":")
+              stop5();
+            i5++;
+          }
+          value2();
+          ws();
+          if (text5[i5] === ",") {
+            i5++;
+            continue;
+          }
+          if (text5[i5] === close3) {
+            i5++;
+            depth--;
+            return;
+          }
+          stop5();
+        }
+      }
+      if (c3 === '"')
+        return str4();
+      if (c3 === "-" || digit())
+        return num3();
+      for (const w4 of ["true", "false", "null"])
+        if (text5.startsWith(w4, i5)) {
+          i5 += w4.length;
+          return;
+        }
+      stop5();
+    };
+    try {
+      value2();
+      ws();
+      return Math.min(i5, n2);
+    } catch (e3) {
+      return Math.min(Number(e3.message), n2);
+    }
   }
   var REGISTRY = /* @__PURE__ */ new Map([
     ["code", "raw"],
@@ -298844,6 +299044,18 @@ ${isHandDrawn ? "" : `
       }
     } else if (mode === "data") {
       block2.data = parseData(body);
+      body.forEach((raw, k3) => {
+        const eq4 = raw.indexOf("=");
+        if (eq4 <= 0 || raw.trim() === "")
+          return;
+        const literal = raw.slice(eq4 + 1).trim();
+        const v3 = coerce(literal);
+        if (typeof v3 !== "number")
+          return;
+        const shown = inexactNumber(literal, v3);
+        if (shown !== null)
+          ctx.diags.push({ severity: "warning", code: "inexact-number", message: inexactMessage(literal, shown), line: openLineNo + consumed + k3 });
+      });
     } else {
       block2.raw = body;
       readTypedRawBody(block2, type3, attrs, body, openLineNo, ctx);
@@ -299235,6 +299447,9 @@ ${isHandDrawn ? "" : `
       blocks2.push({ kind: "paragraph", text: text5, inlines: parseInline(text5, paraStart, ctx) });
     }
     return blocks2;
+  }
+  function inexactMessage(literal, shown) {
+    return `the number \`${literal}\` reads as \`${shown}\`: binary64 holds 15 to 17 significant digits, so a value this long belongs in a string`;
   }
   function parseData(lines) {
     const out = {};
@@ -300254,7 +300469,7 @@ ${isHandDrawn ? "" : `
         continue;
       const parsed = parseDataBody(fmt4, lines, line2);
       for (const d3 of parsed.diags)
-        ctx.diags.push(d3);
+        ctx.diags.push({ ...d3, line: line2 });
       if (parsed.value !== void 0) {
         block2.value = parsed.value;
         if (block2.id !== void 0 && !ctx.dataValues?.has(nameKey(block2.id))) {
@@ -300343,7 +300558,7 @@ ${isHandDrawn ? "" : `
             }
             const parsed = parseDataBody(/\.jsonl$/i.test(id38) ? "jsonl" : "json", normalizeSource(text5).split("\n"), line2);
             for (const d3 of parsed.diags)
-              ctx.diags.push(d3);
+              ctx.diags.push({ ...d3, line: line2 });
             if (parsed.value === void 0)
               continue;
             const projected = recordsToTable(parsed.value, block2.attrs, line2, ctx);

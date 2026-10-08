@@ -2,45 +2,75 @@
 profile = "geml-codemap/v1"
 module = geml-parser/ijson.ts
 src = geml-parser/src/ijson.ts
-entry = #tooDeep #iJsonFault #valueFault
+entry = #tooDeep #iJsonFault #inexactNumber #numberLiterals #valueFault
 resolution-default = cpg
 ===
 
 # geml-parser/ijson.ts
 
-=== code {#tooDeep .leaf src=geml-parser/src/ijson.ts#L31-40 anchor="scip-typescript npm @geml/geml 1.12.3 src/`ijson.ts`/tooDeep()."}
+=== code {#tooDeep .leaf src=geml-parser/src/ijson.ts#L31-40 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/tooDeep()."}
 ===
 
-=== code {#iJsonFault src=geml-parser/src/ijson.ts#L50-84 anchor="scip-typescript npm @geml/geml 1.12.3 src/`ijson.ts`/iJsonFault()."}
+=== code {#iJsonFault src=geml-parser/src/ijson.ts#L50-84 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/iJsonFault()."}
 ===
 
-=== code {#valueFault src=geml-parser/src/ijson.ts#L91-106 anchor="scip-typescript npm @geml/geml 1.12.3 src/`ijson.ts`/valueFault()."}
+=== code {#decimalOf src=geml-parser/src/ijson.ts#L91-100 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/decimalOf()."}
+===
+
+=== code {#inexactNumber src=geml-parser/src/ijson.ts#L109-119 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/inexactNumber()."}
+===
+
+=== code {#numberLiterals src=geml-parser/src/ijson.ts#L122-143 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/numberLiterals()."}
+===
+
+=== code {#valueFault src=geml-parser/src/ijson.ts#L150-165 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/valueFault()."}
+===
+
+=== table {#calls format=csv}
+from,           to,         kind, confidence
+#inexactNumber, #decimalOf, call,
+#inexactNumber, #decimalOf, call,
 ===
 
 === table {#called-by format=csv}
-from,                                    to,          kind, site
-geml-parser--geml.ts.geml#parseDataBody, #tooDeep,    call, geml-parser/src/geml.ts:108
-geml-parser--geml.ts.geml#parseDataBody, #tooDeep,    call, geml-parser/src/geml.ts:128
-geml-parser--geml.ts.geml#parseDataBody, #iJsonFault, call, geml-parser/src/geml.ts:113
-geml-parser--geml.ts.geml#parseDataBody, #iJsonFault, call, geml-parser/src/geml.ts:129
-geml-parser--geml.ts.geml#parseDataBody, #valueFault, call, geml-parser/src/geml.ts:140
-geml-parser--geml.ts.geml#parseDataBody, #valueFault, call, geml-parser/src/geml.ts:149
+from,                                      to,              kind, site
+geml-parser--coord.ts.geml#readContent,    #tooDeep,        call, geml-parser/src/coord.ts:230
+geml-parser--geml.ts.geml#parseDataBody,   #tooDeep,        call, geml-parser/src/geml.ts:117
+geml-parser--geml.ts.geml#parseDataBody,   #tooDeep,        call, geml-parser/src/geml.ts:140
+geml-parser--coord.ts.geml#readContent,    #iJsonFault,     call, geml-parser/src/coord.ts:233
+geml-parser--geml.ts.geml#parseDataBody,   #iJsonFault,     call, geml-parser/src/geml.ts:122
+geml-parser--geml.ts.geml#parseDataBody,   #iJsonFault,     call, geml-parser/src/geml.ts:141
+#inexactNumber,                            #decimalOf,      call, geml-parser/src/ijson.ts:117
+#inexactNumber,                            #decimalOf,      call, geml-parser/src/ijson.ts:118
+geml-parser--geml.ts.geml#parseDataBody,   #inexactNumber,  call, geml-parser/src/geml.ts:103
+geml-parser--geml.ts.geml#readFencedBlock, #inexactNumber,  call, geml-parser/src/geml.ts:1609
+geml-parser--geml.ts.geml#parseDataBody,   #numberLiterals, call, geml-parser/src/geml.ts:124
+geml-parser--geml.ts.geml#parseDataBody,   #numberLiterals, call, geml-parser/src/geml.ts:143
+geml-parser--geml.ts.geml#parseDataBody,   #valueFault,     call, geml-parser/src/geml.ts:154
+geml-parser--geml.ts.geml#parseDataBody,   #valueFault,     call, geml-parser/src/geml.ts:167
 ===
 
 === table {#unresolved format=csv hidden}
-from,        to
-#iJsonFault, Array.pop
-#iJsonFault, Array.push
-#iJsonFault, JSON.parse
-#iJsonFault, JSON.stringify
-#iJsonFault, NumberConstructor.isFinite
-#iJsonFault, RegExp.exec
-#iJsonFault, RegExp.test
-#iJsonFault, Set.add
-#iJsonFault, Set.has
-#iJsonFault, String.slice
-#valueFault, ArrayConstructor.isArray
-#valueFault, NumberConstructor.isFinite
-#valueFault, ObjectConstructor.entries
-#valueFault, RegExp.test
+from,            to
+#iJsonFault,     Array.pop
+#iJsonFault,     Array.push
+#iJsonFault,     JSON.parse
+#iJsonFault,     JSON.stringify
+#iJsonFault,     NumberConstructor.isFinite
+#iJsonFault,     RegExp.exec
+#iJsonFault,     RegExp.test
+#iJsonFault,     Set.add
+#iJsonFault,     Set.has
+#iJsonFault,     String.slice
+#decimalOf,      RegExp.exec
+#decimalOf,      String.replace
+#inexactNumber,  NumberConstructor.isFinite
+#inexactNumber,  NumberConstructor.isInteger
+#inexactNumber,  RegExp.exec
+#numberLiterals, Array.push
+#numberLiterals, RegExp.exec
+#valueFault,     ArrayConstructor.isArray
+#valueFault,     NumberConstructor.isFinite
+#valueFault,     ObjectConstructor.entries
+#valueFault,     RegExp.test
 ===

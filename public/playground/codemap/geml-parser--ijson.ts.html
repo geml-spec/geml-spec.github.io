@@ -130,18 +130,33 @@ sup.fn a { font-size:.75em; }
 </head>
 <body>
 <main>
-<figure class="code-graph"><div class="cg-mount" data-start="geml-parser--ijson.ts.geml" data-graph="{&quot;start&quot;:&quot;geml-parser--ijson.ts.geml&quot;,&quot;depth&quot;:6,&quot;roots&quot;:[&quot;geml-parser--ijson.ts.geml#iJsonFault&quot;,&quot;geml-parser--ijson.ts.geml#valueFault&quot;],&quot;nodes&quot;:{&quot;geml-parser--ijson.ts.geml#iJsonFault&quot;:{&quot;n&quot;:&quot;iJsonFault&quot;,&quot;doc&quot;:&quot;geml-parser--ijson.ts.geml&quot;,&quot;src&quot;:&quot;geml-parser/src/ijson.ts#L50-84&quot;},&quot;geml-parser--ijson.ts.geml#valueFault&quot;:{&quot;n&quot;:&quot;valueFault&quot;,&quot;doc&quot;:&quot;geml-parser--ijson.ts.geml&quot;,&quot;src&quot;:&quot;geml-parser/src/ijson.ts#L91-106&quot;}},&quot;edges&quot;:[],&quot;module&quot;:&quot;geml-parser/ijson.ts&quot;,&quot;style&quot;:{&quot;fold&quot;:1,&quot;depth&quot;:6,&quot;hideAccessors&quot;:true,&quot;palette&quot;:[&quot;#e3f2fd&quot;,&quot;#e8f5e9&quot;,&quot;#fff3e0&quot;,&quot;#f3e5f5&quot;,&quot;#e0f7fa&quot;,&quot;#fce4ec&quot;,&quot;#f1f8e9&quot;,&quot;#ede7f6&quot;,&quot;#fff8e1&quot;,&quot;#e0f2f1&quot;,&quot;#efebe9&quot;,&quot;#f9fbe7&quot;]}}"></div><figcaption>layered method flow — roots from this document's <code>entry</code></figcaption></figure>
+<figure class="code-graph"><div class="cg-mount" data-start="geml-parser--ijson.ts.geml" data-graph="{&quot;start&quot;:&quot;geml-parser--ijson.ts.geml&quot;,&quot;depth&quot;:6,&quot;roots&quot;:[&quot;geml-parser--ijson.ts.geml#inexactNumber&quot;],&quot;nodes&quot;:{&quot;geml-parser--ijson.ts.geml#inexactNumber&quot;:{&quot;n&quot;:&quot;inexactNumber&quot;,&quot;doc&quot;:&quot;geml-parser--ijson.ts.geml&quot;,&quot;src&quot;:&quot;geml-parser/src/ijson.ts#L109-119&quot;},&quot;geml-parser--ijson.ts.geml#decimalOf&quot;:{&quot;n&quot;:&quot;decimalOf&quot;,&quot;doc&quot;:&quot;geml-parser--ijson.ts.geml&quot;,&quot;src&quot;:&quot;geml-parser/src/ijson.ts#L91-100&quot;}},&quot;edges&quot;:[[&quot;geml-parser--ijson.ts.geml#inexactNumber&quot;,&quot;geml-parser--ijson.ts.geml#decimalOf&quot;,&quot;call&quot;,&quot;&quot;],[&quot;geml-parser--ijson.ts.geml#inexactNumber&quot;,&quot;geml-parser--ijson.ts.geml#decimalOf&quot;,&quot;call&quot;,&quot;&quot;]],&quot;module&quot;:&quot;geml-parser/ijson.ts&quot;,&quot;style&quot;:{&quot;fold&quot;:1,&quot;depth&quot;:6,&quot;hideAccessors&quot;:true,&quot;palette&quot;:[&quot;#e3f2fd&quot;,&quot;#e8f5e9&quot;,&quot;#fff3e0&quot;,&quot;#f3e5f5&quot;,&quot;#e0f7fa&quot;,&quot;#fce4ec&quot;,&quot;#f1f8e9&quot;,&quot;#ede7f6&quot;,&quot;#fff8e1&quot;,&quot;#e0f2f1&quot;,&quot;#efebe9&quot;,&quot;#f9fbe7&quot;]}}"></div><figcaption>layered method flow — roots from this document's <code>entry</code></figcaption></figure>
 <h1 id="geml-parserijsonts">geml-parser/ijson.ts</h1>
 <pre id="tooDeep" class="leaf"><code></code></pre>
 <pre id="iJsonFault"><code></code></pre>
+<pre id="decimalOf"><code></code></pre>
+<pre id="inexactNumber"><code></code></pre>
+<pre id="numberLiterals"><code></code></pre>
 <pre id="valueFault"><code></code></pre>
+<figure class="table-figure" id="calls"><div class="table-tools"><input class="table-filter" type="search" placeholder="Filter rows…" aria-label="Filter table rows"></div><div class="table-scroll"><table class="geml-table"><thead><tr><th>from</th><th>to</th><th>kind</th><th>confidence</th></tr></thead><tbody>
+<tr><td>#inexactNumber</td><td>#decimalOf</td><td>call</td><td></td></tr>
+<tr><td>#inexactNumber</td><td>#decimalOf</td><td>call</td><td></td></tr>
+</tbody></table></div></figure>
 <figure class="table-figure" id="called-by"><div class="table-tools"><input class="table-filter" type="search" placeholder="Filter rows…" aria-label="Filter table rows"></div><div class="table-scroll"><table class="geml-table"><thead><tr><th>from</th><th>to</th><th>kind</th><th>site</th></tr></thead><tbody>
-<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#tooDeep</td><td>call</td><td>geml-parser/src/geml.ts:108</td></tr>
-<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#tooDeep</td><td>call</td><td>geml-parser/src/geml.ts:128</td></tr>
-<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#iJsonFault</td><td>call</td><td>geml-parser/src/geml.ts:113</td></tr>
-<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#iJsonFault</td><td>call</td><td>geml-parser/src/geml.ts:129</td></tr>
-<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#valueFault</td><td>call</td><td>geml-parser/src/geml.ts:140</td></tr>
-<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#valueFault</td><td>call</td><td>geml-parser/src/geml.ts:149</td></tr>
+<tr><td>geml-parser--coord.ts.geml#readContent</td><td>#tooDeep</td><td>call</td><td>geml-parser/src/coord.ts:230</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#tooDeep</td><td>call</td><td>geml-parser/src/geml.ts:117</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#tooDeep</td><td>call</td><td>geml-parser/src/geml.ts:140</td></tr>
+<tr><td>geml-parser--coord.ts.geml#readContent</td><td>#iJsonFault</td><td>call</td><td>geml-parser/src/coord.ts:233</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#iJsonFault</td><td>call</td><td>geml-parser/src/geml.ts:122</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#iJsonFault</td><td>call</td><td>geml-parser/src/geml.ts:141</td></tr>
+<tr><td>#inexactNumber</td><td>#decimalOf</td><td>call</td><td>geml-parser/src/ijson.ts:117</td></tr>
+<tr><td>#inexactNumber</td><td>#decimalOf</td><td>call</td><td>geml-parser/src/ijson.ts:118</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#inexactNumber</td><td>call</td><td>geml-parser/src/geml.ts:103</td></tr>
+<tr><td>geml-parser--geml.ts.geml#readFencedBlock</td><td>#inexactNumber</td><td>call</td><td>geml-parser/src/geml.ts:1609</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#numberLiterals</td><td>call</td><td>geml-parser/src/geml.ts:124</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#numberLiterals</td><td>call</td><td>geml-parser/src/geml.ts:143</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#valueFault</td><td>call</td><td>geml-parser/src/geml.ts:154</td></tr>
+<tr><td>geml-parser--geml.ts.geml#parseDataBody</td><td>#valueFault</td><td>call</td><td>geml-parser/src/geml.ts:167</td></tr>
 </tbody></table></div></figure>
 </main>
 <footer class="geml-footer">Rendered from <code>geml-parser--ijson.ts.geml</code> by the GEML runtime. Tables are sortable and filterable; the chart is inline SVG drawn from its bound table.</footer>

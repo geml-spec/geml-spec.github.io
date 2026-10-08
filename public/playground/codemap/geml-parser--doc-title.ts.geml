@@ -8,18 +8,18 @@ resolution-default = cpg
 
 # geml-parser/doc-title.ts
 
-=== code {#docTitle src=geml-parser/src/doc-title.ts#L26-39 anchor="scip-typescript npm @geml/geml 1.12.3 src/`doc-title.ts`/docTitle()."}
+=== code {#docTitle src=geml-parser/src/doc-title.ts#L26-39 anchor="scip-typescript npm @geml/geml 1.12.4 src/`doc-title.ts`/docTitle()."}
 ===
 
-=== code {#headingShift .leaf src=geml-parser/src/doc-title.ts#L42-44 anchor="scip-typescript npm @geml/geml 1.12.3 src/`doc-title.ts`/headingShift()."}
+=== code {#headingShift .leaf src=geml-parser/src/doc-title.ts#L42-44 anchor="scip-typescript npm @geml/geml 1.12.4 src/`doc-title.ts`/headingShift()."}
 ===
 
 === table {#called-by format=csv}
 from,                                      to,            kind, site
 geml-parser--render.ts.geml#RenderCtx-new, #docTitle,     call, geml-parser/src/render.ts:304
-geml-parser--to-md.ts.geml#gemlToMd,       #docTitle,     call, geml-parser/src/to-md.ts:385
+geml-parser--to-md.ts.geml#gemlToMd,       #docTitle,     call, geml-parser/src/to-md.ts:388
 geml-parser--render.ts.geml#RenderCtx-new, #headingShift, call, geml-parser/src/render.ts:305
-geml-parser--to-md.ts.geml#gemlToMd,       #headingShift, call, geml-parser/src/to-md.ts:386
+geml-parser--to-md.ts.geml#gemlToMd,       #headingShift, call, geml-parser/src/to-md.ts:389
 ===
 
 === table {#unresolved format=csv hidden}

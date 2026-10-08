@@ -8,10 +8,10 @@ resolution-default = cpg
 
 # geml-parser/render-html.ts
 
-=== code {#page src=geml-parser/src/render-html.ts#L26-89 anchor="scip-typescript npm @geml/geml 1.12.3 src/`render-html.ts`/page()."}
+=== code {#page src=geml-parser/src/render-html.ts#L26-89 anchor="scip-typescript npm @geml/geml 1.12.4 src/`render-html.ts`/page()."}
 ===
 
-=== code {#renderHtml src=geml-parser/src/render-html.ts#L91-153 anchor="scip-typescript npm @geml/geml 1.12.3 src/`render-html.ts`/renderHtml()."}
+=== code {#renderHtml src=geml-parser/src/render-html.ts#L91-153 anchor="scip-typescript npm @geml/geml 1.12.4 src/`render-html.ts`/renderHtml()."}
 ===
 
 === table {#calls format=csv}
@@ -32,7 +32,7 @@ from,        to,                                                 kind, confidenc
 === table {#called-by format=csv}
 from,                                 to,          kind, site
 #renderHtml,                          #page,       call, geml-parser/src/render-html.ts:152
-geml-parser--verbs.ts.geml#transform, #renderHtml, call, geml-parser/src/verbs.ts:906
+geml-parser--verbs.ts.geml#transform, #renderHtml, call, geml-parser/src/verbs.ts:939
 ===
 
 === table {#unresolved format=csv hidden}

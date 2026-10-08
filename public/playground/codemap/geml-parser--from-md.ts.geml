@@ -8,34 +8,37 @@ resolution-default = cpg
 
 # geml-parser/from-md.ts
 
-=== code {#fenceFor src=geml-parser/src/from-md.ts#L28-35 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/fenceFor()."}
+=== code {#fenceFor src=geml-parser/src/from-md.ts#L28-35 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/fenceFor()."}
 ===
 
-=== code {#emitBlock src=geml-parser/src/from-md.ts#L39-49 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/emitBlock()."}
+=== code {#emitBlock src=geml-parser/src/from-md.ts#L39-49 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/emitBlock()."}
 ===
 
-=== code {#metaLine src=geml-parser/src/from-md.ts#L55-70 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/metaLine()."}
+=== code {#metaLine src=geml-parser/src/from-md.ts#L55-70 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/metaLine()."}
 ===
 
-=== code {#yamlScalar src=geml-parser/src/from-md.ts#L74-81 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/yamlScalar()."}
+=== code {#yamlScalar src=geml-parser/src/from-md.ts#L74-81 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/yamlScalar()."}
 ===
 
-=== code {#autolinks src=geml-parser/src/from-md.ts#L85-96 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/autolinks()."}
+=== code {#autolinks src=geml-parser/src/from-md.ts#L85-96 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/autolinks()."}
 ===
 
-=== code {#escMetaRefs src=geml-parser/src/from-md.ts#L105-135 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/escMetaRefs()."}
+=== code {#escMetaRefs src=geml-parser/src/from-md.ts#L105-135 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/escMetaRefs()."}
 ===
 
-=== code {#githubSlug src=geml-parser/src/from-md.ts#L140-147 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/githubSlug()."}
+=== code {#githubSlug src=geml-parser/src/from-md.ts#L140-147 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/githubSlug()."}
 ===
 
-=== code {#closesFence src=geml-parser/src/from-md.ts#L158-162 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/closesFence()."}
+=== code {#closesFence src=geml-parser/src/from-md.ts#L158-162 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/closesFence()."}
 ===
 
-=== code {#hasLevelOneHeading src=geml-parser/src/from-md.ts#L167-178 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/hasLevelOneHeading()."}
+=== code {#hasLevelOneHeading src=geml-parser/src/from-md.ts#L167-178 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/hasLevelOneHeading()."}
 ===
 
-=== code {#mdToGeml src=geml-parser/src/from-md.ts#L181-361 anchor="scip-typescript npm @geml/geml 1.12.3 src/`from-md.ts`/mdToGeml()."}
+=== code {#gemlClose src=geml-parser/src/from-md.ts#L185-193 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/gemlClose()."}
+===
+
+=== code {#mdToGeml src=geml-parser/src/from-md.ts#L195-389 anchor="scip-typescript npm @geml/geml 1.12.4 src/`from-md.ts`/mdToGeml()."}
 ===
 
 === table {#calls format=csv}
@@ -60,6 +63,7 @@ from,                to,                                            kind, confid
 #mdToGeml,           #escMetaRefs,                                  call,
 #mdToGeml,           #escMetaRefs,                                  call,
 #mdToGeml,           #escMetaRefs,                                  call,
+#mdToGeml,           #gemlClose,                                    call,
 #mdToGeml,           #githubSlug,                                   call,
 #mdToGeml,           #hasLevelOneHeading,                           call,
 #mdToGeml,           #metaLine,                                     call,
@@ -69,29 +73,30 @@ from,                to,                                            kind, confid
 === table {#called-by format=csv}
 from,                                 to,                  kind, site
 #emitBlock,                           #fenceFor,           call, geml-parser/src/from-md.ts:45
-#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:202
-#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:251
-#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:252
-#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:262
-#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:295
-#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:307
-#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:318
-#mdToGeml,                            #metaLine,           call, geml-parser/src/from-md.ts:194
-#mdToGeml,                            #yamlScalar,         call, geml-parser/src/from-md.ts:198
-#mdToGeml,                            #autolinks,          call, geml-parser/src/from-md.ts:295
-#mdToGeml,                            #autolinks,          call, geml-parser/src/from-md.ts:336
-#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:271
-#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:272
-#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:295
-#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:304
-#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:331
-#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:336
-#mdToGeml,                            #githubSlug,         call, geml-parser/src/from-md.ts:330
+#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:216
+#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:279
+#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:280
+#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:290
+#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:323
+#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:335
+#mdToGeml,                            #emitBlock,          call, geml-parser/src/from-md.ts:346
+#mdToGeml,                            #metaLine,           call, geml-parser/src/from-md.ts:208
+#mdToGeml,                            #yamlScalar,         call, geml-parser/src/from-md.ts:212
+#mdToGeml,                            #autolinks,          call, geml-parser/src/from-md.ts:323
+#mdToGeml,                            #autolinks,          call, geml-parser/src/from-md.ts:364
+#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:299
+#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:300
+#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:323
+#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:332
+#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:359
+#mdToGeml,                            #escMetaRefs,        call, geml-parser/src/from-md.ts:364
+#mdToGeml,                            #githubSlug,         call, geml-parser/src/from-md.ts:358
 #hasLevelOneHeading,                  #closesFence,        call, geml-parser/src/from-md.ts:171
-#mdToGeml,                            #closesFence,        call, geml-parser/src/from-md.ts:248
-#mdToGeml,                            #hasLevelOneHeading, call, geml-parser/src/from-md.ts:228
-geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:879
-geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:890
+#mdToGeml,                            #closesFence,        call, geml-parser/src/from-md.ts:276
+#mdToGeml,                            #hasLevelOneHeading, call, geml-parser/src/from-md.ts:242
+#mdToGeml,                            #gemlClose,          call, geml-parser/src/from-md.ts:258
+geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:912
+geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:923
 ===
 
 === table {#unresolved format=csv hidden}
@@ -130,6 +135,10 @@ from,                to
 #hasLevelOneHeading, RegExp.exec
 #hasLevelOneHeading, RegExp.test
 #hasLevelOneHeading, String.trim
+#gemlClose,          RegExp.exec
+#gemlClose,          RegExp.test
+#gemlClose,          String.repeat
+#gemlClose,          String.replace
 #mdToGeml,           Array.join
 #mdToGeml,           Array.map
 #mdToGeml,           Array.push
