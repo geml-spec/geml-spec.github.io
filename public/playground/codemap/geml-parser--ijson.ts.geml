@@ -8,22 +8,22 @@ resolution-default = cpg
 
 # geml-parser/ijson.ts
 
-=== code {#tooDeep .leaf src=geml-parser/src/ijson.ts#L31-40 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/tooDeep()."}
+=== code {#tooDeep .leaf src=geml-parser/src/ijson.ts#L31-40 anchor="scip-typescript npm @geml/geml 1.12.5 src/`ijson.ts`/tooDeep()."}
 ===
 
-=== code {#iJsonFault src=geml-parser/src/ijson.ts#L50-84 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/iJsonFault()."}
+=== code {#iJsonFault src=geml-parser/src/ijson.ts#L50-84 anchor="scip-typescript npm @geml/geml 1.12.5 src/`ijson.ts`/iJsonFault()."}
 ===
 
-=== code {#decimalOf src=geml-parser/src/ijson.ts#L91-100 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/decimalOf()."}
+=== code {#decimalOf src=geml-parser/src/ijson.ts#L91-100 anchor="scip-typescript npm @geml/geml 1.12.5 src/`ijson.ts`/decimalOf()."}
 ===
 
-=== code {#inexactNumber src=geml-parser/src/ijson.ts#L109-119 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/inexactNumber()."}
+=== code {#inexactNumber src=geml-parser/src/ijson.ts#L109-119 anchor="scip-typescript npm @geml/geml 1.12.5 src/`ijson.ts`/inexactNumber()."}
 ===
 
-=== code {#numberLiterals src=geml-parser/src/ijson.ts#L122-143 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/numberLiterals()."}
+=== code {#numberLiterals src=geml-parser/src/ijson.ts#L122-143 anchor="scip-typescript npm @geml/geml 1.12.5 src/`ijson.ts`/numberLiterals()."}
 ===
 
-=== code {#valueFault src=geml-parser/src/ijson.ts#L150-165 anchor="scip-typescript npm @geml/geml 1.12.4 src/`ijson.ts`/valueFault()."}
+=== code {#valueFault src=geml-parser/src/ijson.ts#L150-165 anchor="scip-typescript npm @geml/geml 1.12.5 src/`ijson.ts`/valueFault()."}
 ===
 
 === table {#calls format=csv}

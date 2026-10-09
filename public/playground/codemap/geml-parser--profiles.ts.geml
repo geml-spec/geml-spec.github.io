@@ -8,37 +8,37 @@ resolution-default = cpg
 
 # geml-parser/profiles.ts
 
-=== code {#ProfileIO-readDoc .leaf name="ProfileIO.readDoc" src=geml-parser/src/profiles.ts#L74-74 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/ProfileIO#readDoc()."}
+=== code {#ProfileIO-readDoc .leaf name="ProfileIO.readDoc" src=geml-parser/src/profiles.ts#L74-74 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/ProfileIO#readDoc()."}
 ===
 
-=== code {#ProfileIO-hashFile .leaf name="ProfileIO.hashFile" src=geml-parser/src/profiles.ts#L76-76 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/ProfileIO#hashFile()."}
+=== code {#ProfileIO-hashFile .leaf name="ProfileIO.hashFile" src=geml-parser/src/profiles.ts#L76-76 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/ProfileIO#hashFile()."}
 ===
 
-=== code {#ProfileIO-hashText .leaf name="ProfileIO.hashText" src=geml-parser/src/profiles.ts#L78-78 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/ProfileIO#hashText()."}
+=== code {#ProfileIO-hashText .leaf name="ProfileIO.hashText" src=geml-parser/src/profiles.ts#L78-78 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/ProfileIO#hashText()."}
 ===
 
-=== code {#enableProfileRegistration src=geml-parser/src/profiles.ts#L329-332 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/enableProfileRegistration()."}
+=== code {#enableProfileRegistration src=geml-parser/src/profiles.ts#L329-332 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/enableProfileRegistration()."}
 ===
 
-=== code {#registerProfile src=geml-parser/src/profiles.ts#L340-360 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/registerProfile()."}
+=== code {#registerProfile src=geml-parser/src/profiles.ts#L340-360 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/registerProfile()."}
 ===
 
-=== code {#profileDef src=geml-parser/src/profiles.ts#L363-365 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/profileDef()."}
+=== code {#profileDef src=geml-parser/src/profiles.ts#L363-365 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/profileDef()."}
 ===
 
-=== code {#knownProfiles src=geml-parser/src/profiles.ts#L367-369 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/knownProfiles()."}
+=== code {#knownProfiles src=geml-parser/src/profiles.ts#L367-369 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/knownProfiles()."}
 ===
 
-=== code {#misnamespacedMetaKey src=geml-parser/src/profiles.ts#L418-426 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/misnamespacedMetaKey()."}
+=== code {#misnamespacedMetaKey src=geml-parser/src/profiles.ts#L418-426 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/misnamespacedMetaKey()."}
 ===
 
-=== code {#unrecognizedVocabularies src=geml-parser/src/profiles.ts#L428-432 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/unrecognizedVocabularies()."}
+=== code {#unrecognizedVocabularies src=geml-parser/src/profiles.ts#L428-432 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/unrecognizedVocabularies()."}
 ===
 
-=== code {#declaredVocabularies src=geml-parser/src/profiles.ts#L438-442 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/declaredVocabularies()."}
+=== code {#declaredVocabularies src=geml-parser/src/profiles.ts#L438-442 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/declaredVocabularies()."}
 ===
 
-=== code {#vocabularyFor src=geml-parser/src/profiles.ts#L444-467 anchor="scip-typescript npm @geml/geml 1.12.4 src/`profiles.ts`/vocabularyFor()."}
+=== code {#vocabularyFor src=geml-parser/src/profiles.ts#L444-467 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/vocabularyFor()."}
 ===
 
 === table {#calls format=csv}

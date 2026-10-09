@@ -8,22 +8,22 @@ resolution-default = cpg
 
 # geml-parser/yaml.ts
 
-=== code {#stripComment src=geml-parser/src/yaml.ts#L52-65 anchor="scip-typescript npm @geml/geml 1.12.4 src/`yaml.ts`/stripComment()."}
+=== code {#stripComment src=geml-parser/src/yaml.ts#L52-65 anchor="scip-typescript npm @geml/geml 1.12.5 src/`yaml.ts`/stripComment()."}
 ===
 
-=== code {#plainScalar src=geml-parser/src/yaml.ts#L68-75 anchor="scip-typescript npm @geml/geml 1.12.4 src/`yaml.ts`/plainScalar()."}
+=== code {#plainScalar src=geml-parser/src/yaml.ts#L68-75 anchor="scip-typescript npm @geml/geml 1.12.5 src/`yaml.ts`/plainScalar()."}
 ===
 
-=== code {#quotedScalar src=geml-parser/src/yaml.ts#L78-88 anchor="scip-typescript npm @geml/geml 1.12.4 src/`yaml.ts`/quotedScalar()."}
+=== code {#quotedScalar src=geml-parser/src/yaml.ts#L78-88 anchor="scip-typescript npm @geml/geml 1.12.5 src/`yaml.ts`/quotedScalar()."}
 ===
 
-=== code {#keyEnd src=geml-parser/src/yaml.ts#L91-104 anchor="scip-typescript npm @geml/geml 1.12.4 src/`yaml.ts`/keyEnd()."}
+=== code {#keyEnd src=geml-parser/src/yaml.ts#L91-104 anchor="scip-typescript npm @geml/geml 1.12.5 src/`yaml.ts`/keyEnd()."}
 ===
 
-=== code {#Refusal-new .leaf name="Refusal.new" src=geml-parser/src/yaml.ts#L115-115 anchor="scip-typescript npm @geml/geml 1.12.4 src/`yaml.ts`/Refusal#`<constructor>`()."}
+=== code {#Refusal-new .leaf name="Refusal.new" src=geml-parser/src/yaml.ts#L115-115 anchor="scip-typescript npm @geml/geml 1.12.5 src/`yaml.ts`/Refusal#`<constructor>`()."}
 ===
 
-=== code {#parseYaml src=geml-parser/src/yaml.ts#L121-313 anchor="scip-typescript npm @geml/geml 1.12.4 src/`yaml.ts`/parseYaml()."}
+=== code {#parseYaml src=geml-parser/src/yaml.ts#L121-313 anchor="scip-typescript npm @geml/geml 1.12.5 src/`yaml.ts`/parseYaml()."}
 ===
 
 === table {#calls format=csv}
