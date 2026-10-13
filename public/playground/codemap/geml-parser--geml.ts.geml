@@ -1145,9 +1145,9 @@ geml-parser--cli.ts.geml#runStyle,                   #parse,                    
 #docReads,                                           #parse,                      call, geml-parser/src/geml.ts:2374
 #remoteRelation,                                     #parse,                      call, geml-parser/src/geml.ts:2633
 geml-parser--graph-style.ts.geml#parseGraphStyle,    #parse,                      call, geml-parser/src/graph-style.ts:68
-geml-parser--mcp-core.ts.geml#applyWrite,            #parse,                      call, geml-parser/src/mcp-core.ts:128
-geml-parser--mcp-core.ts.geml#applyWrite,            #parse,                      call, geml-parser/src/mcp-core.ts:161
-geml-parser--mcp-core.ts.geml#toolsFor,              #parse,                      call, geml-parser/src/mcp-core.ts:384
+geml-parser--mcp-core.ts.geml#applyWrite,            #parse,                      call, geml-parser/src/mcp-core.ts:129
+geml-parser--mcp-core.ts.geml#applyWrite,            #parse,                      call, geml-parser/src/mcp-core.ts:162
+geml-parser--mcp-core.ts.geml#toolsFor,              #parse,                      call, geml-parser/src/mcp-core.ts:385
 geml-parser--media-check.ts.geml#checkMedia,         #parse,                      call, geml-parser/src/media-check.ts:218
 geml-parser--media-check.ts.geml#promptTextOf,       #parse,                      call, geml-parser/src/media-check.ts:760
 geml-parser--media-timeline.ts.geml#layout,          #parse,                      call, geml-parser/src/media-timeline.ts:90
