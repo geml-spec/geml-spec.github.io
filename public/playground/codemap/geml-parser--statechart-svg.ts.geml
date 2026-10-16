@@ -8,49 +8,49 @@ resolution-default = cpg
 
 # geml-parser/statechart-svg.ts
 
-=== code {#esc src=geml-parser/src/statechart-svg.ts#L47-47 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/esc."}
+=== code {#esc src=geml-parser/src/statechart-svg.ts#L47-47 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/esc."}
 ===
 
-=== code {#escAttr src=geml-parser/src/statechart-svg.ts#L48-48 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/escAttr."}
+=== code {#escAttr src=geml-parser/src/statechart-svg.ts#L48-48 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/escAttr."}
 ===
 
-=== code {#r1 src=geml-parser/src/statechart-svg.ts#L49-49 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/r1."}
+=== code {#r1 src=geml-parser/src/statechart-svg.ts#L49-49 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/r1."}
 ===
 
-=== code {#textWidth src=geml-parser/src/statechart-svg.ts#L53-57 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/textWidth()."}
+=== code {#textWidth src=geml-parser/src/statechart-svg.ts#L53-57 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/textWidth()."}
 ===
 
-=== code {#clip src=geml-parser/src/statechart-svg.ts#L59-59 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/clip."}
+=== code {#clip src=geml-parser/src/statechart-svg.ts#L59-59 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/clip."}
 ===
 
-=== code {#wrapLabel src=geml-parser/src/statechart-svg.ts#L62-69 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/wrapLabel()."}
+=== code {#wrapLabel src=geml-parser/src/statechart-svg.ts#L62-69 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/wrapLabel()."}
 ===
 
-=== code {#ranksOf src=geml-parser/src/statechart-svg.ts#L118-150 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/ranksOf()."}
+=== code {#ranksOf src=geml-parser/src/statechart-svg.ts#L118-150 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/ranksOf()."}
 ===
 
-=== code {#show src=geml-parser/src/statechart-svg.ts#L152-152 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/show."}
+=== code {#show src=geml-parser/src/statechart-svg.ts#L152-152 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/show."}
 ===
 
-=== code {#pillsOf src=geml-parser/src/statechart-svg.ts#L155-175 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsOf()."}
+=== code {#pillsOf src=geml-parser/src/statechart-svg.ts#L155-175 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/pillsOf()."}
 ===
 
-=== code {#flowOf src=geml-parser/src/statechart-svg.ts#L199-214 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/flowOf()."}
+=== code {#flowOf src=geml-parser/src/statechart-svg.ts#L199-214 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/flowOf()."}
 ===
 
-=== code {#pillsWidth src=geml-parser/src/statechart-svg.ts#L216-216 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsWidth."}
+=== code {#pillsWidth src=geml-parser/src/statechart-svg.ts#L216-216 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/pillsWidth."}
 ===
 
-=== code {#pillsHeight src=geml-parser/src/statechart-svg.ts#L217-217 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsHeight."}
+=== code {#pillsHeight src=geml-parser/src/statechart-svg.ts#L217-217 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/pillsHeight."}
 ===
 
-=== code {#layoutOf src=geml-parser/src/statechart-svg.ts#L220-391 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/layoutOf()."}
+=== code {#layoutOf src=geml-parser/src/statechart-svg.ts#L220-391 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/layoutOf()."}
 ===
 
-=== code {#statechartSvg src=geml-parser/src/statechart-svg.ts#L394-487 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/statechartSvg()."}
+=== code {#statechartSvg src=geml-parser/src/statechart-svg.ts#L394-487 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/statechartSvg()."}
 ===
 
-=== code {#statechartSvgDataUrl src=geml-parser/src/statechart-svg.ts#L490-492 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/statechartSvgDataUrl()."}
+=== code {#statechartSvgDataUrl src=geml-parser/src/statechart-svg.ts#L490-492 anchor="scip-typescript npm @geml/geml 1.12.6 src/`statechart-svg.ts`/statechartSvgDataUrl()."}
 ===
 
 === table {#calls format=csv}
