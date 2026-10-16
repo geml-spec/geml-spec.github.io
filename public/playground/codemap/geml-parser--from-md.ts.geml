@@ -95,8 +95,8 @@ from,                                 to,                  kind, site
 #mdToGeml,                            #closesFence,        call, geml-parser/src/from-md.ts:276
 #mdToGeml,                            #hasLevelOneHeading, call, geml-parser/src/from-md.ts:242
 #mdToGeml,                            #gemlClose,          call, geml-parser/src/from-md.ts:258
-geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:912
-geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:923
+geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:913
+geml-parser--verbs.ts.geml#transform, #mdToGeml,           call, geml-parser/src/verbs.ts:924
 ===
 
 === table {#unresolved format=csv hidden}

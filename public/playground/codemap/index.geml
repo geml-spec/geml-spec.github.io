@@ -1,7 +1,7 @@
 === meta
 profile = "geml-codemap/v1"
 repo = geml
-commit = e1e2d37
+commit = c28fd09
 container = file
 entry = chrome-geml-viewer--content.js.geml#main
 resolution-default = cpg
@@ -13,7 +13,7 @@ resolution-default = cpg
 module,                                  doc,                                           methods, entries, tests
 geml-parser/geml.ts,                     geml-parser--geml.ts.geml,                     140,     28,      0
 geml-parser/verbs.ts,                    geml-parser--verbs.ts.geml,                    76,      21,      0
-geml-parser/cli.ts,                      geml-parser--cli.ts.geml,                      50,      0,       0
+geml-parser/cli.ts,                      geml-parser--cli.ts.geml,                      51,      0,       0
 geml-parser/render.ts,                   geml-parser--render.ts.geml,                   48,      8,       0
 geml-parser/history.ts,                  geml-parser--history.ts.geml,                  40,      7,       0
 geml-parser/table.ts,                    geml-parser--table.ts.geml,                    35,      5,       0
@@ -27,13 +27,15 @@ geml-parser/edn.ts,                      geml-parser--edn.ts.geml,              
 geml-parser/style-selector.ts,           geml-parser--style-selector.ts.geml,           21,      8,       0
 geml-parser/to-md.ts,                    geml-parser--to-md.ts.geml,                    21,      1,       0
 chrome-geml-viewer/transclude.js,        chrome-geml-viewer--transclude.js.geml,        20,      1,       0
+geml-parser/media-check.ts,              geml-parser--media-check.ts.geml,              17,      7,       0
 geml-parser/mcp.ts,                      geml-parser--mcp.ts.geml,                      16,      0,       0
-geml-parser/media-check.ts,              geml-parser--media-check.ts.geml,              16,      6,       0
 geml-parser/serialize.ts,                geml-parser--serialize.ts.geml,                16,      1,       0
+geml-parser/statechart-svg.ts,           geml-parser--statechart-svg.ts.geml,           15,      2,       0
 chrome-geml-viewer/layout.js,            chrome-geml-viewer--layout.js.geml,            14,      3,       0
 geml-parser/host-fs.ts,                  geml-parser--host-fs.ts.geml,                  14,      7,       0
 geml-parser/selector.ts,                 geml-parser--selector.ts.geml,                 14,      9,       0
 chrome-geml-viewer/chart.js,             chrome-geml-viewer--chart.js.geml,             13,      1,       0
+geml-parser/statechart.ts,               geml-parser--statechart.ts.geml,               13,      4,       0
 geml-parser/translate.ts,                geml-parser--translate.ts.geml,                13,      2,       0
 chrome-geml-viewer/content.js,           chrome-geml-viewer--content.js.geml,           12,      1,       0
 geml-parser/graph-style.ts,              geml-parser--graph-style.ts.geml,              12,      2,       0
@@ -48,12 +50,14 @@ chrome-geml-viewer/media.js,             chrome-geml-viewer--media.js.geml,     
 chrome-geml-viewer/upgrade.js,           chrome-geml-viewer--upgrade.js.geml,           7,       3,       0
 geml-parser/block-edit.ts,               geml-parser--block-edit.ts.geml,               7,       1,       0
 geml-parser/media-timeline.ts,           geml-parser--media-timeline.ts.geml,           7,       3,       0
+geml-parser/statechart-render.ts,        geml-parser--statechart-render.ts.geml,        7,       1,       0
 geml-parser/attrs.ts,                    geml-parser--attrs.ts.geml,                    6,       5,       0
 geml-parser/code-graph.ts,               geml-parser--code-graph.ts.geml,               6,       1,       0
 geml-parser/ijson.ts,                    geml-parser--ijson.ts.geml,                    6,       5,       0
 geml-parser/yaml.ts,                     geml-parser--yaml.ts.geml,                     6,       1,       0
 chrome-geml-viewer/components.js,        chrome-geml-viewer--components.js.geml,        5,       1,       0
 chrome-geml-viewer/translate-browser.js, chrome-geml-viewer--translate-browser.js.geml, 5,       1,       0
+geml-parser/statechart-check.ts,         geml-parser--statechart-check.ts.geml,         5,       1,       0
 chrome-geml-viewer/page.js,              chrome-geml-viewer--page.js.geml,              2,       2,       0
 chrome-geml-viewer/snapshot.js,          chrome-geml-viewer--snapshot.js.geml,          2,       1,       0
 chrome-geml-viewer/translate-map.js,     chrome-geml-viewer--translate-map.js.geml,     2,       0,       0
@@ -76,27 +80,28 @@ geml-parser/verbs.ts,                 geml-parser/geml.ts,                     1
 geml-parser/style-resolve.ts,         geml-parser/style-diagnostics.ts,        52
 geml-parser/media-check.ts,           geml-parser/media-diagnostics.ts,        41
 geml-parser/geml.ts,                  geml-parser/inline.ts,                   24
-geml-parser/media-verbs.ts,           geml-parser/media-check.ts,              22
 geml-parser/style-resolve.ts,         geml-parser/style-selector.ts,           22
 geml-parser/cli.ts,                   geml-parser/media-verbs.ts,              21
 geml-parser/cli.ts,                   geml-parser/verbs.ts,                    21
 geml-parser/verbs.ts,                 geml-parser/selector.ts,                 21
+geml-parser/media-verbs.ts,           geml-parser/media-check.ts,              19
 geml-parser/geml.ts,                  geml-parser/diagnostics.ts,              17
+geml-parser/statechart-render.ts,     geml-parser/render.ts,                   14
 geml-parser/geml.ts,                  geml-parser/attrs.ts,                    12
 geml-parser/mcp-core.ts,              geml-parser/verbs.ts,                    12
+geml-parser/cli.ts,                   geml-parser/geml.ts,                     11
 geml-parser/cli.ts,                   geml-parser/host-fs.ts,                  11
 geml-parser/codemap-render.ts,        geml-parser/render.ts,                   11
-geml-parser/cli.ts,                   geml-parser/geml.ts,                     10
 geml-parser/cli.ts,                   geml-parser/history.ts,                  10
 geml-parser/geml.ts,                  geml-parser/ijson.ts,                    10
 geml-parser/render-html.ts,           geml-parser/render.ts,                   10
 geml-parser/verbs.ts,                 geml-parser/attrs.ts,                    10
+geml-parser/cli.ts,                   geml-parser/profiles.ts,                 9
 geml-parser/geml.ts,                  geml-parser/profiles.ts,                 9
 geml-parser/geml.ts,                  geml-parser/table.ts,                    9
 geml-parser/verbs.ts,                 geml-parser/coord.ts,                    8
 geml-parser/geml.ts,                  geml-parser/coord.ts,                    7
 geml-parser/media-verbs.ts,           geml-parser/profiles.ts,                 7
-geml-parser/cli.ts,                   geml-parser/profiles.ts,                 6
 geml-parser/media-check.ts,           geml-parser/media-compose.ts,            6
 chrome-geml-viewer/transclude.js,     chrome-geml-viewer/render.js,            5
 chrome-geml-viewer/transclude.js,     chrome-geml-viewer/translate-browser.js, 5
@@ -119,6 +124,7 @@ geml-parser/host-fs.ts,               geml-parser/profiles.ts,                 3
 geml-parser/host-fs.ts,               geml-parser/verbs.ts,                    3
 geml-parser/mcp-core.ts,              geml-parser/geml.ts,                     3
 geml-parser/render.ts,                geml-parser/inline.ts,                   3
+geml-parser/statechart-svg.ts,        geml-parser/statechart.ts,               3
 chrome-geml-viewer/content.js,        chrome-geml-viewer/page.js,              2
 chrome-geml-viewer/content.js,        chrome-geml-viewer/render.js,            2
 chrome-geml-viewer/media-playlist.js, chrome-geml-viewer/media-player.js,      2
@@ -142,7 +148,13 @@ geml-parser/render.ts,                geml-parser/geml.ts,                     2
 geml-parser/render.ts,                geml-parser/translate.ts,                2
 geml-parser/selector.ts,              geml-parser/attrs.ts,                    2
 geml-parser/serialize.ts,             geml-parser/inline.ts,                   2
+geml-parser/statechart-check.ts,      geml-parser/geml.ts,                     2
+geml-parser/statechart-check.ts,      geml-parser/profiles.ts,                 2
+geml-parser/statechart-check.ts,      geml-parser/statechart.ts,               2
+geml-parser/statechart-render.ts,     geml-parser/statechart-svg.ts,           2
+geml-parser/statechart-render.ts,     geml-parser/statechart.ts,               2
 geml-parser/to-md.ts,                 geml-parser/doc-title.ts,                2
+geml-parser/to-md.ts,                 geml-parser/statechart.ts,               2
 geml-parser/verbs.ts,                 geml-parser/from-md.ts,                  2
 chrome-geml-viewer/content.js,        chrome-geml-viewer/snapshot.js,          1
 chrome-geml-viewer/content.js,        chrome-geml-viewer/transclude.js,        1
@@ -163,6 +175,7 @@ geml-parser/mcp.ts,                   geml-parser/geml.ts,                     1
 geml-parser/mcp.ts,                   geml-parser/mcp-core.ts,                 1
 geml-parser/media-timeline.ts,        geml-parser/geml.ts,                     1
 geml-parser/media-verbs.ts,           geml-parser/media-player-runtime.ts,     1
+geml-parser/statechart-render.ts,     geml-parser/statechart-check.ts,         1
 geml-parser/style-resolve.ts,         geml-parser/geml.ts,                     1
 geml-parser/style-selector.ts,        geml-parser/style-diagnostics.ts,        1
 geml-parser/table.ts,                 geml-parser/attrs.ts,                    1
@@ -170,5 +183,6 @@ geml-parser/table.ts,                 geml-parser/inline.ts,                   1
 geml-parser/verbs.ts,                 geml-parser/codemap-render.ts,           1
 geml-parser/verbs.ts,                 geml-parser/render-html.ts,              1
 geml-parser/verbs.ts,                 geml-parser/serialize.ts,                1
+geml-parser/verbs.ts,                 geml-parser/statechart-render.ts,        1
 geml-parser/verbs.ts,                 geml-parser/translate.ts,                1
 ===

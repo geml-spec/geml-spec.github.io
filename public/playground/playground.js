@@ -793,7 +793,7 @@
         }
       };
       uppercase = /([A-Z])/g;
-      hyphenate = (str4) => str4.replace(uppercase, "-$1").toLowerCase();
+      hyphenate = (str5) => str5.replace(uppercase, "-$1").toLowerCase();
       ESCAPE_LOOKUP = {
         "&": "&amp;",
         ">": "&gt;",
@@ -9829,16 +9829,16 @@
           return buildExpressionRow(group2.mathml, options2);
         }
       });
-      sizeData = function sizeData2(str4) {
-        if (/^[-+]? *(\d+(\.\d*)?|\.\d+)$/.test(str4)) {
+      sizeData = function sizeData2(str5) {
+        if (/^[-+]? *(\d+(\.\d*)?|\.\d+)$/.test(str5)) {
           return {
-            number: +str4,
+            number: +str5,
             unit: "bp"
           };
         } else {
-          var match3 = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/.exec(str4);
+          var match3 = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/.exec(str5);
           if (!match3) {
-            throw new ParseError("Invalid size: '" + str4 + "' in \\includegraphics");
+            throw new ParseError("Invalid size: '" + str5 + "' in \\includegraphics");
           }
           var data6 = {
             number: +(match3[1] + match3[2]),
@@ -9879,19 +9879,19 @@
             for (var i4 = 0; i4 < attributes.length; i4++) {
               var keyVal = attributes[i4].split("=");
               if (keyVal.length === 2) {
-                var str4 = keyVal[1].trim();
+                var str5 = keyVal[1].trim();
                 switch (keyVal[0].trim()) {
                   case "alt":
-                    alt = str4;
+                    alt = str5;
                     break;
                   case "width":
-                    width3 = sizeData(str4);
+                    width3 = sizeData(str5);
                     break;
                   case "height":
-                    height2 = sizeData(str4);
+                    height2 = sizeData(str5);
                     break;
                   case "totalheight":
-                    totalheight = sizeData(str4);
+                    totalheight = sizeData(str5);
                     break;
                   default:
                     throw new ParseError("Invalid key: '" + keyVal[0] + "' in \\includegraphics.");
@@ -13713,14 +13713,14 @@
           if (argToken == null) {
             return null;
           }
-          var str4 = "";
+          var str5 = "";
           var nextToken;
           while ((nextToken = this.fetch()).text !== "EOF") {
-            str4 += nextToken.text;
+            str5 += nextToken.text;
             this.consume();
           }
           this.consume();
-          argToken.text = str4;
+          argToken.text = str5;
           return argToken;
         }
         /**
@@ -13731,17 +13731,17 @@
         parseRegexGroup(regex2, modeName) {
           var firstToken = this.fetch();
           var lastToken = firstToken;
-          var str4 = "";
+          var str5 = "";
           var nextToken;
-          while ((nextToken = this.fetch()).text !== "EOF" && regex2.test(str4 + nextToken.text)) {
+          while ((nextToken = this.fetch()).text !== "EOF" && regex2.test(str5 + nextToken.text)) {
             lastToken = nextToken;
-            str4 += lastToken.text;
+            str5 += lastToken.text;
             this.consume();
           }
-          if (str4 === "") {
+          if (str5 === "") {
             throw new ParseError("Invalid " + modeName + ": '" + firstToken.text + "'", firstToken);
           }
-          return firstToken.range(lastToken, str4);
+          return firstToken.range(lastToken, str5);
         }
         /**
          * Parses a color description.
@@ -15479,7 +15479,7 @@
       init_color();
       init_rgba();
       mix = (color1, color2, weight8 = 50) => {
-        const { r: r1, g: g1, b: b1, a: a1 } = color_default.parse(color1);
+        const { r: r12, g: g1, b: b1, a: a1 } = color_default.parse(color1);
         const { r: r2, g: g2, b: b22, a: a2 } = color_default.parse(color2);
         const weightScale = weight8 / 100;
         const weightNormalized = weightScale * 2 - 1;
@@ -15487,7 +15487,7 @@
         const weight1combined = weightNormalized * alphaDelta === -1 ? weightNormalized : (weightNormalized + alphaDelta) / (1 + weightNormalized * alphaDelta);
         const weight1 = (weight1combined + 1) / 2;
         const weight22 = 1 - weight1;
-        const r3 = r1 * weight1 + r2 * weight22;
+        const r3 = r12 * weight1 + r2 * weight22;
         const g3 = g1 * weight1 + g2 * weight22;
         const b3 = b1 * weight1 + b22 * weight22;
         const a3 = a1 * weightScale + a2 * (1 - weightScale);
@@ -22583,10 +22583,10 @@
         }
         log.debug("After sanitization", args);
       }, "sanitizeDirective");
-      sanitizeCss = /* @__PURE__ */ __name((str4) => {
+      sanitizeCss = /* @__PURE__ */ __name((str5) => {
         let startCnt = 0;
         let endCnt = 0;
-        for (const element3 of str4) {
+        for (const element3 of str5) {
           if (startCnt < endCnt) {
             return "{ /* ERROR: Unbalanced CSS */ }";
           }
@@ -22599,7 +22599,7 @@
         if (startCnt !== endCnt) {
           return "{ /* ERROR: Unbalanced CSS */ }";
         }
-        return str4;
+        return str5;
       }, "sanitizeCss");
       defaultConfig = Object.freeze(defaultConfig_default);
       APPEARANCE_KEYS = ["theme", "look", "layout"];
@@ -22790,8 +22790,8 @@
         if (!s2) {
           return [""];
         }
-        const str4 = breakToPlaceholder(s2).replace(/\\n/g, "#br#");
-        return str4.split("#br#");
+        const str5 = breakToPlaceholder(s2).replace(/\\n/g, "#br#");
+        return str5.split("#br#");
       }, "getRows");
       setupDompurifyHooksIfNotSetup = /* @__PURE__ */ (() => {
         let setup = false;
@@ -27967,10 +27967,10 @@
 
   // node_modules/d3-scale/src/band.js
   function band() {
-    var scale3 = ordinal().unknown(void 0), domain = scale3.domain, ordinalRange = scale3.range, r0 = 0, r1 = 1, step3, bandwidth, round = false, paddingInner = 0, paddingOuter = 0, align = 0.5;
+    var scale3 = ordinal().unknown(void 0), domain = scale3.domain, ordinalRange = scale3.range, r0 = 0, r12 = 1, step3, bandwidth, round = false, paddingInner = 0, paddingOuter = 0, align = 0.5;
     delete scale3.unknown;
     function rescale() {
-      var n2 = domain().length, reverse2 = r1 < r0, start2 = reverse2 ? r1 : r0, stop5 = reverse2 ? r0 : r1;
+      var n2 = domain().length, reverse2 = r12 < r0, start2 = reverse2 ? r12 : r0, stop5 = reverse2 ? r0 : r12;
       step3 = (stop5 - start2) / Math.max(1, n2 - paddingInner + paddingOuter * 2);
       if (round) step3 = Math.floor(step3);
       start2 += (stop5 - start2 - step3 * (n2 - paddingInner)) * align;
@@ -27985,10 +27985,10 @@
       return arguments.length ? (domain(_3), rescale()) : domain();
     };
     scale3.range = function(_3) {
-      return arguments.length ? ([r0, r1] = _3, r0 = +r0, r1 = +r1, rescale()) : [r0, r1];
+      return arguments.length ? ([r0, r12] = _3, r0 = +r0, r12 = +r12, rescale()) : [r0, r12];
     };
     scale3.rangeRound = function(_3) {
-      return [r0, r1] = _3, r0 = +r0, r1 = +r1, round = true, rescale();
+      return [r0, r12] = _3, r0 = +r0, r12 = +r12, round = true, rescale();
     };
     scale3.bandwidth = function() {
       return bandwidth;
@@ -28012,7 +28012,7 @@
       return arguments.length ? (align = Math.max(0, Math.min(1, _3)), rescale()) : align;
     };
     scale3.copy = function() {
-      return band(domain(), [r0, r1]).round(round).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
+      return band(domain(), [r0, r12]).round(round).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
     };
     return initRange.apply(rescale(), arguments);
   }
@@ -28064,9 +28064,9 @@
     };
   }
   function bimap(domain, range3, interpolate2) {
-    var d0 = domain[0], d1 = domain[1], r0 = range3[0], r1 = range3[1];
-    if (d1 < d0) d0 = normalize(d1, d0), r0 = interpolate2(r1, r0);
-    else d0 = normalize(d0, d1), r0 = interpolate2(r0, r1);
+    var d0 = domain[0], d1 = domain[1], r0 = range3[0], r12 = range3[1];
+    if (d1 < d0) d0 = normalize(d1, d0), r0 = interpolate2(r12, r0);
+    else d0 = normalize(d0, d1), r0 = interpolate2(r0, r12);
     return function(x6) {
       return r0(d0(x6));
     };
@@ -29453,49 +29453,49 @@
     t4 = (x322 * (y0 - y22) - y322 * (x0 - x22)) / t4;
     return [x0 + t4 * x10, y0 + t4 * y10];
   }
-  function cornerTangents(x0, y0, x1, y1, r1, rc, cw) {
-    var x01 = x0 - x1, y01 = y0 - y1, lo = (cw ? rc : -rc) / sqrt(x01 * x01 + y01 * y01), ox = lo * y01, oy = -lo * x01, x11 = x0 + ox, y11 = y0 + oy, x10 = x1 + ox, y10 = y1 + oy, x00 = (x11 + x10) / 2, y00 = (y11 + y10) / 2, dx = x10 - x11, dy = y10 - y11, d22 = dx * dx + dy * dy, r2 = r1 - rc, D4 = x11 * y10 - x10 * y11, d3 = (dy < 0 ? -1 : 1) * sqrt(max3(0, r2 * r2 * d22 - D4 * D4)), cx0 = (D4 * dy - dx * d3) / d22, cy0 = (-D4 * dx - dy * d3) / d22, cx1 = (D4 * dy + dx * d3) / d22, cy1 = (-D4 * dx + dy * d3) / d22, dx0 = cx0 - x00, dy0 = cy0 - y00, dx1 = cx1 - x00, dy1 = cy1 - y00;
+  function cornerTangents(x0, y0, x1, y1, r12, rc, cw) {
+    var x01 = x0 - x1, y01 = y0 - y1, lo = (cw ? rc : -rc) / sqrt(x01 * x01 + y01 * y01), ox = lo * y01, oy = -lo * x01, x11 = x0 + ox, y11 = y0 + oy, x10 = x1 + ox, y10 = y1 + oy, x00 = (x11 + x10) / 2, y00 = (y11 + y10) / 2, dx = x10 - x11, dy = y10 - y11, d22 = dx * dx + dy * dy, r2 = r12 - rc, D4 = x11 * y10 - x10 * y11, d3 = (dy < 0 ? -1 : 1) * sqrt(max3(0, r2 * r2 * d22 - D4 * D4)), cx0 = (D4 * dy - dx * d3) / d22, cy0 = (-D4 * dx - dy * d3) / d22, cx1 = (D4 * dy + dx * d3) / d22, cy1 = (-D4 * dx + dy * d3) / d22, dx0 = cx0 - x00, dy0 = cy0 - y00, dx1 = cx1 - x00, dy1 = cy1 - y00;
     if (dx0 * dx0 + dy0 * dy0 > dx1 * dx1 + dy1 * dy1) cx0 = cx1, cy0 = cy1;
     return {
       cx: cx0,
       cy: cy0,
       x01: -ox,
       y01: -oy,
-      x11: cx0 * (r1 / r2 - 1),
-      y11: cy0 * (r1 / r2 - 1)
+      x11: cx0 * (r12 / r2 - 1),
+      y11: cy0 * (r12 / r2 - 1)
     };
   }
   function arc_default() {
     var innerRadius = arcInnerRadius, outerRadius = arcOuterRadius, cornerRadius = constant_default5(0), padRadius = null, startAngle = arcStartAngle, endAngle = arcEndAngle, padAngle = arcPadAngle, context = null, path4 = withPath(arc);
     function arc() {
-      var buffer, r2, r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), a0 = startAngle.apply(this, arguments) - halfPi, a1 = endAngle.apply(this, arguments) - halfPi, da = abs2(a1 - a0), cw = a1 > a0;
+      var buffer, r2, r0 = +innerRadius.apply(this, arguments), r12 = +outerRadius.apply(this, arguments), a0 = startAngle.apply(this, arguments) - halfPi, a1 = endAngle.apply(this, arguments) - halfPi, da = abs2(a1 - a0), cw = a1 > a0;
       if (!context) context = buffer = path4();
-      if (r1 < r0) r2 = r1, r1 = r0, r0 = r2;
-      if (!(r1 > epsilon3)) context.moveTo(0, 0);
+      if (r12 < r0) r2 = r12, r12 = r0, r0 = r2;
+      if (!(r12 > epsilon3)) context.moveTo(0, 0);
       else if (da > tau2 - epsilon3) {
-        context.moveTo(r1 * cos(a0), r1 * sin(a0));
-        context.arc(0, 0, r1, a0, a1, !cw);
+        context.moveTo(r12 * cos(a0), r12 * sin(a0));
+        context.arc(0, 0, r12, a0, a1, !cw);
         if (r0 > epsilon3) {
           context.moveTo(r0 * cos(a1), r0 * sin(a1));
           context.arc(0, 0, r0, a1, a0, cw);
         }
       } else {
-        var a01 = a0, a11 = a1, a00 = a0, a10 = a1, da0 = da, da1 = da, ap = padAngle.apply(this, arguments) / 2, rp = ap > epsilon3 && (padRadius ? +padRadius.apply(this, arguments) : sqrt(r0 * r0 + r1 * r1)), rc = min3(abs2(r1 - r0) / 2, +cornerRadius.apply(this, arguments)), rc0 = rc, rc1 = rc, t03, t13;
+        var a01 = a0, a11 = a1, a00 = a0, a10 = a1, da0 = da, da1 = da, ap = padAngle.apply(this, arguments) / 2, rp = ap > epsilon3 && (padRadius ? +padRadius.apply(this, arguments) : sqrt(r0 * r0 + r12 * r12)), rc = min3(abs2(r12 - r0) / 2, +cornerRadius.apply(this, arguments)), rc0 = rc, rc1 = rc, t03, t13;
         if (rp > epsilon3) {
-          var p0 = asin(rp / r0 * sin(ap)), p1 = asin(rp / r1 * sin(ap));
+          var p0 = asin(rp / r0 * sin(ap)), p1 = asin(rp / r12 * sin(ap));
           if ((da0 -= p0 * 2) > epsilon3) p0 *= cw ? 1 : -1, a00 += p0, a10 -= p0;
           else da0 = 0, a00 = a10 = (a0 + a1) / 2;
           if ((da1 -= p1 * 2) > epsilon3) p1 *= cw ? 1 : -1, a01 += p1, a11 -= p1;
           else da1 = 0, a01 = a11 = (a0 + a1) / 2;
         }
-        var x01 = r1 * cos(a01), y01 = r1 * sin(a01), x10 = r0 * cos(a10), y10 = r0 * sin(a10);
+        var x01 = r12 * cos(a01), y01 = r12 * sin(a01), x10 = r0 * cos(a10), y10 = r0 * sin(a10);
         if (rc > epsilon3) {
-          var x11 = r1 * cos(a11), y11 = r1 * sin(a11), x00 = r0 * cos(a00), y00 = r0 * sin(a00), oc;
+          var x11 = r12 * cos(a11), y11 = r12 * sin(a11), x00 = r0 * cos(a00), y00 = r0 * sin(a00), oc;
           if (da < pi2) {
             if (oc = intersect(x01, y01, x00, y00, x11, y11, x10, y10)) {
               var ax = x01 - oc[0], ay = y01 - oc[1], bx = x11 - oc[0], by = y11 - oc[1], kc = 1 / sin(acos((ax * bx + ay * by) / (sqrt(ax * ax + ay * ay) * sqrt(bx * bx + by * by))) / 2), lc = sqrt(oc[0] * oc[0] + oc[1] * oc[1]);
               rc0 = min3(rc, (r0 - lc) / (kc - 1));
-              rc1 = min3(rc, (r1 - lc) / (kc + 1));
+              rc1 = min3(rc, (r12 - lc) / (kc + 1));
             } else {
               rc0 = rc1 = 0;
             }
@@ -29503,16 +29503,16 @@
         }
         if (!(da1 > epsilon3)) context.moveTo(x01, y01);
         else if (rc1 > epsilon3) {
-          t03 = cornerTangents(x00, y00, x01, y01, r1, rc1, cw);
-          t13 = cornerTangents(x11, y11, x10, y10, r1, rc1, cw);
+          t03 = cornerTangents(x00, y00, x01, y01, r12, rc1, cw);
+          t13 = cornerTangents(x11, y11, x10, y10, r12, rc1, cw);
           context.moveTo(t03.cx + t03.x01, t03.cy + t03.y01);
           if (rc1 < rc) context.arc(t03.cx, t03.cy, rc1, atan2(t03.y01, t03.x01), atan2(t13.y01, t13.x01), !cw);
           else {
             context.arc(t03.cx, t03.cy, rc1, atan2(t03.y01, t03.x01), atan2(t03.y11, t03.x11), !cw);
-            context.arc(0, 0, r1, atan2(t03.cy + t03.y11, t03.cx + t03.x11), atan2(t13.cy + t13.y11, t13.cx + t13.x11), !cw);
+            context.arc(0, 0, r12, atan2(t03.cy + t03.y11, t03.cx + t03.x11), atan2(t13.cy + t13.y11, t13.cx + t13.x11), !cw);
             context.arc(t13.cx, t13.cy, rc1, atan2(t13.y11, t13.x11), atan2(t13.y01, t13.x01), !cw);
           }
-        } else context.moveTo(x01, y01), context.arc(0, 0, r1, a01, a11, !cw);
+        } else context.moveTo(x01, y01), context.arc(0, 0, r12, a01, a11, !cw);
         if (!(r0 > epsilon3) || !(da0 > epsilon3)) context.lineTo(x10, y10);
         else if (rc0 > epsilon3) {
           t03 = cornerTangents(x10, y10, x11, y11, r0, -rc0, cw);
@@ -30947,10 +30947,10 @@
       return typeof subject === "undefined" || subject === null;
     }
     __name(isNothing, "isNothing");
-    function isObject3(subject) {
+    function isObject4(subject) {
       return typeof subject === "object" && subject !== null;
     }
-    __name(isObject3, "isObject");
+    __name(isObject4, "isObject");
     function toArray2(sequence) {
       if (Array.isArray(sequence)) return sequence;
       else if (isNothing(sequence)) return [];
@@ -30981,7 +30981,7 @@
     }
     __name(isNegativeZero, "isNegativeZero");
     common.isNothing = isNothing;
-    common.isObject = isObject3;
+    common.isObject = isObject4;
     common.toArray = toArray2;
     common.repeat = repeat;
     common.isNegativeZero = isNegativeZero;
@@ -31263,16 +31263,16 @@
     return schema;
   }
   function requireStr() {
-    if (hasRequiredStr) return str3;
+    if (hasRequiredStr) return str4;
     hasRequiredStr = 1;
     const Type22 = requireType();
-    str3 = new Type22("tag:yaml.org,2002:str", {
+    str4 = new Type22("tag:yaml.org,2002:str", {
       kind: "scalar",
       construct: /* @__PURE__ */ __name(function(data6) {
         return data6 !== null ? data6 : "";
       }, "construct")
     });
-    return str3;
+    return str4;
   }
   function requireSeq() {
     if (hasRequiredSeq) return seq;
@@ -33651,9 +33651,9 @@
     __name(writeScalar, "writeScalar");
     function blockHeader(string3, indentPerLevel) {
       const indentIndicator = needIndentIndicator(string3) ? String(indentPerLevel) : "";
-      const clip3 = string3[string3.length - 1] === "\n";
-      const keep = clip3 && (string3[string3.length - 2] === "\n" || string3 === "\n");
-      const chomp = keep ? "+" : clip3 ? "" : "-";
+      const clip4 = string3[string3.length - 1] === "\n";
+      const keep = clip4 && (string3[string3.length - 2] === "\n" || string3 === "\n");
+      const chomp = keep ? "+" : clip4 ? "" : "-";
       return indentIndicator + chomp + "\n";
     }
     __name(blockHeader, "blockHeader");
@@ -34049,7 +34049,7 @@
     jsYaml.safeDump = renamed("safeDump", "dump");
     return jsYaml;
   }
-  var jsYaml, loader, common, hasRequiredCommon, exception, hasRequiredException, snippet, hasRequiredSnippet, type2, hasRequiredType, schema, hasRequiredSchema, str3, hasRequiredStr, seq, hasRequiredSeq, map2, hasRequiredMap, failsafe, hasRequiredFailsafe, _null, hasRequired_null, bool2, hasRequiredBool, int, hasRequiredInt, float, hasRequiredFloat, json, hasRequiredJson, core, hasRequiredCore, timestamp, hasRequiredTimestamp, merge, hasRequiredMerge, binary, hasRequiredBinary, omap, hasRequiredOmap, pairs, hasRequiredPairs, set3, hasRequiredSet, _default, hasRequired_default, hasRequiredLoader, dumper, hasRequiredDumper, hasRequiredJsYaml, jsYamlExports, yaml, Type2, Schema, FAILSAFE_SCHEMA, JSON_SCHEMA, CORE_SCHEMA, DEFAULT_SCHEMA, load, loadAll, dump, YAMLException, types, safeLoad, safeLoadAll, safeDump;
+  var jsYaml, loader, common, hasRequiredCommon, exception, hasRequiredException, snippet, hasRequiredSnippet, type2, hasRequiredType, schema, hasRequiredSchema, str4, hasRequiredStr, seq, hasRequiredSeq, map2, hasRequiredMap, failsafe, hasRequiredFailsafe, _null, hasRequired_null, bool2, hasRequiredBool, int, hasRequiredInt, float, hasRequiredFloat, json, hasRequiredJson, core, hasRequiredCore, timestamp, hasRequiredTimestamp, merge, hasRequiredMerge, binary, hasRequiredBinary, omap, hasRequiredOmap, pairs, hasRequiredPairs, set3, hasRequiredSet, _default, hasRequired_default, hasRequiredLoader, dumper, hasRequiredDumper, hasRequiredJsYaml, jsYamlExports, yaml, Type2, Schema, FAILSAFE_SCHEMA, JSON_SCHEMA, CORE_SCHEMA, DEFAULT_SCHEMA, load, loadAll, dump, YAMLException, types, safeLoad, safeLoadAll, safeDump;
   var init_chunk_LNGE3PJU = __esm({
     "node_modules/mermaid/dist/chunks/mermaid.core/chunk-LNGE3PJU.mjs"() {
       init_define_process_argv();
@@ -34760,8 +34760,8 @@
       function isRelativeUrlWithoutProtocol(url) {
         return constants_1.relativeFirstCharacters.indexOf(url[0]) > -1;
       }
-      function decodeHtmlCharacters(str4) {
-        var removedNullByte = str4.replace(constants_1.ctrlCharactersRegex, "");
+      function decodeHtmlCharacters(str5) {
+        var removedNullByte = str5.replace(constants_1.ctrlCharactersRegex, "");
         return removedNullByte.replace(constants_1.htmlEntitiesRegex, function(match3, dec) {
           return String.fromCharCode(dec);
         });
@@ -35668,7 +35668,7 @@
     );
     return sanitizedD.includes(roundedX.toString()) || sanitizedD.includes(roundedY.toString());
   }
-  var import_sanitize_url, ZERO_WIDTH_SPACE, d3CurveTypes, directiveWithoutOpen, detectInit, detectDirective, removeDirectives, isSubstringInArray, runFunc, roundNumber, calculatePoint, calcCardinalityPosition, cnt, generateId, random, getTextObj, drawSimpleText, wrapLabel, breakString, calculateTextDimensions, InitIDGenerator, decoder, entityDecode, insertTitle, parseFontSize, utils_default2, encodeEntities, decodeEntities, getEdgeId;
+  var import_sanitize_url, ZERO_WIDTH_SPACE, d3CurveTypes, directiveWithoutOpen, detectInit, detectDirective, removeDirectives, isSubstringInArray, runFunc, roundNumber, calculatePoint, calcCardinalityPosition, cnt, generateId, random, getTextObj, drawSimpleText, wrapLabel2, breakString, calculateTextDimensions, InitIDGenerator, decoder, entityDecode, insertTitle, parseFontSize, utils_default2, encodeEntities, decodeEntities, getEdgeId;
   var init_chunk_3YJQHVM4 = __esm({
     "node_modules/mermaid/dist/chunks/mermaid.core/chunk-3YJQHVM4.mjs"() {
       init_define_process_argv();
@@ -35763,9 +35763,9 @@
       removeDirectives = /* @__PURE__ */ __name(function(text4) {
         return text4.replace(directiveRegex, "");
       }, "removeDirectives");
-      isSubstringInArray = /* @__PURE__ */ __name(function(str4, arr) {
+      isSubstringInArray = /* @__PURE__ */ __name(function(str5, arr) {
         for (const [i4, element3] of arr.entries()) {
-          if (element3.match(str4)) {
+          if (element3.match(str5)) {
             return i4;
           }
         }
@@ -35886,7 +35886,7 @@
         span.text(nText);
         return textElem;
       }, "drawSimpleText");
-      wrapLabel = memoize(
+      wrapLabel2 = memoize(
         (label, maxWidth2, config3) => {
           if (!label) {
             return label;
@@ -36035,7 +36035,7 @@
       __name(cleanAndMerge, "cleanAndMerge");
       utils_default2 = {
         assignWithDepth: assignWithDepth_default,
-        wrapLabel,
+        wrapLabel: wrapLabel2,
         calculateTextHeight,
         calculateTextWidth,
         calculateTextDimensions,
@@ -37266,8 +37266,8 @@ Please report this to https://github.com/markedjs/marked.`, e3) {
     }
     var strings = Array.from(typeof templ === "string" ? [templ] : templ);
     strings[strings.length - 1] = strings[strings.length - 1].replace(/\r?\n([\t ]*)$/, "");
-    var indentLengths = strings.reduce(function(arr, str4) {
-      var matches34 = str4.match(/\n([\t ]+|(?!\s).)/g);
+    var indentLengths = strings.reduce(function(arr, str5) {
+      var matches34 = str5.match(/\n([\t ]+|(?!\s).)/g);
       if (matches34) {
         return arr.concat(matches34.map(function(match3) {
           var _a, _b;
@@ -37278,8 +37278,8 @@ Please report this to https://github.com/markedjs/marked.`, e3) {
     }, []);
     if (indentLengths.length) {
       var pattern_1 = new RegExp("\n[	 ]{".concat(Math.min.apply(Math, indentLengths), "}"), "g");
-      strings = strings.map(function(str4) {
-        return str4.replace(pattern_1, "\n");
+      strings = strings.map(function(str5) {
+        return str5.replace(pattern_1, "\n");
       });
     }
     strings[0] = strings[0].replace(/^\r?\n/, "");
@@ -37289,8 +37289,8 @@ Please report this to https://github.com/markedjs/marked.`, e3) {
       var endentation = endentations ? endentations[1] : "";
       var indentedValue = value2;
       if (typeof value2 === "string" && value2.includes("\n")) {
-        indentedValue = String(value2).split("\n").map(function(str4, i5) {
-          return i5 === 0 ? str4 : "".concat(endentation).concat(str4);
+        indentedValue = String(value2).split("\n").map(function(str5, i5) {
+          return i5 === 0 ? str5 : "".concat(endentation).concat(str5);
         }).join("\n");
       }
       string3 += indentedValue + strings[i4 + 1];
@@ -39363,9 +39363,9 @@ ${lines.join("\n")}`);
       const a2 = q22.y - q1.y;
       const b22 = q1.x - q22.x;
       const c22 = q22.x * q1.y - q1.x * q22.y;
-      const r1 = a2 * p1.x + b22 * p1.y + c22;
+      const r12 = a2 * p1.x + b22 * p1.y + c22;
       const r2 = a2 * p22.x + b22 * p22.y + c22;
-      if (Math.abs(r1) < epsilon6 && Math.abs(r2) < epsilon6 && sameSign(r1, r2)) {
+      if (Math.abs(r12) < epsilon6 && Math.abs(r2) < epsilon6 && sameSign(r12, r2)) {
         return;
       }
       const denom = a1 * b22 - a2 * b1;
@@ -39377,8 +39377,8 @@ ${lines.join("\n")}`);
       return { x: x6, y: y6 };
     }
   }
-  function sameSign(r1, r2) {
-    return r1 * r2 > 0;
+  function sameSign(r12, r2) {
+    return r12 * r2 > 0;
   }
   function intersectPolygon(node2, polyPoints, point7) {
     let x1 = node2.x;
@@ -44177,25 +44177,25 @@ ${lines.join("\n")}`);
     );
     const w4 = bbox.width + 2 * halfPadding;
     const h2 = bbox.height + 2 * halfPadding;
-    const r1 = 0.15 * w4;
+    const r12 = 0.15 * w4;
     const r2 = 0.25 * w4;
     const r3 = 0.35 * w4;
     const r4 = 0.2 * w4;
     const { cssStyles } = node2;
     let cloudElem;
     const path4 = `M0 0 
-    a${r1},${r1} 0 0,1 ${w4 * 0.25},${-1 * w4 * 0.1}
+    a${r12},${r12} 0 0,1 ${w4 * 0.25},${-1 * w4 * 0.1}
     a${r3},${r3} 1 0,1 ${w4 * 0.4},${-1 * w4 * 0.1}
     a${r2},${r2} 1 0,1 ${w4 * 0.35},${w4 * 0.2}
 
-    a${r1},${r1} 1 0,1 ${w4 * 0.15},${h2 * 0.35}
+    a${r12},${r12} 1 0,1 ${w4 * 0.15},${h2 * 0.35}
     a${r4},${r4} 1 0,1 ${-1 * w4 * 0.15},${h2 * 0.65}
 
-    a${r2},${r1} 1 0,1 ${-1 * w4 * 0.25},${w4 * 0.15}
+    a${r2},${r12} 1 0,1 ${-1 * w4 * 0.25},${w4 * 0.15}
     a${r3},${r3} 1 0,1 ${-1 * w4 * 0.5},0
-    a${r1},${r1} 1 0,1 ${-1 * w4 * 0.25},${-1 * w4 * 0.15}
+    a${r12},${r12} 1 0,1 ${-1 * w4 * 0.25},${-1 * w4 * 0.15}
 
-    a${r1},${r1} 1 0,1 ${-1 * w4 * 0.1},${-1 * h2 * 0.35}
+    a${r12},${r12} 1 0,1 ${-1 * w4 * 0.1},${-1 * h2 * 0.35}
     a${r4},${r4} 1 0,1 ${w4 * 0.1},${-1 * h2 * 0.65}
   H0 V0 Z`;
     if (node2.look === "handDrawn") {
@@ -46887,8 +46887,8 @@ ${lines.join("\n")}`);
         let useHtmlLabels = getEffectiveHtmlLabels(config3);
         const { labelStyles } = styles2String(edge);
         edge.labelStyle = labelStyles;
-        const edgeLabel = elem.insert("g").attr("class", "edgeLabel");
-        const label = edgeLabel.insert("g").attr("class", "label").attr("data-id", edge.id);
+        const edgeLabel2 = elem.insert("g").attr("class", "edgeLabel");
+        const label = edgeLabel2.insert("g").attr("class", "label").attr("data-id", edge.id);
         const isMarkdown = edge.labelType === "markdown";
         const markdownWidth = void 0;
         const labelElement = await createText(
@@ -46928,7 +46928,7 @@ ${lines.join("\n")}`);
           });
         }
         label.attr("transform", computeLabelTransform(transformBbox, useHtmlLabels));
-        edgeLabels.set(edge.id, edgeLabel);
+        edgeLabels.set(edge.id, edgeLabel2);
         edge.width = bbox.width;
         edge.height = bbox.height;
         let fo;
@@ -48335,7 +48335,7 @@ ${lines.join("\n")}`);
   });
 
   // node_modules/lodash-es/isObject.js
-  function isObject(value2) {
+  function isObject2(value2) {
     var type3 = typeof value2;
     return value2 != null && (type3 == "object" || type3 == "function");
   }
@@ -48343,7 +48343,7 @@ ${lines.join("\n")}`);
   var init_isObject = __esm({
     "node_modules/lodash-es/isObject.js"() {
       init_define_process_argv();
-      isObject_default = isObject;
+      isObject_default = isObject2;
     }
   });
 
@@ -129024,7 +129024,7 @@ ${lines.join("\n")}`);
               };
               var NW = sfb(zBe, "BreakingPointProcessor", 1545);
               feb(1546, 1, nwe, dsc);
-              _3.Mb = function esc2(a10) {
+              _3.Mb = function esc3(a10) {
                 return Krc(RD(a10, 10));
               };
               var LW = sfb(zBe, "BreakingPointProcessor/0methodref$isEnd$Type", 1546);
@@ -132325,7 +132325,7 @@ ${lines.join("\n")}`);
               _3.Ig = function v9c(a10, b10) {
                 r9c(a10, b10);
               };
-              var r1 = sfb(cGe, "EqualWhitespaceEliminator", 1474);
+              var r12 = sfb(cGe, "EqualWhitespaceEliminator", 1474);
               feb(1475, 1474, nEe, x9c);
               _3.Ig = function y9c(a10, b10) {
                 var c10, d10, e11, f10, g10;
@@ -149614,35 +149614,35 @@ ${lines.join("\n")}`);
     var w4 = e3.w;
     var wRank = g2.node(w4).rank;
     var name = e3.name;
-    var edgeLabel = g2.edge(e3);
-    var labelRank = edgeLabel.labelRank;
+    var edgeLabel2 = g2.edge(e3);
+    var labelRank = edgeLabel2.labelRank;
     if (wRank === vRank + 1) return;
     g2.removeEdge(e3);
     var attrs = void 0;
     var dummy, i4;
     for (i4 = 0, ++vRank; vRank < wRank; ++i4, ++vRank) {
-      edgeLabel.points = [];
+      edgeLabel2.points = [];
       attrs = {
         width: 0,
         height: 0,
-        edgeLabel,
+        edgeLabel: edgeLabel2,
         edgeObj: e3,
         rank: vRank
       };
       dummy = addDummyNode(g2, "edge", attrs, "_d");
       if (vRank === labelRank) {
-        attrs.width = edgeLabel.width;
-        attrs.height = edgeLabel.height;
+        attrs.width = edgeLabel2.width;
+        attrs.height = edgeLabel2.height;
         attrs.dummy = "edge-label";
-        attrs.labelpos = edgeLabel.labelpos;
+        attrs.labelpos = edgeLabel2.labelpos;
       }
-      g2.setEdge(v3, dummy, { weight: edgeLabel.weight }, name);
+      g2.setEdge(v3, dummy, { weight: edgeLabel2.weight }, name);
       if (i4 === 0) {
         g2.graph().dummyChains.push(dummy);
       }
       v3 = dummy;
     }
-    g2.setEdge(v3, w4, { weight: edgeLabel.weight }, name);
+    g2.setEdge(v3, w4, { weight: edgeLabel2.weight }, name);
   }
   function undo3(g2) {
     forEach_default(g2.graph().dummyChains, function(v3) {
@@ -153736,8 +153736,8 @@ ${lines.join("\n")}`);
               const segLen = Math.hypot(b3.x - a2.x, b3.y - a2.y);
               const isHoriz = sameY(a2, b3, EPS_LOCAL2);
               const isVert = sameX(a2, b3, EPS_LOCAL2);
-              const fits = isHoriz && segLen >= lw + 2 || isVert && segLen >= lh + 2;
-              if (!fits) {
+              const fits2 = isHoriz && segLen >= lw + 2 || isVert && segLen >= lh + 2;
+              if (!fits2) {
                 continue;
               }
               if (segLen > bestLen) {
@@ -160331,11 +160331,11 @@ ${lines.join("\n")}`);
   function requireIsObject() {
     if (hasRequiredIsObject) return isObject_1;
     hasRequiredIsObject = 1;
-    function isObject3(value2) {
+    function isObject4(value2) {
       var type3 = typeof value2;
       return value2 != null && (type3 == "object" || type3 == "function");
     }
-    isObject_1 = isObject3;
+    isObject_1 = isObject4;
     return isObject_1;
   }
   function require_freeGlobal() {
@@ -160473,7 +160473,7 @@ ${lines.join("\n")}`);
   function requireToNumber() {
     if (hasRequiredToNumber) return toNumber_1;
     hasRequiredToNumber = 1;
-    var baseTrim2 = require_baseTrim(), isObject3 = requireIsObject(), isSymbol3 = requireIsSymbol();
+    var baseTrim2 = require_baseTrim(), isObject4 = requireIsObject(), isSymbol3 = requireIsSymbol();
     var NAN2 = 0 / 0;
     var reIsBadHex2 = /^[-+]0x[0-9a-f]+$/i;
     var reIsBinary2 = /^0b[01]+$/i;
@@ -160486,9 +160486,9 @@ ${lines.join("\n")}`);
       if (isSymbol3(value2)) {
         return NAN2;
       }
-      if (isObject3(value2)) {
+      if (isObject4(value2)) {
         var other = typeof value2.valueOf == "function" ? value2.valueOf() : value2;
-        value2 = isObject3(other) ? other + "" : other;
+        value2 = isObject4(other) ? other + "" : other;
       }
       if (typeof value2 != "string") {
         return value2 === 0 ? value2 : +value2;
@@ -160503,7 +160503,7 @@ ${lines.join("\n")}`);
   function requireDebounce() {
     if (hasRequiredDebounce) return debounce_1;
     hasRequiredDebounce = 1;
-    var isObject3 = requireIsObject(), now4 = requireNow(), toNumber2 = requireToNumber();
+    var isObject4 = requireIsObject(), now4 = requireNow(), toNumber2 = requireToNumber();
     var FUNC_ERROR_TEXT3 = "Expected a function";
     var nativeMax4 = Math.max, nativeMin = Math.min;
     function debounce2(func, wait, options2) {
@@ -160512,7 +160512,7 @@ ${lines.join("\n")}`);
         throw new TypeError(FUNC_ERROR_TEXT3);
       }
       wait = toNumber2(wait) || 0;
-      if (isObject3(options2)) {
+      if (isObject4(options2)) {
         leading = !!options2.leading;
         maxing = "maxWait" in options2;
         maxWait = maxing ? nativeMax4(toNumber2(options2.maxWait) || 0, wait) : maxWait;
@@ -161092,10 +161092,10 @@ ${lines.join("\n")}`);
   function requireIsFunction() {
     if (hasRequiredIsFunction) return isFunction_1;
     hasRequiredIsFunction = 1;
-    var baseGetTag3 = require_baseGetTag(), isObject3 = requireIsObject();
+    var baseGetTag3 = require_baseGetTag(), isObject4 = requireIsObject();
     var asyncTag3 = "[object AsyncFunction]", funcTag5 = "[object Function]", genTag4 = "[object GeneratorFunction]", proxyTag3 = "[object Proxy]";
     function isFunction3(value2) {
-      if (!isObject3(value2)) {
+      if (!isObject4(value2)) {
         return false;
       }
       var tag = baseGetTag3(value2);
@@ -161150,7 +161150,7 @@ ${lines.join("\n")}`);
   function require_baseIsNative() {
     if (hasRequired_baseIsNative) return _baseIsNative;
     hasRequired_baseIsNative = 1;
-    var isFunction3 = requireIsFunction(), isMasked3 = require_isMasked(), isObject3 = requireIsObject(), toSource3 = require_toSource();
+    var isFunction3 = requireIsFunction(), isMasked3 = require_isMasked(), isObject4 = requireIsObject(), toSource3 = require_toSource();
     var reRegExpChar3 = /[\\^$.*+?()[\]{}|]/g;
     var reIsHostCtor3 = /^\[object .+?Constructor\]$/;
     var funcProto5 = Function.prototype, objectProto21 = Object.prototype;
@@ -161160,7 +161160,7 @@ ${lines.join("\n")}`);
       "^" + funcToString5.call(hasOwnProperty18).replace(reRegExpChar3, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
     );
     function baseIsNative3(value2) {
-      if (!isObject3(value2) || isMasked3(value2)) {
+      if (!isObject4(value2) || isMasked3(value2)) {
         return false;
       }
       var pattern = isFunction3(value2) ? reIsNative3 : reIsHostCtor3;
@@ -161733,9 +161733,9 @@ ${lines.join("\n")}`);
   function require_baseSet() {
     if (hasRequired_baseSet) return _baseSet;
     hasRequired_baseSet = 1;
-    var assignValue2 = require_assignValue(), castPath3 = require_castPath(), isIndex3 = require_isIndex(), isObject3 = requireIsObject(), toKey3 = require_toKey();
+    var assignValue2 = require_assignValue(), castPath3 = require_castPath(), isIndex3 = require_isIndex(), isObject4 = requireIsObject(), toKey3 = require_toKey();
     function baseSet2(object3, path4, value2, customizer) {
-      if (!isObject3(object3)) {
+      if (!isObject4(object3)) {
         return object3;
       }
       path4 = castPath3(path4, object3);
@@ -161749,7 +161749,7 @@ ${lines.join("\n")}`);
           var objValue = nested[key];
           newValue = customizer ? customizer(objValue, key, nested) : void 0;
           if (newValue === void 0) {
-            newValue = isObject3(objValue) ? objValue : isIndex3(path4[index + 1]) ? [] : {};
+            newValue = isObject4(objValue) ? objValue : isIndex3(path4[index + 1]) ? [] : {};
           }
         }
         assignValue2(nested, key, newValue);
@@ -162221,9 +162221,9 @@ ${lines.join("\n")}`);
         y: mY2
       }];
     };
-    var str4 = "generateBezier(" + [mX1, mY1, mX2, mY2] + ")";
+    var str5 = "generateBezier(" + [mX1, mY1, mX2, mY2] + ")";
     f2.toString = function() {
-      return str4;
+      return str5;
     };
     return f2;
   }
@@ -163938,26 +163938,26 @@ ${lines.join("\n")}`);
         _memoizedFn.cache = {};
         return _memoizedFn;
       };
-      camel2dash = memoize3(function(str4) {
-        return str4.replace(/([A-Z])/g, function(v3) {
+      camel2dash = memoize3(function(str5) {
+        return str5.replace(/([A-Z])/g, function(v3) {
           return "-" + v3.toLowerCase();
         });
       });
-      dash2camel = memoize3(function(str4) {
-        return str4.replace(/(-\w)/g, function(v3) {
+      dash2camel = memoize3(function(str5) {
+        return str5.replace(/(-\w)/g, function(v3) {
           return v3[1].toUpperCase();
         });
       });
-      prependCamel = memoize3(function(prefix, str4) {
-        return prefix + str4[0].toUpperCase() + str4.substring(1);
-      }, function(prefix, str4) {
-        return prefix + "$" + str4;
+      prependCamel = memoize3(function(prefix, str5) {
+        return prefix + str5[0].toUpperCase() + str5.substring(1);
+      }, function(prefix, str5) {
+        return prefix + "$" + str5;
       });
-      capitalize = function capitalize2(str4) {
-        if (emptyString(str4)) {
-          return str4;
+      capitalize = function capitalize2(str5) {
+        if (emptyString(str5)) {
+          return str5;
         }
-        return str4.charAt(0).toUpperCase() + str4.substring(1);
+        return str5.charAt(0).toUpperCase() + str5.substring(1);
       };
       endsWith = function endsWith2(string3, suffix) {
         return string3.slice(-1 * suffix.length) === suffix;
@@ -164387,17 +164387,17 @@ ${lines.join("\n")}`);
         };
         return hashIterableInts(iterator, seed);
       };
-      hashString2 = function hashString3(str4, seed) {
+      hashString2 = function hashString3(str5, seed) {
         var entry = {
           value: 0,
           done: false
         };
         var i4 = 0;
-        var length2 = str4.length;
+        var length2 = str5.length;
         var iterator = {
           next: function next3() {
             if (i4 < length2) {
-              entry.value = str4.charCodeAt(i4++);
+              entry.value = str5.charCodeAt(i4++);
             } else {
               entry.done = true;
             }
@@ -164412,11 +164412,11 @@ ${lines.join("\n")}`);
       hashStringsArray = function hashStringsArray2(strs) {
         var hash;
         for (var i4 = 0; i4 < strs.length; i4++) {
-          var str4 = strs[i4];
+          var str5 = strs[i4];
           if (i4 === 0) {
-            hash = hashString2(str4);
+            hash = hashString2(str5);
           } else {
-            hash = hashString2(str4, hash);
+            hash = hashString2(str5, hash);
           }
         }
         return hash;
@@ -169380,8 +169380,8 @@ ${lines.join("\n")}`);
       stateSelectorRegex = "(" + stateSelectors.map(function(s2) {
         return s2.selector;
       }).join("|") + ")";
-      cleanMetaChars = function cleanMetaChars2(str4) {
-        return str4.replace(new RegExp("\\\\(" + tokens.metaChar + ")", "g"), function(match3, $1) {
+      cleanMetaChars = function cleanMetaChars2(str5) {
+        return str5.replace(new RegExp("\\\\(" + tokens.metaChar + ")", "g"), function(match3, $1) {
           return $1;
         });
       };
@@ -169869,20 +169869,20 @@ ${lines.join("\n")}`);
           }
         };
         var queryToString = function queryToString2(query2, subject) {
-          return query2.checks.reduce(function(str5, chk, i5) {
-            return str5 + (subject === query2 && i5 === 0 ? "$" : "") + checkToString(chk, subject);
+          return query2.checks.reduce(function(str6, chk, i5) {
+            return str6 + (subject === query2 && i5 === 0 ? "$" : "") + checkToString(chk, subject);
           }, "");
         };
-        var str4 = "";
+        var str5 = "";
         for (var i4 = 0; i4 < this.length; i4++) {
           var query = this[i4];
-          str4 += queryToString(query, query.subject);
+          str5 += queryToString(query, query.subject);
           if (this.length > 1 && i4 < this.length - 1) {
-            str4 += ", ";
+            str5 += ", ";
           }
         }
-        this.toStringCache = str4;
-        return str4;
+        this.toStringCache = str5;
+        return str5;
       };
       parse$1 = {
         parse: parse2,
@@ -172935,7 +172935,7 @@ ${lines.join("\n")}`);
           this.emitAndNotify("style");
           return this;
         },
-        show: function show() {
+        show: function show2() {
           this.css("display", "element");
           return this;
         },
@@ -174870,7 +174870,7 @@ ${lines.join("\n")}`);
               percent = 1;
             }
             if (type3.color) {
-              var r1 = prop.valueMin[0];
+              var r12 = prop.valueMin[0];
               var r2 = prop.valueMax[0];
               var g1 = prop.valueMin[1];
               var g2 = prop.valueMax[1];
@@ -174878,7 +174878,7 @@ ${lines.join("\n")}`);
               var b22 = prop.valueMax[2];
               var a1 = prop.valueMin[3] == null ? 1 : prop.valueMin[3];
               var a2 = prop.valueMax[3] == null ? 1 : prop.valueMax[3];
-              var clr = [Math.round(r1 + (r2 - r1) * percent), Math.round(g1 + (g2 - g1) * percent), Math.round(b1 + (b22 - b1) * percent), Math.round(a1 + (a2 - a1) * percent)];
+              var clr = [Math.round(r12 + (r2 - r12) * percent), Math.round(g1 + (g2 - g1) * percent), Math.round(b1 + (b22 - b1) * percent), Math.round(a1 + (a2 - a1) * percent)];
               flatProp = {
                 // colours are simple, so just create the flat property instead of expensive string parsing
                 bypass: prop.bypass,
@@ -186795,8 +186795,8 @@ ${lines.join("\n")}`);
         var nodeTW = nodeW + (getIndexedStyle(node2, "background-width-relative-to", "value", index) === "inner" ? 0 : paddingX2);
         var nodeTH = nodeH + (getIndexedStyle(node2, "background-height-relative-to", "value", index) === "inner" ? 0 : paddingX2);
         var rs = node2._private.rscratch;
-        var clip3 = getIndexedStyle(node2, "background-clip", "value", index);
-        var shouldClip = clip3 === "node";
+        var clip4 = getIndexedStyle(node2, "background-clip", "value", index);
+        var shouldClip = clip4 === "node";
         var imgOpacity = getIndexedStyle(node2, "background-image-opacity", "value", index) * nodeOpacity;
         var smooth = getIndexedStyle(node2, "background-image-smoothing", "value", index);
         var cornerRadius = node2.pstyle("corner-radius").value;
@@ -195616,7 +195616,7 @@ ${lines.join("\n")}`);
     const textElement = c4Shape[textType];
     if (!textElement.width) {
       if (c4ShapeTextWrap) {
-        textElement.text = wrapLabel(
+        textElement.text = wrapLabel2(
           textElement.text,
           textLimitWidth,
           textConf
@@ -195988,11 +195988,11 @@ ${lines.join("\n")}`);
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 7: [1, 6], 8: [1, 7], 9: [1, 8], 10: 4, 11: [1, 9], 15: [1, 10], 16: [1, 11], 17: [1, 12], 18: [1, 13] }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, { 1: [2, 7] }, { 1: [2, 3] }, { 1: [2, 4] }, { 1: [2, 5] }, { 1: [2, 6] }, { 12: [1, 14] }, { 12: [1, 15] }, { 12: [1, 16] }, { 12: [1, 17] }, { 12: [1, 18] }, { 13: 19, 19: 20, 20: 21, 21: 22, 22: $V0, 23: $V1, 24: $V2, 26: $V3, 28: $V4, 29: 49, 30: 61, 32: 62, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 43: 23, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }, { 13: 70, 19: 20, 20: 21, 21: 22, 22: $V0, 23: $V1, 24: $V2, 26: $V3, 28: $V4, 29: 49, 30: 61, 32: 62, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 43: 23, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }, { 13: 71, 19: 20, 20: 21, 21: 22, 22: $V0, 23: $V1, 24: $V2, 26: $V3, 28: $V4, 29: 49, 30: 61, 32: 62, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 43: 23, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }, { 13: 72, 19: 20, 20: 21, 21: 22, 22: $V0, 23: $V1, 24: $V2, 26: $V3, 28: $V4, 29: 49, 30: 61, 32: 62, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 43: 23, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }, { 13: 73, 19: 20, 20: 21, 21: 22, 22: $V0, 23: $V1, 24: $V2, 26: $V3, 28: $V4, 29: 49, 30: 61, 32: 62, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 43: 23, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }, { 14: [1, 74] }, o2($VH, [2, 13], { 43: 23, 29: 49, 30: 61, 32: 62, 20: 75, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }), o2($VH, [2, 14]), o2($VI, [2, 16], { 12: [1, 76] }), o2($VH, [2, 36], { 12: [1, 77] }), o2($VJ, [2, 19]), o2($VJ, [2, 20]), { 25: [1, 78] }, { 27: [1, 79] }, o2($VJ, [2, 23]), { 35: 80, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 86, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 87, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 88, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 89, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 90, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 91, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 92, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 93, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 94, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 95, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 96, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 97, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 98, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 99, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 100, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 101, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 102, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 103, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 104, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, o2($VO, [2, 59]), { 35: 105, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 106, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 107, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 108, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 109, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 110, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 111, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 112, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 113, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 114, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 115, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 20: 116, 29: 49, 30: 61, 32: 62, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 43: 23, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }, { 12: [1, 118], 33: [1, 117] }, { 35: 119, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 120, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 121, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 122, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 123, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 124, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 35: 125, 75: 81, 76: $VK, 77: $VL, 79: $VM, 80: $VN }, { 14: [1, 126] }, { 14: [1, 127] }, { 14: [1, 128] }, { 14: [1, 129] }, { 1: [2, 8] }, o2($VH, [2, 15]), o2($VI, [2, 17], { 21: 22, 19: 130, 22: $V0, 23: $V1, 24: $V2, 26: $V3, 28: $V4 }), o2($VH, [2, 37], { 19: 20, 20: 21, 21: 22, 43: 23, 29: 49, 30: 61, 32: 62, 13: 131, 22: $V0, 23: $V1, 24: $V2, 26: $V3, 28: $V4, 34: $V5, 36: $V6, 37: $V7, 38: $V8, 39: $V9, 40: $Va, 41: $Vb, 44: $Vc, 45: $Vd, 46: $Ve, 47: $Vf, 48: $Vg, 49: $Vh, 50: $Vi, 51: $Vj, 52: $Vk, 53: $Vl, 54: $Vm, 55: $Vn, 56: $Vo, 57: $Vp, 58: $Vq, 59: $Vr, 60: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz, 68: $VA, 69: $VB, 70: $VC, 71: $VD, 72: $VE, 73: $VF, 74: $VG }), o2($VJ, [2, 21]), o2($VJ, [2, 22]), o2($VO, [2, 39]), o2($VP, [2, 71], { 75: 81, 35: 132, 76: $VK, 77: $VL, 79: $VM, 80: $VN }), o2($VQ, [2, 73]), { 78: [1, 133] }, o2($VQ, [2, 75]), o2($VQ, [2, 76]), o2($VO, [2, 40]), o2($VO, [2, 41]), o2($VO, [2, 42]), o2($VO, [2, 43]), o2($VO, [2, 44]), o2($VO, [2, 45]), o2($VO, [2, 46]), o2($VO, [2, 47]), o2($VO, [2, 48]), o2($VO, [2, 49]), o2($VO, [2, 50]), o2($VO, [2, 51]), o2($VO, [2, 52]), o2($VO, [2, 53]), o2($VO, [2, 54]), o2($VO, [2, 55]), o2($VO, [2, 56]), o2($VO, [2, 57]), o2($VO, [2, 58]), o2($VO, [2, 60]), o2($VO, [2, 61]), o2($VO, [2, 62]), o2($VO, [2, 63]), o2($VO, [2, 64]), o2($VO, [2, 65]), o2($VO, [2, 66]), o2($VO, [2, 67]), o2($VO, [2, 68]), o2($VO, [2, 69]), o2($VO, [2, 70]), { 31: 134, 42: [1, 135] }, { 12: [1, 136] }, { 33: [1, 137] }, o2($VR, [2, 28]), o2($VR, [2, 29]), o2($VR, [2, 30]), o2($VR, [2, 31]), o2($VR, [2, 32]), o2($VR, [2, 33]), o2($VR, [2, 34]), { 1: [2, 9] }, { 1: [2, 10] }, { 1: [2, 11] }, { 1: [2, 12] }, o2($VI, [2, 18]), o2($VH, [2, 38]), o2($VP, [2, 72]), o2($VQ, [2, 74]), o2($VO, [2, 24]), o2($VO, [2, 35]), o2($VS, [2, 25]), o2($VS, [2, 26], { 12: [1, 138] }), o2($VS, [2, 27])],
           defaultActions: { 2: [2, 1], 3: [2, 2], 4: [2, 7], 5: [2, 3], 6: [2, 4], 7: [2, 5], 8: [2, 6], 74: [2, 8], 126: [2, 9], 127: [2, 10], 128: [2, 11], 129: [2, 12] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -196143,11 +196143,11 @@ ${lines.join("\n")}`);
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -198844,63 +198844,63 @@ You have to call mermaid.initialize.`
           return false;
         }
         destructStartLink(_str) {
-          let str4 = _str.trim();
+          let str5 = _str.trim();
           let type3 = "arrow_open";
-          switch (str4[0]) {
+          switch (str5[0]) {
             case "<":
               type3 = "arrow_point";
-              str4 = str4.slice(1);
+              str5 = str5.slice(1);
               break;
             case "x":
               type3 = "arrow_cross";
-              str4 = str4.slice(1);
+              str5 = str5.slice(1);
               break;
             case "o":
               type3 = "arrow_circle";
-              str4 = str4.slice(1);
+              str5 = str5.slice(1);
               break;
           }
           let stroke = "normal";
-          if (str4.includes("=")) {
+          if (str5.includes("=")) {
             stroke = "thick";
           }
-          if (str4.includes(".")) {
+          if (str5.includes(".")) {
             stroke = "dotted";
           }
           return { type: type3, stroke };
         }
-        countChar(char2, str4) {
-          const length2 = str4.length;
+        countChar(char2, str5) {
+          const length2 = str5.length;
           let count2 = 0;
           for (let i4 = 0; i4 < length2; ++i4) {
-            if (str4[i4] === char2) {
+            if (str5[i4] === char2) {
               ++count2;
             }
           }
           return count2;
         }
         destructEndLink(_str) {
-          const str4 = _str.trim();
-          let line2 = str4.slice(0, -1);
+          const str5 = _str.trim();
+          let line2 = str5.slice(0, -1);
           let type3 = "arrow_open";
-          switch (str4.slice(-1)) {
+          switch (str5.slice(-1)) {
             case "x":
               type3 = "arrow_cross";
-              if (str4.startsWith("x")) {
+              if (str5.startsWith("x")) {
                 type3 = "double_" + type3;
                 line2 = line2.slice(1);
               }
               break;
             case ">":
               type3 = "arrow_point";
-              if (str4.startsWith("<")) {
+              if (str5.startsWith("<")) {
                 type3 = "double_" + type3;
                 line2 = line2.slice(1);
               }
               break;
             case "o":
               type3 = "arrow_circle";
-              if (str4.startsWith("o")) {
+              if (str5.startsWith("o")) {
                 type3 = "double_" + type3;
                 line2 = line2.slice(1);
               }
@@ -199667,11 +199667,11 @@ You have to call mermaid.initialize.`
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 9: $V0, 10: $V1, 12: $V2 }, { 1: [3] }, o2($V3, $V4, { 5: 6 }), { 4: 7, 9: $V0, 10: $V1, 12: $V2 }, { 4: 8, 9: $V0, 10: $V1, 12: $V2 }, { 13: [1, 9], 14: [1, 10] }, { 1: [2, 1], 6: 11, 7: 12, 8: $V5, 9: $V6, 10: $V7, 11: $V8, 20: 17, 22: 18, 23: 19, 24: 20, 25: 21, 26: 22, 27: $V9, 33: 24, 34: $Va, 36: $Vb, 38: $Vc, 42: 28, 43: 39, 44: $Vd, 45: 40, 47: 41, 60: $Ve, 84: $Vf, 85: $Vg, 86: $Vh, 87: $Vi, 88: $Vj, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs, 121: $Vt, 122: $Vu, 123: $Vv, 124: $Vw, 125: $Vx }, o2($V3, [2, 9]), o2($V3, [2, 10]), o2($V3, [2, 11]), { 8: [1, 55], 9: [1, 56], 10: $Vy, 15: 54, 18: 57 }, o2($Vz, [2, 3]), o2($Vz, [2, 4]), o2($Vz, [2, 5]), o2($Vz, [2, 6]), o2($Vz, [2, 7]), o2($Vz, [2, 8]), { 8: $VA, 9: $VB, 11: $VC, 21: 59, 41: 60, 72: 64, 75: [1, 65], 77: [1, 67], 78: [1, 66] }, { 8: $VA, 9: $VB, 11: $VC, 21: 68 }, { 8: $VA, 9: $VB, 11: $VC, 21: 69 }, { 8: $VA, 9: $VB, 11: $VC, 21: 70 }, { 8: $VA, 9: $VB, 11: $VC, 21: 71 }, { 8: $VA, 9: $VB, 11: $VC, 21: 72 }, { 8: $VA, 9: $VB, 10: [1, 73], 11: $VC, 21: 74 }, o2($Vz, [2, 36]), { 35: [1, 75] }, { 37: [1, 76] }, o2($Vz, [2, 39]), o2($VD, [2, 50], { 18: 77, 39: 78, 10: $Vy, 40: $VE }), { 10: [1, 80] }, { 10: [1, 81] }, { 10: [1, 82] }, { 10: [1, 83] }, { 14: $VF, 44: $VG, 60: $VH, 80: [1, 87], 89: $VI, 95: [1, 84], 97: [1, 85], 101: 86, 105: $VJ, 106: $VK, 109: $VL, 111: $VM, 114: $VN, 115: $VO, 116: $VP, 120: 88 }, o2($Vz, [2, 185]), o2($Vz, [2, 186]), o2($Vz, [2, 187]), o2($Vz, [2, 188]), o2($Vz, [2, 189]), o2($VQ, [2, 51]), o2($VQ, [2, 54], { 46: [1, 100] }), o2($VR, [2, 72], { 113: 113, 29: [1, 101], 44: $Vd, 48: [1, 102], 50: [1, 103], 52: [1, 104], 54: [1, 105], 56: [1, 106], 58: [1, 107], 60: $Ve, 63: [1, 108], 65: [1, 109], 67: [1, 110], 68: [1, 111], 70: [1, 112], 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 114: $Vq, 115: $Vr, 116: $Vs }), o2($VS, [2, 181]), o2($VS, [2, 142]), o2($VS, [2, 143]), o2($VS, [2, 144]), o2($VS, [2, 145]), o2($VS, [2, 146]), o2($VS, [2, 147]), o2($VS, [2, 148]), o2($VS, [2, 149]), o2($VS, [2, 150]), o2($VS, [2, 151]), o2($VS, [2, 152]), o2($V3, [2, 12]), o2($V3, [2, 18]), o2($V3, [2, 19]), { 9: [1, 114] }, o2($VT, [2, 26], { 18: 115, 10: $Vy }), o2($Vz, [2, 27]), { 42: 116, 43: 39, 44: $Vd, 45: 40, 47: 41, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, o2($Vz, [2, 40]), o2($Vz, [2, 41]), o2($Vz, [2, 42]), o2($VU, [2, 76], { 73: 117, 62: [1, 119], 74: [1, 118] }), { 76: 120, 79: 121, 80: $VV, 81: $VW, 116: $VX, 119: $VY }, { 75: [1, 126], 77: [1, 127] }, o2($VZ, [2, 83]), o2($Vz, [2, 28]), o2($Vz, [2, 29]), o2($Vz, [2, 30]), o2($Vz, [2, 31]), o2($Vz, [2, 32]), { 10: $V_, 12: $V$, 14: $V01, 27: $V11, 28: 128, 32: $V21, 44: $V31, 60: $V41, 75: $V51, 80: [1, 130], 81: [1, 131], 83: 141, 84: $V61, 85: $V71, 86: $V81, 87: $V91, 88: $Va1, 89: $Vb1, 90: $Vc1, 91: 129, 105: $Vd1, 109: $Ve1, 111: $Vf1, 114: $Vg1, 115: $Vh1, 116: $Vi1 }, o2($Vj1, $V4, { 5: 154 }), o2($Vz, [2, 37]), o2($Vz, [2, 38]), o2($VD, [2, 48], { 44: $Vk1 }), o2($VD, [2, 49], { 18: 156, 10: $Vy, 40: $Vl1 }), o2($VQ, [2, 44]), { 44: $Vd, 47: 158, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, { 102: [1, 159], 103: 160, 105: [1, 161] }, { 44: $Vd, 47: 162, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, { 44: $Vd, 47: 163, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, o2($Vm1, [2, 107], { 10: [1, 164], 96: [1, 165] }), { 80: [1, 166] }, o2($Vm1, [2, 115], { 120: 168, 10: [1, 167], 14: $VF, 44: $VG, 60: $VH, 89: $VI, 105: $VJ, 106: $VK, 109: $VL, 111: $VM, 114: $VN, 115: $VO, 116: $VP }), o2($Vm1, [2, 117], { 10: [1, 169] }), o2($Vn1, [2, 183]), o2($Vn1, [2, 170]), o2($Vn1, [2, 171]), o2($Vn1, [2, 172]), o2($Vn1, [2, 173]), o2($Vn1, [2, 174]), o2($Vn1, [2, 175]), o2($Vn1, [2, 176]), o2($Vn1, [2, 177]), o2($Vn1, [2, 178]), o2($Vn1, [2, 179]), o2($Vn1, [2, 180]), { 44: $Vd, 47: 170, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, { 30: 171, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 179, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 181, 50: [1, 180], 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 182, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 183, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 184, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 109: [1, 185] }, { 30: 186, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 187, 65: [1, 188], 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 189, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 190, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 191, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($VS, [2, 182]), o2($V3, [2, 20]), o2($VT, [2, 25]), o2($VD, [2, 46], { 39: 192, 18: 193, 10: $Vy, 40: $VE }), o2($VU, [2, 73], { 10: [1, 194] }), { 10: [1, 195] }, { 30: 196, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 77: [1, 197], 79: 198, 116: $VX, 119: $VY }, o2($Vu1, [2, 79]), o2($Vu1, [2, 81]), o2($Vu1, [2, 82]), o2($Vu1, [2, 168]), o2($Vu1, [2, 169]), { 76: 199, 79: 121, 80: $VV, 81: $VW, 116: $VX, 119: $VY }, o2($VZ, [2, 84]), { 8: $VA, 9: $VB, 10: $V_, 11: $VC, 12: $V$, 14: $V01, 21: 201, 27: $V11, 29: [1, 200], 32: $V21, 44: $V31, 60: $V41, 75: $V51, 83: 141, 84: $V61, 85: $V71, 86: $V81, 87: $V91, 88: $Va1, 89: $Vb1, 90: $Vc1, 91: 202, 105: $Vd1, 109: $Ve1, 111: $Vf1, 114: $Vg1, 115: $Vh1, 116: $Vi1 }, o2($Vv1, [2, 101]), o2($Vv1, [2, 103]), o2($Vv1, [2, 104]), o2($Vv1, [2, 157]), o2($Vv1, [2, 158]), o2($Vv1, [2, 159]), o2($Vv1, [2, 160]), o2($Vv1, [2, 161]), o2($Vv1, [2, 162]), o2($Vv1, [2, 163]), o2($Vv1, [2, 164]), o2($Vv1, [2, 165]), o2($Vv1, [2, 166]), o2($Vv1, [2, 167]), o2($Vv1, [2, 90]), o2($Vv1, [2, 91]), o2($Vv1, [2, 92]), o2($Vv1, [2, 93]), o2($Vv1, [2, 94]), o2($Vv1, [2, 95]), o2($Vv1, [2, 96]), o2($Vv1, [2, 97]), o2($Vv1, [2, 98]), o2($Vv1, [2, 99]), o2($Vv1, [2, 100]), { 6: 11, 7: 12, 8: $V5, 9: $V6, 10: $V7, 11: $V8, 20: 17, 22: 18, 23: 19, 24: 20, 25: 21, 26: 22, 27: $V9, 32: [1, 203], 33: 24, 34: $Va, 36: $Vb, 38: $Vc, 42: 28, 43: 39, 44: $Vd, 45: 40, 47: 41, 60: $Ve, 84: $Vf, 85: $Vg, 86: $Vh, 87: $Vi, 88: $Vj, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs, 121: $Vt, 122: $Vu, 123: $Vv, 124: $Vw, 125: $Vx }, { 10: $Vy, 18: 204 }, { 44: [1, 205] }, o2($VQ, [2, 43]), { 10: [1, 206], 44: $Vd, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 113, 114: $Vq, 115: $Vr, 116: $Vs }, { 10: [1, 207] }, { 10: [1, 208], 106: [1, 209] }, o2($Vw1, [2, 128]), { 10: [1, 210], 44: $Vd, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 113, 114: $Vq, 115: $Vr, 116: $Vs }, { 10: [1, 211], 44: $Vd, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 113, 114: $Vq, 115: $Vr, 116: $Vs }, { 80: [1, 212] }, o2($Vm1, [2, 109], { 10: [1, 213] }), o2($Vm1, [2, 111], { 10: [1, 214] }), { 80: [1, 215] }, o2($Vn1, [2, 184]), { 80: [1, 216], 98: [1, 217] }, o2($VQ, [2, 55], { 113: 113, 44: $Vd, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 114: $Vq, 115: $Vr, 116: $Vs }), { 31: [1, 218], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($Vx1, [2, 86]), o2($Vx1, [2, 88]), o2($Vx1, [2, 89]), o2($Vx1, [2, 153]), o2($Vx1, [2, 154]), o2($Vx1, [2, 155]), o2($Vx1, [2, 156]), { 49: [1, 220], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 221, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 51: [1, 222], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 53: [1, 223], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 55: [1, 224], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 57: [1, 225], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 60: [1, 226] }, { 64: [1, 227], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 66: [1, 228], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 30: 229, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 31: [1, 230], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 67: $Vo1, 69: [1, 231], 71: [1, 232], 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 67: $Vo1, 69: [1, 234], 71: [1, 233], 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($VD, [2, 45], { 18: 156, 10: $Vy, 40: $Vl1 }), o2($VD, [2, 47], { 44: $Vk1 }), o2($VU, [2, 75]), o2($VU, [2, 74]), { 62: [1, 235], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($VU, [2, 77]), o2($Vu1, [2, 80]), { 77: [1, 236], 79: 198, 116: $VX, 119: $VY }, { 30: 237, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($Vj1, $V4, { 5: 238 }), o2($Vv1, [2, 102]), o2($Vz, [2, 35]), { 43: 239, 44: $Vd, 45: 40, 47: 41, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, { 10: $Vy, 18: 240 }, { 10: $Vy1, 60: $Vz1, 84: $VA1, 92: 241, 105: $VB1, 107: 242, 108: 243, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }, { 10: $Vy1, 60: $Vz1, 84: $VA1, 92: 252, 104: [1, 253], 105: $VB1, 107: 242, 108: 243, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }, { 10: $Vy1, 60: $Vz1, 84: $VA1, 92: 254, 104: [1, 255], 105: $VB1, 107: 242, 108: 243, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }, { 105: [1, 256] }, { 10: $Vy1, 60: $Vz1, 84: $VA1, 92: 257, 105: $VB1, 107: 242, 108: 243, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }, { 44: $Vd, 47: 258, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, o2($Vm1, [2, 108]), { 80: [1, 259] }, { 80: [1, 260], 98: [1, 261] }, o2($Vm1, [2, 116]), o2($Vm1, [2, 118], { 10: [1, 262] }), o2($Vm1, [2, 119]), o2($VR, [2, 56]), o2($Vx1, [2, 87]), o2($VR, [2, 57]), { 51: [1, 263], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($VR, [2, 64]), o2($VR, [2, 59]), o2($VR, [2, 60]), o2($VR, [2, 61]), { 109: [1, 264] }, o2($VR, [2, 63]), o2($VR, [2, 65]), { 66: [1, 265], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($VR, [2, 67]), o2($VR, [2, 68]), o2($VR, [2, 70]), o2($VR, [2, 69]), o2($VR, [2, 71]), o2([10, 44, 60, 89, 102, 105, 106, 109, 111, 114, 115, 116], [2, 85]), o2($VU, [2, 78]), { 31: [1, 266], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 6: 11, 7: 12, 8: $V5, 9: $V6, 10: $V7, 11: $V8, 20: 17, 22: 18, 23: 19, 24: 20, 25: 21, 26: 22, 27: $V9, 32: [1, 267], 33: 24, 34: $Va, 36: $Vb, 38: $Vc, 42: 28, 43: 39, 44: $Vd, 45: 40, 47: 41, 60: $Ve, 84: $Vf, 85: $Vg, 86: $Vh, 87: $Vi, 88: $Vj, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs, 121: $Vt, 122: $Vu, 123: $Vv, 124: $Vw, 125: $Vx }, o2($VQ, [2, 53]), { 43: 268, 44: $Vd, 45: 40, 47: 41, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs }, o2($Vm1, [2, 121], { 106: $VG1 }), o2($VH1, [2, 130], { 108: 270, 10: $Vy1, 60: $Vz1, 84: $VA1, 105: $VB1, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }), o2($VI1, [2, 132]), o2($VI1, [2, 134]), o2($VI1, [2, 135]), o2($VI1, [2, 136]), o2($VI1, [2, 137]), o2($VI1, [2, 138]), o2($VI1, [2, 139]), o2($VI1, [2, 140]), o2($VI1, [2, 141]), o2($Vm1, [2, 122], { 106: $VG1 }), { 10: [1, 271] }, o2($Vm1, [2, 123], { 106: $VG1 }), { 10: [1, 272] }, o2($Vw1, [2, 129]), o2($Vm1, [2, 105], { 106: $VG1 }), o2($Vm1, [2, 106], { 113: 113, 44: $Vd, 60: $Ve, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 114: $Vq, 115: $Vr, 116: $Vs }), o2($Vm1, [2, 110]), o2($Vm1, [2, 112], { 10: [1, 273] }), o2($Vm1, [2, 113]), { 98: [1, 274] }, { 51: [1, 275] }, { 62: [1, 276] }, { 66: [1, 277] }, { 8: $VA, 9: $VB, 11: $VC, 21: 278 }, o2($Vz, [2, 34]), o2($VQ, [2, 52]), { 10: $Vy1, 60: $Vz1, 84: $VA1, 105: $VB1, 107: 279, 108: 243, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }, o2($VI1, [2, 133]), { 14: $VF, 44: $VG, 60: $VH, 89: $VI, 101: 280, 105: $VJ, 106: $VK, 109: $VL, 111: $VM, 114: $VN, 115: $VO, 116: $VP, 120: 88 }, { 14: $VF, 44: $VG, 60: $VH, 89: $VI, 101: 281, 105: $VJ, 106: $VK, 109: $VL, 111: $VM, 114: $VN, 115: $VO, 116: $VP, 120: 88 }, { 98: [1, 282] }, o2($Vm1, [2, 120]), o2($VR, [2, 58]), { 30: 283, 67: $Vo1, 80: $Vp1, 81: $Vq1, 82: 172, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, o2($VR, [2, 66]), o2($Vj1, $V4, { 5: 284 }), o2($VH1, [2, 131], { 108: 270, 10: $Vy1, 60: $Vz1, 84: $VA1, 105: $VB1, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }), o2($Vm1, [2, 126], { 120: 168, 10: [1, 285], 14: $VF, 44: $VG, 60: $VH, 89: $VI, 105: $VJ, 106: $VK, 109: $VL, 111: $VM, 114: $VN, 115: $VO, 116: $VP }), o2($Vm1, [2, 127], { 120: 168, 10: [1, 286], 14: $VF, 44: $VG, 60: $VH, 89: $VI, 105: $VJ, 106: $VK, 109: $VL, 111: $VM, 114: $VN, 115: $VO, 116: $VP }), o2($Vm1, [2, 114]), { 31: [1, 287], 67: $Vo1, 82: 219, 116: $Vr1, 117: $Vs1, 118: $Vt1 }, { 6: 11, 7: 12, 8: $V5, 9: $V6, 10: $V7, 11: $V8, 20: 17, 22: 18, 23: 19, 24: 20, 25: 21, 26: 22, 27: $V9, 32: [1, 288], 33: 24, 34: $Va, 36: $Vb, 38: $Vc, 42: 28, 43: 39, 44: $Vd, 45: 40, 47: 41, 60: $Ve, 84: $Vf, 85: $Vg, 86: $Vh, 87: $Vi, 88: $Vj, 89: $Vk, 102: $Vl, 105: $Vm, 106: $Vn, 109: $Vo, 111: $Vp, 113: 42, 114: $Vq, 115: $Vr, 116: $Vs, 121: $Vt, 122: $Vu, 123: $Vv, 124: $Vw, 125: $Vx }, { 10: $Vy1, 60: $Vz1, 84: $VA1, 92: 289, 105: $VB1, 107: 242, 108: 243, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }, { 10: $Vy1, 60: $Vz1, 84: $VA1, 92: 290, 105: $VB1, 107: 242, 108: 243, 109: $VC1, 110: $VD1, 111: $VE1, 112: $VF1 }, o2($VR, [2, 62]), o2($Vz, [2, 33]), o2($Vm1, [2, 124], { 106: $VG1 }), o2($Vm1, [2, 125], { 106: $VG1 })],
           defaultActions: {},
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -199822,11 +199822,11 @@ You have to call mermaid.initialize.`
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -202190,29 +202190,29 @@ You have to call mermaid.initialize.`
           return void 0;
         }
         destructStartLink(_str) {
-          const str4 = _str.trim();
+          const str5 = _str.trim();
           const type3 = "arrow_open";
           let stroke = "normal";
-          if (str4.includes(".")) {
+          if (str5.includes(".")) {
             stroke = "dotted";
           }
           return { type: type3, stroke };
         }
-        countChar(char2, str4) {
-          const length2 = str4.length;
+        countChar(char2, str5) {
+          const length2 = str5.length;
           let count2 = 0;
           for (let i4 = 0; i4 < length2; ++i4) {
-            if (str4[i4] === char2) {
+            if (str5[i4] === char2) {
               ++count2;
             }
           }
           return count2;
         }
         destructEndLink(_str) {
-          const str4 = _str.trim();
-          let line2 = str4.slice(0, -1);
+          const str5 = _str.trim();
+          let line2 = str5.slice(0, -1);
           let type3 = "arrow_open";
-          switch (str4.slice(-1)) {
+          switch (str5.slice(-1)) {
             case "x":
               type3 = "arrow_cross";
               break;
@@ -202222,7 +202222,7 @@ You have to call mermaid.initialize.`
             case "-":
             case ".":
               type3 = "arrow_open";
-              line2 = str4;
+              line2 = str5;
               break;
           }
           let stroke = "normal";
@@ -203532,11 +203532,11 @@ You have to call mermaid.initialize.`
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 8: $V0, 10: $V1, 11: $V2, 13: $V3 }, { 1: [3] }, o2($V4, $V5, { 5: 7 }), { 4: 8, 8: $V0, 10: $V1, 11: $V2, 13: $V3 }, { 4: 9, 8: $V0, 10: $V1, 11: $V2, 13: $V3 }, { 4: 10, 8: $V0, 10: $V1, 11: $V2, 13: $V3 }, { 14: [1, 11], 15: [1, 12] }, { 1: [2, 1], 6: 13, 7: 14, 8: $V6, 9: $V7, 10: $V8, 11: $V9, 12: $Va, 21: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: $Vb, 35: $Vc, 36: $Vd, 37: 29, 38: $Ve, 40: $Vf, 42: $Vg, 45: 33, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 87: $Vj, 88: $Vk, 89: $Vl, 90: $Vm, 91: $Vn, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw, 124: $Vx, 125: $Vy, 126: $Vz, 127: $VA, 128: $VB }, o2($V4, [2, 10]), o2($V4, [2, 11]), o2($V4, [2, 12]), o2($V4, [2, 13]), { 8: [1, 63], 9: [1, 60], 10: [1, 61], 11: $VC, 16: 59, 19: 62 }, o2($VD, [2, 3]), o2($VD, [2, 4]), o2($VD, [2, 5]), o2($VD, [2, 6]), o2($VD, [2, 7]), o2($VD, [2, 8]), o2($VD, [2, 9]), { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 65, 44: 66, 75: 71, 78: [1, 72], 80: [1, 74], 81: [1, 73] }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 75 }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 76 }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 77 }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 78 }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 79 }, { 8: $VE, 9: $VF, 10: $VG, 11: [1, 80], 12: $VH, 22: 81 }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 82 }, { 11: [1, 83] }, o2($VD, [2, 48]), { 39: [1, 84] }, { 41: [1, 85] }, o2($VD, [2, 51]), o2($VI, [2, 63], { 19: 86, 34: 87, 11: $VC, 43: $VJ }), { 11: [1, 89] }, { 11: [1, 90] }, { 11: [1, 91] }, { 11: [1, 92] }, { 15: $VK, 47: $VL, 63: $VM, 83: [1, 96], 92: $VN, 98: [1, 93], 100: [1, 94], 104: 95, 108: $VO, 109: $VP, 112: $VQ, 114: $VR, 117: $VS, 118: $VT, 119: $VU, 123: 97 }, o2($VD, [2, 200]), o2($VD, [2, 201]), o2($VD, [2, 202]), o2($VD, [2, 203]), o2($VD, [2, 204]), o2($VV, [2, 64]), o2($VV, [2, 67], { 49: [1, 109] }), o2($VW, [2, 85], { 116: 122, 30: [1, 110], 47: $Vh, 51: [1, 111], 53: [1, 112], 55: [1, 113], 57: [1, 114], 59: [1, 115], 61: [1, 116], 63: $Vi, 66: [1, 117], 68: [1, 118], 70: [1, 119], 71: [1, 120], 73: [1, 121], 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 117: $Vu, 118: $Vv, 119: $Vw }), o2($VX, [2, 196]), o2($VX, [2, 157]), o2($VX, [2, 158]), o2($VX, [2, 159]), o2($VX, [2, 160]), o2($VX, [2, 161]), o2($VX, [2, 162]), o2($VX, [2, 163]), o2($VX, [2, 164]), o2($VX, [2, 165]), o2($VX, [2, 166]), o2($VX, [2, 167]), o2($V4, [2, 14]), o2($V4, [2, 20]), o2($V4, [2, 21]), { 10: [1, 123] }, o2($V4, [2, 23]), o2($VY, [2, 31], { 19: 124, 11: $VC }), o2($VD, [2, 32]), { 45: 125, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, o2($VD, [2, 52]), o2($VD, [2, 53]), o2($VD, [2, 54]), o2($VD, [2, 55]), o2($VZ, [2, 89], { 76: 126, 65: [1, 128], 77: [1, 127] }), { 79: 129, 82: 130, 83: $V_, 84: $V$, 119: $V01, 122: $V11 }, { 78: [1, 135], 80: [1, 136] }, o2($V21, [2, 96]), o2($VD, [2, 33]), o2($VD, [2, 34]), o2($VD, [2, 35]), o2($VD, [2, 36]), o2($VD, [2, 37]), { 11: $V31, 13: $V41, 15: $V51, 28: $V61, 29: 137, 33: $V71, 35: $V81, 36: $V91, 47: $Va1, 63: $Vb1, 78: $Vc1, 83: $Vd1, 84: $Ve1, 86: 150, 87: $Vf1, 88: $Vg1, 89: $Vh1, 90: $Vi1, 91: $Vj1, 92: $Vk1, 93: $Vl1, 94: 138, 108: $Vm1, 112: $Vn1, 114: $Vo1, 117: $Vp1, 118: $Vq1, 119: $Vr1 }, o2($Vs1, $V5, { 5: 165 }), o2($Vs1, $V5, { 5: 166 }), { 11: $V31, 13: $V41, 15: $V51, 28: $V61, 29: 167, 33: $V71, 35: $V81, 36: $V91, 47: $Va1, 63: $Vb1, 78: $Vc1, 83: $Vd1, 84: $Ve1, 86: 150, 87: $Vf1, 88: $Vg1, 89: $Vh1, 90: $Vi1, 91: $Vj1, 92: $Vk1, 93: $Vl1, 94: 138, 108: $Vm1, 112: $Vn1, 114: $Vo1, 117: $Vp1, 118: $Vq1, 119: $Vr1 }, o2($VD, [2, 49]), o2($VD, [2, 50]), o2($VI, [2, 61], { 47: $Vt1 }), o2($VI, [2, 62], { 19: 169, 11: $VC, 43: $Vu1 }), o2($VV, [2, 57]), { 47: $Vh, 50: 171, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, { 105: [1, 172], 106: 173, 108: [1, 174] }, { 47: $Vh, 50: 175, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, { 47: $Vh, 50: 176, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, o2($Vv1, [2, 122], { 11: [1, 177], 99: [1, 178] }), { 83: [1, 179] }, o2($Vv1, [2, 130], { 123: 181, 11: [1, 180], 15: $VK, 47: $VL, 63: $VM, 92: $VN, 108: $VO, 109: $VP, 112: $VQ, 114: $VR, 117: $VS, 118: $VT, 119: $VU }), o2($Vv1, [2, 132], { 11: [1, 182] }), o2($Vw1, [2, 198]), o2($Vw1, [2, 185]), o2($Vw1, [2, 186]), o2($Vw1, [2, 187]), o2($Vw1, [2, 188]), o2($Vw1, [2, 189]), o2($Vw1, [2, 190]), o2($Vw1, [2, 191]), o2($Vw1, [2, 192]), o2($Vw1, [2, 193]), o2($Vw1, [2, 194]), o2($Vw1, [2, 195]), { 47: $Vh, 50: 183, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, { 31: 184, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 192, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 194, 53: [1, 193], 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 195, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 196, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 197, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 112: [1, 198] }, { 31: 199, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 200, 68: [1, 201], 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 202, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 203, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 204, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VX, [2, 197]), o2($V4, [2, 22]), o2($VY, [2, 30]), o2($VI, [2, 59], { 34: 205, 19: 206, 11: $VC, 43: $VJ }), o2($VZ, [2, 86], { 11: [1, 207] }), { 11: [1, 208] }, { 31: 209, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 80: [1, 210], 82: 211, 119: $V01, 122: $V11 }, o2($VD1, [2, 92]), o2($VD1, [2, 94]), o2($VD1, [2, 95]), o2($VD1, [2, 183]), o2($VD1, [2, 184]), { 79: 212, 82: 130, 83: $V_, 84: $V$, 119: $V01, 122: $V11 }, o2($V21, [2, 97]), { 8: $VE, 9: $VF, 10: $VG, 11: $V31, 12: $VH, 13: $V41, 15: $V51, 22: 214, 28: $V61, 30: [1, 213], 33: $V71, 34: 215, 35: $V81, 36: $V91, 43: $VJ, 47: $Va1, 63: $Vb1, 78: $Vc1, 86: 150, 87: $Vf1, 88: $Vg1, 89: $Vh1, 90: $Vi1, 91: $Vj1, 92: $Vk1, 93: $Vl1, 94: 216, 108: $Vm1, 112: $Vn1, 114: $Vo1, 117: $Vp1, 118: $Vq1, 119: $Vr1 }, o2($VE1, [2, 116]), o2($VE1, [2, 118]), o2($VE1, [2, 119]), o2($VE1, [2, 172]), o2($VE1, [2, 173]), o2($VE1, [2, 174]), o2($VE1, [2, 175]), o2($VE1, [2, 176]), o2($VE1, [2, 177]), o2($VE1, [2, 178]), o2($VE1, [2, 179]), o2($VE1, [2, 180]), o2($VE1, [2, 181]), o2($VE1, [2, 182]), o2($VE1, [2, 103]), o2($VE1, [2, 104]), o2($VE1, [2, 105]), o2($VE1, [2, 106]), o2($VE1, [2, 107]), o2($VE1, [2, 108]), o2($VE1, [2, 109]), o2($VE1, [2, 110]), o2($VE1, [2, 111]), o2($VE1, [2, 112]), o2($VE1, [2, 113]), o2($VE1, [2, 114]), o2($VE1, [2, 115]), { 6: 13, 7: 14, 8: $V6, 9: $V7, 10: $V8, 11: $V9, 12: $Va, 21: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: $Vb, 33: [1, 217], 35: $Vc, 36: $Vd, 37: 29, 38: $Ve, 40: $Vf, 42: $Vg, 45: 33, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 87: $Vj, 88: $Vk, 89: $Vl, 90: $Vm, 91: $Vn, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw, 124: $Vx, 125: $Vy, 126: $Vz, 127: $VA, 128: $VB }, { 6: 13, 7: 14, 8: $V6, 9: $V7, 10: $V8, 11: $V9, 12: $Va, 21: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: $Vb, 33: [1, 218], 35: $Vc, 36: $Vd, 37: 29, 38: $Ve, 40: $Vf, 42: $Vg, 45: 33, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 87: $Vj, 88: $Vk, 89: $Vl, 90: $Vm, 91: $Vn, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw, 124: $Vx, 125: $Vy, 126: $Vz, 127: $VA, 128: $VB }, { 8: $VE, 9: $VF, 10: $VG, 11: $V31, 12: $VH, 13: $V41, 15: $V51, 22: 220, 28: $V61, 30: [1, 219], 33: $V71, 34: 221, 35: $V81, 36: $V91, 43: $VJ, 47: $Va1, 63: $Vb1, 78: $Vc1, 86: 150, 87: $Vf1, 88: $Vg1, 89: $Vh1, 90: $Vi1, 91: $Vj1, 92: $Vk1, 93: $Vl1, 94: 216, 108: $Vm1, 112: $Vn1, 114: $Vo1, 117: $Vp1, 118: $Vq1, 119: $Vr1 }, { 11: $VC, 19: 222 }, { 47: [1, 223] }, o2($VV, [2, 56]), { 11: [1, 224], 47: $Vh, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 122, 117: $Vu, 118: $Vv, 119: $Vw }, { 11: [1, 225] }, { 11: [1, 226], 109: [1, 227] }, o2($VF1, [2, 143]), { 11: [1, 228], 47: $Vh, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 122, 117: $Vu, 118: $Vv, 119: $Vw }, { 11: [1, 229], 47: $Vh, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 122, 117: $Vu, 118: $Vv, 119: $Vw }, { 83: [1, 230] }, o2($Vv1, [2, 124], { 11: [1, 231] }), o2($Vv1, [2, 126], { 11: [1, 232] }), { 83: [1, 233] }, o2($Vw1, [2, 199]), { 83: [1, 234], 101: [1, 235] }, o2($VV, [2, 68], { 116: 122, 47: $Vh, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 117: $Vu, 118: $Vv, 119: $Vw }), { 32: [1, 236], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VG1, [2, 99]), o2($VG1, [2, 101]), o2($VG1, [2, 102]), o2($VG1, [2, 168]), o2($VG1, [2, 169]), o2($VG1, [2, 170]), o2($VG1, [2, 171]), { 52: [1, 238], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 239, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 54: [1, 240], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 56: [1, 241], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 58: [1, 242], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 60: [1, 243], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 63: [1, 244] }, { 67: [1, 245], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 69: [1, 246], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 31: 247, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, { 32: [1, 248], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 70: $Vx1, 72: [1, 249], 74: [1, 250], 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 70: $Vx1, 72: [1, 252], 74: [1, 251], 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VI, [2, 58], { 19: 169, 11: $VC, 43: $Vu1 }), o2($VI, [2, 60], { 47: $Vt1 }), o2($VZ, [2, 88]), o2($VZ, [2, 87]), { 65: [1, 253], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VZ, [2, 90]), o2($VD1, [2, 93]), { 80: [1, 254], 82: 211, 119: $V01, 122: $V11 }, { 31: 255, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($Vs1, $V5, { 5: 256 }), { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 257, 43: $Vu1 }, o2($VE1, [2, 117]), o2($VD, [2, 42]), o2($VD, [2, 43]), { 31: 258, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VD, [2, 46]), { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 259, 43: $Vu1 }, { 46: 260, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, { 11: $VC, 19: 261 }, { 11: $VH1, 63: $VI1, 87: $VJ1, 95: 262, 108: $VK1, 110: 263, 111: 264, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }, { 11: $VH1, 63: $VI1, 87: $VJ1, 95: 273, 107: [1, 274], 108: $VK1, 110: 263, 111: 264, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }, { 11: $VH1, 63: $VI1, 87: $VJ1, 95: 275, 107: [1, 276], 108: $VK1, 110: 263, 111: 264, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }, { 108: [1, 277] }, { 11: $VH1, 63: $VI1, 87: $VJ1, 95: 278, 108: $VK1, 110: 263, 111: 264, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }, { 47: $Vh, 50: 279, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, o2($Vv1, [2, 123]), { 83: [1, 280] }, { 83: [1, 281], 101: [1, 282] }, o2($Vv1, [2, 131]), o2($Vv1, [2, 133], { 11: [1, 283] }), o2($Vv1, [2, 134]), o2($VW, [2, 69]), o2($VG1, [2, 100]), o2($VW, [2, 70]), { 54: [1, 284], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VW, [2, 77]), o2($VW, [2, 72]), o2($VW, [2, 73]), o2($VW, [2, 74]), { 112: [1, 285] }, o2($VW, [2, 76]), o2($VW, [2, 78]), { 69: [1, 286], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VW, [2, 80]), o2($VW, [2, 81]), o2($VW, [2, 83]), o2($VW, [2, 82]), o2($VW, [2, 84]), o2([11, 47, 63, 92, 105, 108, 109, 112, 114, 117, 118, 119], [2, 98]), o2($VZ, [2, 91]), { 32: [1, 287], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 6: 13, 7: 14, 8: $V6, 9: $V7, 10: $V8, 11: $V9, 12: $Va, 21: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: $Vb, 33: [1, 288], 35: $Vc, 36: $Vd, 37: 29, 38: $Ve, 40: $Vf, 42: $Vg, 45: 33, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 87: $Vj, 88: $Vk, 89: $Vl, 90: $Vm, 91: $Vn, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw, 124: $Vx, 125: $Vy, 126: $Vz, 127: $VA, 128: $VB }, o2($Vs1, $V5, { 5: 289 }), { 32: [1, 290], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VD, [2, 47]), o2($VV, [2, 66]), { 46: 291, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw }, o2($Vv1, [2, 136], { 109: $VP1 }), o2($VQ1, [2, 145], { 111: 293, 11: $VH1, 63: $VI1, 87: $VJ1, 108: $VK1, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }), o2($VR1, [2, 147]), o2($VR1, [2, 149]), o2($VR1, [2, 150]), o2($VR1, [2, 151]), o2($VR1, [2, 152]), o2($VR1, [2, 153]), o2($VR1, [2, 154]), o2($VR1, [2, 155]), o2($VR1, [2, 156]), o2($Vv1, [2, 137], { 109: $VP1 }), { 11: [1, 294] }, o2($Vv1, [2, 138], { 109: $VP1 }), { 11: [1, 295] }, o2($VF1, [2, 144]), o2($Vv1, [2, 120], { 109: $VP1 }), o2($Vv1, [2, 121], { 116: 122, 47: $Vh, 63: $Vi, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 117: $Vu, 118: $Vv, 119: $Vw }), o2($Vv1, [2, 125]), o2($Vv1, [2, 127], { 11: [1, 296] }), o2($Vv1, [2, 128]), { 101: [1, 297] }, { 54: [1, 298] }, { 65: [1, 299] }, { 69: [1, 300] }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 301, 34: 302, 43: $VJ }, o2($VD, [2, 40]), { 6: 13, 7: 14, 8: $V6, 9: $V7, 10: $V8, 11: $V9, 12: $Va, 21: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: $Vb, 33: [1, 303], 35: $Vc, 36: $Vd, 37: 29, 38: $Ve, 40: $Vf, 42: $Vg, 45: 33, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 87: $Vj, 88: $Vk, 89: $Vl, 90: $Vm, 91: $Vn, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw, 124: $Vx, 125: $Vy, 126: $Vz, 127: $VA, 128: $VB }, { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 304, 34: 305, 43: $VJ }, o2($VV, [2, 65]), { 11: $VH1, 63: $VI1, 87: $VJ1, 108: $VK1, 110: 306, 111: 264, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }, o2($VR1, [2, 148]), { 15: $VK, 47: $VL, 63: $VM, 92: $VN, 104: 307, 108: $VO, 109: $VP, 112: $VQ, 114: $VR, 117: $VS, 118: $VT, 119: $VU, 123: 97 }, { 15: $VK, 47: $VL, 63: $VM, 92: $VN, 104: 308, 108: $VO, 109: $VP, 112: $VQ, 114: $VR, 117: $VS, 118: $VT, 119: $VU, 123: 97 }, { 101: [1, 309] }, o2($Vv1, [2, 135]), o2($VW, [2, 71]), { 31: 310, 70: $Vx1, 83: $Vy1, 84: $Vz1, 85: 185, 119: $VA1, 120: $VB1, 121: $VC1 }, o2($VW, [2, 79]), o2($Vs1, $V5, { 5: 311 }), { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 312, 43: $Vu1 }, o2($VD, [2, 41]), o2($VD, [2, 44]), { 8: $VE, 9: $VF, 10: $VG, 12: $VH, 22: 313, 43: $Vu1 }, o2($VQ1, [2, 146], { 111: 293, 11: $VH1, 63: $VI1, 87: $VJ1, 108: $VK1, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }), o2($Vv1, [2, 141], { 123: 181, 11: [1, 314], 15: $VK, 47: $VL, 63: $VM, 92: $VN, 108: $VO, 109: $VP, 112: $VQ, 114: $VR, 117: $VS, 118: $VT, 119: $VU }), o2($Vv1, [2, 142], { 123: 181, 11: [1, 315], 15: $VK, 47: $VL, 63: $VM, 92: $VN, 108: $VO, 109: $VP, 112: $VQ, 114: $VR, 117: $VS, 118: $VT, 119: $VU }), o2($Vv1, [2, 129]), { 32: [1, 316], 70: $Vx1, 85: 237, 119: $VA1, 120: $VB1, 121: $VC1 }, { 6: 13, 7: 14, 8: $V6, 9: $V7, 10: $V8, 11: $V9, 12: $Va, 21: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: $Vb, 33: [1, 317], 35: $Vc, 36: $Vd, 37: 29, 38: $Ve, 40: $Vf, 42: $Vg, 45: 33, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 87: $Vj, 88: $Vk, 89: $Vl, 90: $Vm, 91: $Vn, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw, 124: $Vx, 125: $Vy, 126: $Vz, 127: $VA, 128: $VB }, o2($Vs1, $V5, { 5: 318 }), o2($VD, [2, 45]), { 11: $VH1, 63: $VI1, 87: $VJ1, 95: 319, 108: $VK1, 110: 263, 111: 264, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }, { 11: $VH1, 63: $VI1, 87: $VJ1, 95: 320, 108: $VK1, 110: 263, 111: 264, 112: $VL1, 113: $VM1, 114: $VN1, 115: $VO1 }, o2($VW, [2, 75]), o2($VD, [2, 38]), { 6: 13, 7: 14, 8: $V6, 9: $V7, 10: $V8, 11: $V9, 12: $Va, 21: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: $Vb, 33: [1, 321], 35: $Vc, 36: $Vd, 37: 29, 38: $Ve, 40: $Vf, 42: $Vg, 45: 33, 46: 44, 47: $Vh, 48: 45, 50: 46, 63: $Vi, 87: $Vj, 88: $Vk, 89: $Vl, 90: $Vm, 91: $Vn, 92: $Vo, 105: $Vp, 108: $Vq, 109: $Vr, 112: $Vs, 114: $Vt, 116: 47, 117: $Vu, 118: $Vv, 119: $Vw, 124: $Vx, 125: $Vy, 126: $Vz, 127: $VA, 128: $VB }, o2($Vv1, [2, 139], { 109: $VP1 }), o2($Vv1, [2, 140], { 109: $VP1 }), o2($VD, [2, 39])],
           defaultActions: {},
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -203687,11 +203687,11 @@ You have to call mermaid.initialize.`
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -204954,11 +204954,11 @@ You have to call mermaid.initialize.`
           }, "anonymous"),
           table: [{ 3: 1, 4: [1, 2] }, { 1: [3] }, o2($V0, $V1, { 5: 3 }), { 6: [1, 4], 7: 5, 8: 6, 9: $V2, 10: 8, 21: $V3, 23: $V4, 25: $V5, 27: $V6, 28: 13, 29: 14, 30: 15, 31: 16, 32: 17, 34: $V7, 37: $V8, 38: $V9, 39: $Va, 40: $Vb, 41: $Vc, 43: $Vd, 46: $Ve, 47: $Vf, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, o2($V0, $Vk, { 1: [2, 1] }), o2($Vl, [2, 3]), o2($Vl, [2, 4]), o2($Vl, [2, 5]), o2($Vl, [2, 15], { 11: 31, 67: 35, 14: [1, 32], 16: [1, 33], 19: [1, 34], 69: $Vm, 70: $Vn, 71: $Vo, 72: $Vp, 73: $Vq }), { 22: [1, 41] }, { 24: [1, 42] }, { 26: [1, 43] }, o2($Vl, [2, 26]), o2($Vl, [2, 27]), o2($Vl, [2, 28]), o2($Vl, [2, 29]), o2($Vl, [2, 30]), o2($Vl, $V1, { 5: 44 }), o2($Vr, [2, 58]), o2($Vr, [2, 59]), o2($Vr, [2, 60]), o2($Vr, [2, 61]), o2($Vr, [2, 62]), o2($Vl, [2, 36]), o2($Vl, [2, 37]), o2($Vl, [2, 38]), o2($Vl, [2, 39]), { 15: 45, 43: $Vs, 44: $Vt }, { 15: 48, 43: $Vs, 44: $Vt }, { 15: 49, 43: $Vs, 44: $Vt }, { 10: 50, 43: $Vd, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, { 10: 51, 43: $Vd, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, { 15: 52, 43: $Vs, 44: $Vt }, { 17: 53, 18: [1, 54], 56: 55, 57: 56, 61: $Vu }, { 10: 58, 43: $Vd, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, { 68: 59, 74: [1, 60], 75: [1, 61] }, o2($Vv, [2, 77]), o2($Vv, [2, 78]), o2($Vv, [2, 79]), o2($Vv, [2, 80]), o2($Vv, [2, 81]), o2($Vl, [2, 23]), o2($Vl, [2, 24]), o2($Vl, [2, 25]), { 6: [1, 63], 7: 5, 8: 6, 9: $V2, 10: 8, 21: $V3, 23: $V4, 25: $V5, 27: $V6, 28: 13, 29: 14, 30: 15, 31: 16, 32: 17, 33: [1, 62], 34: $V7, 37: $V8, 38: $V9, 39: $Va, 40: $Vb, 41: $Vc, 43: $Vd, 46: $Ve, 47: $Vf, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, { 12: $Vw, 42: 64, 44: $Vx, 45: $Vy, 48: 66, 49: 67, 51: $Vz, 52: $VA }, o2($VB, [2, 41]), o2($VB, [2, 42]), { 15: 72, 43: $Vs, 44: $Vt, 45: $Vy }, { 12: $Vw, 42: 73, 44: $Vx, 45: $Vy, 48: 66, 49: 67, 51: $Vz, 52: $VA }, { 6: $VC, 9: $VD, 19: [1, 75], 35: 74, 50: $VE }, { 12: [1, 79], 14: [1, 80] }, o2($Vl, [2, 16], { 67: 35, 11: 81, 16: [1, 82], 45: $Vy, 69: $Vm, 70: $Vn, 71: $Vo, 72: $Vp, 73: $Vq }), { 18: [1, 83] }, o2($Vl, [2, 13]), { 17: 84, 18: [2, 63], 56: 55, 57: 56, 61: $Vu }, { 58: 85, 61: [1, 86] }, { 61: [2, 69], 62: [1, 87] }, { 20: [1, 88] }, { 67: 89, 69: $Vm, 70: $Vn, 71: $Vo, 72: $Vp, 73: $Vq }, o2($VF, [2, 82]), o2($VF, [2, 83]), o2($Vl, [2, 31]), o2($Vl, $Vk), { 6: $VC, 9: $VD, 35: 90, 45: $VG, 50: $VE }, { 43: [1, 92], 44: [1, 93] }, o2($VH, [2, 47], { 49: 94, 12: $Vw, 44: $Vx, 51: $Vz, 52: $VA }), o2($VI, [2, 49]), o2($VI, [2, 54]), o2($VI, [2, 55]), o2($VI, [2, 56]), o2($VI, [2, 57]), o2($Vl, [2, 45], { 45: $Vy }), { 6: $VC, 9: $VD, 35: 95, 45: $VG, 50: $VE }, o2($Vl, [2, 32]), { 10: 97, 36: 96, 43: $Vd, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, o2($Vl, [2, 51]), o2($Vl, [2, 52]), o2($Vl, [2, 53]), { 13: 98, 43: $VJ, 53: $VK, 76: $VL }, { 15: 102, 43: $Vs, 44: $Vt }, { 10: 103, 43: $Vd, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, { 17: 104, 18: [1, 105], 56: 55, 57: 56, 61: $Vu }, o2($Vl, [2, 11]), { 18: [2, 64] }, o2($VM, [2, 65], { 59: 106, 60: 107, 63: 108, 65: $VN, 66: $VO }), o2([18, 61, 65, 66], [2, 71]), { 61: [2, 70] }, o2($Vl, [2, 21], { 14: [1, 112], 16: [1, 111] }), o2([43, 51, 53, 54, 55], [2, 76]), o2($Vl, [2, 40]), { 12: $Vw, 44: $Vx, 48: 113, 49: 67, 51: $Vz, 52: $VA }, o2($VB, [2, 43]), o2($VB, [2, 44]), o2($VI, [2, 50]), o2($Vl, [2, 46]), { 10: 115, 20: [1, 114], 43: $Vd, 51: $Vg, 53: $Vh, 54: $Vi, 55: $Vj }, o2($VP, [2, 34]), o2($Vl, [2, 7]), o2($Vl, [2, 84]), o2($Vl, [2, 85]), o2($Vl, [2, 86]), { 12: [1, 116], 45: $Vy }, { 12: [1, 118], 14: [1, 117] }, { 18: [1, 119] }, o2($Vl, [2, 14]), o2($VM, [2, 66], { 60: 120, 64: [1, 121], 66: $VO }), o2($VM, [2, 67]), o2($VQ, [2, 72]), o2($VM, [2, 75]), o2($VQ, [2, 74]), { 17: 122, 18: [1, 123], 56: 55, 57: 56, 61: $Vu }, { 15: 124, 43: $Vs, 44: $Vt }, o2($VH, [2, 48], { 49: 94, 12: $Vw, 44: $Vx, 51: $Vz, 52: $VA }), { 6: $VC, 9: $VD, 35: 125, 50: $VE }, o2($VP, [2, 35]), { 13: 126, 43: $VJ, 53: $VK, 76: $VL }, { 15: 127, 43: $Vs, 44: $Vt }, { 13: 128, 43: $VJ, 53: $VK, 76: $VL }, o2($Vl, [2, 12]), o2($VM, [2, 68]), { 63: 129, 65: $VN }, { 18: [1, 130] }, o2($Vl, [2, 19]), o2($Vl, [2, 22], { 16: [1, 131], 45: $Vy }), o2($Vl, [2, 33]), o2($Vl, [2, 10]), { 12: [1, 132], 45: $Vy }, o2($Vl, [2, 9]), o2($VQ, [2, 73]), o2($Vl, [2, 17]), { 17: 133, 18: [1, 134], 56: 55, 57: 56, 61: $Vu }, { 13: 135, 43: $VJ, 53: $VK, 76: $VL }, { 18: [1, 136] }, o2($Vl, [2, 20]), o2($Vl, [2, 8]), o2($Vl, [2, 18])],
           defaultActions: { 84: [2, 64], 87: [2, 70] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -205109,11 +205109,11 @@ You have to call mermaid.initialize.`
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -206279,7 +206279,7 @@ You have to call mermaid.initialize.`
   function isAstNode(obj) {
     return typeof obj === "object" && obj !== null && typeof obj.$type === "string";
   }
-  function isReference(obj) {
+  function isReference2(obj) {
     return typeof obj === "object" && obj !== null && typeof obj.$refText === "string" && "ref" in obj;
   }
   function isMultiReference(obj) {
@@ -206414,7 +206414,7 @@ You have to call mermaid.initialize.`
     return node2;
   }
   function getReferenceNodes(reference) {
-    if (isReference(reference)) {
+    if (isReference2(reference)) {
       return reference.ref ? [reference.ref] : [];
     } else if (isMultiReference(reference)) {
       return reference.items.map((item) => item.ref);
@@ -206490,14 +206490,14 @@ You have to call mermaid.initialize.`
         const property22 = state5.keys[state5.keyIndex];
         if (!property22.startsWith("$")) {
           const value2 = node2[property22];
-          if (isReference(value2) || isMultiReference(value2)) {
+          if (isReference2(value2) || isMultiReference(value2)) {
             state5.keyIndex++;
             return { done: false, value: { reference: value2, container: node2, property: property22 } };
           } else if (Array.isArray(value2)) {
             while (state5.arrayIndex < value2.length) {
               const index = state5.arrayIndex++;
               const element3 = value2[index];
-              if (isReference(element3) || isMultiReference(element3)) {
+              if (isReference2(element3) || isMultiReference(element3)) {
                 return { done: false, value: { reference: element3, container: node2, property: property22, index } };
               }
             }
@@ -208189,19 +208189,19 @@ See https://chevrotain.io/docs/guide/resolving_lexer_errors.html#UNREACHABLE`;
     });
     return errors;
   }
-  function tryToMatchStrToPattern(str4, pattern) {
+  function tryToMatchStrToPattern(str5, pattern) {
     if (pattern instanceof RegExp) {
       if (usesLookAheadOrBehind(pattern)) {
         return false;
       }
-      const regExpArray = pattern.exec(str4);
+      const regExpArray = pattern.exec(str5);
       return regExpArray !== null && regExpArray.index === 0;
     } else if (typeof pattern === "function") {
-      return pattern(str4, 0, [], {});
+      return pattern(str5, 0, [], {});
     } else if (Object.hasOwn(pattern, "exec")) {
-      return pattern.exec(str4, 0, [], {});
+      return pattern.exec(str5, 0, [], {});
     } else if (typeof pattern === "string") {
-      return pattern === str4;
+      return pattern === str5;
     } else {
       throw Error("non exhaustive match");
     }
@@ -209545,7 +209545,7 @@ See https://chevrotain.io/docs/guide/resolving_lexer_errors.html#UNREACHABLE`;
     }
   }
   function defineNameProp(obj, nameValue) {
-    Object.defineProperty(obj, NAME2, {
+    Object.defineProperty(obj, NAME3, {
       enumerable: false,
       configurable: true,
       writable: false,
@@ -209809,7 +209809,7 @@ See https://chevrotain.io/docs/guide/resolving_lexer_errors.html#UNREACHABLE`;
     }
     return symToStringTag22 && symToStringTag22 in Object(value2) ? getRawTag_default2(value2) : objectToString_default2(value2);
   }
-  function isObject2(value2) {
+  function isObject3(value2) {
     var type3 = typeof value2;
     return value2 != null && (type3 == "object" || type3 == "function");
   }
@@ -212599,7 +212599,7 @@ For Further details.`;
   function isWardley(item) {
     return reflection2.isInstance(item, Wardley.$type);
   }
-  var __create2, __defProp3, __getOwnPropDesc2, __getOwnPropNames2, __getProtoOf2, __hasOwnProp2, __name2, __esm2, __commonJS2, __export3, __copyProps2, __toESM2, __toCommonJS, require_is, require_messages, require_linkedMap, require_disposable, require_ral, require_events, require_cancellation, require_sharedArrayCancellation, require_semaphore, require_messageReader, require_messageWriter, require_messageBuffer, require_connection, require_api, main_exports, DocumentUri, URI, integer3, uinteger, Position, Range, Location, LocationLink, Color3, ColorInformation, ColorPresentation, FoldingRangeKind, FoldingRange, DiagnosticRelatedInformation, DiagnosticSeverity, DiagnosticTag, CodeDescription, Diagnostic, Command, TextEdit, ChangeAnnotation, ChangeAnnotationIdentifier, AnnotatedTextEdit, TextDocumentEdit, CreateFile, RenameFile, DeleteFile, WorkspaceEdit, TextEditChangeImpl, SnippetTextEdit, ChangeAnnotations, WorkspaceChange, TextDocumentIdentifier, VersionedTextDocumentIdentifier, OptionalVersionedTextDocumentIdentifier, LanguageKind, TextDocumentItem, MarkupKind, MarkupContent, CompletionItemKind, InsertTextFormat, CompletionItemTag, InsertReplaceEdit, InsertTextMode, ApplyKind, CompletionItemLabelDetails, CompletionItem, CompletionList, MarkedString, Hover, ParameterInformation, SignatureInformation, DocumentHighlightKind, DocumentHighlight, SymbolKind, SymbolTag, SymbolInformation, WorkspaceSymbol, DocumentSymbol, CodeActionKind, CodeActionTriggerKind, CodeActionContext, CodeActionTag, CodeAction, CodeLens, FormattingOptions, DocumentLink, SelectionRange, SemanticTokenTypes, SemanticTokenModifiers, SemanticTokens, InlineValueText, InlineValueVariableLookup, InlineValueEvaluatableExpression, InlineValueContext, InlayHintKind, InlayHintLabelPart, InlayHint, StringValue, InlineCompletionItem, InlineCompletionList, InlineCompletionTriggerKind, SelectedCompletionInfo, InlineCompletionContext, WorkspaceFolder, EOL, TextDocument, FullTextDocument, Is, init_main, require_messages2, require_is2, require_protocol_implementation, require_protocol_typeDefinition, require_protocol_workspaceFolder, require_protocol_configuration, require_protocol_colorProvider, require_protocol_foldingRange, require_protocol_declaration, require_protocol_selectionRange, require_protocol_progress, require_protocol_callHierarchy, require_protocol_semanticTokens, require_protocol_showDocument, require_protocol_linkedEditingRange, require_protocol_fileOperations, require_protocol_moniker, require_protocol_typeHierarchy, require_protocol_inlineValue, require_protocol_inlayHint, require_protocol_diagnostic, require_protocol_notebook, require_protocol_inlineCompletion, require_protocol_textDocumentContent, require_protocol, require_connection2, require_api2, AbstractAstReflection, StreamImpl, EMPTY_STREAM, DONE_RESULT, TreeStreamImpl, Reduction, AbstractElement, AbstractParserRule, AbstractRule, AbstractType, Action, Alternatives, ArrayLiteral, ArrayType, Assignment, BooleanLiteral, CharacterRange, Condition, Conjunction, CrossReference, Disjunction, EndOfFile, Grammar, GrammarImport, Group, InferredType, InfixRule, InfixRuleOperatorList, InfixRuleOperators, Interface, Keyword2, NamedArgument, NegatedToken, Negation, NumberLiteral, Parameter, ParameterReference, ParserRule, ReferenceType, RegexToken, ReturnType, RuleCall, SimpleType, StringLiteral, TerminalAlternatives, TerminalElement, TerminalGroup, TerminalRule, TerminalRuleCall, Type4, TypeAttribute, TypeDefinition, UnionType, UnorderedGroup, UntilToken, ValueLiteral, Wildcard, LangiumGrammarAstReflection, reflection, RangeComparison, DefaultNameRegexp, ErrorWithLocation, digitsCharCodes, wordCharCodes, whitespaceCodes, hexDigitPattern, decimalPattern, decimalPatternNoZero, RegExpParser, BaseRegExpVisitor, NEWLINE_REGEXP, regexpParser, TerminalRegExpVisitor, visitor, whitespaceCharacters, WILDCARD, AbstractProduction, NonTerminal, Rule, Alternative, Option2, RepetitionMandatory, RepetitionMandatoryWithSeparator, Repetition, RepetitionWithSeparator, Alternation, Terminal, GAstVisitor, RestWalker, IN, ResyncFollowsWalker, regExpAstCache, regExpParser, complementErrorMessage, failedOptimizationPrefixMsg, CharCodeFinder, PATTERN, DEFAULT_MODE, MODES, SINGLE_CHAR_MATCH, CUSTOM_MATCH, REG_EXP_MATCH, ASCII_CLASS_MATCH, end_of_input, start_of_input, LineTerminatorOptimizedTester, minOptimizationVal, charCodeToOptimizedIdxMap, tokenShortNameIdx, tokenIdxToClass, defaultLexerErrorProvider, LexerDefinitionErrorType, DEFAULT_LEXER_CONFIG, Lexer2, PARENT, CATEGORIES, LABEL, GROUP, PUSH_MODE, POP_MODE, LONGER_ALT, LINE_BREAKS, START_CHARS_HINT, EOF, defaultParserErrorProvider, defaultGrammarResolverErrorProvider, defaultGrammarValidatorErrorProvider, GastRefResolverVisitor, AbstractNextPossibleTokensWalker, NextAfterTokenWalker, AbstractNextTerminalAfterProductionWalker, NextTerminalAfterManyWalker, NextTerminalAfterManySepWalker, NextTerminalAfterAtLeastOneWalker, NextTerminalAfterAtLeastOneSepWalker, PROD_TYPE, RestDefinitionFinderWalker, InsideDefinitionFinderVisitor, OccurrenceValidationCollector, OrCollector, RepetitionCollector, MISMATCHED_TOKEN_EXCEPTION, NO_VIABLE_ALT_EXCEPTION, EARLY_EXIT_EXCEPTION, NOT_ALL_INPUT_PARSED_EXCEPTION, RECOGNITION_EXCEPTION_NAMES, RecognitionException, MismatchedTokenException, NoViableAltException, NotAllInputParsedException, EarlyExitException, EOF_FOLLOW_KEY, IN_RULE_RECOVERY_EXCEPTION, InRuleRecoveryException, Recoverable, BITS_FOR_OCCURRENCE_IDX, OR_IDX, OPTION_IDX, MANY_IDX, AT_LEAST_ONE_IDX, MANY_SEP_IDX, AT_LEAST_ONE_SEP_IDX, LLkLookaheadStrategy, LooksAhead, DslMethodsCollectorVisitor, collectorVisitor, NAME2, CstVisitorDefinitionError, TreeBuilder, LexerAdapter, RecognizerApi, RecognizerEngine, ErrorHandler, RECORDING_NULL_OBJECT, HANDLE_SEPARATOR, MAX_METHOD_IDX, RFT, RECORDING_PHASE_TOKEN, RECORDING_PHASE_CSTNODE, GastRecorder, PerformanceTracer, END_OF_FILE, DEFAULT_PARSER_CONFIG, DEFAULT_RULE_CONFIG, ParserDefinitionErrorType, Parser2, EmbeddedActionsParser, arrayMap_default2, listCacheClear_default2, eq_default2, assocIndexOf_default2, arrayProto2, splice2, listCacheDelete_default2, listCacheGet_default2, listCacheHas_default2, listCacheSet_default2, ListCache_default2, stackClear_default2, stackDelete_default2, stackGet_default2, stackHas_default2, freeGlobal2, freeGlobal_default2, freeSelf2, root3, root_default2, Symbol22, Symbol_default2, objectProto20, hasOwnProperty17, nativeObjectToString3, symToStringTag3, getRawTag_default2, objectProto22, nativeObjectToString22, objectToString_default2, nullTag2, undefinedTag2, symToStringTag22, baseGetTag_default2, isObject_default2, asyncTag2, funcTag4, genTag3, proxyTag2, isFunction_default2, coreJsData2, coreJsData_default2, maskSrcKey2, isMasked_default2, funcProto4, funcToString4, toSource_default2, reRegExpChar2, reIsHostCtor2, funcProto22, objectProto32, funcToString22, hasOwnProperty22, reIsNative2, baseIsNative_default2, getValue_default2, getNative_default2, Map22, Map_default2, nativeCreate2, nativeCreate_default2, hashClear_default2, hashDelete_default2, HASH_UNDEFINED4, objectProto42, hasOwnProperty32, hashGet_default2, objectProto52, hasOwnProperty42, hashHas_default2, HASH_UNDEFINED22, hashSet_default2, Hash_default2, mapCacheClear_default2, isKeyable_default2, getMapData_default2, mapCacheDelete_default2, mapCacheGet_default2, mapCacheHas_default2, mapCacheSet_default2, MapCache_default2, LARGE_ARRAY_SIZE3, stackSet_default2, Stack_default2, HASH_UNDEFINED32, setCacheAdd_default2, setCacheHas_default2, SetCache_default2, arraySome_default2, cacheHas_default2, COMPARE_PARTIAL_FLAG7, COMPARE_UNORDERED_FLAG5, equalArrays_default2, Uint8Array22, Uint8Array_default2, mapToArray_default2, setToArray_default2, COMPARE_PARTIAL_FLAG22, COMPARE_UNORDERED_FLAG22, boolTag5, dateTag6, errorTag4, mapTag10, numberTag6, regexpTag6, setTag10, stringTag7, symbolTag6, arrayBufferTag6, dataViewTag7, symbolProto4, symbolValueOf3, equalByTag_default2, arrayPush_default2, isArray3, isArray_default2, baseGetAllKeys_default2, arrayFilter_default2, stubArray_default2, objectProto62, propertyIsEnumerable3, nativeGetSymbols3, getSymbols3, getSymbols_default2, baseTimes_default2, isObjectLike_default2, argsTag5, baseIsArguments_default2, objectProto72, hasOwnProperty52, propertyIsEnumerable22, isArguments3, isArguments_default2, stubFalse_default2, freeExports4, freeModule4, moduleExports4, Buffer22, nativeIsBuffer2, isBuffer3, isBuffer_default2, MAX_SAFE_INTEGER3, reIsUint2, isIndex_default2, MAX_SAFE_INTEGER22, isLength_default2, argsTag22, arrayTag5, boolTag22, dateTag22, errorTag22, funcTag22, mapTag22, numberTag22, objectTag7, regexpTag22, setTag22, stringTag22, weakMapTag4, arrayBufferTag22, dataViewTag22, float32Tag4, float64Tag4, int8Tag4, int16Tag4, int32Tag4, uint8Tag4, uint8ClampedTag4, uint16Tag4, uint32Tag4, typedArrayTags2, baseIsTypedArray_default2, baseUnary_default2, freeExports22, freeModule22, moduleExports22, freeProcess2, nodeUtil2, nodeUtil_default2, nodeIsTypedArray2, isTypedArray4, isTypedArray_default2, objectProto82, hasOwnProperty62, arrayLikeKeys_default2, objectProto92, isPrototype_default2, overArg_default2, nativeKeys2, nativeKeys_default2, objectProto102, hasOwnProperty72, baseKeys_default2, isArrayLike_default2, keys_default2, getAllKeys_default2, COMPARE_PARTIAL_FLAG32, objectProto112, hasOwnProperty82, equalObjects_default2, DataView3, DataView_default2, Promise22, Promise_default2, Set22, Set_default2, WeakMap3, WeakMap_default2, mapTag32, objectTag22, promiseTag2, setTag32, weakMapTag22, dataViewTag32, dataViewCtorString2, mapCtorString2, promiseCtorString2, setCtorString2, weakMapCtorString2, getTag3, getTag_default2, COMPARE_PARTIAL_FLAG42, argsTag32, arrayTag22, objectTag32, objectProto122, hasOwnProperty92, baseIsEqualDeep_default2, baseIsEqual_default2, COMPARE_PARTIAL_FLAG52, COMPARE_UNORDERED_FLAG32, baseIsMatch_default2, isStrictComparable_default2, getMatchData_default2, matchesStrictComparable_default2, baseMatches_default2, symbolTag22, isSymbol_default2, reIsDeepProp2, reIsPlainProp2, isKey_default2, FUNC_ERROR_TEXT2, memoize_default2, MAX_MEMOIZE_SIZE2, memoizeCapped_default2, rePropName2, reEscapeChar2, stringToPath2, stringToPath_default2, INFINITY5, symbolProto22, symbolToString3, baseToString_default2, toString_default2, castPath_default2, INFINITY22, toKey_default2, baseGet_default2, get_default2, baseHasIn_default2, hasPath_default2, hasIn_default2, COMPARE_PARTIAL_FLAG62, COMPARE_UNORDERED_FLAG42, baseMatchesProperty_default2, identity_default5, baseProperty_default2, basePropertyDeep_default2, property_default3, baseIteratee_default2, createBaseFor_default2, baseFor2, baseFor_default2, baseForOwn_default2, createBaseEach_default2, baseEach2, baseEach_default2, baseMap_default2, map_default2, baseFilter_default2, filter_default4, ATN_BASIC, ATN_RULE_START, ATN_PLUS_BLOCK_START, ATN_STAR_BLOCK_START, ATN_RULE_STOP, ATN_BLOCK_END, ATN_STAR_LOOP_BACK, ATN_STAR_LOOP_ENTRY, ATN_PLUS_LOOP_BACK, ATN_LOOP_END, AbstractTransition, AtomTransition, EpsilonTransition, RuleTransition, DFA_ERROR, ATNConfigSet, baseExtremum_default2, baseLt_default2, min_default2, spreadableSymbol2, isFlattenable_default2, baseFlatten_default2, flatMap_default, baseFindIndex_default2, baseIsNaN_default2, strictIndexOf_default2, baseIndexOf_default2, arrayIncludes_default2, arrayIncludesWith_default2, noop_default3, INFINITY32, createSet2, createSet_default2, LARGE_ARRAY_SIZE22, baseUniq_default2, uniqBy_default, flatten_default2, arrayEach_default2, castFunction_default2, forEach_default2, mapTag42, setTag42, objectProto132, hasOwnProperty102, isEmpty_default2, arrayReduce_default2, baseReduce_default2, reduce_default2, PredicateSet, EMPTY_PREDICATES, LLStarLookaheadStrategy, CstNodeBuilder, AbstractCstNode, LeafCstNodeImpl, CompositeCstNodeImpl, RootCstNodeImpl, DatatypeSymbol, ruleSuffix, withRuleSuffix, AbstractLangiumParser, LangiumParser, AbstractParserErrorMessageProvider, LangiumParserErrorMessageProvider, LangiumCompletionParser, defaultConfig3, ChevrotainWrapper, ProfilerWrapper, DefaultTokenBuilder, DefaultValueConverter, ValueConverter, import_vscode_languageserver_protocol, lastTick, globalInterruptionPeriod, OperationCancelled, Deferred, FullTextDocument2, TextDocument2, LIB, URI2, Utils2, UriUtils, UriTrie, DocumentState, DefaultLangiumDocumentFactory, DefaultLangiumDocuments, RefResolving, DefaultReferenceImpl, DefaultMultiReferenceImpl, DefaultLinker, DefaultNameProvider, DefaultReferences, MultiMap, BiMap, DefaultScopeComputation, StreamScope, MultiMapScope, DisposableCache, SimpleCache, ContextCache, WorkspaceCache, DefaultScopeProvider, DefaultJsonSerializer, DefaultServiceRegistry, ValidationCategory, ValidationRegistry, VALIDATE_EACH_NODE, DefaultDocumentValidator, DocumentValidator, DefaultAstNodeDescriptionProvider, DefaultReferenceDescriptionProvider, DefaultAstNodeLocator, import_vscode_languageserver_protocol2, DefaultConfigurationProvider, import_vscode_languageserver_protocol3, Disposable, DefaultDocumentBuilder, DefaultIndexManager, DefaultWorkspaceManager, DefaultLexerErrorMessageProvider, DEFAULT_TOKENIZE_OPTIONS, DefaultLexer, tagRegex, inlineTagRegex, nonWhitespaceRegex, whitespaceEndRegex, JSDocCommentImpl, JSDocTagImpl, JSDocTextImpl, JSDocLineImpl, JSDocDocumentationProvider, DefaultCommentProvider, DefaultAsyncParser, ReadPriority, DefaultWorkspaceLock, DefaultHydrator, Module, isProxy, __requested__, EmptyFileSystemProvider, EmptyFileSystem, minimalGrammarModule, minimalSharedGrammarModule, ArchitectureGrammar, CynefinGrammar, EventModeling, GitGraphGrammar, InfoGrammar, PacketGrammar, PieGrammar, RadarGrammar, RailroadAbnfGrammar, RailroadEbnfGrammar, RailroadGrammar, RailroadPegGrammar, TreemapGrammar, TreeViewGrammar, WardleyGrammar, MermaidTerminals, AbnfAlternation, AbnfConcatenation, AbnfElement, AbnfGroup, AbnfNumVal, AbnfOptionalGroup, AbnfPrimary, AbnfRule, AbnfRuleName, AbnfStringLiteral, Accelerator, Alignment, Anchor2, Annotation, Annotations, Architecture, Axis, Branch, Checkout, CherryPicking, ClassDefStatement, Commit, Common, Component, Curve, Cynefin, Deaccelerator, Decorator, Direction, DomainBlock, DomainItem, EbnfChoice, EbnfExceptionPostfix, EbnfGroup, EbnfNonTerminal, EbnfOneOrMorePostfix, EbnfOptional, EbnfOptionalPostfix, EbnfPostfix, EbnfPrimary, EbnfRepetition, EbnfRule, EbnfSequence, EbnfSpecial, EbnfTerm, EbnfTerminal, EbnfZeroOrMorePostfix, Edge, EmDataEntity, EmFrame, EmGwt, EmGwtStatement, EmModelEntity, EmNoteEntity, EmResetFrame, EmTimeFrame, Entry, EventModel, Evolution, EvolutionStage, Evolve, GitGraph, Group2, Info, Item, Junction, Label, Leaf, Link, Merge, Note, Option22, Packet, PacketBlock, PegAny, PegGroup, PegIdentifier, PegLiteral, PegOrderedChoice, PegPrefix, PegPrimary, PegRule, PegSequence, PegSuffix, Pie, PieSection, Pipeline, PipelineComponent, Radar, Railroad, RailroadAbnf, RailroadChoiceExpr, RailroadEbnf, RailroadExpression, RailroadNonTerminalExpr, RailroadOneOrMoreExpr, RailroadOptionalExpr, RailroadPeg, RailroadRule, RailroadSequenceExpr, RailroadSpecialExpr, RailroadTerminalExpr, RailroadZeroOrMoreExpr, Section, Service, Size, Statement, Transition2, Treemap, TreemapRow, TreeNode, TreeView, Wardley, MermaidAstReflection, reflection2, loadedArchitectureGrammarGrammar, ArchitectureGrammarGrammar, loadedCynefinGrammarGrammar, CynefinGrammarGrammar, loadedEventModelingGrammar, EventModelingGrammar, loadedGitGraphGrammarGrammar, GitGraphGrammarGrammar, loadedInfoGrammarGrammar, InfoGrammarGrammar, loadedPacketGrammarGrammar, PacketGrammarGrammar, loadedPieGrammarGrammar, PieGrammarGrammar, loadedRadarGrammarGrammar, RadarGrammarGrammar, loadedRailroadAbnfGrammarGrammar, RailroadAbnfGrammarGrammar, loadedRailroadEbnfGrammarGrammar, RailroadEbnfGrammarGrammar, loadedRailroadGrammarGrammar, RailroadGrammarGrammar, loadedRailroadPegGrammarGrammar, RailroadPegGrammarGrammar, loadedTreemapGrammarGrammar, TreemapGrammarGrammar, loadedTreeViewGrammarGrammar, TreeViewGrammarGrammar, loadedWardleyGrammarGrammar, WardleyGrammarGrammar, ArchitectureGrammarLanguageMetaData, CynefinGrammarLanguageMetaData, EventModelingLanguageMetaData, GitGraphGrammarLanguageMetaData, InfoGrammarLanguageMetaData, PacketGrammarLanguageMetaData, PieGrammarLanguageMetaData, RadarGrammarLanguageMetaData, RailroadAbnfGrammarLanguageMetaData, RailroadEbnfGrammarLanguageMetaData, RailroadGrammarLanguageMetaData, RailroadPegGrammarLanguageMetaData, TreemapGrammarLanguageMetaData, TreeViewGrammarLanguageMetaData, WardleyGrammarLanguageMetaData, MermaidGeneratedSharedModule, ArchitectureGrammarGeneratedModule, CynefinGrammarGeneratedModule, EventModelingGeneratedModule, GitGraphGrammarGeneratedModule, InfoGrammarGeneratedModule, PacketGrammarGeneratedModule, PieGrammarGeneratedModule, RadarGrammarGeneratedModule, RailroadAbnfGrammarGeneratedModule, RailroadEbnfGrammarGeneratedModule, RailroadGrammarGeneratedModule, RailroadPegGrammarGeneratedModule, TreemapGrammarGeneratedModule, TreeViewGrammarGeneratedModule, WardleyGrammarGeneratedModule, accessibilityDescrRegex, accessibilityTitleRegex, titleRegex, rulesRegexes, AbstractMermaidValueConverter, CommonValueConverter, AbstractMermaidTokenBuilder, CommonTokenBuilder;
+  var __create2, __defProp3, __getOwnPropDesc2, __getOwnPropNames2, __getProtoOf2, __hasOwnProp2, __name2, __esm2, __commonJS2, __export3, __copyProps2, __toESM2, __toCommonJS, require_is, require_messages, require_linkedMap, require_disposable, require_ral, require_events, require_cancellation, require_sharedArrayCancellation, require_semaphore, require_messageReader, require_messageWriter, require_messageBuffer, require_connection, require_api, main_exports, DocumentUri, URI, integer3, uinteger, Position, Range, Location, LocationLink, Color3, ColorInformation, ColorPresentation, FoldingRangeKind, FoldingRange, DiagnosticRelatedInformation, DiagnosticSeverity, DiagnosticTag, CodeDescription, Diagnostic, Command, TextEdit, ChangeAnnotation, ChangeAnnotationIdentifier, AnnotatedTextEdit, TextDocumentEdit, CreateFile, RenameFile, DeleteFile, WorkspaceEdit, TextEditChangeImpl, SnippetTextEdit, ChangeAnnotations, WorkspaceChange, TextDocumentIdentifier, VersionedTextDocumentIdentifier, OptionalVersionedTextDocumentIdentifier, LanguageKind, TextDocumentItem, MarkupKind, MarkupContent, CompletionItemKind, InsertTextFormat, CompletionItemTag, InsertReplaceEdit, InsertTextMode, ApplyKind, CompletionItemLabelDetails, CompletionItem, CompletionList, MarkedString, Hover, ParameterInformation, SignatureInformation, DocumentHighlightKind, DocumentHighlight, SymbolKind, SymbolTag, SymbolInformation, WorkspaceSymbol, DocumentSymbol, CodeActionKind, CodeActionTriggerKind, CodeActionContext, CodeActionTag, CodeAction, CodeLens, FormattingOptions, DocumentLink, SelectionRange, SemanticTokenTypes, SemanticTokenModifiers, SemanticTokens, InlineValueText, InlineValueVariableLookup, InlineValueEvaluatableExpression, InlineValueContext, InlayHintKind, InlayHintLabelPart, InlayHint, StringValue, InlineCompletionItem, InlineCompletionList, InlineCompletionTriggerKind, SelectedCompletionInfo, InlineCompletionContext, WorkspaceFolder, EOL, TextDocument, FullTextDocument, Is, init_main, require_messages2, require_is2, require_protocol_implementation, require_protocol_typeDefinition, require_protocol_workspaceFolder, require_protocol_configuration, require_protocol_colorProvider, require_protocol_foldingRange, require_protocol_declaration, require_protocol_selectionRange, require_protocol_progress, require_protocol_callHierarchy, require_protocol_semanticTokens, require_protocol_showDocument, require_protocol_linkedEditingRange, require_protocol_fileOperations, require_protocol_moniker, require_protocol_typeHierarchy, require_protocol_inlineValue, require_protocol_inlayHint, require_protocol_diagnostic, require_protocol_notebook, require_protocol_inlineCompletion, require_protocol_textDocumentContent, require_protocol, require_connection2, require_api2, AbstractAstReflection, StreamImpl, EMPTY_STREAM, DONE_RESULT, TreeStreamImpl, Reduction, AbstractElement, AbstractParserRule, AbstractRule, AbstractType, Action, Alternatives, ArrayLiteral, ArrayType, Assignment, BooleanLiteral, CharacterRange, Condition, Conjunction, CrossReference, Disjunction, EndOfFile, Grammar, GrammarImport, Group, InferredType, InfixRule, InfixRuleOperatorList, InfixRuleOperators, Interface, Keyword2, NamedArgument, NegatedToken, Negation, NumberLiteral, Parameter, ParameterReference, ParserRule, ReferenceType, RegexToken, ReturnType, RuleCall, SimpleType, StringLiteral, TerminalAlternatives, TerminalElement, TerminalGroup, TerminalRule, TerminalRuleCall, Type4, TypeAttribute, TypeDefinition, UnionType, UnorderedGroup, UntilToken, ValueLiteral, Wildcard, LangiumGrammarAstReflection, reflection, RangeComparison, DefaultNameRegexp, ErrorWithLocation, digitsCharCodes, wordCharCodes, whitespaceCodes, hexDigitPattern, decimalPattern, decimalPatternNoZero, RegExpParser, BaseRegExpVisitor, NEWLINE_REGEXP, regexpParser, TerminalRegExpVisitor, visitor, whitespaceCharacters, WILDCARD, AbstractProduction, NonTerminal, Rule, Alternative, Option2, RepetitionMandatory, RepetitionMandatoryWithSeparator, Repetition, RepetitionWithSeparator, Alternation, Terminal, GAstVisitor, RestWalker, IN, ResyncFollowsWalker, regExpAstCache, regExpParser, complementErrorMessage, failedOptimizationPrefixMsg, CharCodeFinder, PATTERN, DEFAULT_MODE, MODES, SINGLE_CHAR_MATCH, CUSTOM_MATCH, REG_EXP_MATCH, ASCII_CLASS_MATCH, end_of_input, start_of_input, LineTerminatorOptimizedTester, minOptimizationVal, charCodeToOptimizedIdxMap, tokenShortNameIdx, tokenIdxToClass, defaultLexerErrorProvider, LexerDefinitionErrorType, DEFAULT_LEXER_CONFIG, Lexer2, PARENT, CATEGORIES, LABEL, GROUP, PUSH_MODE, POP_MODE, LONGER_ALT, LINE_BREAKS, START_CHARS_HINT, EOF, defaultParserErrorProvider, defaultGrammarResolverErrorProvider, defaultGrammarValidatorErrorProvider, GastRefResolverVisitor, AbstractNextPossibleTokensWalker, NextAfterTokenWalker, AbstractNextTerminalAfterProductionWalker, NextTerminalAfterManyWalker, NextTerminalAfterManySepWalker, NextTerminalAfterAtLeastOneWalker, NextTerminalAfterAtLeastOneSepWalker, PROD_TYPE, RestDefinitionFinderWalker, InsideDefinitionFinderVisitor, OccurrenceValidationCollector, OrCollector, RepetitionCollector, MISMATCHED_TOKEN_EXCEPTION, NO_VIABLE_ALT_EXCEPTION, EARLY_EXIT_EXCEPTION, NOT_ALL_INPUT_PARSED_EXCEPTION, RECOGNITION_EXCEPTION_NAMES, RecognitionException, MismatchedTokenException, NoViableAltException, NotAllInputParsedException, EarlyExitException, EOF_FOLLOW_KEY, IN_RULE_RECOVERY_EXCEPTION, InRuleRecoveryException, Recoverable, BITS_FOR_OCCURRENCE_IDX, OR_IDX, OPTION_IDX, MANY_IDX, AT_LEAST_ONE_IDX, MANY_SEP_IDX, AT_LEAST_ONE_SEP_IDX, LLkLookaheadStrategy, LooksAhead, DslMethodsCollectorVisitor, collectorVisitor, NAME3, CstVisitorDefinitionError, TreeBuilder, LexerAdapter, RecognizerApi, RecognizerEngine, ErrorHandler, RECORDING_NULL_OBJECT, HANDLE_SEPARATOR, MAX_METHOD_IDX, RFT, RECORDING_PHASE_TOKEN, RECORDING_PHASE_CSTNODE, GastRecorder, PerformanceTracer, END_OF_FILE, DEFAULT_PARSER_CONFIG, DEFAULT_RULE_CONFIG, ParserDefinitionErrorType, Parser2, EmbeddedActionsParser, arrayMap_default2, listCacheClear_default2, eq_default2, assocIndexOf_default2, arrayProto2, splice2, listCacheDelete_default2, listCacheGet_default2, listCacheHas_default2, listCacheSet_default2, ListCache_default2, stackClear_default2, stackDelete_default2, stackGet_default2, stackHas_default2, freeGlobal2, freeGlobal_default2, freeSelf2, root3, root_default2, Symbol22, Symbol_default2, objectProto20, hasOwnProperty17, nativeObjectToString3, symToStringTag3, getRawTag_default2, objectProto22, nativeObjectToString22, objectToString_default2, nullTag2, undefinedTag2, symToStringTag22, baseGetTag_default2, isObject_default2, asyncTag2, funcTag4, genTag3, proxyTag2, isFunction_default2, coreJsData2, coreJsData_default2, maskSrcKey2, isMasked_default2, funcProto4, funcToString4, toSource_default2, reRegExpChar2, reIsHostCtor2, funcProto22, objectProto32, funcToString22, hasOwnProperty22, reIsNative2, baseIsNative_default2, getValue_default2, getNative_default2, Map22, Map_default2, nativeCreate2, nativeCreate_default2, hashClear_default2, hashDelete_default2, HASH_UNDEFINED4, objectProto42, hasOwnProperty32, hashGet_default2, objectProto52, hasOwnProperty42, hashHas_default2, HASH_UNDEFINED22, hashSet_default2, Hash_default2, mapCacheClear_default2, isKeyable_default2, getMapData_default2, mapCacheDelete_default2, mapCacheGet_default2, mapCacheHas_default2, mapCacheSet_default2, MapCache_default2, LARGE_ARRAY_SIZE3, stackSet_default2, Stack_default2, HASH_UNDEFINED32, setCacheAdd_default2, setCacheHas_default2, SetCache_default2, arraySome_default2, cacheHas_default2, COMPARE_PARTIAL_FLAG7, COMPARE_UNORDERED_FLAG5, equalArrays_default2, Uint8Array22, Uint8Array_default2, mapToArray_default2, setToArray_default2, COMPARE_PARTIAL_FLAG22, COMPARE_UNORDERED_FLAG22, boolTag5, dateTag6, errorTag4, mapTag10, numberTag6, regexpTag6, setTag10, stringTag7, symbolTag6, arrayBufferTag6, dataViewTag7, symbolProto4, symbolValueOf3, equalByTag_default2, arrayPush_default2, isArray3, isArray_default2, baseGetAllKeys_default2, arrayFilter_default2, stubArray_default2, objectProto62, propertyIsEnumerable3, nativeGetSymbols3, getSymbols3, getSymbols_default2, baseTimes_default2, isObjectLike_default2, argsTag5, baseIsArguments_default2, objectProto72, hasOwnProperty52, propertyIsEnumerable22, isArguments3, isArguments_default2, stubFalse_default2, freeExports4, freeModule4, moduleExports4, Buffer22, nativeIsBuffer2, isBuffer3, isBuffer_default2, MAX_SAFE_INTEGER3, reIsUint2, isIndex_default2, MAX_SAFE_INTEGER22, isLength_default2, argsTag22, arrayTag5, boolTag22, dateTag22, errorTag22, funcTag22, mapTag22, numberTag22, objectTag7, regexpTag22, setTag22, stringTag22, weakMapTag4, arrayBufferTag22, dataViewTag22, float32Tag4, float64Tag4, int8Tag4, int16Tag4, int32Tag4, uint8Tag4, uint8ClampedTag4, uint16Tag4, uint32Tag4, typedArrayTags2, baseIsTypedArray_default2, baseUnary_default2, freeExports22, freeModule22, moduleExports22, freeProcess2, nodeUtil2, nodeUtil_default2, nodeIsTypedArray2, isTypedArray4, isTypedArray_default2, objectProto82, hasOwnProperty62, arrayLikeKeys_default2, objectProto92, isPrototype_default2, overArg_default2, nativeKeys2, nativeKeys_default2, objectProto102, hasOwnProperty72, baseKeys_default2, isArrayLike_default2, keys_default2, getAllKeys_default2, COMPARE_PARTIAL_FLAG32, objectProto112, hasOwnProperty82, equalObjects_default2, DataView3, DataView_default2, Promise22, Promise_default2, Set22, Set_default2, WeakMap3, WeakMap_default2, mapTag32, objectTag22, promiseTag2, setTag32, weakMapTag22, dataViewTag32, dataViewCtorString2, mapCtorString2, promiseCtorString2, setCtorString2, weakMapCtorString2, getTag3, getTag_default2, COMPARE_PARTIAL_FLAG42, argsTag32, arrayTag22, objectTag32, objectProto122, hasOwnProperty92, baseIsEqualDeep_default2, baseIsEqual_default2, COMPARE_PARTIAL_FLAG52, COMPARE_UNORDERED_FLAG32, baseIsMatch_default2, isStrictComparable_default2, getMatchData_default2, matchesStrictComparable_default2, baseMatches_default2, symbolTag22, isSymbol_default2, reIsDeepProp2, reIsPlainProp2, isKey_default2, FUNC_ERROR_TEXT2, memoize_default2, MAX_MEMOIZE_SIZE2, memoizeCapped_default2, rePropName2, reEscapeChar2, stringToPath2, stringToPath_default2, INFINITY5, symbolProto22, symbolToString3, baseToString_default2, toString_default2, castPath_default2, INFINITY22, toKey_default2, baseGet_default2, get_default2, baseHasIn_default2, hasPath_default2, hasIn_default2, COMPARE_PARTIAL_FLAG62, COMPARE_UNORDERED_FLAG42, baseMatchesProperty_default2, identity_default5, baseProperty_default2, basePropertyDeep_default2, property_default3, baseIteratee_default2, createBaseFor_default2, baseFor2, baseFor_default2, baseForOwn_default2, createBaseEach_default2, baseEach2, baseEach_default2, baseMap_default2, map_default2, baseFilter_default2, filter_default4, ATN_BASIC, ATN_RULE_START, ATN_PLUS_BLOCK_START, ATN_STAR_BLOCK_START, ATN_RULE_STOP, ATN_BLOCK_END, ATN_STAR_LOOP_BACK, ATN_STAR_LOOP_ENTRY, ATN_PLUS_LOOP_BACK, ATN_LOOP_END, AbstractTransition, AtomTransition, EpsilonTransition, RuleTransition, DFA_ERROR, ATNConfigSet, baseExtremum_default2, baseLt_default2, min_default2, spreadableSymbol2, isFlattenable_default2, baseFlatten_default2, flatMap_default, baseFindIndex_default2, baseIsNaN_default2, strictIndexOf_default2, baseIndexOf_default2, arrayIncludes_default2, arrayIncludesWith_default2, noop_default3, INFINITY32, createSet2, createSet_default2, LARGE_ARRAY_SIZE22, baseUniq_default2, uniqBy_default, flatten_default2, arrayEach_default2, castFunction_default2, forEach_default2, mapTag42, setTag42, objectProto132, hasOwnProperty102, isEmpty_default2, arrayReduce_default2, baseReduce_default2, reduce_default2, PredicateSet, EMPTY_PREDICATES, LLStarLookaheadStrategy, CstNodeBuilder, AbstractCstNode, LeafCstNodeImpl, CompositeCstNodeImpl, RootCstNodeImpl, DatatypeSymbol, ruleSuffix, withRuleSuffix, AbstractLangiumParser, LangiumParser, AbstractParserErrorMessageProvider, LangiumParserErrorMessageProvider, LangiumCompletionParser, defaultConfig3, ChevrotainWrapper, ProfilerWrapper, DefaultTokenBuilder, DefaultValueConverter, ValueConverter, import_vscode_languageserver_protocol, lastTick, globalInterruptionPeriod, OperationCancelled, Deferred, FullTextDocument2, TextDocument2, LIB, URI2, Utils2, UriUtils, UriTrie, DocumentState, DefaultLangiumDocumentFactory, DefaultLangiumDocuments, RefResolving, DefaultReferenceImpl, DefaultMultiReferenceImpl, DefaultLinker, DefaultNameProvider, DefaultReferences, MultiMap, BiMap, DefaultScopeComputation, StreamScope, MultiMapScope, DisposableCache, SimpleCache, ContextCache, WorkspaceCache, DefaultScopeProvider, DefaultJsonSerializer, DefaultServiceRegistry, ValidationCategory, ValidationRegistry, VALIDATE_EACH_NODE, DefaultDocumentValidator, DocumentValidator, DefaultAstNodeDescriptionProvider, DefaultReferenceDescriptionProvider, DefaultAstNodeLocator, import_vscode_languageserver_protocol2, DefaultConfigurationProvider, import_vscode_languageserver_protocol3, Disposable, DefaultDocumentBuilder, DefaultIndexManager, DefaultWorkspaceManager, DefaultLexerErrorMessageProvider, DEFAULT_TOKENIZE_OPTIONS, DefaultLexer, tagRegex, inlineTagRegex, nonWhitespaceRegex, whitespaceEndRegex, JSDocCommentImpl, JSDocTagImpl, JSDocTextImpl, JSDocLineImpl, JSDocDocumentationProvider, DefaultCommentProvider, DefaultAsyncParser, ReadPriority, DefaultWorkspaceLock, DefaultHydrator, Module, isProxy, __requested__, EmptyFileSystemProvider, EmptyFileSystem, minimalGrammarModule, minimalSharedGrammarModule, ArchitectureGrammar, CynefinGrammar, EventModeling, GitGraphGrammar, InfoGrammar, PacketGrammar, PieGrammar, RadarGrammar, RailroadAbnfGrammar, RailroadEbnfGrammar, RailroadGrammar, RailroadPegGrammar, TreemapGrammar, TreeViewGrammar, WardleyGrammar, MermaidTerminals, AbnfAlternation, AbnfConcatenation, AbnfElement, AbnfGroup, AbnfNumVal, AbnfOptionalGroup, AbnfPrimary, AbnfRule, AbnfRuleName, AbnfStringLiteral, Accelerator, Alignment, Anchor2, Annotation, Annotations, Architecture, Axis, Branch, Checkout, CherryPicking, ClassDefStatement, Commit, Common, Component, Curve, Cynefin, Deaccelerator, Decorator, Direction, DomainBlock, DomainItem, EbnfChoice, EbnfExceptionPostfix, EbnfGroup, EbnfNonTerminal, EbnfOneOrMorePostfix, EbnfOptional, EbnfOptionalPostfix, EbnfPostfix, EbnfPrimary, EbnfRepetition, EbnfRule, EbnfSequence, EbnfSpecial, EbnfTerm, EbnfTerminal, EbnfZeroOrMorePostfix, Edge, EmDataEntity, EmFrame, EmGwt, EmGwtStatement, EmModelEntity, EmNoteEntity, EmResetFrame, EmTimeFrame, Entry, EventModel, Evolution, EvolutionStage, Evolve, GitGraph, Group2, Info, Item, Junction, Label, Leaf, Link, Merge, Note, Option22, Packet, PacketBlock, PegAny, PegGroup, PegIdentifier, PegLiteral, PegOrderedChoice, PegPrefix, PegPrimary, PegRule, PegSequence, PegSuffix, Pie, PieSection, Pipeline, PipelineComponent, Radar, Railroad, RailroadAbnf, RailroadChoiceExpr, RailroadEbnf, RailroadExpression, RailroadNonTerminalExpr, RailroadOneOrMoreExpr, RailroadOptionalExpr, RailroadPeg, RailroadRule, RailroadSequenceExpr, RailroadSpecialExpr, RailroadTerminalExpr, RailroadZeroOrMoreExpr, Section, Service, Size, Statement, Transition2, Treemap, TreemapRow, TreeNode, TreeView, Wardley, MermaidAstReflection, reflection2, loadedArchitectureGrammarGrammar, ArchitectureGrammarGrammar, loadedCynefinGrammarGrammar, CynefinGrammarGrammar, loadedEventModelingGrammar, EventModelingGrammar, loadedGitGraphGrammarGrammar, GitGraphGrammarGrammar, loadedInfoGrammarGrammar, InfoGrammarGrammar, loadedPacketGrammarGrammar, PacketGrammarGrammar, loadedPieGrammarGrammar, PieGrammarGrammar, loadedRadarGrammarGrammar, RadarGrammarGrammar, loadedRailroadAbnfGrammarGrammar, RailroadAbnfGrammarGrammar, loadedRailroadEbnfGrammarGrammar, RailroadEbnfGrammarGrammar, loadedRailroadGrammarGrammar, RailroadGrammarGrammar, loadedRailroadPegGrammarGrammar, RailroadPegGrammarGrammar, loadedTreemapGrammarGrammar, TreemapGrammarGrammar, loadedTreeViewGrammarGrammar, TreeViewGrammarGrammar, loadedWardleyGrammarGrammar, WardleyGrammarGrammar, ArchitectureGrammarLanguageMetaData, CynefinGrammarLanguageMetaData, EventModelingLanguageMetaData, GitGraphGrammarLanguageMetaData, InfoGrammarLanguageMetaData, PacketGrammarLanguageMetaData, PieGrammarLanguageMetaData, RadarGrammarLanguageMetaData, RailroadAbnfGrammarLanguageMetaData, RailroadEbnfGrammarLanguageMetaData, RailroadGrammarLanguageMetaData, RailroadPegGrammarLanguageMetaData, TreemapGrammarLanguageMetaData, TreeViewGrammarLanguageMetaData, WardleyGrammarLanguageMetaData, MermaidGeneratedSharedModule, ArchitectureGrammarGeneratedModule, CynefinGrammarGeneratedModule, EventModelingGeneratedModule, GitGraphGrammarGeneratedModule, InfoGrammarGeneratedModule, PacketGrammarGeneratedModule, PieGrammarGeneratedModule, RadarGrammarGeneratedModule, RailroadAbnfGrammarGeneratedModule, RailroadEbnfGrammarGeneratedModule, RailroadGrammarGeneratedModule, RailroadPegGrammarGeneratedModule, TreemapGrammarGeneratedModule, TreeViewGrammarGeneratedModule, WardleyGrammarGeneratedModule, accessibilityDescrRegex, accessibilityTitleRegex, titleRegex, rulesRegexes, AbstractMermaidValueConverter, CommonValueConverter, AbstractMermaidTokenBuilder, CommonTokenBuilder;
   var init_chunk_NGNAAXSQ = __esm({
     "node_modules/@mermaid-js/parser/dist/chunks/mermaid-parser.core/chunk-NGNAAXSQ.mjs"() {
       init_define_process_argv();
@@ -219445,7 +219445,7 @@ ${JSON.stringify(message, null, 4)}`);
         }
       });
       __name2(isAstNode, "isAstNode");
-      __name2(isReference, "isReference");
+      __name2(isReference2, "isReference");
       __name2(isMultiReference, "isMultiReference");
       __name2(isAstNodeDescription, "isAstNodeDescription");
       __name2(isLinkingError, "isLinkingError");
@@ -224139,7 +224139,7 @@ see: https://en.wikipedia.org/wiki/LL_parser#Left_factoring.`;
       __name2(setNodeLocationFull, "setNodeLocationFull");
       __name2(addTerminalToCst, "addTerminalToCst");
       __name2(addNoneTerminalToCst, "addNoneTerminalToCst");
-      NAME2 = "name";
+      NAME3 = "name";
       __name2(defineNameProp, "defineNameProp");
       __name2(defaultVisit, "defaultVisit");
       __name2(createBaseSemanticVisitorConstructor, "createBaseSemanticVisitorConstructor");
@@ -225715,8 +225715,8 @@ Make sure that all grammar rule definitions are done before 'performSelfAnalysis
       symToStringTag22 = Symbol_default2 ? Symbol_default2.toStringTag : void 0;
       __name2(baseGetTag2, "baseGetTag");
       baseGetTag_default2 = baseGetTag2;
-      __name2(isObject2, "isObject");
-      isObject_default2 = isObject2;
+      __name2(isObject3, "isObject");
+      isObject_default2 = isObject3;
       asyncTag2 = "[object AsyncFunction]";
       funcTag4 = "[object Function]";
       genTag3 = "[object GeneratorFunction]";
@@ -228870,11 +228870,11 @@ Make sure that all grammar rule definitions are done before 'performSelfAnalysis
             const nodeElem = sourceCstNode.astNode;
             if (assignment && nodeElem) {
               const reference = nodeElem[assignment.feature];
-              if (isReference(reference) || isMultiReference(reference)) {
+              if (isReference2(reference) || isMultiReference(reference)) {
                 return getReferenceNodes(reference);
               } else if (Array.isArray(reference)) {
                 for (const ref of reference) {
-                  if ((isReference(ref) || isMultiReference(ref)) && ref.$refNode && ref.$refNode.offset <= sourceCstNode.offset && ref.$refNode.end >= sourceCstNode.end) {
+                  if ((isReference2(ref) || isMultiReference(ref)) && ref.$refNode && ref.$refNode.offset <= sourceCstNode.offset && ref.$refNode.end >= sourceCstNode.end) {
                     return getReferenceNodes(ref);
                   }
                 }
@@ -229529,7 +229529,7 @@ Make sure that all grammar rule definitions are done before 'performSelfAnalysis
         replacer(key, value2, { refText, sourceText, textRegions, comments, uriConverter }) {
           if (this.ignoreProperties.has(key)) {
             return void 0;
-          } else if (isReference(value2)) {
+          } else if (isReference2(value2)) {
             const refValue = value2.ref;
             const $refText = refText ? value2.$refText : void 0;
             if (refValue) {
@@ -230209,7 +230209,7 @@ Make sure that all grammar rule definitions are done before 'performSelfAnalysis
             return [];
           }
           let items = [];
-          if (isReference(reference) && reference.$nodeDescription) {
+          if (isReference2(reference) && reference.$nodeDescription) {
             items = [reference.$nodeDescription];
           } else if (isMultiReference(reference)) {
             items = reference.items.map((e3) => e3.$nodeDescription).filter((e3) => e3 !== void 0);
@@ -231416,7 +231416,7 @@ ${content}`;
               for (const item of value2) {
                 if (isAstNode(item)) {
                   arr.push(this.dehydrateAstNode(item, context));
-                } else if (isReference(item)) {
+                } else if (isReference2(item)) {
                   arr.push(this.dehydrateReference(item, context));
                 } else {
                   arr.push(item);
@@ -231424,7 +231424,7 @@ ${content}`;
               }
             } else if (isAstNode(value2)) {
               obj[name] = this.dehydrateAstNode(value2, context);
-            } else if (isReference(value2)) {
+            } else if (isReference2(value2)) {
               obj[name] = this.dehydrateReference(value2, context);
             } else if (value2 !== void 0) {
               obj[name] = value2;
@@ -231525,7 +231525,7 @@ ${content}`;
               for (const item of value2) {
                 if (isAstNode(item)) {
                   arr.push(this.setParent(this.hydrateAstNode(item, context), astNode));
-                } else if (isReference(item)) {
+                } else if (isReference2(item)) {
                   arr.push(this.hydrateReference(item, astNode, name, context));
                 } else {
                   arr.push(item);
@@ -231533,7 +231533,7 @@ ${content}`;
               }
             } else if (isAstNode(value2)) {
               astNode[name] = this.setParent(this.hydrateAstNode(value2, context), astNode);
-            } else if (isReference(value2)) {
+            } else if (isReference2(value2)) {
               astNode[name] = this.hydrateReference(value2, astNode, name, context);
             } else if (value2 !== void 0) {
               astNode[name] = value2;
@@ -238299,11 +238299,11 @@ ${content}`;
           }, "anonymous"),
           table: [{ 3: 1, 4: [1, 2] }, { 1: [3] }, o2($V0, [2, 2], { 5: 3 }), { 6: [1, 4], 7: 5, 8: [1, 6], 9: 7, 10: [1, 8], 11: 17, 12: $V1, 13: $V2, 14: $V3, 15: $V4, 16: $V5, 17: $V6, 18: $V7, 19: 18, 20: $V8, 21: $V9, 22: $Va, 23: $Vb, 24: $Vc, 25: $Vd, 26: $Ve, 27: $Vf, 28: $Vg, 29: $Vh, 30: $Vi, 31: $Vj, 33: $Vk, 35: $Vl, 36: $Vm, 37: 24, 38: $Vn, 40: $Vo }, o2($V0, [2, 7], { 1: [2, 1] }), o2($V0, [2, 3]), { 9: 36, 11: 17, 12: $V1, 13: $V2, 14: $V3, 15: $V4, 16: $V5, 17: $V6, 18: $V7, 19: 18, 20: $V8, 21: $V9, 22: $Va, 23: $Vb, 24: $Vc, 25: $Vd, 26: $Ve, 27: $Vf, 28: $Vg, 29: $Vh, 30: $Vi, 31: $Vj, 33: $Vk, 35: $Vl, 36: $Vm, 37: 24, 38: $Vn, 40: $Vo }, o2($V0, [2, 5]), o2($V0, [2, 6]), o2($V0, [2, 17]), o2($V0, [2, 18]), o2($V0, [2, 19]), o2($V0, [2, 20]), o2($V0, [2, 21]), o2($V0, [2, 22]), o2($V0, [2, 23]), o2($V0, [2, 24]), o2($V0, [2, 25]), o2($V0, [2, 26]), o2($V0, [2, 27]), { 32: [1, 37] }, { 34: [1, 38] }, o2($V0, [2, 30]), o2($V0, [2, 31]), o2($V0, [2, 32]), { 39: [1, 39] }, o2($V0, [2, 8]), o2($V0, [2, 9]), o2($V0, [2, 10]), o2($V0, [2, 11]), o2($V0, [2, 12]), o2($V0, [2, 13]), o2($V0, [2, 14]), o2($V0, [2, 15]), o2($V0, [2, 16]), { 41: [1, 40], 43: [1, 41] }, o2($V0, [2, 4]), o2($V0, [2, 28]), o2($V0, [2, 29]), o2($V0, [2, 33]), o2($V0, [2, 34], { 42: [1, 42], 43: [1, 43] }), o2($V0, [2, 40], { 41: [1, 44] }), o2($V0, [2, 35], { 43: [1, 45] }), o2($V0, [2, 36]), o2($V0, [2, 38], { 42: [1, 46] }), o2($V0, [2, 37]), o2($V0, [2, 39])],
           defaultActions: {},
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -238454,11 +238454,11 @@ ${content}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -239118,17 +239118,17 @@ ${content}`;
           `Gantt: the "${keyword2}" statement references unknown task id(s): ${ids.join(", ")}. Make sure the referenced tasks exist and declare an id. Milestones need both an id and a duration, e.g. "Milestone :milestone, m1, 2023-01-01, 0d".`
         );
       }, "warnAboutUnknownTaskIds");
-      getStartDate = /* @__PURE__ */ __name(function(prevTime, dateFormat2, str4) {
-        str4 = str4.trim();
+      getStartDate = /* @__PURE__ */ __name(function(prevTime, dateFormat2, str5) {
+        str5 = str5.trim();
         const isTimestampFormat = /* @__PURE__ */ __name((format3) => {
           const trimmedFormat = format3.trim();
           return trimmedFormat === "x" || trimmedFormat === "X";
         }, "isTimestampFormat");
-        if (isTimestampFormat(dateFormat2) && /^\d+$/.test(str4)) {
-          return new Date(Number(str4));
+        if (isTimestampFormat(dateFormat2) && /^\d+$/.test(str5)) {
+          return new Date(Number(str5));
         }
         const afterRePattern = /^after\s+(?<ids>[\d\w- ]+)/;
-        const afterStatement = afterRePattern.exec(str4);
+        const afterStatement = afterRePattern.exec(str5);
         if (afterStatement !== null) {
           let latestTask = null;
           const unknownIds = [];
@@ -239153,35 +239153,35 @@ ${content}`;
           today.setHours(0, 0, 0, 0);
           return today;
         }
-        let mDate = (0, import_dayjs2.default)(str4, dateFormat2.trim(), true);
+        let mDate = (0, import_dayjs2.default)(str5, dateFormat2.trim(), true);
         if (mDate.isValid()) {
           return mDate.toDate();
         } else {
-          log.debug("Invalid date:" + str4);
+          log.debug("Invalid date:" + str5);
           log.debug("With date format:" + dateFormat2.trim());
-          const d3 = new Date(str4);
+          const d3 = new Date(str5);
           if (d3 === void 0 || isNaN(d3.getTime()) || // WebKit browsers can mis-parse invalid dates to be ridiculously
           // huge numbers, e.g. new Date('202304') gets parsed as January 1, 202304.
           // This can cause virtually infinite loops while rendering, so for the
           // purposes of Gantt charts we'll just treat any date beyond 10,000 AD/BC as
           // invalid.
           d3.getFullYear() < -1e4 || d3.getFullYear() > 1e4) {
-            throw new Error("Invalid date:" + str4);
+            throw new Error("Invalid date:" + str5);
           }
           return d3;
         }
       }, "getStartDate");
-      parseDuration = /* @__PURE__ */ __name(function(str4) {
-        const statement = /^(\d+(?:\.\d+)?)([Mdhmswy]|ms)$/.exec(str4.trim());
+      parseDuration = /* @__PURE__ */ __name(function(str5) {
+        const statement = /^(\d+(?:\.\d+)?)([Mdhmswy]|ms)$/.exec(str5.trim());
         if (statement !== null) {
           return [Number.parseFloat(statement[1]), statement[2]];
         }
         return [NaN, "ms"];
       }, "parseDuration");
-      getEndDate = /* @__PURE__ */ __name(function(prevTime, dateFormat2, str4, inclusive = false) {
-        str4 = str4.trim();
+      getEndDate = /* @__PURE__ */ __name(function(prevTime, dateFormat2, str5, inclusive = false) {
+        str5 = str5.trim();
         const untilRePattern = /^until\s+(?<ids>[\d\w- ]+)/;
-        const untilStatement = untilRePattern.exec(str4);
+        const untilStatement = untilRePattern.exec(str5);
         if (untilStatement !== null) {
           let earliestTask = null;
           const unknownIds = [];
@@ -239206,7 +239206,7 @@ ${content}`;
           today.setHours(0, 0, 0, 0);
           return today;
         }
-        let parsedDate = (0, import_dayjs2.default)(str4, dateFormat2.trim(), true);
+        let parsedDate = (0, import_dayjs2.default)(str5, dateFormat2.trim(), true);
         if (parsedDate.isValid()) {
           if (inclusive) {
             parsedDate = parsedDate.add(1, "d");
@@ -239214,10 +239214,10 @@ ${content}`;
           return parsedDate.toDate();
         }
         let endTime = (0, import_dayjs2.default)(prevTime);
-        const [durationValue, durationUnit] = parseDuration(str4);
+        const [durationValue, durationUnit] = parseDuration(str5);
         if (Number.isNaN(durationValue)) {
           log.warn(
-            `Gantt: "${str4}" is neither a valid date for the "${dateFormat2.trim()}" date format nor a valid duration (e.g. "3d"), so it is ignored and the task gets a zero duration. Milestones need a duration too, e.g. "Milestone :milestone, m1, 2023-01-01, 0d".`
+            `Gantt: "${str5}" is neither a valid date for the "${dateFormat2.trim()}" date format nor a valid duration (e.g. "3d"), so it is ignored and the task gets a zero duration. Milestones need a duration too, e.g. "Milestone :milestone, m1, 2023-01-01, 0d".`
           );
         } else {
           const newEndTime = endTime.add(durationValue, durationUnit);
@@ -239789,9 +239789,9 @@ ${content}`;
             if (d3.vert) {
               return timeScale(d3.startTime) + theSidePad;
             }
-            const textWidth = this.getBBox().width;
-            if (textWidth > endX - startX2) {
-              if (endX + textWidth + 1.5 * conf4.leftPadding > w22) {
+            const textWidth2 = this.getBBox().width;
+            if (textWidth2 > endX - startX2) {
+              if (endX + textWidth2 + 1.5 * conf4.leftPadding > w22) {
                 return startX2 + theSidePad - 5;
               } else {
                 return endX + theSidePad + 5;
@@ -239811,7 +239811,7 @@ ${content}`;
             if (d3.milestone) {
               endX = startX2 + theBarHeight;
             }
-            const textWidth = this.getBBox().width;
+            const textWidth2 = this.getBBox().width;
             let classStr = "";
             if (d3.classes.length > 0) {
               classStr = d3.classes.join(" ");
@@ -239847,14 +239847,14 @@ ${content}`;
             if (d3.vert) {
               taskType += " vertText";
             }
-            if (textWidth > endX - startX2) {
-              if (endX + textWidth + 1.5 * conf4.leftPadding > w22) {
+            if (textWidth2 > endX - startX2) {
+              if (endX + textWidth2 + 1.5 * conf4.leftPadding > w22) {
                 return classStr + " taskTextOutsideLeft taskTextOutside" + secNum + " " + taskType;
               } else {
-                return classStr + " taskTextOutsideRight taskTextOutside" + secNum + " " + taskType + " width-" + textWidth;
+                return classStr + " taskTextOutsideRight taskTextOutside" + secNum + " " + taskType + " width-" + textWidth2;
               }
             } else {
-              return classStr + " taskText taskText" + secNum + " " + taskType + " width-" + textWidth;
+              return classStr + " taskText taskText" + secNum + " " + taskType + " width-" + textWidth2;
             }
           });
           const securityLevel2 = getConfig2().securityLevel;
@@ -240982,11 +240982,11 @@ ${content}`;
           }, "anonymous"),
           table: [{ 18: $V0, 26: 1, 27: 2, 28: $V1, 55: $V2, 56: $V3, 57: $V4 }, { 1: [3] }, { 18: $V0, 26: 8, 27: 2, 28: $V1, 55: $V2, 56: $V3, 57: $V4 }, { 18: $V0, 26: 9, 27: 2, 28: $V1, 55: $V2, 56: $V3, 57: $V4 }, o2($V5, [2, 33], { 29: 10 }), o2($V6, [2, 61]), o2($V6, [2, 62]), o2($V6, [2, 63]), { 1: [2, 30] }, { 1: [2, 31] }, o2($V7, $V8, { 30: 11, 31: 12, 24: 13, 32: 15, 33: 16, 34: 17, 43: 30, 58: 31, 1: [2, 32], 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $Vg, 25: $Vh, 35: $Vi, 37: $Vj, 39: $Vk, 41: $Vl, 42: $Vm, 48: $Vn, 50: $Vo, 51: $Vp, 52: $Vq, 53: $Vr, 54: $Vs, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V5, [2, 34]), { 27: 46, 55: $V2, 56: $V3, 57: $V4 }, o2($V7, [2, 37]), o2($V7, $V8, { 24: 13, 32: 15, 33: 16, 34: 17, 43: 30, 58: 31, 31: 47, 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $Vg, 25: $Vh, 35: $Vi, 37: $Vj, 39: $Vk, 41: $Vl, 42: $Vm, 48: $Vn, 50: $Vo, 51: $Vp, 52: $Vq, 53: $Vr, 54: $Vs, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 39]), o2($V7, [2, 40]), o2($V7, [2, 41]), { 36: [1, 48] }, { 38: [1, 49] }, { 40: [1, 50] }, o2($V7, [2, 45]), o2($V7, [2, 46]), { 18: [1, 51] }, { 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 43: 52, 58: 31, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }, { 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 43: 53, 58: 31, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }, { 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 43: 54, 58: 31, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }, { 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 43: 55, 58: 31, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }, { 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 43: 56, 58: 31, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }, { 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 43: 57, 58: 31, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }, { 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 44: [1, 58], 47: [1, 59], 58: 61, 59: 60, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }, o2($VC, [2, 64]), o2($VC, [2, 66]), o2($VC, [2, 67]), o2($VC, [2, 70]), o2($VC, [2, 71]), o2($VC, [2, 72]), o2($VC, [2, 73]), o2($VC, [2, 74]), o2($VC, [2, 75]), o2($VC, [2, 76]), o2($VC, [2, 77]), o2($VC, [2, 78]), o2($VC, [2, 79]), o2($VC, [2, 80]), o2($VC, [2, 81]), o2($V5, [2, 35]), o2($V7, [2, 38]), o2($V7, [2, 42]), o2($V7, [2, 43]), o2($V7, [2, 44]), { 3: 65, 4: $VD, 5: $VE, 6: $VF, 7: $VG, 8: $VH, 9: $VI, 10: $VJ, 11: $VK, 12: $VL, 13: $VM, 14: $VN, 15: $VO, 21: 64 }, o2($V7, [2, 53], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 49: [1, 78], 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 56], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 49: [1, 79], 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 57], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 58], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 59], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 60], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), { 45: [1, 80] }, { 44: [1, 81] }, o2($VC, [2, 65]), o2($VC, [2, 82]), o2($VC, [2, 83]), o2($VC, [2, 84]), { 3: 83, 4: $VD, 5: $VE, 6: $VF, 7: $VG, 8: $VH, 9: $VI, 10: $VJ, 11: $VK, 12: $VL, 13: $VM, 14: $VN, 15: $VO, 18: [1, 82] }, o2($VP, [2, 23]), o2($VP, [2, 1]), o2($VP, [2, 2]), o2($VP, [2, 3]), o2($VP, [2, 4]), o2($VP, [2, 5]), o2($VP, [2, 6]), o2($VP, [2, 7]), o2($VP, [2, 8]), o2($VP, [2, 9]), o2($VP, [2, 10]), o2($VP, [2, 11]), o2($VP, [2, 12]), o2($V7, [2, 52], { 58: 31, 43: 84, 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 55], { 58: 31, 43: 85, 4: $V9, 5: $Va, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 60: $Vt, 61: $Vu, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), { 46: [1, 86] }, { 45: [1, 87] }, { 4: $VQ, 5: $VR, 6: $VS, 8: $VT, 11: $VU, 13: $VV, 16: 90, 17: $VW, 18: $VX, 19: $VY, 20: $VZ, 22: 89, 23: 88 }, o2($VP, [2, 24]), o2($V7, [2, 51], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 54], { 59: 60, 58: 61, 4: $V9, 5: $Va, 8: $VA, 10: $Vb, 12: $Vc, 13: $Vd, 14: $Ve, 15: $Vf, 18: $VB, 63: $Vv, 64: $Vw, 65: $Vx, 66: $Vy, 67: $Vz }), o2($V7, [2, 47], { 22: 89, 16: 90, 23: 101, 4: $VQ, 5: $VR, 6: $VS, 8: $VT, 11: $VU, 13: $VV, 17: $VW, 18: $VX, 19: $VY, 20: $VZ }), { 46: [1, 102] }, o2($V7, [2, 29], { 10: $V_ }), o2($V$, [2, 27], { 16: 104, 4: $VQ, 5: $VR, 6: $VS, 8: $VT, 11: $VU, 13: $VV, 17: $VW, 18: $VX, 19: $VY, 20: $VZ }), o2($V01, [2, 25]), o2($V01, [2, 13]), o2($V01, [2, 14]), o2($V01, [2, 15]), o2($V01, [2, 16]), o2($V01, [2, 17]), o2($V01, [2, 18]), o2($V01, [2, 19]), o2($V01, [2, 20]), o2($V01, [2, 21]), o2($V01, [2, 22]), o2($V7, [2, 49], { 10: $V_ }), o2($V7, [2, 48], { 22: 89, 16: 90, 23: 105, 4: $VQ, 5: $VR, 6: $VS, 8: $VT, 11: $VU, 13: $VV, 17: $VW, 18: $VX, 19: $VY, 20: $VZ }), { 4: $VQ, 5: $VR, 6: $VS, 8: $VT, 11: $VU, 13: $VV, 16: 90, 17: $VW, 18: $VX, 19: $VY, 20: $VZ, 22: 106 }, o2($V01, [2, 26]), o2($V7, [2, 50], { 10: $V_ }), o2($V$, [2, 28], { 16: 104, 4: $VQ, 5: $VR, 6: $VS, 8: $VT, 11: $VU, 13: $VV, 17: $VW, 18: $VX, 19: $VY, 20: $VZ })],
           defaultActions: { 8: [2, 30], 9: [2, 31] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -241137,11 +241137,11 @@ ${content}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -242460,11 +242460,11 @@ ${content}`;
           }, "anonymous"),
           table: [o2($V0, $V1, { 3: 1, 4: 2, 7: 4, 5: $V2, 36: $V3, 37: $V4, 38: $V5 }), { 1: [3] }, o2($V0, $V1, { 4: 2, 7: 4, 3: 8, 5: $V2, 36: $V3, 37: $V4, 38: $V5 }), o2($V0, $V1, { 4: 2, 7: 4, 6: 9, 3: 10, 5: $V2, 8: [1, 11], 36: $V3, 37: $V4, 38: $V5 }), { 1: [2, 4], 9: 12, 10: [1, 13], 12: [1, 14], 14: [1, 15], 16: [1, 16], 18: [1, 17], 19: [1, 18], 21: [1, 19], 23: [1, 20] }, o2($V6, [2, 36]), o2($V6, [2, 37]), o2($V6, [2, 38]), { 1: [2, 1] }, o2($V0, $V1, { 4: 2, 7: 4, 3: 21, 5: $V2, 36: $V3, 37: $V4, 38: $V5 }), { 1: [2, 3] }, o2($V6, [2, 5]), o2($V0, [2, 7], { 4: 22, 36: $V3, 37: $V4, 38: $V5 }), { 11: 23, 30: $V7, 39: 24, 40: $V8, 41: 27, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }, { 11: 39, 13: 38, 24: $Vj, 29: $Vk, 30: $V7, 31: 40, 32: 41, 39: 24, 40: $V8, 41: 27, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }, { 11: 45, 15: 44, 29: $Vl, 30: $V7, 35: 46, 39: 24, 40: $V8, 41: 27, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }, { 11: 49, 17: 48, 24: $Vm, 30: $V7, 39: 24, 40: $V8, 41: 27, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }, { 11: 52, 17: 51, 24: $Vm, 30: $V7, 39: 24, 40: $V8, 41: 27, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }, { 20: [1, 53] }, { 22: [1, 54] }, o2($Vn, [2, 18]), { 1: [2, 2] }, o2($Vn, [2, 8]), o2($Vn, [2, 9]), o2($Vo, [2, 39], { 41: 55, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }), o2($Vo, [2, 40]), o2($Vo, [2, 41]), o2($Vp, [2, 42]), o2($Vp, [2, 44]), o2($Vp, [2, 45]), o2($Vp, [2, 46]), o2($Vp, [2, 47]), o2($Vp, [2, 48]), o2($Vp, [2, 49]), o2($Vp, [2, 50]), o2($Vp, [2, 51]), o2($Vp, [2, 52]), o2($Vp, [2, 53]), o2($Vn, [2, 10]), o2($Vn, [2, 24], { 32: 41, 31: 56, 24: $Vj, 29: $Vk }), o2($Vn, [2, 26]), o2($Vn, [2, 27]), { 33: [1, 57] }, { 11: 59, 30: $V7, 34: 58, 39: 24, 40: $V8, 41: 27, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }, o2($Vn, [2, 11]), o2($Vn, [2, 32], { 35: 60, 29: $Vl }), o2($Vn, [2, 34]), { 33: [1, 61] }, o2($Vn, [2, 12]), { 17: 62, 24: $Vm }, { 25: 63, 27: 64, 29: $Vq }, o2($Vn, [2, 14]), { 17: 66, 24: $Vm }, o2($Vn, [2, 16]), o2($Vn, [2, 17]), o2($Vp, [2, 43]), o2($Vn, [2, 25]), { 29: [1, 67] }, { 26: [1, 68] }, { 26: [2, 31], 28: [1, 69] }, o2($Vn, [2, 33]), { 29: [1, 70] }, o2($Vn, [2, 13]), { 26: [1, 71] }, { 26: [2, 21], 28: [1, 72] }, o2($Vr, [2, 23], { 30: [1, 73] }), o2($Vn, [2, 15]), o2($Vn, [2, 28]), o2($Vn, [2, 29]), { 11: 59, 30: $V7, 34: 74, 39: 24, 40: $V8, 41: 27, 42: $V9, 43: $Va, 44: $Vb, 45: $Vc, 46: $Vd, 47: $Ve, 48: $Vf, 49: $Vg, 50: $Vh, 51: $Vi }, o2($Vn, [2, 35]), o2($Vn, [2, 19]), { 25: 75, 27: 64, 29: $Vq }, o2($Vr, [2, 22]), { 26: [2, 30] }, { 26: [2, 20] }],
           defaultActions: { 8: [2, 1], 10: [2, 3], 21: [2, 2], 74: [2, 30], 75: [2, 20] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -242615,11 +242615,11 @@ ${content}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -244220,8 +244220,8 @@ ${content}`;
                 if (chartConfig.chartOrientation === "horizontal") {
                   let fitsHorizontally2 = function(item, fontSize) {
                     const { data: data6, label } = item;
-                    const textWidth = fontSize * label.length * charWidthFactor;
-                    return textWidth <= data6.width - rightMargin;
+                    const textWidth2 = fontSize * label.length * charWidthFactor;
+                    return textWidth2 <= data6.width - rightMargin;
                   };
                   var fitsHorizontally = fitsHorizontally2;
                   __name(fitsHorizontally2, "fitsHorizontally");
@@ -244249,10 +244249,10 @@ ${content}`;
                   let fitsInBar2 = function(item, fontSize, yOffset2) {
                     const { data: data6, label } = item;
                     const charWidthFactor = 0.7;
-                    const textWidth = fontSize * label.length * charWidthFactor;
+                    const textWidth2 = fontSize * label.length * charWidthFactor;
                     const centerX = data6.x + data6.width / 2;
-                    const leftEdge = centerX - textWidth / 2;
-                    const rightEdge = centerX + textWidth / 2;
+                    const leftEdge = centerX - textWidth2 / 2;
+                    const rightEdge = centerX + textWidth2 / 2;
                     const horizontalFits = leftEdge >= data6.x && rightEdge <= data6.x + data6.width;
                     const verticalFits = data6.y + yOffset2 + fontSize <= data6.y + data6.height;
                     return horizontalFits && verticalFits;
@@ -244499,11 +244499,11 @@ ${content}`;
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 6: $V0, 9: $V1, 11: $V2, 13: $V3 }, { 1: [3] }, { 3: 8, 4: 2, 5: [1, 7], 6: $V0, 9: $V1, 11: $V2, 13: $V3 }, { 5: [1, 9] }, { 10: [1, 10] }, { 12: [1, 11] }, o2($V4, [2, 6]), { 3: 12, 4: 2, 6: $V0, 9: $V1, 11: $V2, 13: $V3 }, { 1: [2, 2] }, { 4: 17, 5: $V5, 7: 13, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, o2($V4, [2, 4]), o2($V4, [2, 5]), { 1: [2, 1] }, { 8: [1, 41] }, { 4: 17, 5: $V5, 7: 42, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 43, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 44, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 45, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 46, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 47, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 48, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 49, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 4: 17, 5: $V5, 7: 50, 8: $V6, 9: $V1, 11: $V2, 13: $V3, 14: 14, 15: 15, 16: 16, 17: 18, 18: 19, 19: 20, 20: 21, 21: $V7, 22: $V8, 23: $V9, 24: $Va, 25: 23, 33: 25, 41: $Vb, 42: $Vc, 43: $Vd, 44: $Ve, 45: $Vf, 46: $Vg, 54: $Vh, 72: $Vi, 74: $Vj, 77: $Vk, 89: $Vl, 90: $Vm }, { 26: 51, 89: [1, 52], 90: [1, 53] }, { 55: 54, 89: [1, 55], 90: [1, 56] }, { 29: [1, 59], 61: [1, 57], 63: [1, 58] }, o2($Vn, [2, 17]), o2($Vn, [2, 18]), o2($Vn, [2, 19]), o2($Vn, [2, 20]), { 30: 60, 33: 62, 75: $Vo, 89: $Vl, 90: $Vm }, { 30: 63, 33: 62, 75: $Vo, 89: $Vl, 90: $Vm }, { 30: 64, 33: 62, 75: $Vo, 89: $Vl, 90: $Vm }, o2($Vp, [2, 29]), o2($Vp, [2, 30]), o2($Vp, [2, 31]), o2($Vp, [2, 32]), o2($Vp, [2, 33]), o2($Vp, [2, 34]), o2($Vq, [2, 81]), o2($Vq, [2, 82]), { 1: [2, 3] }, { 8: [2, 8] }, { 8: [2, 9] }, { 8: [2, 10] }, { 8: [2, 11] }, { 8: [2, 12] }, { 8: [2, 13] }, { 8: [2, 14] }, { 8: [2, 15] }, { 8: [2, 16] }, { 27: [1, 65], 29: [1, 66] }, o2($Vr, [2, 79]), o2($Vr, [2, 80]), { 27: [1, 67], 29: [1, 68] }, o2($Vr, [2, 85]), o2($Vr, [2, 86]), { 62: 69, 65: $Vs, 66: $Vt, 67: $Vu, 68: $Vv, 69: $Vw, 70: $Vx, 71: $Vy }, { 62: 77, 65: $Vs, 66: $Vt, 67: $Vu, 68: $Vv, 69: $Vw, 70: $Vx, 71: $Vy }, { 30: 78, 33: 62, 75: $Vo, 89: $Vl, 90: $Vm }, { 73: 79, 75: $Vz, 76: $VA, 78: 81, 79: 82, 80: $VB, 81: $VC, 82: $VD, 83: $VE, 84: $VF, 85: $VG, 86: $VH, 87: $VI, 88: $VJ }, o2($VK, [2, 60]), o2($VK, [2, 62]), { 73: 93, 75: $Vz, 76: $VA, 78: 81, 79: 82, 80: $VB, 81: $VC, 82: $VD, 83: $VE, 84: $VF, 85: $VG, 86: $VH, 87: $VI, 88: $VJ }, { 30: 94, 33: 62, 75: $Vo, 76: $VA, 89: $Vl, 90: $Vm }, { 5: [1, 95] }, { 30: 96, 33: 62, 75: $Vo, 89: $Vl, 90: $Vm }, { 5: [1, 97] }, { 30: 98, 33: 62, 75: $Vo, 89: $Vl, 90: $Vm }, { 63: [1, 99] }, o2($VL, [2, 50]), o2($VL, [2, 51]), o2($VL, [2, 52]), o2($VL, [2, 53]), o2($VL, [2, 54]), o2($VL, [2, 55]), o2($VL, [2, 56]), { 64: [1, 100] }, o2($Vn, [2, 59], { 76: $VA }), o2($Vn, [2, 64], { 76: $VM }), { 33: 103, 75: [1, 102], 89: $Vl, 90: $Vm }, o2($VN, [2, 65], { 79: 104, 75: $Vz, 80: $VB, 81: $VC, 82: $VD, 83: $VE, 84: $VF, 85: $VG, 86: $VH, 87: $VI, 88: $VJ }), o2($VO, [2, 67]), o2($VO, [2, 69]), o2($VO, [2, 70]), o2($VO, [2, 71]), o2($VO, [2, 72]), o2($VO, [2, 73]), o2($VO, [2, 74]), o2($VO, [2, 75]), o2($VO, [2, 76]), o2($VO, [2, 77]), o2($VO, [2, 78]), o2($Vn, [2, 57], { 76: $VM }), o2($Vn, [2, 58], { 76: $VA }), { 5: $VP, 28: 105, 31: $VQ, 34: $VR, 36: $VS, 38: $VT, 40: $VU }, { 27: [1, 112], 76: $VA }, { 5: $VV, 40: $VW, 56: 113, 57: $VX, 59: $VY }, { 27: [1, 118], 76: $VA }, { 33: 119, 89: $Vl, 90: $Vm }, { 33: 120, 89: $Vl, 90: $Vm }, { 75: $Vz, 78: 121, 79: 82, 80: $VB, 81: $VC, 82: $VD, 83: $VE, 84: $VF, 85: $VG, 86: $VH, 87: $VI, 88: $VJ }, o2($VK, [2, 61]), o2($VK, [2, 63]), o2($VO, [2, 68]), o2($Vn, [2, 21]), { 32: [1, 122] }, { 32: [1, 123] }, { 32: [1, 124] }, { 32: [1, 125] }, { 5: $VP, 28: 126, 31: $VQ, 34: $VR, 36: $VS, 38: $VT, 40: $VU }, o2($Vn, [2, 28]), { 5: [1, 127] }, o2($Vn, [2, 42]), { 32: [1, 128] }, { 32: [1, 129] }, { 5: $VV, 40: $VW, 56: 130, 57: $VX, 59: $VY }, o2($Vn, [2, 47]), { 5: [1, 131] }, o2($Vn, [2, 48]), o2($Vn, [2, 49]), o2($VN, [2, 66], { 79: 104, 75: $Vz, 80: $VB, 81: $VC, 82: $VD, 83: $VE, 84: $VF, 85: $VG, 86: $VH, 87: $VI, 88: $VJ }), { 33: 132, 89: $Vl, 90: $Vm }, { 35: 133, 89: [1, 134], 90: [1, 135] }, { 37: 136, 47: [1, 137], 48: [1, 138], 49: [1, 139] }, { 39: 140, 50: [1, 141], 51: [1, 142], 52: [1, 143], 53: [1, 144] }, o2($Vn, [2, 27]), { 5: $VP, 28: 145, 31: $VQ, 34: $VR, 36: $VS, 38: $VT, 40: $VU }, { 58: 146, 89: [1, 147], 90: [1, 148] }, { 60: 149, 89: [1, 150], 90: [1, 151] }, o2($Vn, [2, 46]), { 5: $VV, 40: $VW, 56: 152, 57: $VX, 59: $VY }, { 5: [1, 153] }, { 5: [1, 154] }, { 5: [2, 83] }, { 5: [2, 84] }, { 5: [1, 155] }, { 5: [2, 35] }, { 5: [2, 36] }, { 5: [2, 37] }, { 5: [1, 156] }, { 5: [2, 38] }, { 5: [2, 39] }, { 5: [2, 40] }, { 5: [2, 41] }, o2($Vn, [2, 22]), { 5: [1, 157] }, { 5: [2, 87] }, { 5: [2, 88] }, { 5: [1, 158] }, { 5: [2, 89] }, { 5: [2, 90] }, o2($Vn, [2, 43]), { 5: $VP, 28: 159, 31: $VQ, 34: $VR, 36: $VS, 38: $VT, 40: $VU }, { 5: $VP, 28: 160, 31: $VQ, 34: $VR, 36: $VS, 38: $VT, 40: $VU }, { 5: $VP, 28: 161, 31: $VQ, 34: $VR, 36: $VS, 38: $VT, 40: $VU }, { 5: $VP, 28: 162, 31: $VQ, 34: $VR, 36: $VS, 38: $VT, 40: $VU }, { 5: $VV, 40: $VW, 56: 163, 57: $VX, 59: $VY }, { 5: $VV, 40: $VW, 56: 164, 57: $VX, 59: $VY }, o2($Vn, [2, 23]), o2($Vn, [2, 24]), o2($Vn, [2, 25]), o2($Vn, [2, 26]), o2($Vn, [2, 44]), o2($Vn, [2, 45])],
           defaultActions: { 8: [2, 2], 12: [2, 1], 41: [2, 3], 42: [2, 8], 43: [2, 9], 44: [2, 10], 45: [2, 11], 46: [2, 12], 47: [2, 13], 48: [2, 14], 49: [2, 15], 50: [2, 16], 134: [2, 83], 135: [2, 84], 137: [2, 35], 138: [2, 36], 139: [2, 37], 141: [2, 38], 142: [2, 39], 143: [2, 40], 144: [2, 41], 147: [2, 87], 148: [2, 88], 150: [2, 89], 151: [2, 90] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -244654,11 +244654,11 @@ ${content}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -245616,7 +245616,7 @@ ${content}`;
     }
     let lineStartY;
     let totalOffset = textDims.height - 10;
-    const textWidth = textDims.width;
+    const textWidth2 = textDims.width;
     if (startx === stopx) {
       lineStartY = bounds2.getVerticalPos() + totalOffset;
       if (!conf2.rightAngles) {
@@ -245624,7 +245624,7 @@ ${content}`;
         lineStartY = bounds2.getVerticalPos() + totalOffset;
       }
       totalOffset += 30;
-      const dx = common_default.getMax(textWidth / 2, conf2.width / 2);
+      const dx = common_default.getMax(textWidth2 / 2, conf2.width / 2);
       bounds2.insert(
         startx - dx,
         bounds2.getVerticalPos() - 10 + totalOffset,
@@ -246221,11 +246221,11 @@ ${content}`;
           }, "anonymous"),
           table: [{ 3: 1, 4: $V0, 5: $V1, 6: $V2 }, { 1: [3] }, { 3: 5, 4: $V0, 5: $V1, 6: $V2 }, { 3: 6, 4: $V0, 5: $V1, 6: $V2 }, o2([1, 4, 5, 10, 14, 15, 19, 22, 24, 30, 31, 32, 34, 36, 37, 38, 39, 40, 42, 44, 45, 47, 51, 53, 54, 56, 61, 62, 63, 64, 73], $V3, { 7: 7 }), { 1: [2, 1] }, { 1: [2, 2] }, { 1: [2, 3], 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, o2($Vy, [2, 5]), { 9: 48, 13: 13, 14: $V7, 15: $V8, 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, o2($Vy, [2, 7]), o2($Vy, [2, 8]), o2($Vy, [2, 9]), o2($Vy, [2, 15]), { 13: 49, 51: $Vp, 53: $Vq, 54: $Vr }, { 16: [1, 50] }, { 5: [1, 51] }, { 5: [1, 54], 20: [1, 52], 21: [1, 53] }, { 23: 55, 62: $Vz, 73: $Vx }, { 23: 57, 62: $Vz, 73: $Vx }, { 5: [1, 58] }, { 5: [1, 59] }, { 5: [1, 60] }, { 5: [1, 61] }, { 5: [1, 62] }, o2($Vy, [2, 30]), o2($Vy, [2, 31]), { 33: [1, 63] }, { 35: [1, 64] }, o2($Vy, [2, 34]), { 16: [1, 65] }, { 16: [1, 66] }, { 16: [1, 67] }, { 16: [1, 68] }, { 16: [1, 69] }, { 16: [1, 70] }, { 16: [1, 71] }, { 16: [1, 72] }, { 23: 73, 55: 74, 62: $Vz, 73: $VA }, { 23: 76, 55: 77, 62: $Vz, 73: $VA }, { 23: 78, 62: $Vz, 73: $Vx }, { 69: 79, 72: [1, 80], 78: $VB, 79: $VC, 80: $VD, 81: $VE, 82: $VF, 83: $VG, 84: $VH, 85: $VI, 86: $VJ, 87: $VK, 88: $VL, 89: $VM, 90: $VN, 91: $VO, 92: $VP, 93: $VQ, 94: $VR, 95: $VS, 96: $VT, 97: $VU, 98: $VV, 99: $VW, 100: $VX, 101: $VY, 102: $VZ, 103: $V_ }, { 57: 107, 59: [1, 108], 67: [1, 109], 68: [1, 110] }, { 23: 111, 62: $Vz, 73: $Vx }, o2([72, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103], $V$, { 23: 112, 62: $Vz, 73: $Vx }), { 23: 113, 62: $Vz, 73: $Vx }, { 23: 114, 62: $Vz, 73: $Vx }, o2([5, 66, 72, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104], $V01), o2($Vy, [2, 6]), o2($Vy, [2, 16]), o2($V11, [2, 10], { 11: 115 }), o2($Vy, [2, 18]), { 5: [1, 117], 20: [1, 116] }, { 5: [1, 118] }, o2($Vy, [2, 22]), { 5: [1, 119] }, o2([5, 52, 66, 104], $V$), { 5: [1, 120] }, o2($Vy, [2, 25]), o2($Vy, [2, 26]), o2($Vy, [2, 27]), o2($Vy, [2, 28]), o2($Vy, [2, 29]), o2($Vy, [2, 32]), o2($Vy, [2, 33]), o2($V21, $V3, { 7: 121 }), o2($V21, $V3, { 7: 122 }), o2($V21, $V3, { 7: 123 }), o2($V31, $V3, { 41: 124, 7: 125 }), o2($V41, $V3, { 43: 126, 7: 127 }), o2($V41, $V3, { 7: 127, 43: 128 }), o2($V51, $V3, { 46: 129, 7: 130 }), o2($V21, $V3, { 7: 131 }), { 5: [1, 133], 52: [1, 132] }, { 5: [1, 135], 52: [1, 134] }, o2($V61, $V01, { 74: 136, 75: [1, 137] }), { 5: [1, 139], 52: [1, 138] }, { 5: [1, 141], 52: [1, 140] }, { 5: [1, 142] }, { 23: 146, 62: $Vz, 70: [1, 143], 71: [1, 144], 72: [1, 145], 73: $Vx }, { 69: 147, 78: $VB, 79: $VC, 80: $VD, 81: $VE, 82: $VF, 83: $VG, 84: $VH, 85: $VI, 86: $VJ, 87: $VK, 88: $VL, 89: $VM, 90: $VN, 91: $VO, 92: $VP, 93: $VQ, 94: $VR, 95: $VS, 96: $VT, 97: $VU, 98: $VV, 99: $VW, 100: $VX, 101: $VY, 102: $VZ, 103: $V_ }, o2($V71, [2, 80]), o2($V71, [2, 81]), o2($V71, [2, 82]), o2($V71, [2, 83]), o2($V71, [2, 84]), o2($V71, [2, 85]), o2($V71, [2, 86]), o2($V71, [2, 87]), o2($V71, [2, 88]), o2($V71, [2, 89]), o2($V71, [2, 90]), o2($V71, [2, 91]), o2($V71, [2, 92]), o2($V71, [2, 93]), o2($V71, [2, 94]), o2($V71, [2, 95]), o2($V71, [2, 96]), o2($V71, [2, 97]), o2($V71, [2, 98]), o2($V71, [2, 99]), o2($V71, [2, 100]), o2($V71, [2, 101]), o2($V71, [2, 102]), o2($V71, [2, 103]), o2($V71, [2, 104]), o2($V71, [2, 105]), { 23: 148, 62: $Vz, 73: $Vx }, { 23: 150, 60: 149, 62: $Vz, 73: $Vx }, o2($V81, [2, 68]), o2($V81, [2, 69]), { 58: 151, 104: $V91 }, { 58: 153, 104: $V91 }, { 58: 154, 104: $V91 }, { 58: 155, 104: $V91 }, { 4: [1, 158], 5: [1, 160], 12: 157, 13: 159, 17: [1, 156], 51: $Vp, 53: $Vq, 54: $Vr }, { 5: [1, 161] }, o2($Vy, [2, 20]), o2($Vy, [2, 21]), o2($Vy, [2, 23]), o2($Vy, [2, 24]), { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 17: [1, 162], 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 17: [1, 163], 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 17: [1, 164], 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, { 17: [1, 165] }, { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 17: [2, 47], 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 50: [1, 166], 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, { 17: [1, 167] }, { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 17: [2, 45], 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 49: [1, 168], 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, { 17: [1, 169] }, { 17: [1, 170] }, { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 17: [2, 43], 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 48: [1, 171], 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: $V6, 13: 13, 14: $V7, 15: $V8, 17: [1, 172], 18: 16, 19: $V9, 22: $Va, 23: 41, 24: $Vb, 25: 20, 26: 21, 27: 22, 28: 23, 29: 24, 30: $Vc, 31: $Vd, 32: $Ve, 34: $Vf, 36: $Vg, 37: $Vh, 38: $Vi, 39: $Vj, 40: $Vk, 42: $Vl, 44: $Vm, 45: $Vn, 47: $Vo, 51: $Vp, 53: $Vq, 54: $Vr, 56: $Vs, 61: $Vt, 62: $Vu, 63: $Vv, 64: $Vw, 73: $Vx }, { 16: [1, 173] }, o2($Vy, [2, 50]), { 16: [1, 174] }, o2($Vy, [2, 55]), o2($V61, [2, 76]), { 76: [1, 175] }, { 16: [1, 176] }, o2($Vy, [2, 52]), { 16: [1, 177] }, o2($Vy, [2, 57]), o2($Vy, [2, 53]), { 23: 178, 62: $Vz, 73: $Vx }, { 23: 179, 62: $Vz, 73: $Vx }, { 23: 180, 62: $Vz, 73: $Vx }, { 58: 181, 104: $V91 }, { 23: 182, 62: $Vz, 72: [1, 183], 73: $Vx }, { 58: 184, 104: $V91 }, { 58: 185, 104: $V91 }, { 66: [1, 186], 104: [2, 67] }, { 5: [2, 60] }, { 5: [2, 106] }, { 5: [2, 61] }, { 5: [2, 62] }, { 5: [2, 63] }, o2($Vy, [2, 17]), o2($V11, [2, 11]), { 13: 187, 51: $Vp, 53: $Vq, 54: $Vr }, o2($V11, [2, 13]), o2($V11, [2, 14]), o2($Vy, [2, 19]), o2($Vy, [2, 35]), o2($Vy, [2, 36]), o2($Vy, [2, 37]), o2($Vy, [2, 38]), { 16: [1, 188] }, o2($Vy, [2, 39]), { 16: [1, 189] }, o2($Vy, [2, 40]), o2($Vy, [2, 41]), { 16: [1, 190] }, o2($Vy, [2, 42]), { 5: [1, 191] }, { 5: [1, 192] }, { 77: [1, 193] }, { 5: [1, 194] }, { 5: [1, 195] }, { 58: 196, 104: $V91 }, { 58: 197, 104: $V91 }, { 58: 198, 104: $V91 }, { 5: [2, 75] }, { 58: 199, 104: $V91 }, { 23: 200, 62: $Vz, 73: $Vx }, { 5: [2, 58] }, { 5: [2, 59] }, { 23: 201, 62: $Vz, 73: $Vx }, o2($V11, [2, 12]), o2($V31, $V3, { 7: 125, 41: 202 }), o2($V41, $V3, { 7: 127, 43: 203 }), o2($V51, $V3, { 7: 130, 46: 204 }), o2($Vy, [2, 49]), o2($Vy, [2, 54]), o2($V61, [2, 77]), o2($Vy, [2, 51]), o2($Vy, [2, 56]), { 5: [2, 70] }, { 5: [2, 71] }, { 5: [2, 72] }, { 5: [2, 73] }, { 58: 205, 104: $V91 }, { 104: [2, 66] }, { 17: [2, 48] }, { 17: [2, 46] }, { 17: [2, 44] }, { 5: [2, 74] }],
           defaultActions: { 5: [2, 1], 6: [2, 2], 151: [2, 60], 152: [2, 106], 153: [2, 61], 154: [2, 62], 155: [2, 63], 181: [2, 75], 184: [2, 58], 185: [2, 59], 196: [2, 70], 197: [2, 71], 198: [2, 72], 199: [2, 73], 201: [2, 66], 202: [2, 48], 203: [2, 46], 204: [2, 44], 205: [2, 74] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -246376,11 +246376,11 @@ ${content}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -247276,8 +247276,8 @@ ${content}`;
           this.state.reset();
           clear();
         }
-        parseMessage(str4) {
-          const trimmedStr = str4.trim();
+        parseMessage(str5) {
+          const trimmedStr = str5.trim();
           const { wrap: wrap3, cleanedText } = this.extractWrap(trimmedStr);
           const message = {
             text: cleanedText,
@@ -247289,21 +247289,21 @@ ${content}`;
         // We expect the box statement to be color first then description
         // The color can be rgb,rgba,hsl,hsla, or css code names  #hex codes are not supported for now because of the way the char # is handled
         // We extract first segment as color, the rest of the line is considered as text
-        parseBoxData(str4) {
-          const match3 = /^((?:rgba?|hsla?)\s*\(.*\)|\w*)(.*)$/.exec(str4);
+        parseBoxData(str5) {
+          const match3 = /^((?:rgba?|hsla?)\s*\(.*\)|\w*)(.*)$/.exec(str5);
           let color2 = match3?.[1] ? match3[1].trim() : "transparent";
           let title2 = match3?.[2] ? match3[2].trim() : void 0;
           if (window?.CSS) {
             if (!window.CSS.supports("color", color2)) {
               color2 = "transparent";
-              title2 = str4.trim();
+              title2 = str5.trim();
             }
           } else {
             const style3 = new Option().style;
             style3.color = color2;
             if (style3.color !== color2) {
               color2 = "transparent";
-              title2 = str4.trim();
+              title2 = str5.trim();
             }
           }
           const { wrap: wrap3, cleanedText } = this.extractWrap(title2);
@@ -249359,7 +249359,7 @@ ${content}`;
         } else {
           drawText3(diagram210, textObj);
         }
-        const textWidth = textDims.width;
+        const textWidth2 = textDims.width;
         let line2;
         if (startx === stopx) {
           const isAutoNumberOn = sequenceVisible || conf2.showSequenceNumbers;
@@ -249369,7 +249369,7 @@ ${content}`;
           if (conf2.rightAngles) {
             line2 = diagram210.append("path").attr(
               "d",
-              `M  ${lineStartX},${lineStartY} H ${startx + common_default.getMax(conf2.width / 2, textWidth / 2)} V ${lineStartY + 25} H ${startx}`
+              `M  ${lineStartX},${lineStartY} H ${startx + common_default.getMax(conf2.width / 2, textWidth2 / 2)} V ${lineStartY + 25} H ${startx}`
             );
           } else {
             line2 = diagram210.append("path").attr(
@@ -250668,11 +250668,11 @@ ${content}`;
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 5: 3, 6: 4, 7: [1, 6], 10: 5, 16: 39, 17: 40, 19: 21, 21: 7, 23: 8, 24: 9, 25: 10, 26: 11, 27: 12, 28: 13, 29: 14, 30: 15, 31: 16, 32: 17, 33: $V0, 35: $V1, 37: $V2, 38: 22, 42: $V3, 43: 23, 46: $V4, 48: $V5, 51: $V6, 52: $V7, 54: $V8, 56: $V9, 57: $Va, 60: $Vb, 62: $Vc, 63: $Vd, 64: $Ve, 65: $Vf, 75: $Vg, 76: $Vh, 78: $Vi, 82: $Vj, 83: $Vk, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 1: [3] }, { 1: [2, 1] }, { 1: [2, 2] }, { 1: [2, 3] }, o2($Vp, [2, 5], { 8: [1, 48] }), { 8: [1, 49] }, o2($Vq, [2, 19], { 22: [1, 50] }), o2($Vq, [2, 21]), o2($Vq, [2, 22]), o2($Vq, [2, 23]), o2($Vq, [2, 24]), o2($Vq, [2, 25]), o2($Vq, [2, 26]), o2($Vq, [2, 27]), o2($Vq, [2, 28]), o2($Vq, [2, 29]), o2($Vq, [2, 30]), { 34: [1, 51] }, { 36: [1, 52] }, o2($Vq, [2, 33]), o2($Vq, [2, 63], { 53: 53, 66: 56, 67: 57, 13: [1, 54], 22: [1, 55], 68: $Vr, 69: $Vs, 70: $Vt, 71: $Vu, 72: $Vv, 73: $Vw, 74: $Vx }), { 39: [1, 65] }, o2($Vy, [2, 47], { 39: [1, 67], 44: [1, 66], 46: [1, 68] }), o2($Vq, [2, 65]), o2($Vq, [2, 66]), { 16: 69, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn }, { 16: 39, 17: 40, 19: 70, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 16: 39, 17: 40, 19: 71, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 16: 39, 17: 40, 19: 72, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 60: [1, 73] }, { 13: [1, 74] }, { 16: 39, 17: 40, 19: 75, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 13: $Vz, 55: 76 }, { 58: 78, 60: [1, 79] }, o2($Vq, [2, 76]), o2($Vq, [2, 77]), o2($Vq, [2, 78]), o2($Vq, [2, 79]), o2($VA, [2, 13], { 16: 39, 17: 40, 19: 81, 18: [1, 80], 20: [1, 82], 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }), o2($VA, [2, 15], { 20: [1, 83] }), { 15: 84, 16: 85, 17: 86, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 16: 39, 17: 40, 19: 87, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, o2($VB, [2, 133]), o2($VB, [2, 134]), o2($VB, [2, 135]), o2($VB, [2, 136]), o2([1, 8, 9, 12, 13, 20, 22, 39, 41, 44, 46, 68, 69, 70, 71, 72, 73, 74, 79, 81], [2, 137]), o2($Vp, [2, 6], { 10: 5, 21: 7, 23: 8, 24: 9, 25: 10, 26: 11, 27: 12, 28: 13, 29: 14, 30: 15, 31: 16, 32: 17, 19: 21, 38: 22, 43: 23, 16: 39, 17: 40, 5: 88, 33: $V0, 35: $V1, 37: $V2, 42: $V3, 46: $V4, 48: $V5, 51: $V6, 52: $V7, 54: $V8, 56: $V9, 57: $Va, 60: $Vb, 62: $Vc, 63: $Vd, 64: $Ve, 65: $Vf, 75: $Vg, 76: $Vh, 78: $Vi, 82: $Vj, 83: $Vk, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }), { 5: 89, 10: 5, 16: 39, 17: 40, 19: 21, 21: 7, 23: 8, 24: 9, 25: 10, 26: 11, 27: 12, 28: 13, 29: 14, 30: 15, 31: 16, 32: 17, 33: $V0, 35: $V1, 37: $V2, 38: 22, 42: $V3, 43: 23, 46: $V4, 48: $V5, 51: $V6, 52: $V7, 54: $V8, 56: $V9, 57: $Va, 60: $Vb, 62: $Vc, 63: $Vd, 64: $Ve, 65: $Vf, 75: $Vg, 76: $Vh, 78: $Vi, 82: $Vj, 83: $Vk, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, o2($Vq, [2, 20]), o2($Vq, [2, 31]), o2($Vq, [2, 32]), { 13: [1, 91], 16: 39, 17: 40, 19: 90, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 53: 92, 66: 56, 67: 57, 68: $Vr, 69: $Vs, 70: $Vt, 71: $Vu, 72: $Vv, 73: $Vw, 74: $Vx }, o2($Vq, [2, 64]), { 67: 93, 73: $Vw, 74: $Vx }, o2($VC, [2, 83], { 66: 94, 68: $Vr, 69: $Vs, 70: $Vt, 71: $Vu, 72: $Vv }), o2($VD, [2, 84]), o2($VD, [2, 85]), o2($VD, [2, 86]), o2($VD, [2, 87]), o2($VD, [2, 88]), o2($VE, [2, 89]), o2($VE, [2, 90]), { 8: [1, 96], 23: 99, 24: 97, 30: 98, 38: 22, 40: 95, 42: $V3, 43: 23, 48: $V5, 54: $V8, 56: $V9 }, { 16: 100, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn }, { 41: [1, 102], 45: 101, 51: $VF }, { 16: 104, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn }, { 47: [1, 105] }, { 13: [1, 106] }, { 13: [1, 107] }, { 79: [1, 108], 81: [1, 109] }, { 22: $VG, 50: $VH, 59: 110, 60: $VI, 82: $VJ, 84: 111, 85: 112, 86: $VK, 87: $VL, 88: $VM, 89: $VN, 90: $VO }, { 60: [1, 122] }, { 13: $Vz, 55: 123 }, o2($Vy, [2, 72]), o2($Vy, [2, 138]), { 22: $VG, 50: $VH, 59: 124, 60: $VI, 61: [1, 125], 82: $VJ, 84: 111, 85: 112, 86: $VK, 87: $VL, 88: $VM, 89: $VN, 90: $VO }, o2($VP, [2, 74]), { 16: 39, 17: 40, 19: 126, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, o2($VA, [2, 16]), o2($VA, [2, 17]), o2($VA, [2, 18]), { 11: 127, 12: $VQ, 39: [2, 36] }, o2($VR, [2, 9], { 16: 85, 17: 86, 15: 130, 18: [1, 129], 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }), o2($VR, [2, 10]), o2($VS, [2, 55], { 11: 131, 12: $VQ }), o2($Vp, [2, 7]), { 9: [1, 132] }, o2($VT, [2, 67]), { 16: 39, 17: 40, 19: 133, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, { 13: [1, 135], 16: 39, 17: 40, 19: 134, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, o2($VC, [2, 82], { 66: 136, 68: $Vr, 69: $Vs, 70: $Vt, 71: $Vu, 72: $Vv }), o2($VC, [2, 81]), { 41: [1, 137] }, { 23: 99, 24: 97, 30: 98, 38: 22, 40: 138, 42: $V3, 43: 23, 48: $V5, 54: $V8, 56: $V9 }, { 8: [1, 139], 41: [2, 38] }, { 8: [1, 140], 41: [2, 41] }, { 8: [1, 141], 41: [2, 44] }, o2($Vy, [2, 48], { 39: [1, 142] }), { 41: [1, 143] }, o2($Vy, [2, 50]), { 41: [2, 61], 45: 144, 51: $VF }, { 47: [1, 145] }, { 16: 39, 17: 40, 19: 146, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, o2($Vq, [2, 91], { 13: [1, 147] }), o2($Vq, [2, 93], { 13: [1, 149], 77: [1, 148] }), o2($Vq, [2, 97], { 13: [1, 150], 80: [1, 151] }), { 13: [1, 152] }, o2($Vq, [2, 105], { 61: $VU }), o2($VV, [2, 107], { 85: 154, 22: $VG, 50: $VH, 60: $VI, 82: $VJ, 86: $VK, 87: $VL, 88: $VM, 89: $VN, 90: $VO }), o2($VW, [2, 109]), o2($VW, [2, 111]), o2($VW, [2, 112]), o2($VW, [2, 113]), o2($VW, [2, 114]), o2($VW, [2, 115]), o2($VW, [2, 116]), o2($VW, [2, 117]), o2($VW, [2, 118]), o2($VW, [2, 119]), o2($Vq, [2, 106]), o2($Vy, [2, 71]), o2($Vq, [2, 73], { 61: $VU }), { 60: [1, 155] }, o2($VA, [2, 14]), { 39: [2, 37] }, { 13: [1, 156] }, { 15: 157, 16: 85, 17: 86, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, o2($VR, [2, 12]), o2($VS, [2, 56]), { 1: [2, 4] }, o2($VT, [2, 69]), o2($VT, [2, 68]), { 16: 39, 17: 40, 19: 158, 60: $Vb, 86: $Vl, 100: $Vm, 102: $Vn, 103: $Vo }, o2($VC, [2, 80]), o2($Vy, [2, 34]), { 41: [1, 159] }, { 23: 99, 24: 97, 30: 98, 38: 22, 40: 160, 41: [2, 39], 42: $V3, 43: 23, 48: $V5, 54: $V8, 56: $V9 }, { 23: 99, 24: 97, 30: 98, 38: 22, 40: 161, 41: [2, 42], 42: $V3, 43: 23, 48: $V5, 54: $V8, 56: $V9 }, { 23: 99, 24: 97, 30: 98, 38: 22, 40: 162, 41: [2, 45], 42: $V3, 43: 23, 48: $V5, 54: $V8, 56: $V9 }, { 45: 163, 51: $VF }, o2($Vy, [2, 49]), { 41: [2, 62] }, o2($Vy, [2, 52], { 39: [1, 164] }), o2($Vq, [2, 60]), o2($Vq, [2, 92]), o2($Vq, [2, 94]), o2($Vq, [2, 95], { 77: [1, 165] }), o2($Vq, [2, 98]), o2($Vq, [2, 99], { 13: [1, 166] }), o2($Vq, [2, 101], { 13: [1, 168], 77: [1, 167] }), { 22: $VG, 50: $VH, 60: $VI, 82: $VJ, 84: 169, 85: 112, 86: $VK, 87: $VL, 88: $VM, 89: $VN, 90: $VO }, o2($VW, [2, 110]), o2($VP, [2, 75]), { 14: [1, 170] }, o2($VR, [2, 11]), o2($VT, [2, 70]), o2($Vy, [2, 35]), { 41: [2, 40] }, { 41: [2, 43] }, { 41: [2, 46] }, { 41: [1, 171] }, { 41: [1, 173], 45: 172, 51: $VF }, o2($Vq, [2, 96]), o2($Vq, [2, 100]), o2($Vq, [2, 102]), o2($Vq, [2, 103], { 77: [1, 174] }), o2($VV, [2, 108], { 85: 154, 22: $VG, 50: $VH, 60: $VI, 82: $VJ, 86: $VK, 87: $VL, 88: $VM, 89: $VN, 90: $VO }), o2($VS, [2, 8]), o2($Vy, [2, 51]), { 41: [1, 175] }, o2($Vy, [2, 54]), o2($Vq, [2, 104]), o2($Vy, [2, 53])],
           defaultActions: { 2: [2, 1], 3: [2, 2], 4: [2, 3], 127: [2, 37], 132: [2, 4], 144: [2, 62], 160: [2, 40], 161: [2, 43], 162: [2, 46] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -250823,11 +250823,11 @@ ${content}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -251950,8 +251950,8 @@ ${content}`;
           });
         }
         // Utility function to escape HTML meta-characters
-        escapeHtml(str4) {
-          return str4.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+        escapeHtml(str5) {
+          return str5.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
         }
         getDirection() {
           return this.direction;
@@ -252730,11 +252730,11 @@ g.classGroup line {
           }, "anonymous"),
           table: [{ 3: 1, 4: $V0, 5: $V1, 6: $V2 }, { 1: [3] }, { 3: 5, 4: $V0, 5: $V1, 6: $V2 }, { 3: 6, 4: $V0, 5: $V1, 6: $V2 }, o2([1, 4, 5, 16, 17, 19, 22, 24, 25, 26, 27, 28, 29, 33, 35, 37, 38, 41, 45, 48, 51, 52, 53, 54, 57], $V3, { 7: 7 }), { 1: [2, 1] }, { 1: [2, 2] }, { 1: [2, 3], 4: $V4, 5: $V5, 8: 8, 9: 10, 10: 12, 11: 13, 12: 14, 13: 15, 16: $V6, 17: $V7, 19: $V8, 22: $V9, 24: $Va, 25: $Vb, 26: $Vc, 27: $Vd, 28: $Ve, 29: $Vf, 32: 25, 33: $Vg, 35: $Vh, 37: $Vi, 38: $Vj, 41: $Vk, 45: $Vl, 48: $Vm, 51: $Vn, 52: $Vo, 53: $Vp, 54: $Vq, 57: $Vr }, o2($Vs, [2, 5]), { 9: 39, 10: 12, 11: 13, 12: 14, 13: 15, 16: $V6, 17: $V7, 19: $V8, 22: $V9, 24: $Va, 25: $Vb, 26: $Vc, 27: $Vd, 28: $Ve, 29: $Vf, 32: 25, 33: $Vg, 35: $Vh, 37: $Vi, 38: $Vj, 41: $Vk, 45: $Vl, 48: $Vm, 51: $Vn, 52: $Vo, 53: $Vp, 54: $Vq, 57: $Vr }, o2($Vs, [2, 7]), o2($Vs, [2, 8]), o2($Vs, [2, 9]), o2($Vs, [2, 10]), o2($Vs, [2, 11]), o2($Vs, [2, 12], { 14: [1, 40], 15: [1, 41] }), o2($Vs, [2, 16]), { 18: [1, 42] }, o2($Vs, [2, 18], { 20: [1, 43] }), { 23: [1, 44] }, o2($Vs, [2, 22]), o2($Vs, [2, 23]), o2($Vs, [2, 24]), o2($Vs, [2, 25]), { 30: 45, 31: [1, 46], 59: [1, 47], 60: [1, 48] }, o2($Vs, [2, 28]), { 34: [1, 49] }, { 36: [1, 50] }, o2($Vs, [2, 31]), { 13: 51, 24: $Va, 57: $Vr }, { 42: [1, 52], 44: [1, 53] }, { 46: [1, 54] }, { 49: [1, 55] }, o2($Vt, [2, 44], { 58: [1, 56] }), o2($Vt, [2, 45], { 58: [1, 57] }), o2($Vs, [2, 38]), o2($Vs, [2, 39]), o2($Vs, [2, 40]), o2($Vs, [2, 41]), o2($Vs, [2, 6]), o2($Vs, [2, 13]), { 13: 58, 24: $Va, 57: $Vr }, o2($Vs, [2, 17]), o2($Vu, $V3, { 7: 59 }), { 24: [1, 60] }, { 24: [1, 61] }, { 23: [1, 62] }, { 24: [2, 48] }, { 24: [2, 49] }, o2($Vs, [2, 29]), o2($Vs, [2, 30]), { 39: [1, 63], 40: [1, 64] }, { 43: [1, 65] }, { 43: [1, 66] }, { 47: [1, 67] }, { 50: [1, 68] }, { 24: [1, 69] }, { 24: [1, 70] }, o2($Vs, [2, 14], { 14: [1, 71] }), { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: 12, 11: 13, 12: 14, 13: 15, 16: $V6, 17: $V7, 19: $V8, 21: [1, 72], 22: $V9, 24: $Va, 25: $Vb, 26: $Vc, 27: $Vd, 28: $Ve, 29: $Vf, 32: 25, 33: $Vg, 35: $Vh, 37: $Vi, 38: $Vj, 41: $Vk, 45: $Vl, 48: $Vm, 51: $Vn, 52: $Vo, 53: $Vp, 54: $Vq, 57: $Vr }, o2($Vs, [2, 20], { 20: [1, 73] }), { 31: [1, 74] }, { 24: [1, 75] }, { 39: [1, 76] }, { 39: [1, 77] }, o2($Vs, [2, 34]), o2($Vs, [2, 35]), o2($Vs, [2, 36]), o2($Vs, [2, 37]), o2($Vt, [2, 46]), o2($Vt, [2, 47]), o2($Vs, [2, 15]), o2($Vs, [2, 19]), o2($Vu, $V3, { 7: 78 }), o2($Vs, [2, 26]), o2($Vs, [2, 27]), { 5: [1, 79] }, { 5: [1, 80] }, { 4: $V4, 5: $V5, 8: 8, 9: 10, 10: 12, 11: 13, 12: 14, 13: 15, 16: $V6, 17: $V7, 19: $V8, 21: [1, 81], 22: $V9, 24: $Va, 25: $Vb, 26: $Vc, 27: $Vd, 28: $Ve, 29: $Vf, 32: 25, 33: $Vg, 35: $Vh, 37: $Vi, 38: $Vj, 41: $Vk, 45: $Vl, 48: $Vm, 51: $Vn, 52: $Vo, 53: $Vp, 54: $Vq, 57: $Vr }, o2($Vs, [2, 32]), o2($Vs, [2, 33]), o2($Vs, [2, 21])],
           defaultActions: { 5: [2, 1], 6: [2, 2], 47: [2, 48], 48: [2, 49] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -252885,11 +252885,11 @@ g.classGroup line {
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -254394,8 +254394,8 @@ g.classGroup line {
             this.rootDoc.unshift({ stmt: STMT_DIRECTION, value: dir2 });
           }
         }
-        trimColon(str4) {
-          return str4.startsWith(":") ? str4.slice(1).trim() : str4.trim();
+        trimColon(str5) {
+          return str5.startsWith(":") ? str5.slice(1).trim() : str5.trim();
         }
         getData() {
           const config3 = getConfig2();
@@ -254771,8 +254771,8 @@ g.stateGroup line {
         words.forEach((word2) => {
           const testLine = currentLine ? `${currentLine} ${word2}` : word2;
           measureText.text(testLine);
-          const textWidth = measureText.node().getBoundingClientRect().width;
-          if (textWidth > maxLabelWidth) {
+          const textWidth2 = measureText.node().getBoundingClientRect().width;
+          if (textWidth2 > maxLabelWidth) {
             if (currentLine) {
               lines.push(currentLine);
             }
@@ -254885,11 +254885,11 @@ g.stateGroup line {
           }, "anonymous"),
           table: [{ 3: 1, 4: [1, 2] }, { 1: [3] }, o2($V0, [2, 2], { 5: 3 }), { 6: [1, 4], 7: 5, 8: [1, 6], 9: 7, 10: [1, 8], 11: $V1, 12: $V2, 14: $V3, 16: $V4, 17: $V5, 18: $V6 }, o2($V0, [2, 7], { 1: [2, 1] }), o2($V0, [2, 3]), { 9: 15, 11: $V1, 12: $V2, 14: $V3, 16: $V4, 17: $V5, 18: $V6 }, o2($V0, [2, 5]), o2($V0, [2, 6]), o2($V0, [2, 8]), { 13: [1, 16] }, { 15: [1, 17] }, o2($V0, [2, 11]), o2($V0, [2, 12]), { 19: [1, 18] }, o2($V0, [2, 4]), o2($V0, [2, 9]), o2($V0, [2, 10]), o2($V0, [2, 13])],
           defaultActions: {},
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -255040,11 +255040,11 @@ g.stateGroup line {
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -256132,11 +256132,11 @@ g.stateGroup line {
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 7: [1, 3], 8: [1, 4], 9: [1, 5] }, { 1: [3] }, o2($V0, [2, 5], { 5: 6 }), o2($V0, [2, 2]), o2($V0, [2, 3]), o2($V0, [2, 4]), { 6: [1, 7], 10: 8, 11: [1, 9], 12: 10, 13: [1, 11], 14: $V1, 15: $V2, 17: $V3, 19: $V4, 20: $V5, 21: 17, 22: 18, 23: $V6, 24: $V7 }, o2($V0, [2, 10], { 1: [2, 1] }), o2($V0, [2, 6]), { 12: 21, 14: $V1, 15: $V2, 17: $V3, 19: $V4, 20: $V5, 21: 17, 22: 18, 23: $V6, 24: $V7 }, o2($V0, [2, 8]), o2($V0, [2, 9]), o2($V0, [2, 11]), { 16: [1, 22] }, { 18: [1, 23] }, o2($V0, [2, 14]), o2($V0, [2, 15]), o2($V0, [2, 16]), o2($V0, [2, 17]), o2($V0, [2, 18]), o2($V0, [2, 19]), o2($V0, [2, 7]), o2($V0, [2, 12]), o2($V0, [2, 13])],
           defaultActions: {},
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -256287,11 +256287,11 @@ g.stateGroup line {
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -257831,11 +257831,11 @@ g.stateGroup line {
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 8: $V0 }, { 1: [3] }, { 1: [2, 1] }, { 4: 6, 6: [1, 7], 7: [1, 8], 8: $V0 }, { 6: $V1, 7: [1, 10], 9: 9, 12: 11, 13: $V2, 14: 14, 15: $V3, 16: $V4, 17: 17, 18: 18, 19: $V5, 22: $V6 }, o2($V7, [2, 3]), { 1: [2, 2] }, o2($V7, [2, 4]), o2($V7, [2, 5]), { 1: [2, 6], 6: $V1, 12: 21, 13: $V2, 14: 14, 15: $V3, 16: $V4, 17: 17, 18: 18, 19: $V5, 22: $V6 }, { 6: $V1, 9: 22, 12: 11, 13: $V2, 14: 14, 15: $V3, 16: $V4, 17: 17, 18: 18, 19: $V5, 22: $V6 }, { 6: $V8, 7: $V9, 10: 23, 11: $Va }, o2($Vb, [2, 22], { 17: 17, 18: 18, 14: 27, 15: [1, 28], 16: [1, 29], 19: $V5, 22: $V6 }), o2($Vb, [2, 18]), o2($Vb, [2, 19]), o2($Vb, [2, 20]), o2($Vb, [2, 21]), o2($Vb, [2, 23]), o2($Vb, [2, 24]), o2($Vb, [2, 26], { 19: [1, 30] }), { 20: [1, 31] }, { 6: $V8, 7: $V9, 10: 32, 11: $Va }, { 1: [2, 7], 6: $V1, 12: 21, 13: $V2, 14: 14, 15: $V3, 16: $V4, 17: 17, 18: 18, 19: $V5, 22: $V6 }, o2($Vc, [2, 14], { 7: $Vd, 11: $Ve }), o2($Vf, [2, 8]), o2($Vf, [2, 9]), o2($Vf, [2, 10]), o2($Vb, [2, 15]), o2($Vb, [2, 16]), o2($Vb, [2, 17]), { 20: [1, 35] }, { 21: [1, 36] }, o2($Vc, [2, 13], { 7: $Vd, 11: $Ve }), o2($Vf, [2, 11]), o2($Vf, [2, 12]), { 21: [1, 37] }, o2($Vb, [2, 25]), o2($Vb, [2, 27])],
           defaultActions: { 2: [2, 1], 6: [2, 2] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -257986,11 +257986,11 @@ g.stateGroup line {
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -259056,11 +259056,11 @@ g.stateGroup line {
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 8: $V0 }, { 1: [3] }, { 1: [2, 1] }, { 4: 6, 6: [1, 7], 7: [1, 8], 8: $V0 }, { 6: $V1, 7: [1, 10], 9: 9, 12: 11, 13: $V2, 14: 14, 16: $V3, 17: $V4, 18: 17, 19: 18, 20: $V5, 23: $V6 }, o2($V7, [2, 3]), { 1: [2, 2] }, o2($V7, [2, 4]), o2($V7, [2, 5]), { 1: [2, 6], 6: $V1, 12: 21, 13: $V2, 14: 14, 16: $V3, 17: $V4, 18: 17, 19: 18, 20: $V5, 23: $V6 }, { 6: $V1, 9: 22, 12: 11, 13: $V2, 14: 14, 16: $V3, 17: $V4, 18: 17, 19: 18, 20: $V5, 23: $V6 }, { 6: $V8, 7: $V9, 10: 23, 11: $Va }, o2($Vb, [2, 24], { 18: 17, 19: 18, 14: 27, 16: [1, 28], 17: [1, 29], 20: $V5, 23: $V6 }), o2($Vb, [2, 19]), o2($Vb, [2, 21], { 15: 30, 24: $Vc }), o2($Vb, [2, 22]), o2($Vb, [2, 23]), o2($Vd, [2, 25]), o2($Vd, [2, 26]), o2($Vd, [2, 28], { 20: [1, 32] }), { 21: [1, 33] }, { 6: $V8, 7: $V9, 10: 34, 11: $Va }, { 1: [2, 7], 6: $V1, 12: 21, 13: $V2, 14: 14, 16: $V3, 17: $V4, 18: 17, 19: 18, 20: $V5, 23: $V6 }, o2($Ve, [2, 14], { 7: $Vf, 11: $Vg }), o2($Vh, [2, 8]), o2($Vh, [2, 9]), o2($Vh, [2, 10]), o2($Vb, [2, 16], { 15: 37, 24: $Vc }), o2($Vb, [2, 17]), o2($Vb, [2, 18]), o2($Vb, [2, 20], { 24: $Vi }), o2($Vd, [2, 31]), { 21: [1, 39] }, { 22: [1, 40] }, o2($Ve, [2, 13], { 7: $Vf, 11: $Vg }), o2($Vh, [2, 11]), o2($Vh, [2, 12]), o2($Vb, [2, 15], { 24: $Vi }), o2($Vd, [2, 30]), { 22: [1, 41] }, o2($Vd, [2, 27]), o2($Vd, [2, 29])],
           defaultActions: { 2: [2, 1], 6: [2, 2] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -259211,11 +259211,11 @@ g.stateGroup line {
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -260769,11 +260769,11 @@ g.stateGroup line {
           }, "anonymous"),
           table: [{ 3: 1, 4: [1, 2] }, { 1: [3] }, { 5: [1, 3] }, { 6: 4, 8: 5, 15: 6, 16: 7, 17: 8, 18: $V0, 20: $V1 }, { 1: [2, 6], 7: 11, 10: [1, 12] }, o2($V1, [2, 4], { 9: 13, 5: [1, 14] }), { 12: [1, 15] }, o2($V2, [2, 8]), o2($V2, [2, 9]), { 19: [1, 16] }, o2($V2, [2, 11]), { 1: [2, 1] }, { 1: [2, 5] }, o2($V1, [2, 2]), { 6: 17, 8: 5, 15: 6, 16: 7, 17: 8, 18: $V0, 20: $V1 }, { 15: 18, 16: 7, 17: 8, 18: $V0, 20: $V1 }, { 18: [1, 19] }, o2($V1, [2, 3]), { 12: [1, 20] }, o2($V2, [2, 10]), { 15: 21, 16: 7, 17: 8, 18: $V0, 20: $V1 }, o2([1, 5, 10], [2, 7])],
           defaultActions: { 11: [2, 1], 12: [2, 5] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -260924,11 +260924,11 @@ g.stateGroup line {
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -262783,11 +262783,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           }, "anonymous"),
           table: [{ 9: 1, 10: [1, 2] }, { 1: [3] }, { 10: $V0, 11: 3, 13: 4, 19: 5, 20: 6, 21: $V1, 22: 8, 23: 9, 24: 10, 25: 11, 26: 12, 28: $V2, 29: $V3, 31: $V4, 39: $V5, 43: $V6, 46: $V7 }, { 8: [1, 20] }, o2($V8, [2, 12], { 13: 4, 19: 5, 20: 6, 22: 8, 23: 9, 24: 10, 25: 11, 26: 12, 11: 21, 10: $V0, 21: $V1, 28: $V2, 29: $V3, 31: $V4, 39: $V5, 43: $V6, 46: $V7 }), o2($V9, [2, 16], { 14: 22, 15: $Va, 16: $Vb }), o2($V9, [2, 17]), o2($V9, [2, 18]), o2($V9, [2, 19]), o2($V9, [2, 20]), o2($V9, [2, 21]), o2($V9, [2, 22]), o2($Vc, [2, 25], { 27: [1, 25] }), o2($V9, [2, 26]), { 19: 26, 26: 12, 31: $V4 }, { 10: $V0, 11: 27, 13: 4, 19: 5, 20: 6, 21: $V1, 22: 8, 23: 9, 24: 10, 25: 11, 26: 12, 28: $V2, 29: $V3, 31: $V4, 39: $V5, 43: $V6, 46: $V7 }, { 40: [1, 28], 42: [1, 29] }, { 44: [1, 30] }, { 47: [1, 31] }, o2($Vd, [2, 29], { 32: 32, 35: [1, 33], 37: [1, 34] }), { 1: [2, 7] }, o2($V8, [2, 13]), { 26: 35, 31: $V4 }, { 31: [2, 14] }, { 17: [1, 36] }, o2($Vc, [2, 24]), { 10: $V0, 11: 37, 13: 4, 14: 22, 15: $Va, 16: $Vb, 19: 5, 20: 6, 21: $V1, 22: 8, 23: 9, 24: 10, 25: 11, 26: 12, 28: $V2, 29: $V3, 31: $V4, 39: $V5, 43: $V6, 46: $V7 }, { 30: [1, 38] }, { 41: [1, 39] }, { 41: [1, 40] }, { 45: [1, 41] }, { 48: [1, 42] }, o2($Vd, [2, 30]), { 18: [1, 43] }, { 18: [1, 44] }, o2($Vc, [2, 23]), { 18: [1, 45] }, { 30: [1, 46] }, o2($V9, [2, 28]), o2($V9, [2, 35]), o2($V9, [2, 36]), o2($V9, [2, 37]), o2($V9, [2, 38]), { 36: [1, 47] }, { 33: 48, 34: $Ve }, { 15: [1, 50] }, o2($V9, [2, 27]), o2($Vd, [2, 33]), { 38: [1, 51] }, { 33: 52, 34: $Ve, 38: [2, 31] }, { 31: [2, 15] }, o2($Vd, [2, 34]), { 38: [2, 32] }],
           defaultActions: { 20: [2, 7], 23: [2, 14], 50: [2, 15], 52: [2, 32] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -262938,11 +262938,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -273808,14 +273808,14 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       fontFamily: '"trebuchet ms", verdana, arial, sans-serif',
       joinWith: "<br/>"
     };
-    const wrappedName = wrapLabel(name, diagramProps2.textMaxWidth, wrapLabelConfig);
+    const wrappedName = wrapLabel2(name, diagramProps2.textMaxWidth, wrapLabelConfig);
     let content = `<b>${wrappedName}</b>`;
     if (frame2.dataInlineValue) {
       toHtml = frame2.dataInlineValue;
       toHtml = toHtml.substring(toHtml.indexOf("{") + 1);
       toHtml = toHtml.substring(0, toHtml.lastIndexOf("}") - 1);
       toHtml = sanitizeText(toHtml, config3);
-      toHtml = wrapLabel(toHtml, diagramProps2.textMaxWidth, wrapLabelConfig);
+      toHtml = wrapLabel2(toHtml, diagramProps2.textMaxWidth, wrapLabelConfig);
       toHtml = toHtml.replaceAll(" ", "&nbsp;");
     }
     if (frame2.dataReference) {
@@ -273827,7 +273827,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         toHtml = toHtml.substring(toHtml.indexOf("{\n") + 2);
         toHtml = toHtml.substring(0, toHtml.lastIndexOf("}") - 1);
         toHtml = sanitizeText(toHtml, config3);
-        toHtml = wrapLabel(toHtml, diagramProps2.textMaxWidth, wrapLabelConfig);
+        toHtml = wrapLabel2(toHtml, diagramProps2.textMaxWidth, wrapLabelConfig);
         toHtml = toHtml.replaceAll(" ", "&nbsp;");
         toHtml += `<br/>`;
       }
@@ -274327,11 +274327,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           }, "anonymous"),
           table: [{ 3: 1, 4: 2, 5: 3, 6: [1, 5], 8: $V0 }, { 1: [3] }, { 1: [2, 1] }, { 4: 6, 6: [1, 7], 7: [1, 8], 8: $V0 }, { 6: $V1, 7: [1, 10], 9: 9, 12: 11, 13: $V2, 14: $V3 }, o2($V4, [2, 3]), { 1: [2, 2] }, o2($V4, [2, 4]), o2($V4, [2, 5]), { 1: [2, 6], 6: $V1, 12: 15, 13: $V2, 14: $V3 }, { 6: $V1, 9: 16, 12: 11, 13: $V2, 14: $V3 }, { 6: $V5, 7: $V6, 10: 17, 11: $V7 }, o2($V8, [2, 18], { 14: [1, 21] }), o2($V8, [2, 16]), o2($V8, [2, 17]), { 6: $V5, 7: $V6, 10: 22, 11: $V7 }, { 1: [2, 7], 6: $V1, 12: 15, 13: $V2, 14: $V3 }, o2($V9, [2, 14], { 7: $Va, 11: $Vb }), o2($Vc, [2, 8]), o2($Vc, [2, 9]), o2($Vc, [2, 10]), o2($V8, [2, 15]), o2($V9, [2, 13], { 7: $Va, 11: $Vb }), o2($Vc, [2, 11]), o2($Vc, [2, 12])],
           defaultActions: { 2: [2, 1], 6: [2, 2] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -274482,11 +274482,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -275389,26 +275389,26 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   function distance2(p1, p22) {
     return Math.sqrt((p1.x - p22.x) * (p1.x - p22.x) + (p1.y - p22.y) * (p1.y - p22.y));
   }
-  function circleOverlap(r1, r2, d3) {
-    if (d3 >= r1 + r2) {
+  function circleOverlap(r12, r2, d3) {
+    if (d3 >= r12 + r2) {
       return 0;
     }
-    if (d3 <= Math.abs(r1 - r2)) {
-      return Math.PI * Math.min(r1, r2) * Math.min(r1, r2);
+    if (d3 <= Math.abs(r12 - r2)) {
+      return Math.PI * Math.min(r12, r2) * Math.min(r12, r2);
     }
-    const w1 = r1 - (d3 * d3 - r2 * r2 + r1 * r1) / (2 * d3);
-    const w22 = r2 - (d3 * d3 - r1 * r1 + r2 * r2) / (2 * d3);
-    return circleArea(r1, w1) + circleArea(r2, w22);
+    const w1 = r12 - (d3 * d3 - r2 * r2 + r12 * r12) / (2 * d3);
+    const w22 = r2 - (d3 * d3 - r12 * r12 + r2 * r2) / (2 * d3);
+    return circleArea(r12, w1) + circleArea(r2, w22);
   }
   function circleCircleIntersection(p1, p22) {
     const d3 = distance2(p1, p22);
-    const r1 = p1.radius;
+    const r12 = p1.radius;
     const r2 = p22.radius;
-    if (d3 >= r1 + r2 || d3 <= Math.abs(r1 - r2)) {
+    if (d3 >= r12 + r2 || d3 <= Math.abs(r12 - r2)) {
       return [];
     }
-    const a2 = (r1 * r1 - r2 * r2 + d3 * d3) / (2 * d3);
-    const h2 = Math.sqrt(r1 * r1 - a2 * a2);
+    const a2 = (r12 * r12 - r2 * r2 + d3 * d3) / (2 * d3);
+    const h2 = Math.sqrt(r12 * r12 - a2 * a2);
     const x0 = p1.x + a2 * (p22.x - p1.x) / d3;
     const y0 = p1.y + a2 * (p22.y - p1.y) / d3;
     const rx = -(p22.y - p1.y) * (h2 / d3);
@@ -275727,11 +275727,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
     return circles;
   }
-  function distanceFromIntersectArea(r1, r2, overlap) {
-    if (Math.min(r1, r2) * Math.min(r1, r2) * Math.PI <= overlap + SMALL) {
-      return Math.abs(r1 - r2);
+  function distanceFromIntersectArea(r12, r2, overlap) {
+    if (Math.min(r12, r2) * Math.min(r12, r2) * Math.PI <= overlap + SMALL) {
+      return Math.abs(r12 - r2);
     }
-    return bisect((distance3) => circleOverlap(r1, r2, distance3) - overlap, 0, r1 + r2);
+    return bisect((distance3) => circleOverlap(r12, r2, distance3) - overlap, 0, r12 + r2);
   }
   function addMissingAreas(areas, parameters = {}) {
     const distinct = parameters.distinct;
@@ -275790,9 +275790,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     areas.filter((x6) => x6.sets.length === 2).forEach((current) => {
       const left3 = setids[current.sets[0]];
       const right3 = setids[current.sets[1]];
-      const r1 = Math.sqrt(sets[left3].size / Math.PI);
+      const r12 = Math.sqrt(sets[left3].size / Math.PI);
       const r2 = Math.sqrt(sets[right3].size / Math.PI);
-      const distance3 = distanceFromIntersectArea(r1, r2, current.size);
+      const distance3 = distanceFromIntersectArea(r12, r2, current.size);
       distances2[left3][right3] = distances2[right3][left3] = distance3;
       let c3 = 0;
       if (current.size + 1e-10 >= Math.min(sets[left3].size, sets[right3].size)) {
@@ -277026,11 +277026,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
           }, "anonymous"),
           table: [o2($V0, [2, 2], { 3: 1, 4: 2 }), { 1: [3] }, { 5: [1, 3], 8: [1, 4] }, o2($V1, [2, 4], { 6: 5 }), o2($V0, [2, 3]), { 7: [1, 6], 8: [1, 8], 9: 7, 10: 9, 11: [1, 10], 12: [1, 11], 17: [1, 12], 19: [1, 13], 22: [1, 14], 24: [1, 15] }, { 1: [2, 1] }, o2($V1, [2, 5]), o2($V1, [2, 6]), o2($V1, [2, 7]), o2($V1, [2, 8]), { 13: 16, 20: $V2, 21: $V3 }, { 13: 20, 18: 19, 20: $V2, 21: $V3 }, { 13: 20, 18: 21, 20: $V2, 21: $V3 }, { 16: [1, 25], 20: [1, 23], 21: [1, 24], 23: 22 }, { 13: 20, 18: 26, 20: $V2, 21: $V3 }, o2($V1, [2, 9], { 14: [1, 27], 15: [1, 28] }), o2($V4, [2, 43]), o2($V4, [2, 44]), o2($V1, [2, 13], { 14: [1, 29], 15: [1, 30], 27: $V5 }), o2($V4, [2, 41]), { 16: [1, 34], 20: [1, 32], 21: [1, 33], 27: $V5 }, o2($V1, [2, 22]), o2($V1, [2, 24], { 14: [1, 35] }), o2($V1, [2, 25], { 14: [1, 36] }), o2($V1, [2, 26]), { 20: $V6, 25: 37, 26: 38, 27: $V5 }, o2($V1, [2, 10], { 15: [1, 40] }), { 16: [1, 41] }, o2($V1, [2, 14], { 15: [1, 42] }), { 16: [1, 43] }, { 13: 44, 20: $V2, 21: $V3 }, o2($V1, [2, 17], { 14: [1, 45] }), o2($V1, [2, 18], { 14: [1, 46] }), o2($V1, [2, 19]), o2($V1, [2, 27]), o2($V1, [2, 28]), o2($V1, [2, 23], { 27: [1, 47] }), o2($V7, [2, 29]), { 15: [1, 48] }, { 16: [1, 49] }, o2($V1, [2, 11]), { 16: [1, 50] }, o2($V1, [2, 15]), o2($V4, [2, 42]), o2($V1, [2, 20]), o2($V1, [2, 21]), { 20: $V6, 26: 51 }, { 16: $V8, 20: $V9, 21: [1, 53], 28: 52, 29: 54, 30: 55, 31: $Va, 32: $Vb, 33: $Vc }, o2($V1, [2, 12]), o2($V1, [2, 16]), o2($V7, [2, 30]), o2($V7, [2, 31]), o2($V7, [2, 32]), o2($V7, [2, 33], { 30: 61, 16: $V8, 20: $V9, 31: $Va, 32: $Vb, 33: $Vc }), o2($Vd, [2, 34]), o2($Vd, [2, 36]), o2($Vd, [2, 37]), o2($Vd, [2, 38]), o2($Vd, [2, 39]), o2($Vd, [2, 40]), o2($Vd, [2, 35])],
           defaultActions: { 6: [2, 1] },
-          parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+          parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
             if (hash.recoverable) {
-              this.trace(str4);
+              this.trace(str5);
             } else {
-              var error3 = new Error(str4);
+              var error3 = new Error(str5);
               error3.hash = hash;
               throw error3;
             }
@@ -277181,11 +277181,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         var lexer = /* @__PURE__ */ (function() {
           var lexer2 = {
             EOF: 1,
-            parseError: /* @__PURE__ */ __name(function parseError(str4, hash) {
+            parseError: /* @__PURE__ */ __name(function parseError(str5, hash) {
               if (this.yy.parser) {
-                this.yy.parser.parseError(str4, hash);
+                this.yy.parser.parseError(str5, hash);
               } else {
-                throw new Error(str4);
+                throw new Error(str5);
               }
             }, "parseError"),
             // resets the lexer, sets new input
@@ -280631,19 +280631,19 @@ See https://chevrotain.io/docs/guide/resolving_lexer_errors.html#UNREACHABLE`;
     });
     return errors;
   }
-  function tryToMatchStrToPattern2(str4, pattern) {
+  function tryToMatchStrToPattern2(str5, pattern) {
     if (pattern instanceof RegExp) {
       if (usesLookAheadOrBehind2(pattern)) {
         return false;
       }
-      const regExpArray = pattern.exec(str4);
+      const regExpArray = pattern.exec(str5);
       return regExpArray !== null && regExpArray.index === 0;
     } else if (typeof pattern === "function") {
-      return pattern(str4, 0, [], {});
+      return pattern(str5, 0, [], {});
     } else if (Object.hasOwn(pattern, "exec")) {
-      return pattern.exec(str4, 0, [], {});
+      return pattern.exec(str5, 0, [], {});
     } else if (typeof pattern === "string") {
-      return pattern === str4;
+      return pattern === str5;
     } else {
       throw Error("non exhaustive match");
     }
@@ -283672,18 +283672,18 @@ see: https://en.wikipedia.org/wiki/LL_parser#Left_factoring.`;
 
   // node_modules/chevrotain/lib/src/lang/lang_extensions.js
   function defineNameProp2(obj, nameValue) {
-    Object.defineProperty(obj, NAME3, {
+    Object.defineProperty(obj, NAME4, {
       enumerable: false,
       configurable: true,
       writable: false,
       value: nameValue
     });
   }
-  var NAME3;
+  var NAME4;
   var init_lang_extensions = __esm({
     "node_modules/chevrotain/lib/src/lang/lang_extensions.js"() {
       init_define_process_argv();
-      NAME3 = "name";
+      NAME4 = "name";
     }
   });
 
@@ -290266,8 +290266,8 @@ ${isHandDrawn ? "" : `
               let maxHeight = 0;
               textElements.forEach((text22) => {
                 const textNode = text22.node();
-                const textWidth = textNode.getComputedTextLength();
-                maxWidth2 = Math.max(maxWidth2, textWidth);
+                const textWidth2 = textNode.getComputedTextLength();
+                maxWidth2 = Math.max(maxWidth2, textWidth2);
                 const bbox = textNode.getBBox();
                 maxHeight = Math.max(maxHeight, bbox.height);
               });
@@ -290429,10 +290429,10 @@ ${isHandDrawn ? "" : `
     t4 ^= t4 + Math.imul(t4 ^ t4 >>> 7, t4 | 61);
     return ((t4 ^ t4 >>> 14) >>> 0) / 4294967296;
   }
-  function hashString4(str4) {
+  function hashString4(str5) {
     let hash = 0;
-    for (let i4 = 0; i4 < str4.length; i4++) {
-      const ch2 = str4.charCodeAt(i4);
+    for (let i4 = 0; i4 < str5.length; i4++) {
+      const ch2 = str5.charCodeAt(i4);
       hash = (hash << 5) - hash + ch2;
       hash |= 0;
     }
@@ -297215,6 +297215,28 @@ ${isHandDrawn ? "" : `
         "history-keyframe": ["id", "hash"],
         "history-blob": ["lang"]
       }
+    },
+    // spec/profiles/geml-statechart/geml-statechart-profile.md — a statechart in
+    // one `diagram` block. The vocabulary admits the format name and the
+    // `current=` attribute on that block, nothing else: the body is raw to the
+    // core either way (§8.6.1), and the renderer that reads the JSON, the
+    // `statechart-*` checks and the Markdown projection are the format's own.
+    "geml-statechart/v1": {
+      // `since` 留空：还没随任何解析器版本发出去。
+      state: "draft",
+      attrs: { diagram: ["current"] },
+      formats: ["geml-statechart"],
+      diagnostics: {
+        "statechart-body": "error",
+        "statechart-initial": "error",
+        "statechart-state": "error",
+        "statechart-transition": "error",
+        "statechart-guard": "error",
+        "statechart-actions": "error",
+        "statechart-vars": "error",
+        "statechart-current": "error",
+        "statechart-unreachable": "warning"
+      }
     }
   };
   var RUNTIME = /* @__PURE__ */ Object.create(null);
@@ -297272,7 +297294,6 @@ ${isHandDrawn ? "" : `
     }
     return { types: types2, attrs, formats, bodies, prose };
   }
-  var EMPTY_VOCABULARY = { types: /* @__PURE__ */ new Set(), attrs: /* @__PURE__ */ new Map(), formats: /* @__PURE__ */ new Set(), bodies: /* @__PURE__ */ new Map(), prose: /* @__PURE__ */ new Set() };
 
   // ../../geml-parser/dist/serialize.js
   init_define_process_argv();
@@ -297340,16 +297361,16 @@ ${isHandDrawn ? "" : `
       return `#${n2.anchor}`;
     return "";
   }
-  function serInline(n2, esc2) {
+  function serInline(n2, esc3) {
     switch (n2.type) {
       case "text":
-        return escMetaRef(esc2 ? escText(n2.value) : n2.value);
+        return escMetaRef(esc3 ? escText(n2.value) : n2.value);
       case "emph":
-        return `*${serSeq(n2.children, esc2)}*`;
+        return `*${serSeq(n2.children, esc3)}*`;
       case "strong":
-        return `**${serSeq(n2.children, esc2)}**`;
+        return `**${serSeq(n2.children, esc3)}**`;
       case "strike":
-        return `~~${serSeq(n2.children, esc2)}~~`;
+        return `~~${serSeq(n2.children, esc3)}~~`;
       case "code": {
         const f2 = "`".repeat(longestRun(n2.value, "`") + 1);
         return f2 + n2.value + f2;
@@ -297361,7 +297382,7 @@ ${isHandDrawn ? "" : `
       case "image":
         return `![${n2.alt}](${n2.src})${serAttrs({ attrs: n2.attrs })}`;
       case "link":
-        return `[${serSeq(n2.children, esc2)}](${linkDest(n2)})${serAttrs({ attrs: n2.attrs })}`;
+        return `[${serSeq(n2.children, esc3)}](${linkDest(n2)})${serAttrs({ attrs: n2.attrs })}`;
       case "autoref":
         return `[[${n2.doc !== void 0 ? `${n2.doc}#${n2.anchor}` : `#${n2.anchor}`}]]`;
       case "project":
@@ -297370,8 +297391,8 @@ ${isHandDrawn ? "" : `
         return `[^${n2.ref}]`;
     }
   }
-  function serSeq(ns, esc2) {
-    return ns.map((n2) => serInline(n2, esc2)).join("");
+  function serSeq(ns, esc3) {
+    return ns.map((n2) => serInline(n2, esc3)).join("");
   }
   function serInlines(ns) {
     const lazy = serSeq(ns, false);
@@ -297454,6 +297475,419 @@ ${isHandDrawn ? "" : `
 
   // ../../geml-parser/dist/to-md.js
   init_define_process_argv();
+
+  // ../../geml-parser/dist/statechart.js
+  init_define_process_argv();
+  var STATECHART_SEVERITY = {
+    "statechart-body": "error",
+    "statechart-initial": "error",
+    "statechart-state": "error",
+    "statechart-transition": "error",
+    "statechart-guard": "error",
+    "statechart-actions": "error",
+    "statechart-vars": "error",
+    "statechart-current": "error",
+    "statechart-final": "error",
+    "statechart-unreachable": "warning",
+    "statechart-dead-end": "warning"
+  };
+  var NAME2 = /^[\p{L}\p{N}_-]+$/u;
+  var isObject = (v3) => typeof v3 === "object" && v3 !== null && !Array.isArray(v3);
+  var str2 = (v3) => v3 === void 0 ? void 0 : typeof v3 === "string" ? v3 : String(v3);
+  var isReference = (s2) => s2.startsWith("#") || /^[^#\s]+\.geml#./.test(s2);
+  function buildStatechart(input) {
+    const diagnostics = [];
+    const report = (code, message) => diagnostics.push({ severity: STATECHART_SEVERITY[code], code, message });
+    const fail = () => ({ model: null, diagnostics });
+    let def;
+    const hasBody = input.body.trim() !== "";
+    if (input.attrs["data"] !== void 0) {
+      if (hasBody) {
+        report("statechart-body", "the definition is in the body and in `data=` at once; write it in one place");
+        return fail();
+      }
+      if (!isObject(input.dataValue)) {
+        report("statechart-body", `\`data=${str2(input.attrs["data"])}\` does not name a \`data\` block whose value is an object`);
+        return fail();
+      }
+      def = input.dataValue;
+    } else {
+      try {
+        def = JSON.parse(input.body);
+      } catch (e3) {
+        report("statechart-body", `the body is not JSON: ${e3.message}`);
+        return fail();
+      }
+      if (!isObject(def)) {
+        report("statechart-body", "the body is not a JSON object");
+        return fail();
+      }
+    }
+    const root4 = def;
+    const states = [];
+    const rawStates = root4["states"];
+    if (!isObject(rawStates)) {
+      report("statechart-state", "`states` is missing or is not an object");
+    } else {
+      for (const [id38, s2] of Object.entries(rawStates)) {
+        if (!NAME2.test(id38)) {
+          report("statechart-state", `state id ${JSON.stringify(id38)} is not a NAME (letters, digits, \`_\`, \`-\`)`);
+          continue;
+        }
+        if (!isObject(s2)) {
+          report("statechart-state", `state \`${id38}\` is not an object`);
+          continue;
+        }
+        for (const k3 of ["states", "regions", "initial"]) {
+          if (k3 in s2)
+            report("statechart-state", `state \`${id38}\` carries \`${k3}\`, which v1 reserves for v2 (hierarchy and parallel regions)`);
+        }
+        const title2 = s2["title"];
+        const description = s2["description"];
+        const final = s2["final"];
+        if (title2 !== void 0 && typeof title2 !== "string")
+          report("statechart-state", `state \`${id38}\`: \`title\` is not a string`);
+        if (description !== void 0 && typeof description !== "string")
+          report("statechart-state", `state \`${id38}\`: \`description\` is not a string`);
+        if (final !== void 0 && typeof final !== "boolean")
+          report("statechart-state", `state \`${id38}\`: \`final\` is not a boolean`);
+        const attrs2 = {};
+        for (const [k3, v3] of Object.entries(s2))
+          if (!["title", "description", "final", "states", "regions", "initial"].includes(k3))
+            attrs2[k3] = v3;
+        const node2 = { id: id38, title: typeof title2 === "string" ? title2 : id38, final: final === true, attrs: attrs2 };
+        if (typeof description === "string")
+          node2.description = description;
+        states.push(node2);
+      }
+    }
+    const stateIds = new Set(states.map((s2) => s2.id));
+    const initial2 = root4["initial"];
+    if (typeof initial2 !== "string")
+      report("statechart-initial", "`initial` is missing or is not a string");
+    else if (isObject(rawStates) && !stateIds.has(initial2))
+      report("statechart-initial", `\`initial\` names \`${initial2}\`, which is not a state`);
+    const current = str2(input.attrs["current"]);
+    if (current !== void 0 && isObject(rawStates) && !stateIds.has(current))
+      report("statechart-current", `\`current=${current}\` is not a state`);
+    const vars = [];
+    const rawVars = root4["vars"];
+    if (rawVars !== void 0) {
+      if (!isObject(rawVars))
+        report("statechart-vars", "`vars` is not an object");
+      else {
+        for (const [name, v3] of Object.entries(rawVars)) {
+          if (!NAME2.test(name)) {
+            report("statechart-vars", `variable name ${JSON.stringify(name)} is not a NAME`);
+            continue;
+          }
+          if (!isObject(v3)) {
+            report("statechart-vars", `variable \`${name}\` is not an object`);
+            continue;
+          }
+          if (!("default" in v3)) {
+            report("statechart-vars", `variable \`${name}\` has no \`default\``);
+            continue;
+          }
+          const attrs2 = {};
+          for (const [k3, val] of Object.entries(v3))
+            if (k3 !== "default")
+              attrs2[k3] = val;
+          vars.push({ name, default: v3["default"], attrs: attrs2 });
+        }
+      }
+    }
+    const varNames = new Set(vars.map((v3) => v3.name));
+    const varsKnown = rawVars === void 0 || isObject(rawVars);
+    const transitions = [];
+    const rawTransitions = root4["transitions"];
+    if (!Array.isArray(rawTransitions)) {
+      report("statechart-transition", "`transitions` is missing or is not an array");
+    } else {
+      const perPair = /* @__PURE__ */ new Map();
+      rawTransitions.forEach((t4, index) => {
+        if (!isObject(t4)) {
+          report("statechart-transition", `transition ${index + 1} is not an object`);
+          return;
+        }
+        const from2 = t4["from"];
+        const to = t4["to"];
+        let ok = true;
+        for (const [k3, v3] of [["from", from2], ["to", to]]) {
+          if (typeof v3 !== "string") {
+            report("statechart-transition", `transition ${index + 1}: \`${k3}\` is missing`);
+            ok = false;
+          } else if (isObject(rawStates) && !stateIds.has(v3)) {
+            report("statechart-transition", `transition ${index + 1}: \`${k3}\` names \`${v3}\`, which is not a state`);
+            ok = false;
+          }
+        }
+        if ("event" in t4) {
+          report("statechart-transition", `transition ${index + 1} carries \`event\`, which v1 reserves for v2`);
+          ok = false;
+        }
+        if (!ok)
+          return;
+        const pair = `${from2}\u2192${to}`;
+        const n2 = (perPair.get(pair) ?? 0) + 1;
+        perPair.set(pair, n2);
+        const name = n2 === 1 ? pair : `${pair}[${n2}]`;
+        let guard;
+        let reads = [];
+        const g2 = t4["guard"];
+        if (g2 !== void 0) {
+          if (isObject(g2)) {
+            const problems = schemaProblems(g2, "guard");
+            for (const p3 of problems)
+              report("statechart-guard", `${name}: ${p3}`);
+            if (problems.length === 0) {
+              guard = { kind: "schema", schema: g2 };
+              reads = readsOf(g2);
+            }
+          } else if (typeof g2 === "string" && isReference(g2)) {
+            const target = input.resolveRef?.(g2);
+            if (target === void 0) {
+              report("statechart-guard", `${name}: \`${g2}\` does not resolve to a \`data\` block`);
+              guard = { kind: "ref", ref: g2, schema: null };
+            } else if (!isObject(target)) {
+              report("statechart-guard", `${name}: \`${g2}\` is not a \`data\` block whose value is an object`);
+              guard = { kind: "ref", ref: g2, schema: null };
+            } else {
+              const problems = schemaProblems(target, g2);
+              for (const p3 of problems)
+                report("statechart-guard", `${name}: ${p3}`);
+              guard = { kind: "ref", ref: g2, schema: problems.length === 0 ? target : null };
+              if (problems.length === 0)
+                reads = readsOf(target);
+            }
+          } else if (typeof g2 === "string") {
+            guard = { kind: "text", text: g2 };
+          } else {
+            report("statechart-guard", `${name}: \`guard\` is neither an object nor a string`);
+          }
+          if (varsKnown) {
+            for (const v3 of reads)
+              if (!varNames.has(v3))
+                report("statechart-guard", `${name}: the guard reads \`${v3}\`, which is not in \`vars\``);
+          }
+        }
+        const resets = [];
+        let actions = [];
+        const a2 = t4["actions"];
+        if (a2 !== void 0) {
+          if (!Array.isArray(a2))
+            report("statechart-actions", `${name}: \`actions\` is not an array`);
+          else {
+            actions = a2;
+            for (const item of a2) {
+              if (!isObject(item))
+                continue;
+              if ("set" in item)
+                report("statechart-actions", `${name}: an action with \`set\` is reserved for v2`);
+              if ("reset" in item) {
+                const r2 = item["reset"];
+                if (!Array.isArray(r2) || !r2.every((x6) => typeof x6 === "string")) {
+                  report("statechart-actions", `${name}: \`reset\` is not an array of names`);
+                  continue;
+                }
+                for (const v3 of r2) {
+                  if (varsKnown && !varNames.has(v3))
+                    report("statechart-actions", `${name}: \`reset\` names \`${v3}\`, which is not in \`vars\``);
+                  else
+                    resets.push(v3);
+                }
+              }
+            }
+          }
+        }
+        const attrs2 = {};
+        for (const [k3, v3] of Object.entries(t4))
+          if (!["from", "to", "guard", "actions", "event"].includes(k3))
+            attrs2[k3] = v3;
+        const tr = { index, from: from2, to, name, actions, resets, reads, attrs: attrs2 };
+        if (guard !== void 0)
+          tr.guard = guard;
+        transitions.push(tr);
+      });
+    }
+    const finalIds = new Set(states.filter((s2) => s2.final).map((s2) => s2.id));
+    for (const t4 of transitions)
+      if (finalIds.has(t4.from))
+        report("statechart-final", `${t4.name}: \`${t4.from}\` is marked final, and a final state has no transition out`);
+    if (diagnostics.some((d3) => d3.severity === "error"))
+      return fail();
+    const start2 = initial2;
+    const seen = /* @__PURE__ */ new Set([start2]);
+    const queue = [start2];
+    while (queue.length > 0) {
+      const s2 = queue.shift();
+      for (const t4 of transitions)
+        if (t4.from === s2 && !seen.has(t4.to)) {
+          seen.add(t4.to);
+          queue.push(t4.to);
+        }
+    }
+    for (const s2 of states)
+      if (!seen.has(s2.id))
+        report("statechart-unreachable", `state \`${s2.id}\` cannot be reached from \`${start2}\``);
+    const hasOut = new Set(transitions.map((t4) => t4.from));
+    for (const s2 of states)
+      if (!s2.final && !hasOut.has(s2.id))
+        report("statechart-dead-end", `state \`${s2.id}\` has no transition out and is not marked final`);
+    const finals = states.filter((s2) => s2.final).map((s2) => s2.id);
+    const attrs = {};
+    for (const [k3, v3] of Object.entries(root4))
+      if (!["initial", "states", "vars", "transitions"].includes(k3))
+        attrs[k3] = v3;
+    const model = { initial: start2, states, vars, transitions, finals, attrs };
+    if (current !== void 0)
+      model.current = current;
+    return { model, diagnostics };
+  }
+  var TYPES2 = /* @__PURE__ */ new Set(["object", "array", "string", "number", "integer", "boolean", "null"]);
+  var KEYWORDS = /* @__PURE__ */ new Set(["type", "oneOf", "anyOf", "properties", "required", "additionalProperties", "items", "enum", "const", "title", "description", "default", "examples"]);
+  var isScalar = (v3) => v3 === null || ["string", "number", "boolean"].includes(typeof v3);
+  function fits(v3, type3) {
+    if (type3 === void 0)
+      return true;
+    if (v3 === null)
+      return type3 === "null";
+    if (type3 === "integer")
+      return typeof v3 === "number" && Number.isInteger(v3);
+    if (type3 === "number")
+      return typeof v3 === "number";
+    return typeof v3 === type3;
+  }
+  function schemaProblems(raw, path4) {
+    const out = [];
+    if (!isObject(raw)) {
+      out.push(`${path4}: a schema must be an object`);
+      return out;
+    }
+    for (const k3 of Object.keys(raw))
+      if (!KEYWORDS.has(k3))
+        out.push(`${path4}: unsupported keyword ${JSON.stringify(k3)}`);
+    const type3 = raw["type"];
+    if (type3 !== void 0 && (typeof type3 !== "string" || !TYPES2.has(type3)))
+      out.push(`${path4}: \`type\` must be one of ${[...TYPES2].join(", ")}`);
+    const t4 = typeof type3 === "string" ? type3 : void 0;
+    const props = raw["properties"];
+    if (props !== void 0) {
+      if (!isObject(props))
+        out.push(`${path4}: \`properties\` must be an object`);
+      else
+        for (const [k3, v3] of Object.entries(props))
+          out.push(...schemaProblems(v3, `${path4}.properties.${k3}`));
+    }
+    const req = raw["required"];
+    if (req !== void 0 && (!Array.isArray(req) || !req.every((x6) => typeof x6 === "string")))
+      out.push(`${path4}: \`required\` must be an array of names`);
+    const ap = raw["additionalProperties"];
+    if (ap !== void 0 && typeof ap !== "boolean")
+      out.push(`${path4}: \`additionalProperties\` must be a boolean`);
+    if (raw["items"] !== void 0)
+      out.push(...schemaProblems(raw["items"], `${path4}.items`));
+    const en = raw["enum"];
+    if (en !== void 0) {
+      if (!Array.isArray(en) || en.length === 0 || !en.every(isScalar))
+        out.push(`${path4}: \`enum\` must be a non-empty array of scalars`);
+      else if (!en.every((v3) => fits(v3, t4)))
+        out.push(`${path4}: an \`enum\` value does not fit \`type\``);
+    }
+    if ("const" in raw) {
+      if (!isScalar(raw["const"]))
+        out.push(`${path4}: \`const\` must be a scalar`);
+      else if (!fits(raw["const"], t4))
+        out.push(`${path4}: \`const\` does not fit \`type\``);
+    }
+    for (const k3 of ["oneOf", "anyOf"]) {
+      const branches = raw[k3];
+      if (branches === void 0)
+        continue;
+      if (!Array.isArray(branches) || branches.length < 2) {
+        out.push(`${path4}: \`${k3}\` needs at least two branches`);
+        continue;
+      }
+      branches.forEach((b3, i4) => out.push(...schemaProblems(b3, `${path4}.${k3}[${i4}]`)));
+    }
+    for (const k3 of ["title", "description"])
+      if (raw[k3] !== void 0 && typeof raw[k3] !== "string")
+        out.push(`${path4}: \`${k3}\` must be a string`);
+    return out;
+  }
+  function readsOf(schema2) {
+    const out = /* @__PURE__ */ new Set();
+    const walk2 = (s2) => {
+      const props = s2["properties"];
+      if (isObject(props))
+        for (const k3 of Object.keys(props))
+          out.add(k3);
+      const req = s2["required"];
+      if (Array.isArray(req)) {
+        for (const r2 of req)
+          if (typeof r2 === "string")
+            out.add(r2);
+      }
+      for (const k3 of ["anyOf", "oneOf"]) {
+        const branches = s2[k3];
+        if (Array.isArray(branches)) {
+          for (const b3 of branches)
+            if (isObject(b3))
+              walk2(b3);
+        }
+      }
+    };
+    walk2(schema2);
+    return [...out].sort();
+  }
+  function edgeLabel(t4) {
+    const g2 = t4.guard;
+    if (g2 === void 0)
+      return "";
+    if (g2.kind === "text")
+      return g2.text;
+    if (g2.kind === "ref")
+      return g2.ref.slice(g2.ref.indexOf("#") + 1);
+    return t4.reads.join(", ");
+  }
+  function guardText(g2) {
+    if (g2.kind === "text")
+      return g2.text;
+    const schema2 = g2.kind === "ref" ? g2.schema : g2.schema;
+    if (schema2 === null)
+      return g2.kind === "ref" ? g2.ref : "";
+    const one4 = (s2) => {
+      const parts = [];
+      const props = s2["properties"];
+      if (isObject(props)) {
+        for (const [k3, sub2] of Object.entries(props)) {
+          if (!isObject(sub2))
+            continue;
+          if ("const" in sub2)
+            parts.push(`${k3} = ${JSON.stringify(sub2["const"])}`);
+          else if (Array.isArray(sub2["enum"]))
+            parts.push(`${k3} \u2208 {${sub2["enum"].map((v3) => JSON.stringify(v3)).join(", ")}}`);
+          else if (typeof sub2["type"] === "string")
+            parts.push(`${k3}: ${sub2["type"]}`);
+          else
+            parts.push(k3);
+        }
+      }
+      const req = s2["required"];
+      if (Array.isArray(req)) {
+        for (const r2 of req)
+          if (typeof r2 === "string" && !(isObject(props) && r2 in props))
+            parts.push(r2);
+      }
+      for (const k3 of ["anyOf", "oneOf"]) {
+        const branches = s2[k3];
+        if (Array.isArray(branches))
+          parts.push("(" + branches.filter(isObject).map(one4).join(k3 === "anyOf" ? " or " : " xor ") + ")");
+      }
+      return parts.join(" and ");
+    };
+    return one4(schema2);
+  }
 
   // ../../geml-parser/dist/coord.js
   init_define_process_argv();
@@ -297813,7 +298247,7 @@ ${isHandDrawn ? "" : `
       while (i4 < n2 && (text4[i4] === " " || text4[i4] === "	" || text4[i4] === "\n" || text4[i4] === "\r"))
         i4++;
     };
-    const str4 = () => {
+    const str5 = () => {
       i4++;
       while (i4 < n2) {
         const c3 = text4[i4];
@@ -297891,7 +298325,7 @@ ${isHandDrawn ? "" : `
             ws();
             if (text4[i4] !== '"')
               stop5();
-            str4();
+            str5();
             ws();
             if (text4[i4] !== ":")
               stop5();
@@ -297912,7 +298346,7 @@ ${isHandDrawn ? "" : `
         }
       }
       if (c3 === '"')
-        return str4();
+        return str5();
       if (c3 === "-" || digit())
         return num3();
       for (const w4 of ["true", "false", "null"])
@@ -299376,7 +299810,7 @@ ${isHandDrawn ? "" : `
     return i4 < 0 ? "" : p3.slice(0, i4);
   }
   function tableFromDocument(source, id38) {
-    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: EMPTY_VOCABULARY };
+    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: vocabularyOf(source) };
     const blocks2 = scanBlocks(normalizeSource(source).split("\n"), 0, ctx);
     const found = ctx.tables?.get(nameKey(id38));
     if (found !== void 0)
@@ -299701,12 +300135,15 @@ ${isHandDrawn ? "" : `
     return typeof caption === "string" ? caption : void 0;
   }
   function gatherIds(source) {
-    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: EMPTY_VOCABULARY };
+    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: vocabularyOf(source) };
     const blocks2 = scanBlocks(normalizeSource(source).split("\n"), 0, ctx);
     const out = new Set(ctx.ids.keys());
     for (const addr of proseRunTargets(blocks2).keys())
       out.add(nameKey(addr));
     return out;
+  }
+  function vocabularyOf(source) {
+    return vocabularyFor(collectMeta(normalizeSource(source).split("\n")));
   }
   function collectMeta(lines, diags, definedAt, markdown) {
     const meta3 = /* @__PURE__ */ new Map();
@@ -299775,7 +300212,7 @@ ${isHandDrawn ? "" : `
     return find4(blocks2) ?? null;
   }
   function scanForCoordinates(source) {
-    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: EMPTY_VOCABULARY };
+    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: vocabularyOf(source) };
     const blocks2 = scanBlocks(normalizeSource(source).split("\n"), 0, ctx);
     const inner2 = {};
     resolveTableSources(ctx, inner2);
@@ -300966,6 +301403,359 @@ ${isHandDrawn ? "" : `
     return div;
   }
 
+  // ../../geml-parser/dist/statechart-svg.js
+  init_define_process_argv();
+  var PAD = 24;
+  var NODE_H = 64;
+  var NODE_MIN_W = 120;
+  var ROW_GAP = 36;
+  var COL_GAP = 28;
+  var RANK_GAP_MIN = 88;
+  var RANK_GAP_DOWN = 76;
+  var PILL_H = 24;
+  var PILL_LINE = 14;
+  var PILL_CHARS = 24;
+  var PILL_GAP = 6;
+  var LANE_GAP = 40;
+  var START = 36;
+  var LABEL_MAX = 28;
+  var SANS = `-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,"PingFang SC","Microsoft Yahei",sans-serif`;
+  var MONO = `ui-monospace,SFMono-Regular,Menlo,Consolas,monospace`;
+  var esc2 = (s2) => s2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  var escAttr2 = (s2) => esc2(s2).replace(/"/g, "&quot;");
+  var r1 = (n2) => String(Math.round(n2 * 10) / 10);
+  var CJK = /[ᄀ-ᇿ⺀-꓏가-힯豈-﫿︰-﹏＀-￯]/;
+  function textWidth(s2, size4, mono = false) {
+    let w4 = 0;
+    for (const ch2 of s2)
+      w4 += CJK.test(ch2) ? size4 : size4 * (mono ? 0.62 : 0.56);
+    return w4;
+  }
+  var clip2 = (s2, max10 = LABEL_MAX) => s2.length > max10 ? `${s2.slice(0, max10 - 1)}\u2026` : s2;
+  function wrapLabel(label) {
+    if (label.length <= PILL_CHARS)
+      return [label];
+    const cut = Math.max(label.lastIndexOf(", ", PILL_CHARS), label.lastIndexOf(" ", PILL_CHARS));
+    const at3 = cut > 6 ? cut : PILL_CHARS;
+    const first4 = label.slice(0, at3).replace(/,\s*$/, "");
+    const rest = label.slice(at3).replace(/^[,\s]+/, "");
+    return [first4, clip2(rest, PILL_CHARS)];
+  }
+  function ranksOf(model) {
+    const ids = model.states.map((s2) => s2.id);
+    const out = new Map(ids.map((id38) => [id38, []]));
+    for (const t4 of model.transitions)
+      if (t4.from !== t4.to && out.has(t4.from) && out.has(t4.to))
+        out.get(t4.from)?.push(t4.to);
+    const back = /* @__PURE__ */ new Set();
+    const seen = /* @__PURE__ */ new Map();
+    const visit = (id38) => {
+      seen.set(id38, 1);
+      for (const to of out.get(id38) ?? []) {
+        const s2 = seen.get(to);
+        if (s2 === 1)
+          back.add(`${id38}\0${to}`);
+        else if (s2 === void 0)
+          visit(to);
+      }
+      seen.set(id38, 2);
+    };
+    if (out.has(model.initial))
+      visit(model.initial);
+    for (const id38 of ids)
+      if (!seen.has(id38))
+        visit(id38);
+    const indeg = new Map(ids.map((id38) => [id38, 0]));
+    const fwd = new Map(ids.map((id38) => [id38, []]));
+    for (const [from2, tos] of out)
+      for (const to of tos)
+        if (!back.has(`${from2}\0${to}`)) {
+          fwd.get(from2)?.push(to);
+          indeg.set(to, (indeg.get(to) ?? 0) + 1);
+        }
+    const rank2 = new Map(ids.map((id38) => [id38, 0]));
+    const queue = ids.filter((id38) => indeg.get(id38) === 0);
+    while (queue.length > 0) {
+      const id38 = queue.shift();
+      for (const to of fwd.get(id38) ?? []) {
+        rank2.set(to, Math.max(rank2.get(to) ?? 0, (rank2.get(id38) ?? 0) + 1));
+        const left3 = (indeg.get(to) ?? 1) - 1;
+        indeg.set(to, left3);
+        if (left3 === 0)
+          queue.push(to);
+      }
+    }
+    return rank2;
+  }
+  var show = (v3) => typeof v3 === "string" ? v3 : JSON.stringify(v3);
+  function pillsOf(t4) {
+    const pills = [];
+    const g2 = t4.guard;
+    if (g2 !== void 0) {
+      const label = edgeLabel(t4);
+      if (label !== "") {
+        const sentence = g2.kind === "text";
+        pills.push({ lines: wrapLabel(label), kind: sentence ? "sentence" : "guard", mono: !sentence, w: 0, h: 0 });
+      }
+    }
+    for (const [k3, v3] of Object.entries(t4.attrs)) {
+      const text4 = v3 === true ? k3 : typeof v3 === "number" ? `${k3}: ${String(v3)}` : null;
+      if (text4 !== null)
+        pills.push({ lines: [text4], kind: "attr", mono: true, w: 0, h: 0 });
+      if (pills.length >= 4)
+        break;
+    }
+    for (const p3 of pills) {
+      p3.w = Math.ceil(Math.max(...p3.lines.map((l4) => textWidth(l4, 11.5, p3.mono)))) + 20;
+      p3.h = p3.lines.length > 1 ? PILL_H + PILL_LINE * (p3.lines.length - 1) : PILL_H;
+    }
+    return pills;
+  }
+  var pillsWidth = (pills) => pills.reduce((a2, p3) => a2 + p3.w, 0) + PILL_GAP * Math.max(0, pills.length - 1);
+  var pillsHeight = (pills) => Math.max(PILL_H, ...pills.map((p3) => p3.h));
+  function layoutOf(model, opts = {}) {
+    const dir2 = opts.direction ?? "right";
+    const right3 = dir2 === "right";
+    const rank2 = ranksOf(model);
+    const top2 = PAD + (opts.title !== void 0 && opts.title !== "" ? 44 : 0);
+    const byRank = /* @__PURE__ */ new Map();
+    const nodes5 = /* @__PURE__ */ new Map();
+    for (const s2 of model.states) {
+      const r2 = rank2.get(s2.id) ?? 0;
+      const w4 = Math.max(NODE_MIN_W, Math.ceil(textWidth(s2.title, 16)) + 40, Math.ceil(textWidth(`#${s2.id} \xB7 current`, 11, true)) + 28);
+      const n2 = { id: s2.id, rank: r2, x: 0, y: 0, w: w4, h: NODE_H };
+      nodes5.set(s2.id, n2);
+      const col = byRank.get(r2) ?? [];
+      col.push(n2);
+      byRank.set(r2, col);
+    }
+    const rankCount = Math.max(-1, ...byRank.keys()) + 1;
+    const thick = [];
+    const spread = [];
+    for (let r2 = 0; r2 < rankCount; r2++) {
+      const col = byRank.get(r2) ?? [];
+      thick.push(right3 ? Math.max(0, ...col.map((n2) => n2.w)) : NODE_H);
+      spread.push(right3 ? col.reduce((a2, n2) => a2 + n2.h, 0) + ROW_GAP * Math.max(0, col.length - 1) : col.reduce((a2, n2) => a2 + n2.w, 0) + COL_GAP * Math.max(0, col.length - 1));
+    }
+    const maxSpread = Math.max(0, ...spread);
+    const pillsFor = /* @__PURE__ */ new Map();
+    const gap = new Array(Math.max(0, rankCount - 1)).fill(right3 ? RANK_GAP_MIN : RANK_GAP_DOWN);
+    let pillBand = PILL_H;
+    for (const t4 of model.transitions) {
+      const a2 = nodes5.get(t4.from);
+      const b3 = nodes5.get(t4.to);
+      if (a2 === void 0 || b3 === void 0)
+        continue;
+      const pills = pillsOf(t4);
+      pillsFor.set(t4.index, pills);
+      if (t4.from !== t4.to && b3.rank === a2.rank + 1) {
+        const need = right3 ? pillsWidth(pills) + 24 - ((thick[a2.rank] ?? 0) + (thick[b3.rank] ?? 0)) / 2 : pillsHeight(pills) + 32;
+        gap[a2.rank] = Math.max(gap[a2.rank] ?? 0, need);
+        pillBand = Math.max(pillBand, pillsHeight(pills));
+      }
+    }
+    const along = [];
+    let pos = right3 ? PAD + START : top2 + START;
+    for (let r2 = 0; r2 < rankCount; r2++) {
+      along.push(pos);
+      pos += (thick[r2] ?? 0) + (gap[r2] ?? 0);
+    }
+    for (let r2 = 0; r2 < rankCount; r2++) {
+      const col = byRank.get(r2) ?? [];
+      if (right3) {
+        let y6 = top2 + pillBand + 16 + (maxSpread - (spread[r2] ?? 0)) / 2;
+        for (const n2 of col) {
+          n2.x = (along[r2] ?? 0) + ((thick[r2] ?? 0) - n2.w) / 2;
+          n2.y = y6;
+          y6 += n2.h + ROW_GAP;
+        }
+      } else {
+        let x6 = PAD + (maxSpread - (spread[r2] ?? 0)) / 2;
+        for (const n2 of col) {
+          n2.x = x6;
+          n2.y = along[r2] ?? 0;
+          x6 += n2.w + COL_GAP;
+        }
+      }
+    }
+    const band2 = right3 ? top2 + pillBand + 16 + maxSpread : PAD + maxSpread;
+    let far = band2;
+    let minX = PAD;
+    let maxX = 0;
+    let maxY = 0;
+    const reach = (x6, y6) => {
+      maxX = Math.max(maxX, x6);
+      maxY = Math.max(maxY, y6);
+    };
+    for (const n2 of nodes5.values())
+      reach(n2.x + n2.w, n2.y + n2.h);
+    const place = (px, py, pills) => {
+      reach(px + pillsWidth(pills) / 2, py + pillsHeight(pills) / 2);
+      minX = Math.min(minX, px - pillsWidth(pills) / 2);
+    };
+    const edges3 = [];
+    let lanes2 = 0;
+    const pairSeen = /* @__PURE__ */ new Map();
+    const laid = [];
+    for (const t4 of model.transitions) {
+      const a2 = nodes5.get(t4.from);
+      const b3 = nodes5.get(t4.to);
+      if (a2 === void 0 || b3 === void 0)
+        continue;
+      const key = `${t4.from}\0${t4.to}`;
+      const k3 = pairSeen.get(key) ?? 0;
+      pairSeen.set(key, k3 + 1);
+      laid.push({ t: t4, a: a2, b: b3, k: k3, pills: pillsFor.get(t4.index) ?? [] });
+    }
+    for (const { t: t4, a: a2, b: b3, k: k3, pills } of laid) {
+      const acx = a2.x + a2.w / 2;
+      const acy = a2.y + a2.h / 2;
+      const bcx = b3.x + b3.w / 2;
+      const bcy = b3.y + b3.h / 2;
+      if (t4.from === t4.to) {
+        let d3;
+        let px;
+        let py;
+        if (right3) {
+          const y0 = a2.y + a2.h;
+          d3 = `M${r1(acx - 14)} ${r1(y0)} V${r1(y0 + 22 + k3 * 12)} H${r1(acx + 14)} V${r1(y0 + 1)}`;
+          px = acx;
+          py = y0 + 34 + k3 * 12 + (pillsHeight(pills) - PILL_H) / 2;
+        } else {
+          const x0 = a2.x + a2.w;
+          d3 = `M${r1(x0)} ${r1(acy - 14)} H${r1(x0 + 22 + k3 * 12)} V${r1(acy + 14)} H${r1(x0 + 1)}`;
+          px = x0 + 30 + k3 * 12 + pillsWidth(pills) / 2;
+          py = acy + 22 + (pillsHeight(pills) - PILL_H) / 2;
+        }
+        edges3.push({ t: t4, kind: "self", d: d3, pills, px, py });
+        place(px, py, pills);
+        far = Math.max(far, right3 ? py + pillsHeight(pills) / 2 : px + pillsWidth(pills) / 2);
+        continue;
+      }
+      if (b3.rank === a2.rank + 1) {
+        let d3;
+        let px;
+        let py;
+        if (right3) {
+          const ax = a2.x + a2.w;
+          const ay = acy + k3 * 10;
+          const bx = b3.x;
+          const by = bcy + k3 * 10;
+          const straight = Math.abs(ay - by) < 1;
+          d3 = straight ? `M${r1(ax)} ${r1(ay)} H${r1(bx)}` : `M${r1(ax)} ${r1(ay)} C${r1((ax + bx) / 2)} ${r1(ay)} ${r1((ax + bx) / 2)} ${r1(by)} ${r1(bx)} ${r1(by)}`;
+          px = (ax + bx) / 2;
+          py = straight ? Math.min(a2.y, b3.y) - 12 - pillsHeight(pills) / 2 - k3 * (PILL_H + PILL_GAP) : (ay + by) / 2;
+        } else {
+          const ax = acx + k3 * 10;
+          const ay = a2.y + a2.h;
+          const bx = bcx + k3 * 10;
+          const by = b3.y;
+          const straight = Math.abs(ax - bx) < 1;
+          d3 = straight ? `M${r1(ax)} ${r1(ay)} V${r1(by)}` : `M${r1(ax)} ${r1(ay)} C${r1(ax)} ${r1((ay + by) / 2)} ${r1(bx)} ${r1((ay + by) / 2)} ${r1(bx)} ${r1(by)}`;
+          px = (ax + bx) / 2 + (k3 > 0 ? pillsWidth(pills) / 2 + 8 : 0);
+          py = (ay + by) / 2;
+        }
+        edges3.push({ t: t4, kind: "forward", d: d3, pills, px, py });
+        place(px, py, pills);
+        if (!right3)
+          far = Math.max(far, px + pillsWidth(pills) / 2);
+      }
+    }
+    for (const { t: t4, a: a2, b: b3, pills } of laid) {
+      if (t4.from === t4.to || b3.rank === a2.rank + 1)
+        continue;
+      const acx = a2.x + a2.w / 2;
+      const acy = a2.y + a2.h / 2;
+      const bcx = b3.x + b3.w / 2;
+      const bcy = b3.y + b3.h / 2;
+      const lane = lanes2++;
+      let d3;
+      let px;
+      let py;
+      if (right3) {
+        const laneY = far + 28 + lane * LANE_GAP;
+        const s2 = bcx < acx ? -1 : 1;
+        d3 = `M${r1(acx)} ${r1(a2.y + a2.h)} V${r1(laneY - 10)} Q${r1(acx)} ${r1(laneY)} ${r1(acx + 10 * s2)} ${r1(laneY)} H${r1(bcx - 10 * s2)} Q${r1(bcx)} ${r1(laneY)} ${r1(bcx)} ${r1(laneY - 10)} V${r1(b3.y + b3.h + 1)}`;
+        px = (acx + bcx) / 2;
+        py = laneY;
+      } else {
+        const laneX = far + 28 + lane * LANE_GAP;
+        const s2 = bcy < acy ? -1 : 1;
+        d3 = `M${r1(a2.x + a2.w)} ${r1(acy)} H${r1(laneX - 10)} Q${r1(laneX)} ${r1(acy)} ${r1(laneX)} ${r1(acy + 10 * s2)} V${r1(bcy - 10 * s2)} Q${r1(laneX)} ${r1(bcy)} ${r1(laneX - 10)} ${r1(bcy)} H${r1(b3.x + b3.w + 1)}`;
+        px = laneX;
+        py = (acy + bcy) / 2;
+      }
+      edges3.push({ t: t4, kind: "lane", d: d3, pills, px, py });
+      place(px, py, pills);
+      reach(right3 ? 0 : px, right3 ? py : 0);
+    }
+    const shiftX = Math.max(0, PAD - minX);
+    return { nodes: nodes5, edges: edges3, width: Math.ceil(maxX + shiftX + PAD), height: Math.ceil(maxY + PAD), top: top2, direction: dir2, shiftX };
+  }
+  function statechartSvg(model, opts = {}) {
+    const L3 = layoutOf(model, { ...opts.title !== void 0 ? { title: opts.title } : {}, ...opts.direction !== void 0 ? { direction: opts.direction } : {} });
+    const right3 = L3.direction === "right";
+    const ov = opts.overlay ?? {};
+    const current = ov.current ?? model.current;
+    const taken = new Set(ov.taken ?? []);
+    const pressable = new Set(ov.pressable ?? []);
+    const key = (opts.key ?? "sc").replace(/[^A-Za-z0-9_-]/g, "_");
+    const arr = `${key}-arr`;
+    const arrA = `${key}-arr-a`;
+    const out = [];
+    out.push(`<style>.sc{font-family:${SANS}}.sc .ttl{font-size:17px;font-weight:600;fill:#1f2328}.sc .box{fill:#fff;stroke:#8c959f;stroke-width:1.2}.sc .name{font-size:16px;font-weight:600;fill:#1f2328}.sc .sid{font-size:11px;fill:#656d76;font-family:${MONO}}.sc .cur .box{fill:#eaf2ff;stroke:#2563eb;stroke-width:2}.sc .cur .name{fill:#0c447c}.sc .inner{fill:none;stroke:#8c959f;stroke-width:1}.sc .ring{fill:none;stroke:#2563eb;stroke-width:2;animation:sc-pulse 2.4s ease-in-out infinite}.sc .badge circle{fill:#2563eb}.sc .badge text{font-size:11px;font-weight:600;fill:#fff;font-family:${MONO}}.sc .edge{fill:none;stroke:#8c959f;stroke-width:1.6}.sc .taken .edge{stroke:#2563eb;stroke-width:2.2}.sc .can{cursor:pointer}.sc .can .edge{stroke:#2563eb}.sc .can .pill rect{stroke:#2563eb}.sc .can:hover .edge{stroke-width:3}.sc .can:hover .pill rect{fill:#eaf2ff}.sc .hit{fill:none;stroke:transparent;stroke-width:16}.sc .flow{fill:none;stroke:#2563eb;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:3 11;animation:sc-flow 1.1s linear infinite}.sc .flow.lane{stroke:#9a6700;animation-duration:2.2s}.sc .pill rect{fill:#fff;stroke:#d0d7de}.sc .pill text{font-size:11.5px;fill:#424a53;font-family:${MONO}}.sc .pill.sentence rect{fill:#fff8c5;stroke:#d4a72c}.sc .pill.sentence text{font-family:${SANS};fill:#7d4e00}.sc .pill.attr rect{fill:#f6f8fa;stroke:#d0d7de}.sc .pill.attr text{fill:#656d76}.sc .pill.ok rect{fill:#dafbe1;stroke:#4ac26b}.sc .pill.ok text{fill:#116329}.sc .pill.no rect{fill:#f6f8fa;stroke:#d0d7de;stroke-dasharray:3 2}.sc .pill.no text{fill:#8c959f}@keyframes sc-flow{to{stroke-dashoffset:-28}}@keyframes sc-pulse{0%,100%{stroke-opacity:.12}50%{stroke-opacity:.7}}@media (prefers-reduced-motion:reduce){.sc .flow,.sc .ring{animation:none}}</style>`);
+    const marker = (id38, fill) => `<marker id="${escAttr2(id38)}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9z" fill="${fill}"/></marker>`;
+    out.push(`<defs>${marker(arr, "#8c959f")}${marker(arrA, "#2563eb")}</defs>`);
+    out.push(`<g class="sc"${L3.shiftX > 0 ? ` transform="translate(${r1(L3.shiftX)} 0)"` : ""}>`);
+    if (opts.title !== void 0 && opts.title !== "")
+      out.push(`<text class="ttl" x="${PAD}" y="${PAD + 18}">${esc2(opts.title)}</text>`);
+    const init3 = L3.nodes.get(model.initial);
+    if (init3 !== void 0) {
+      const cx = init3.x + init3.w / 2;
+      const cy = init3.y + init3.h / 2;
+      out.push(right3 ? `<g class="start"><circle cx="${r1(init3.x - 32)}" cy="${r1(cy)}" r="6" fill="#1f2328"/><path class="edge" d="M${r1(init3.x - 25)} ${r1(cy)} H${r1(init3.x - 2)}" marker-end="url(#${escAttr2(arr)})"/></g>` : `<g class="start"><circle cx="${r1(cx)}" cy="${r1(init3.y - 30)}" r="6" fill="#1f2328"/><path class="edge" d="M${r1(cx)} ${r1(init3.y - 23)} V${r1(init3.y - 2)}" marker-end="url(#${escAttr2(arr)})"/></g>`);
+    }
+    const tip = (t4) => {
+      const g2 = t4.guard === void 0 ? "" : ` \u2014 ${guardText(t4.guard)}`;
+      const extra = Object.entries(t4.attrs).filter(([, v3]) => typeof v3 === "string").map(([k3, v3]) => `${k3}: ${show(v3)}`);
+      return [`${t4.name}${g2}`, ...extra].join("\n");
+    };
+    for (const e3 of L3.edges) {
+      const lane = e3.kind !== "forward";
+      const was = taken.has(e3.t.name);
+      const can = pressable.has(e3.t.name);
+      out.push(`<g class="tr ${e3.kind}${was ? " taken" : ""}${can ? " can" : ""}" data-transition="${escAttr2(e3.t.name)}"${can ? ` data-from="${escAttr2(e3.t.from)}" data-to="${escAttr2(e3.t.to)}" role="button"` : ""}><title>${esc2(tip(e3.t))}${can ? "\n\u2014 press to take" : ""}</title>` + (can ? `<path class="hit" d="${e3.d}"/>` : "") + `<path class="edge" d="${e3.d}" marker-end="url(#${escAttr2(was || can ? arrA : arr)})"/><path class="flow${lane ? " lane" : ""}" d="${e3.d}"/>`);
+      if (e3.pills.length > 0) {
+        const holds = ov.holds?.[e3.t.name];
+        let x6 = e3.px - pillsWidth(e3.pills) / 2;
+        for (const p3 of e3.pills) {
+          const state5 = p3.kind === "guard" && holds !== void 0 ? holds ? " ok" : " no" : "";
+          const y0 = e3.py - (p3.lines.length - 1) * PILL_LINE / 2;
+          out.push(`<g class="pill ${p3.kind}${state5}"><rect x="${r1(x6)}" y="${r1(e3.py - p3.h / 2)}" width="${r1(p3.w)}" height="${r1(p3.h)}" rx="12"/><text x="${r1(x6 + p3.w / 2)}" y="${r1(y0)}" text-anchor="middle" dominant-baseline="central">${p3.lines.map((l4, i4) => i4 === 0 ? esc2(l4) : `<tspan x="${r1(x6 + p3.w / 2)}" dy="${PILL_LINE}">${esc2(l4)}</tspan>`).join("")}</text></g>`);
+          x6 += p3.w + PILL_GAP;
+        }
+      }
+      out.push(`</g>`);
+    }
+    for (const s2 of model.states) {
+      const n2 = L3.nodes.get(s2.id);
+      if (n2 === void 0)
+        continue;
+      const cur = s2.id === current;
+      const cls = ["node", s2.id === model.initial ? "initial" : "", s2.final ? "final" : "", cur ? "cur" : ""].filter(Boolean).join(" ");
+      const sub2 = `#${s2.id}${cur ? ov.paused ? " \xB7 paused" : " \xB7 current" : s2.final ? " \xB7 final" : ""}`;
+      const count2 = ov.counts?.[s2.id] ?? 0;
+      const badge = count2 > 0 && !(count2 === 1 && cur) ? `<g class="badge"><circle cx="${r1(n2.x + n2.w - 2)}" cy="${r1(n2.y + 2)}" r="10"/><text x="${r1(n2.x + n2.w - 2)}" y="${r1(n2.y + 2)}" text-anchor="middle" dominant-baseline="central">${String(count2)}</text></g>` : "";
+      out.push(`<g class="${cls}" data-state="${escAttr2(s2.id)}"><title>${esc2(s2.description !== void 0 ? `${s2.title} \u2014 ${s2.description}` : s2.title)}</title>` + (cur ? `<rect class="ring" x="${r1(n2.x - 6)}" y="${r1(n2.y - 6)}" width="${r1(n2.w + 12)}" height="${r1(n2.h + 12)}" rx="18"/>` : "") + `<rect class="box" x="${r1(n2.x)}" y="${r1(n2.y)}" width="${r1(n2.w)}" height="${r1(n2.h)}" rx="14"/>` + (s2.final ? `<rect class="inner" x="${r1(n2.x + 4)}" y="${r1(n2.y + 4)}" width="${r1(n2.w - 8)}" height="${r1(n2.h - 8)}" rx="11"/>` : "") + `<text class="name" x="${r1(n2.x + n2.w / 2)}" y="${r1(n2.y + 27)}" text-anchor="middle">${esc2(s2.title)}</text><text class="sid" x="${r1(n2.x + n2.w / 2)}" y="${r1(n2.y + 50)}" text-anchor="middle">${esc2(sub2)}</text>${badge}</g>`);
+    }
+    out.push(`</g>`);
+    const label = `${opts.title !== void 0 && opts.title !== "" ? `${opts.title}: ` : ""}${model.states.map((s2) => s2.title).join(", ")}`;
+    return `<svg class="geml-statechart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${L3.width} ${L3.height}" width="100%" style="max-width:${L3.width}px;height:auto;display:block;margin:0 auto" role="img" aria-label="${escAttr2(label)}">${out.join("")}</svg>`;
+  }
+  function statechartSvgDataUrl(svg2) {
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg2)}`;
+  }
+
   // src/render.js
   function renderDocument(model, dom, focus) {
     const byId = collectById(model.children, /* @__PURE__ */ new Map());
@@ -301322,6 +302112,56 @@ ${isHandDrawn ? "" : `
           return wrap3;
         }
         wrap3.appendChild(el(dom, "div", { class: "cg-mount", "data-src": src, text: "loading code graph \u2026" }));
+        return wrap3;
+      }
+      if (fmt4 === "geml-statechart") {
+        const wrap3 = el(dom, "figure", { class: "geml-block geml-diagram statechart", id: b3.id });
+        const hasData = b3.attrs && b3.attrs.data !== void 0;
+        const { model, diagnostics } = hasData ? { model: null, diagnostics: [] } : buildStatechart({ body: (b3.raw || []).join("\n"), attrs: b3.attrs || {} });
+        if (!model) {
+          const why = hasData ? `definition in data=${b3.attrs.data}` : diagnostics.map((d3) => d3.message).join("; ");
+          wrap3.appendChild(el(dom, "pre", { class: "geml-diagram-src", text: (b3.raw || []).join("\n") }));
+          wrap3.appendChild(el(dom, "figcaption", { text: `geml-statechart (${why})` }));
+          return wrap3;
+        }
+        const caption = b3.attrs && typeof b3.attrs.caption === "string" ? b3.attrs.caption : void 0;
+        const svg2 = statechartSvg(model, { key: b3.id || "sc", ...caption !== void 0 ? { title: caption } : {} });
+        const picture = el(dom, "div", { class: "statechart-picture" });
+        picture.innerHTML = svg2;
+        wrap3.appendChild(picture);
+        wrap3.appendChild(el(dom, "p", { class: "statechart-tools" }, [el(dom, "a", { download: `${b3.id || "statechart"}.svg`, href: statechartSvgDataUrl(svg2), text: "Download SVG" })]));
+        const show3 = (v3) => typeof v3 === "string" ? v3 : JSON.stringify(v3);
+        const attrRows = (attrs) => {
+          const keys3 = Object.keys(attrs);
+          return keys3.length === 0 ? null : el(dom, "dl", null, keys3.flatMap((k3) => [el(dom, "dt", { text: k3 }), el(dom, "dd", { text: show3(attrs[k3]) })]));
+        };
+        const edge = (t4, arrow) => {
+          const l4 = edgeLabel(t4);
+          return el(dom, "li", { text: `${arrow} ${t4.name}${l4 === "" ? "" : ` \u2014 ${l4}`}` });
+        };
+        const states = el(dom, "div", { class: "statechart-states" });
+        for (const s2 of model.states) {
+          const marks = [s2.id === model.initial ? "initial" : "", model.finals.includes(s2.id) ? "final" : "", s2.id === model.current ? "current" : ""].filter(Boolean).join(", ");
+          const edges3 = [...model.transitions.filter((t4) => t4.from === s2.id).map((t4) => edge(t4, "\u2192")), ...model.transitions.filter((t4) => t4.to === s2.id).map((t4) => edge(t4, "\u2190"))];
+          const d3 = el(dom, "details", { class: "statechart-state", open: s2.id === model.current ? "" : void 0 }, [
+            el(dom, "summary", { text: `${s2.title}${s2.title === s2.id ? "" : ` (${s2.id})`}${marks ? ` \u2014 ${marks}` : ""}` }),
+            s2.description === void 0 ? null : el(dom, "p", { text: s2.description }),
+            attrRows(s2.attrs),
+            edges3.length === 0 ? null : el(dom, "ul", null, edges3)
+          ]);
+          states.appendChild(d3);
+        }
+        wrap3.appendChild(states);
+        const transitions = el(dom, "div", { class: "statechart-transitions" });
+        for (const t4 of model.transitions) {
+          transitions.appendChild(el(dom, "details", { class: "statechart-transition" }, [
+            el(dom, "summary", { text: t4.name }),
+            t4.guard === void 0 ? null : el(dom, "p", { text: `guard: ${guardText(t4.guard)}` }),
+            t4.actions.length === 0 ? null : el(dom, "p", { text: `actions: ${t4.actions.map(show3).join("; ")}` }),
+            attrRows(t4.attrs)
+          ]));
+        }
+        wrap3.appendChild(transitions);
         return wrap3;
       }
       if (fmt4 === "mermaid") {
@@ -302227,14 +303067,14 @@ ${isHandDrawn ? "" : `
         typedBlocks(n2.children, out);
     }
   }
-  function str2(v3) {
+  function str3(v3) {
     return v3 === void 0 ? void 0 : String(v3);
   }
   function entryLayers(doc, forDoc) {
     const meta3 = doc.children.find((b3) => b3.kind === "block" && b3.type === "meta");
     const data6 = meta3 && meta3.kind === "block" ? meta3.data : void 0;
     const out = [];
-    const dflt = str2(data6?.["default-style"]);
+    const dflt = str3(data6?.["default-style"]);
     if (dflt)
       out.push({ path: dflt, id: "default-style" });
     if (forDoc === void 0)
@@ -302329,11 +303169,11 @@ ${isHandDrawn ? "" : `
         continue;
       }
       const id38 = b3.id ?? "(anon)";
-      const written = str2(b3.attrs["src"]) ?? "";
+      const written = str3(b3.attrs["src"]) ?? "";
       const hash = written.indexOf("#");
       const docPath = hash < 0 ? written : written.slice(0, hash);
       const anchor2 = hash < 0 ? void 0 : written.slice(hash + 1);
-      const partRaw = str2(b3.attrs["part"]);
+      const partRaw = str3(b3.attrs["part"]);
       const part = partRaw !== void 0 && EMBED_PARTS2.has(partRaw) ? partRaw : "whole";
       const say = (why) => void sheet.diagnostics.push(styleDiag("style-embed-not-expanded", `\`embed\`${written ? ` of \`${written}\`` : ""} contributed no rules: ${why}`, id38));
       if (written === "") {
@@ -302416,7 +303256,7 @@ ${isHandDrawn ? "" : `
         const position5 = sheet.ruleBlocks ?? 0;
         sheet.ruleBlocks = position5 + 1;
         const label = b3.id !== void 0 ? `#${b3.id}` : `[${position5}]`;
-        const match3 = str2(b3.attrs["match"]);
+        const match3 = str3(b3.attrs["match"]);
         if (match3 === void 0) {
           sheet.diagnostics.push(styleDiag("style-missing-attribute", "`style-rule` requires `match=`", id38));
           continue;
@@ -302429,7 +303269,7 @@ ${isHandDrawn ? "" : `
         for (const note3 of r2.notes ?? [])
           sheet.diagnostics.push(styleDiag("style-reserved-name", note3, id38));
         const partRule = isPartSelector(r2.branches[0]);
-        const component2 = str2(b3.attrs["component"]);
+        const component2 = str3(b3.attrs["component"]);
         const params = {};
         const box = {};
         for (const [k3, v3] of Object.entries(b3.attrs)) {
@@ -302446,8 +303286,8 @@ ${isHandDrawn ? "" : `
           }
           params[k3] = v3;
         }
-        const screensRaw = str2(b3.attrs["screen"]) ?? "";
-        const whenRaw = str2(b3.attrs["when"]);
+        const screensRaw = str3(b3.attrs["screen"]) ?? "";
+        const whenRaw = str3(b3.attrs["when"]);
         let when = [];
         if (whenRaw !== void 0) {
           const parsed = parseWhen(whenRaw, id38, sheet);
@@ -302467,19 +303307,19 @@ ${isHandDrawn ? "" : `
         };
         if (component2 !== void 0)
           rule.component = component2;
-        const handler2 = str2(b3.attrs["handler"]);
+        const handler2 = str3(b3.attrs["handler"]);
         if (handler2 !== void 0)
           rule.handler = handler2;
-        const show2 = str2(b3.attrs["show"]);
-        if (show2 !== void 0)
-          rule.show = show2;
-        const filter8 = str2(b3.attrs["filter"]);
+        const show3 = str3(b3.attrs["show"]);
+        if (show3 !== void 0)
+          rule.show = show3;
+        const filter8 = str3(b3.attrs["filter"]);
         if (filter8 !== void 0)
           rule.filter = filter8;
         sheet.rules.push(rule);
       } else if (b3.type === "style-state") {
-        const match3 = str2(b3.attrs["match"]);
-        const on3 = str2(b3.attrs["on"]);
+        const match3 = str3(b3.attrs["match"]);
+        const on3 = str3(b3.attrs["on"]);
         if (match3 === void 0)
           sheet.diagnostics.push(styleDiag("style-missing-attribute", "`style-state` requires `match=`", id38));
         if (on3 === void 0)
@@ -302500,11 +303340,11 @@ ${isHandDrawn ? "" : `
         }
         for (const note3 of r2.notes ?? [])
           sheet.diagnostics.push(styleDiag("style-reserved-name", note3, id38));
-        const st2 = { id: id38, type: str2(b3.attrs["type"]) ?? "block-ref", match: r2.branches, on: on3 };
-        const vf = str2(b3.attrs["value-from"]);
+        const st2 = { id: id38, type: str3(b3.attrs["type"]) ?? "block-ref", match: r2.branches, on: on3 };
+        const vf = str3(b3.attrs["value-from"]);
         if (vf !== void 0)
           st2.valueFrom = vf;
-        const iv = str2(b3.attrs["init-value"]);
+        const iv = str3(b3.attrs["init-value"]);
         if (iv !== void 0)
           st2.initValue = iv;
         sheet.states.push(st2);
@@ -302520,12 +303360,12 @@ ${isHandDrawn ? "" : `
     }
   }
   function readContainer(b3, id38, kind, sheet) {
-    const slots = str2(b3.attrs["slots"]);
+    const slots = str3(b3.attrs["slots"]);
     if (slots === void 0) {
       sheet.diagnostics.push(styleDiag("style-missing-attribute", `\`${kind}\` requires \`slots=\``, id38));
       return null;
     }
-    const component2 = str2(b3.attrs["component"]);
+    const component2 = str3(b3.attrs["component"]);
     const box = {};
     const params = {};
     for (const k3 of Object.keys(b3.attrs)) {
@@ -302544,7 +303384,7 @@ ${isHandDrawn ? "" : `
       params[k3] = b3.attrs[k3];
     }
     let axis2 = "column";
-    const axisRaw = str2(b3.attrs["axis"]);
+    const axisRaw = str3(b3.attrs["axis"]);
     if (axisRaw !== void 0) {
       if (AXES.has(axisRaw))
         axis2 = axisRaw;
@@ -304892,7 +305732,7 @@ ${isHandDrawn ? "" : `
       const v3 = li.getAttribute(k3);
       return v3 === null ? null : Number(v3);
     };
-    const show2 = () => {
+    const show3 = () => {
       el2.setAttribute("data-shuffle", shuffled ? "on" : "off");
       el2.setAttribute("data-repeat", repeat);
       if (shuffleBtn) shuffleBtn.setAttribute("aria-pressed", shuffled ? "true" : "false");
@@ -305000,11 +305840,11 @@ ${isHandDrawn ? "" : `
     shuffleBtn?.addEventListener("click", () => {
       shuffled = !shuffled;
       if (shuffled) reshuffle();
-      show2();
+      show3();
     });
     repeatBtn?.addEventListener("click", () => {
       repeat = repeat === "off" ? "all" : repeat === "all" ? "one" : "off";
-      show2();
+      show3();
     });
     media.addEventListener("loadedmetadata", () => {
       const start2 = at3 < 0 ? null : num3(items[at3], "data-in");
@@ -305038,7 +305878,7 @@ ${isHandDrawn ? "" : `
     } else {
       select(0, false);
     }
-    show2();
+    show3();
   }
   function playlistLive(block2, params, ctx) {
     const el2 = playlist(block2, params, ctx);
@@ -305093,7 +305933,7 @@ ${isHandDrawn ? "" : `
     for (const m3 of [1, 2, 5]) if (m3 * pow >= raw) return m3 * pow;
     return 10 * pow;
   }
-  function clip2(block2, params, ctx) {
+  function clip3(block2, params, ctx) {
     const dom = ctx.dom;
     const el2 = dom.createElement("div");
     el2.className = "geml-clip";
@@ -305150,7 +305990,7 @@ ${isHandDrawn ? "" : `
     return trackEl(ctx, "geml-track-overlay", params);
   }
   var MEDIA_COMPONENTS = {
-    clip: clip2,
+    clip: clip3,
     player: playerLive,
     playlist: playlistLive,
     "timeline-track": timelineTrack,
@@ -305413,7 +306253,7 @@ ${isHandDrawn ? "" : `
   }
 
   // src/geml.css
-  var geml_default = '/* GEML Viewer \u2014 document styling. Scoped under .geml-doc so it never leaks. */\n\n.geml-body {\n  margin: 0;\n  background: #fbfbfa;\n  color: #1f2328;\n  font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;\n}\n\n.geml-doc {\n  max-width: 860px;\n  margin: 0 auto;\n  padding: 48px 24px 96px;\n}\n\n.geml-doc h1, .geml-doc h2, .geml-doc h3,\n.geml-doc h4, .geml-doc h5, .geml-doc h6 {\n  line-height: 1.25;\n  margin: 1.8em 0 0.6em;\n  font-weight: 600;\n}\n.geml-doc h1 { font-size: 2em; margin-top: 0; }\n.geml-doc h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid #e6e6e3; }\n.geml-doc h3 { font-size: 1.25em; }\n.geml-doc h4 { font-size: 1.05em; }\n\n.geml-doc p { margin: 0 0 1em; }\n.geml-doc a { color: #0969da; text-decoration: none; }\n.geml-doc a:hover { text-decoration: underline; }\n.geml-doc a.geml-broken { color: #cf222e; text-decoration: underline wavy; }\n\n.geml-doc em { font-style: italic; }\n.geml-doc strong { font-weight: 600; }\n.geml-doc del { color: #6e7781; }\n\n.geml-doc code {\n  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;\n  font-size: 0.9em;\n  background: #eff1f3;\n  border-radius: 4px;\n  padding: 0.15em 0.4em;\n}\n\n.geml-doc pre {\n  background: #f6f8fa;\n  border: 1px solid #e6e6e3;\n  border-radius: 8px;\n  padding: 14px 16px;\n  overflow-x: auto;\n  line-height: 1.5;\n}\n.geml-doc pre code { background: none; padding: 0; font-size: 0.875em; }\n\n/* code/diagram block with a small type tag in the corner */\n.geml-block { position: relative; margin: 0 0 1.2em; }\n.geml-tag {\n  position: absolute; top: 8px; right: 10px;\n  font: 11px/1 ui-monospace, monospace;\n  color: #6e7781; background: #fff; border: 1px solid #e6e6e3;\n  border-radius: 4px; padding: 2px 6px; user-select: none;\n}\n\n/* data block (GEP-0005): external-source / empty notes under the preview */\n.geml-data-note {\n  margin: 0 0 0.4em; font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n}\n\n/* The rest of a long data block: present, collapsed. Styled like the note it\n   replaced, so a page that used to end in "\u2026 13 more line(s)" now ends in the\n   same grey line \u2014 except it opens. No resource of any kind: this renders under\n   `default-src \'none\'`, so the marker is the system disclosure triangle. */\n.geml-data-more > summary {\n  font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n  cursor: pointer; user-select: none; margin: 0.4em 0;\n}\n.geml-data-more > pre { margin: 0.4em 0 0; }\n\n.geml-doc ul, .geml-doc ol { margin: 0 0 1em; padding-left: 1.6em; }\n.geml-doc li { margin: 0.2em 0; }\n\n.geml-doc blockquote.geml-note {\n  margin: 0 0 1.2em; padding: 0.5em 1em;\n  border-left: 4px solid #0969da; background: #f3f7fd; border-radius: 0 6px 6px 0;\n}\n.geml-doc blockquote.geml-note > :last-child { margin-bottom: 0; }\n\n/* Tables */\n.geml-doc table { border-collapse: collapse; margin: 0 0 1.2em; font-size: 0.95em; width: auto; }\n.geml-doc caption { caption-side: top; text-align: left; color: #6e7781; padding-bottom: 6px; font-size: 0.9em; }\n.geml-doc th, .geml-doc td { border: 1px solid #d0d7de; padding: 6px 12px; text-align: left; }\n.geml-doc thead th { background: #f6f8fa; }\n.geml-doc td.geml-num { text-align: right; font-variant-numeric: tabular-nums; }\n.geml-doc td.geml-computed { background: #f3fbf4; }\n.geml-doc tr.geml-summary td { font-weight: 600; border-top: 2px solid #afb8c1; background: #fafbfc; }\n\n/* Charts (geml-chart) and diagrams */\n.geml-chart, .geml-diagram { margin: 0 0 1.4em; text-align: center; }\n.geml-chart svg { max-width: 100%; height: auto; }\n.geml-d2 svg { max-width: 100%; height: auto; }\n.geml-d2-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-graphviz svg { max-width: 100%; height: auto; }\n.geml-graphviz-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-chart-legend { font-size: 0.85em; color: #57606a; margin-top: 6px; }\n.geml-chart-legend span { margin: 0 8px; }\n.geml-chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }\n\n/* Diagnostics banner */\n.geml-diag {\n  max-width: 860px; margin: 0 auto 12px; padding: 10px 14px;\n  border-radius: 8px; font-size: 0.9em;\n}\n.geml-diag-error { background: #fff0ef; border: 1px solid #ffcecb; color: #82071e; }\n.geml-diag-warn { background: #fff8c5; border: 1px solid #f0e3a1; color: #6b5e16; }\n.geml-diag ul { margin: 6px 0 0; padding-left: 1.4em; }\n.geml-diag code { background: rgba(0,0,0,0.05); }\n\n.katex-display { overflow-x: auto; overflow-y: hidden; }\n\n/* Task-list items (- [ ] / - [x]). Native disabled checkboxes render an ugly\n   grey, so we draw our own with appearance:none \u2014 a clean empty box for open,\n   a solid green box with a white tick for done.\n   The tick is a centred text glyph, NOT a background image: raw.githubusercontent.com\n   serves `Content-Security-Policy: default-src \'none\'`, which strips data-URI\n   images \u2014 so an SVG-background tick vanishes in the browser extension. A "\u2713"\n   glyph needs no resource, survives the CSP, and flex-centres exactly. */\n.geml-doc li.geml-task { list-style: none; }\n.geml-doc li.geml-task > input[type="checkbox"] {\n  appearance: none; -webkit-appearance: none;\n  width: 1.1em; height: 1.1em; margin: 0 0.5em 0 0; vertical-align: -0.2em;\n  border: 1.5px solid #c8ccd0; border-radius: 4px; background: #fff;\n  position: relative; opacity: 1; cursor: default; box-sizing: border-box;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked {\n  background-color: #1f883d; border-color: #1f883d;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked::after {\n  content: "\u2713";\n  position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n  display: flex; align-items: center; justify-content: center;\n  color: #fff; font-size: 0.8em; line-height: 1; font-weight: 700;\n}\n\n/* geml-code-graph (GEP-0003): layered method flow. Pure CSS only \u2014 this file\n   is injected under strict page CSPs (default-src \'none\'), so no resources. */\n.geml-doc .code-graph, .code-graph { margin: 0 0 1.4em; }\n/* The graph is the widest artifact in the document: let it break out of the\n   860px reading column and take the viewport, centred, leaving the prose\n   around it untouched. .geml-doc is `margin: 0 auto`, so negative inline\n   margins land centred; a transform would instead become the containing block\n   for the fullscreen overlay below. */\n@media (min-width: 900px) { .geml-doc .code-graph { margin-inline: calc((100% - min(96vw, 1600px)) / 2); } }\n.cg-mount { border: 1px solid #e6e6e3; border-radius: 8px; padding: 10px 12px; background: #fff; color: #6e7781; font-size: .85em; }\n.cg-scroll { overflow: auto; max-height: 84vh; }\n.cg-svg { display: block; }\n/* Fullscreen. The button and the class come from the parser\'s codeGraphRuntime,\n   which this bundle imports, so these rules are what make it do anything: one\n   class covers both the native Fullscreen API and the fixed-overlay fallback.\n   :fullscreen is deliberately absent from the selectors \u2014 a browser that\n   doesn\'t know it would drop the whole rule. The stage carries its own flex\n   here because the non-fullscreen sheet doesn\'t style it, and the z-index has\n   to beat the host page, not merely our own stacking context. */\n.cg-mount.cg-full { position: fixed; inset: 0; z-index: 2147483000; margin: 0; border: 0; border-radius: 0; padding: 10px 14px; background: #fff; display: flex; flex-direction: column; }\n.cg-mount.cg-full > .cg-bar, .cg-mount.cg-full > .cg-legend, .cg-mount.cg-full > .cg-groups { flex: 0 0 auto; }\n.cg-mount.cg-full .cg-stage { display: flex; gap: 10px; align-items: flex-start; flex: 1 1 auto; min-height: 0; }\n.cg-mount.cg-full .cg-stage .cg-scroll { flex: 1 1 auto; min-width: 0; }\n.cg-mount.cg-full .cg-scroll { min-height: 0; max-height: none; height: 100%; }\n.cg-mount.cg-full .cg-src-body { max-height: none; }\n.cg-mount.cg-full .cg-frame { flex: 1 1 auto; height: auto; }\n.cg-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .82em; color: #6e7781; margin-bottom: 6px; }\n.cg-bar button { font: inherit; padding: 1px 8px; border: 1px solid #d0d7de; border-radius: 5px; background: transparent; cursor: pointer; }\n.cg-crumb .cg-seg { border: 0; border-radius: 0; padding: 0; background: none; color: #0969da; cursor: pointer; font: inherit; }\n.cg-crumb .cg-seg:hover { text-decoration: underline; }\n.cg-legend { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-size: .75em; color: #6e7781; margin-top: 6px; }\n.cg-upbtn circle { fill: #fff; stroke: #94a3b8; }\n.cg-upbtn text { font-size: 11px; fill: #57606a; }\n.cg-upbtn:hover circle { stroke: #2563eb; }\n.cg-upbtn:hover text { fill: #2563eb; }\n.cg-groups { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: .75em; color: #6e7781; }\n.cg-chip { display: inline-flex; align-items: center; gap: 4px; }\n.cg-chip i { width: 10px; height: 10px; border-radius: 2px; border: 1px solid #94a3b8; display: inline-block; }\n.cg-note { font-size: .8em; color: #9a6700; }\n.cg-frame { display: block; width: 100%; height: 84vh; border: 0; background: #fff; }\n.cg-flash { color: #b42318; }\n.cg-n rect { fill: #eef2f7; stroke: #94a3b8; }\n.cg-n text { font-size: 12px; fill: #1f2328; font-family: ui-monospace, Consolas, monospace; }\n.cg-n { cursor: pointer; }\n.cg-n.root rect { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; }\n.cg-n.leaf { opacity: .45; }\n.cg-n.test rect { stroke-dasharray: 3 2; }\n.cg-n.grp rect { stroke-width: 1.8; }\n.cg-e { fill: none; stroke: #94a3b8; stroke-width: .9; }\n.cg-e.cand { stroke-dasharray: 2 3; }\n.cg-e.back { stroke: #dc2626; stroke-dasharray: 5 3; }\n.cg-e.soft { opacity: .55; }\n/* hover: the caller cone lights up, the rest dims */\n.cg-svg.hl .cg-n { opacity: .22; }\n.cg-svg.hl .cg-e { opacity: .1; }\n.cg-svg.hl .cg-n.hl { opacity: 1; }\n.cg-svg.hl .cg-e.hl { opacity: 1; stroke-width: 1.6; }\n\n/* Transclusion (=== embed). Borrowed content is marked by a left rule; a\n   refused embed keeps its target link plus a visible note (S7 \u2014 never a\n   silent blank). Pure CSS only: this sheet is injected on pages that may run\n   under `default-src \'none\'`, so it must load zero resources. */\n.geml-transclusion { border-left: 3px solid #d8dee4; padding-left: 12px; margin: 12px 0; }\n.geml-transclusion-unexpanded { color: #57606a; }\n.geml-transclusion-note { color: #6e7781; font-size: 0.85em; margin-left: 6px; }\n.geml-transclusion-error { background: #fff0ef; border: 1px solid #ffcecb; border-left: 3px solid #82071e; color: #82071e; padding: 6px 10px; }\n\n/* Single-block focus (URL #id): a bar noting the narrowed view + the way back. */\n.geml-focus-banner {\n  margin: 0 0 1.2em; padding: 8px 12px;\n  background: #fff8e6; border: 1px solid #f0e0a8; border-radius: 6px;\n  color: #6e5c1f; font-size: 0.9em;\n}\n.geml-focus-banner a.geml-focus-full { color: #0969da; text-decoration: none; }\n.geml-focus-banner a.geml-focus-full:hover { text-decoration: underline; }\n\n/* GEP 0010 \u2014 the affordance for a translation model that is not downloaded yet.\n   Chrome will only fetch one under a user activation, so the click is not a\n   nicety: it is the gesture the API requires, and the moment the reader agrees\n   to the download. */\n.geml-translate-offer { margin: 0 0 .5rem; }\n.geml-translate-offer button {\n  font: inherit; font-size: .85em; padding: .2em .6em; cursor: pointer;\n  border: 1px solid currentColor; border-radius: .25em;\n  background: transparent; color: inherit; opacity: .75;\n}\n.geml-translate-offer button:hover:not(:disabled) { opacity: 1; }\n.geml-translate-offer button:disabled { cursor: progress; opacity: .55; }\n/* A refusal the reader can see: the page is showing its source, and silence\n   would be indistinguishable from a document that was always in that language. */\n.geml-translate-refused { font-size: .8em; opacity: .65; font-style: italic; }\n\n/* Freeze what the page is showing. Fixed rather than in the flow because the\n   viewer injects into someone else\'s document and owns no header to sit in. */\n.geml-export-btn {\n  position: fixed; right: 1rem; bottom: 1rem; z-index: 9;\n  font: inherit; font-size: .85em; padding: .4rem .75rem;\n  border: 1px solid currentColor; border-radius: 6px;\n  background: Canvas; color: inherit; cursor: pointer; opacity: .55;\n}\n.geml-export-btn:hover:not(:disabled) { opacity: 1; }\n.geml-export-btn:disabled { cursor: progress; opacity: .35; }\n\n/* The source/translation switch rides at the end of its section\'s heading:\n   small, quiet, and out of the reading line. Sized in em so it shrinks with the\n   heading it hangs off rather than being one fixed size on an h1 and an h4. */\n.geml-source-toggle {\n  font: inherit; font-size: .6em; font-weight: 400; vertical-align: middle;\n  margin-left: .6em; padding: .1em .45em;\n  border: 1px solid currentColor; border-radius: 4px;\n  background: transparent; color: inherit; cursor: pointer; opacity: .4;\n}\n.geml-source-toggle:hover { opacity: .85; }\n\n/* geml-form/v1\uFF08GEP-0008\uFF09\u7684\u63A7\u4EF6\u3002\u53EA\u753B\uFF0C\u4E0D\u6821\u9A8C \u2014\u2014 \u7EA6\u675F\u662F\u58F0\u660E\uFF0C\u5904\u7406\u5668\u624D\u6267\u884C\u3002 */\n.geml-form { display: flex; flex-direction: column; gap: 12px; }\n.geml-form-group { border: 1px solid currentColor; border-radius: 6px; padding: 12px; }\n.geml-form-field { display: flex; flex-direction: column; gap: 4px; }\n.geml-form-field[data-type="boolean"] { flex-direction: row; align-items: center; gap: 8px; }\n.geml-form-label { font-size: .9em; opacity: .85; }\n.geml-form-required { color: #f85149; margin-left: 2px; }\n.geml-form-control { font: inherit; color: inherit; background: transparent;\n  border: 1px solid currentColor; border-radius: 6px; padding: 5px 8px; max-width: 100%; }\n.geml-form-control:hover, .geml-form-control:focus { outline: none; border-color: currentColor; opacity: 1; }\nselect.geml-form-control { cursor: pointer; }\n.geml-form-desc { margin: 0; font-size: .85em; opacity: .7; }\n\n/* ---- \u9875\u9762\u5E03\u5C40\uFF08geml-style\uFF09\u3002\u53EA\u6709\u5BB9\u5668\u7684 flex \u4E0E\u51E0\u6761\u4E0D\u5E26\u4EFB\u4F55\u8272\u503C\u3001\u5C3A\u5BF8\u7684\u901A\u7528\u89C4\u5219\uFF1A\n   \u989C\u8272\u3001\u95F4\u8DDD\u3001\u5B57\u53F7\u5168\u90E8\u6765\u81EA\u6837\u5F0F\u8868\uFF08cssForPage \u751F\u6210\uFF09\u3002\u6CE8\u5165\u9875\u9762\u7684 CSS \u4E0D\u5F97\u52A0\u8F7D\u4EFB\u4F55\u8D44\u6E90\u3002 */\n.geml-page { margin: 0; }\n.geml-frame { display: flex; min-width: 0; min-height: 0; position: relative; }\n/* \u8F74\u7684\u9ED8\u8BA4\u653E\u8FDB\u4E00\u4E2A\u533F\u540D @layer\uFF1A\u672A\u5206\u5C42\u7684\u89C4\u5219\u4E00\u5F8B\u8D62\u8FC7\u5206\u5C42\u7684\uFF0C\u4E0E\u7279\u5F02\u6027\u65E0\u5173\u3002\n   cssForPage \u53D1\u51FA\u7684\u662F `.geml-f-x` / `.geml-b-x` \u5355\u7C7B\uFF080,1,0\uFF09\uFF0C\u800C\u8FD9\u91CC\u662F\u7C7B+\u5C5E\u6027\n   \uFF080,2,0\uFF09\u2014\u2014 \u4E0D\u5206\u5C42\u7684\u8BDD\uFF0C`item-align` \u5728\u6A2A\u6392\u5BB9\u5668\u4E0A\u3001`grow` \u5728\u6A2A\u6392\u91CC\u7684\u5757\u4E0A\u90FD\u4F1A\n   \u88AB\u8FD9\u4E24\u6761\u9759\u9ED8\u538B\u6B7B\uFF08\u5B9E\u6D4B\uFF1Aalign-items \u4ECD\u662F stretch\u3001flex-grow \u4ECD\u662F 0\uFF09\u3002\n   \u5BBF\u4E3B\u7684\u9ED8\u8BA4\u5FC5\u987B\u8BA9\u4F4D\u7ED9\u6837\u5F0F\u8868\u8BF4\u7684\u8BDD\uFF0C\u8FD9\u662F\u4E00\u6574\u7C7B\u95EE\u9898\uFF0C\u4E0D\u662F\u67D0\u4E2A\u8BCD\u7684\u95EE\u9898\u3002\n   `align-items: stretch` \u540C\u65F6\u88AB\u5220\u6389\uFF1Aflex \u5BB9\u5668\u4E0D\u5199\u5B83\u65F6\u8BA1\u7B97\u503C\u5C31\u662F `normal`\uFF0C\n   \u884C\u4E3A\u5B8C\u5168\u76F8\u540C\uFF0C\u5B83\u552F\u4E00\u7684\u4F5C\u7528\u662F\u538B\u4F4F `item-align`\u3002 */\n@layer {\n  .geml-frame[data-axis="column"] { flex-direction: column; }\n  .geml-frame[data-axis="row"] { flex-direction: row; }\n  .geml-frame[data-axis="row"] > .geml-placed { flex: 0 0 auto; }\n}\n.geml-placed { min-width: 0; box-sizing: border-box; }\n.geml-placed[role="button"], .geml-frame[role="button"] { cursor: pointer; }\n.geml-page button { color: inherit; font: inherit; }\n/* \u94FE\u63A5**\u4E0D\u5265**\uFF1AHTML \u7684\u9ED8\u8BA4\u662F\u84DD\u8272\u5E26\u4E0B\u5212\u7EBF\uFF0C\u53BB\u6389\u662F\u5916\u89C2\u51B3\u5B9A\uFF0C\u7531\u6837\u5F0F\u8868\u7528 `color` \u548C\n   `underline=no` \u8BF4\u3002\u5BBF\u4E3B\u5265\u6389\u7684\u90A3\u4E00\u7248\u8FDE\u5D4C\u8FDB\u6765\u7684\u6587\u7AE0\u91CC\u7684\u94FE\u63A5\u90FD\u4E00\u8D77\u5265\u4E86 \u2014\u2014 \u6B63\u6587\u91CC\u7684\u94FE\u63A5\n   \u548C\u6B63\u6587\u7684\u5B57\u4E00\u6A21\u4E00\u6837\uFF0C\u770B\u4E0D\u51FA\u662F\u94FE\u63A5\uFF0C\u800C\u6CA1\u6709\u4EBA\u8981\u6C42\u8FC7\u8FD9\u4E2A\u3002 */\n.geml-page img { vertical-align: middle; }\n.geml-page .text > p { margin: 0; }\n/* \u6761\u76EE\u672C\u8EAB\uFF1A\u6CBF\u8F74\u6392\u7684\u4E00\u6761\u5C31\u662F\u4E00\u884C\u3002`gap` \u7531\u6837\u5F0F\u8868\u7ED9\uFF08cssForPage \u540C\u65F6\u843D\u5230\u5BB9\u5668\u548C\u6761\u76EE\u4E0A\uFF09\uFF0C\n   \u8FD9\u91CC\u53EA\u6709\u300C\u6761\u76EE\u662F\u4EC0\u4E48\u5F62\u72B6\u300D\uFF0C\u6CA1\u6709\u4EFB\u4F55\u957F\u5EA6\u3002 */\n.geml-items > li { display: inline-flex; align-items: center; white-space: nowrap; }\n/* \u6811\u53EA\u6709\u4E00\u4E2A\u6807\u8BB0\uFF1A`summary` \u7684\u5C55\u5F00\u4E09\u89D2\u3002`li` \u81EA\u5DF1\u7684\u9879\u76EE\u7B26\u53F7\u8981\u53BB\u6389 \u2014\u2014 \u4E00\u884C\u4E24\u4E2A\u6807\u8BB0\n   \uFF08\u2022 \u548C \u25BE\uFF09\u662F\u4E24\u5957\u673A\u5236\u649E\u5728\u4E00\u8D77\uFF0C\u4E0D\u662F\u7248\u9762\u9009\u62E9\u3002\u7F29\u8FDB\u7528 em\uFF0C\u8DDF\u7740\u6837\u5F0F\u8868\u8BBE\u7684\u5B57\u53F7\u8D70\uFF0C\n   \u5BBF\u4E3B\u91CC\u56E0\u6B64\u6CA1\u6709\u9875\u9762\u5E38\u91CF\uFF1B\u771F\u9700\u8981\u6309\u9875\u5B9A\u7F29\u8FDB\u65F6\u5B83\u662F tree \u7684\u7EC4\u4EF6\u53C2\u6570\uFF08\xA712.3 \u70B9\u540D\u7684 `indent`\uFF09\uFF0C\n   \u4E0D\u662F\u5185\u542B\u8BCD\uFF0C\u7B49\u7B2C\u4E00\u4E2A\u771F\u5B9E\u9700\u6C42\u518D\u52A0\u3002\n   list-style \u662F\u7EE7\u627F\u5C5E\u6027\uFF0C\u6240\u4EE5 summary \u8981\u628A\u4E09\u89D2\u8981\u56DE\u6765\uFF0C\u5426\u5219\u8FDE\u5B83\u4E00\u8D77\u6CA1\u4E86\u3002 */\n.geml-tree, .geml-tree ul { list-style: none; margin: 0; padding-left: 0; }\n.geml-tree summary { cursor: pointer; list-style: revert; }\n.geml-segments { display: inline-flex; }\n.geml-segments button { border: 0; background: none; cursor: pointer; }\n.geml-segments button[aria-pressed="true"] { background: Canvas; font-weight: 500; }\n.geml-source { width: 100%; box-sizing: border-box; min-height: 60vh; font-family: ui-monospace, monospace; }\n/* `fade-out=<\u79D2>` \u7528\u7684\u52A8\u753B\u3002\u6DE1\u5B8C\u4E4B\u540E visibility: hidden\uFF0C\u4E8E\u662F\u5B83\u65E2\u770B\u4E0D\u89C1\u4E5F\u6321\u4E0D\u4F4F\u70B9\u51FB\u3002\n   \u65F6\u957F\u7531\u6837\u5F0F\u8868\u7ED9\uFF0C\u8FD9\u91CC\u53EA\u6709\u5F62\u72B6\u3002\u8BFB\u8005\u8981\u6C42\u51CF\u5C11\u52A8\u6001\u6548\u679C\u65F6\u76F4\u63A5\u8DF3\u5230\u7EC8\u70B9 \u2014\u2014 \u63D0\u793A\u4E00\u95EA\u800C\u8FC7\uFF0C\u4E0D\u662F\u5185\u5BB9\u3002 */\n@keyframes geml-fade { to { opacity: 0; visibility: hidden; } }\n@keyframes geml-fade-in { from { opacity: 0; } to { opacity: 1; } }\n@media (prefers-reduced-motion: reduce) {\n  .geml-page .geml-frame, .geml-page .geml-placed { animation-duration: 1ms !important; }\n}\n.geml-page .geml-form-field { display: contents; }\n.geml-page .geml-form-control { border: 0; padding: 0; outline: none; width: 100%; }\n\n/* geml-media\uFF1A\u65F6\u95F4\u7EBF\u3002frame \u7EC4\u4EF6\u53EA\u80FD\u7ED9\u533A\u5757\u6DFB\u4E2A\u5144\u5F1F\u8282\u70B9\uFF0C\u5305\u4E0D\u4F4F\u69FD\u4F4D\u91CC\u7684\u5757 \u2014\u2014\n   \u6240\u4EE5\u5B9A\u4F4D\u4E0A\u4E0B\u6587\u5FC5\u987B\u662F frame \u533A\u5757\u672C\u8EAB\uFF0C\u7531\u5B83\u7684 data-component \u8BA4\u4EBA\u3002\u7247\u6BB5\u7684\n   left/width \u662F\u7EC4\u4EF6\u6309\u65F6\u95F4\u7B97\u51FA\u6765\u7684\u767E\u5206\u6BD4\uFF0C\u8FD9\u91CC\u53EA\u8D1F\u8D23\u8BA9\u5B83\u4EEC\u6709\u5904\u53EF\u843D\u3002 */\n[data-component="timeline-track"],\n[data-component="overlay-track"] { position: relative; }\n.geml-clip { position: absolute; box-sizing: border-box; overflow: hidden; }\n.geml-track-ruler { position: absolute; inset: 0 0 auto 0; }\n.geml-tick { position: absolute; }\n\n/* geml-media/v1 \xB7 \u64AD\u653E\u5668\uFF08media-player.js\uFF09\u3002\u4E00\u884C\u5916\u90E8\u8D44\u6E90\u90FD\u6CA1\u6709 \u2014\u2014 viewer \u8DD1\u5728\n   default-src \'none\' \u7684\u9875\u9762\u4E0A\uFF0C\u6837\u5F0F\u8868\u91CC\u51FA\u73B0\u4EFB\u4F55 url() \u90FD\u4F1A\u88AB CSP \u6321\u4E0B\u3002 */\n.geml-player { display: flex; flex-direction: column; gap: 8px; }\n.geml-player-empty { opacity: .7; font-style: italic; }\n.geml-stage {\n  position: relative;\n  width: 100%;\n  aspect-ratio: 16 / 9;\n  background: #000;\n  overflow: hidden;\n  border-radius: 6px;\n}\n.geml-layer-video {\n  position: absolute;\n  inset: 0;\n  width: 100%;\n  height: 100%;\n  object-fit: contain;\n}\n/* \u58F0\u97F3\u8F68\u6CA1\u6709\u753B\u9762\uFF0C\u4F46\u8981\u7559\u5728 DOM \u91CC\u8BA9\u65F6\u949F\u63A8\u5B83 */\n.geml-layer-audio { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }\n.geml-caption {\n  position: absolute;\n  left: 0; right: 0; bottom: 6%;\n  padding: 0 8%;\n  text-align: center;\n  color: #fff;\n  text-shadow: 0 1px 3px rgba(0, 0, 0, .9);\n  line-height: 1.4;\n  pointer-events: none;\n}\n.geml-transport { display: flex; align-items: center; gap: 10px; }\n.geml-play {\n  width: 2.2em; height: 2.2em;\n  border: 1px solid currentColor;\n  border-radius: 50%;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  line-height: 1;\n  cursor: pointer;\n}\n.geml-seek { flex: 1; min-width: 0; }\n.geml-clock {\n  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n  opacity: .75;\n  min-width: 9ch;\n  text-align: right;\n}\n\n/* geml-media/v1 \xB7 \u6B4C\u5355\uFF08media-playlist.js\uFF09\u3002\u53EA\u51FA\u7ED3\u6784\uFF1A\u4E00\u4E2A\u5A92\u4F53\u5143\u7D20\u3001\u4E0A\u4E00\u9996/\u4E0B\u4E00\u9996\u3001\n   \u66F2\u76EE\u5217\u8868\uFF1B\u6B63\u5728\u653E\u7684\u90A3\u9996\u7531 aria-current \u6807\u51FA\u3002\u989C\u8272\u5B57\u53F7\u5F52\u6837\u5F0F\u8868\u3002 */\n.geml-playlist { display: flex; flex-direction: column; gap: 8px; }\n.geml-playlist-empty { opacity: .7; font-style: italic; }\n.geml-playlist-media { width: 100%; }\nvideo.geml-playlist-media { background: #000; border-radius: 6px; }\n.geml-playlist-transport { display: flex; gap: 8px; }\n.geml-playlist-transport button,\n.geml-playlist-item {\n  border: 0;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  cursor: pointer;\n}\n/* \u968F\u673A\u3001\u91CD\u590D\uFF1A\u6CA1\u6309\u4E0B\u662F\u534A\u900F\u660E\uFF1B\u5355\u66F2\u91CD\u590D\u5728\u6309\u94AE\u4E0A\u6807\u4E00\u4E2A 1 */\n.geml-shuffle, .geml-repeat { opacity: .45; }\n.geml-shuffle[aria-pressed="true"], .geml-repeat[aria-pressed="true"] { opacity: 1; }\n.geml-repeat[data-mode="one"]::after { content: "1"; font-size: .7em; vertical-align: super; }\n.geml-playlist-items { margin: 0; padding-left: 2em; }\n.geml-playlist-items > li { padding: 2px 0; }\n.geml-playlist-item { width: 100%; padding: 4px 6px; text-align: left; border-radius: 4px; }\n.geml-playlist-item:hover { background: rgba(127, 127, 127, .15); }\n.geml-playlist-items > li[aria-current="true"] { font-weight: 600; }\n.geml-playlist-items > li[aria-current="true"] .geml-playlist-item { background: rgba(127, 127, 127, .22); }\n';
+  var geml_default = '/* GEML Viewer \u2014 document styling. Scoped under .geml-doc so it never leaks. */\n\n.geml-body {\n  margin: 0;\n  background: #fbfbfa;\n  color: #1f2328;\n  font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;\n}\n\n.geml-doc {\n  max-width: 860px;\n  margin: 0 auto;\n  padding: 48px 24px 96px;\n}\n\n.geml-doc h1, .geml-doc h2, .geml-doc h3,\n.geml-doc h4, .geml-doc h5, .geml-doc h6 {\n  line-height: 1.25;\n  margin: 1.8em 0 0.6em;\n  font-weight: 600;\n}\n.geml-doc h1 { font-size: 2em; margin-top: 0; }\n.geml-doc h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid #e6e6e3; }\n.geml-doc h3 { font-size: 1.25em; }\n.geml-doc h4 { font-size: 1.05em; }\n\n.geml-doc p { margin: 0 0 1em; }\n.geml-doc a { color: #0969da; text-decoration: none; }\n.geml-doc a:hover { text-decoration: underline; }\n.geml-doc a.geml-broken { color: #cf222e; text-decoration: underline wavy; }\n\n.geml-doc em { font-style: italic; }\n.geml-doc strong { font-weight: 600; }\n.geml-doc del { color: #6e7781; }\n\n.geml-doc code {\n  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;\n  font-size: 0.9em;\n  background: #eff1f3;\n  border-radius: 4px;\n  padding: 0.15em 0.4em;\n}\n\n.geml-doc pre {\n  background: #f6f8fa;\n  border: 1px solid #e6e6e3;\n  border-radius: 8px;\n  padding: 14px 16px;\n  overflow-x: auto;\n  line-height: 1.5;\n}\n.geml-doc pre code { background: none; padding: 0; font-size: 0.875em; }\n\n/* code/diagram block with a small type tag in the corner */\n.geml-block { position: relative; margin: 0 0 1.2em; }\n.geml-tag {\n  position: absolute; top: 8px; right: 10px;\n  font: 11px/1 ui-monospace, monospace;\n  color: #6e7781; background: #fff; border: 1px solid #e6e6e3;\n  border-radius: 4px; padding: 2px 6px; user-select: none;\n}\n\n/* data block (GEP-0005): external-source / empty notes under the preview */\n.geml-data-note {\n  margin: 0 0 0.4em; font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n}\n\n/* The rest of a long data block: present, collapsed. Styled like the note it\n   replaced, so a page that used to end in "\u2026 13 more line(s)" now ends in the\n   same grey line \u2014 except it opens. No resource of any kind: this renders under\n   `default-src \'none\'`, so the marker is the system disclosure triangle. */\n.geml-data-more > summary {\n  font: 12px/1.4 ui-monospace, monospace; color: #6e7781;\n  cursor: pointer; user-select: none; margin: 0.4em 0;\n}\n.geml-data-more > pre { margin: 0.4em 0 0; }\n\n.geml-doc ul, .geml-doc ol { margin: 0 0 1em; padding-left: 1.6em; }\n.geml-doc li { margin: 0.2em 0; }\n\n.geml-doc blockquote.geml-note {\n  margin: 0 0 1.2em; padding: 0.5em 1em;\n  border-left: 4px solid #0969da; background: #f3f7fd; border-radius: 0 6px 6px 0;\n}\n.geml-doc blockquote.geml-note > :last-child { margin-bottom: 0; }\n\n/* Tables */\n.geml-doc table { border-collapse: collapse; margin: 0 0 1.2em; font-size: 0.95em; width: auto; }\n.geml-doc caption { caption-side: top; text-align: left; color: #6e7781; padding-bottom: 6px; font-size: 0.9em; }\n.geml-doc th, .geml-doc td { border: 1px solid #d0d7de; padding: 6px 12px; text-align: left; }\n.geml-doc thead th { background: #f6f8fa; }\n.geml-doc td.geml-num { text-align: right; font-variant-numeric: tabular-nums; }\n.geml-doc td.geml-computed { background: #f3fbf4; }\n.geml-doc tr.geml-summary td { font-weight: 600; border-top: 2px solid #afb8c1; background: #fafbfc; }\n\n/* Charts (geml-chart) and diagrams */\n.geml-chart, .geml-diagram { margin: 0 0 1.4em; text-align: center; }\n.geml-chart svg { max-width: 100%; height: auto; }\n/* geml-statechart: the parser\'s own SVG, a download link, then the state / transition lists */\n.geml-diagram.statechart { text-align: left; }\n.statechart-picture svg.geml-statechart { background: #fff; border: 1px solid #d0d7de; border-radius: 12px; }\n.statechart-tools { margin: 6px 0 10px; text-align: right; font-size: .82em; }\n.statechart-tools a { color: #656d76; }\n.statechart-state > summary, .statechart-transition > summary { cursor: pointer; padding: 4px 0; }\n.statechart-state dl, .statechart-transition dl { margin: 4px 0 4px 1em; font-size: .9em; }\n.statechart-state dt, .statechart-transition dt { float: left; clear: left; min-width: 8em; color: #656d76; }\n.geml-d2 svg { max-width: 100%; height: auto; }\n.geml-d2-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-graphviz svg { max-width: 100%; height: auto; }\n.geml-graphviz-error { color: #82071e; font-size: 0.85em; margin: 6px 0 0; }\n.geml-chart-legend { font-size: 0.85em; color: #57606a; margin-top: 6px; }\n.geml-chart-legend span { margin: 0 8px; }\n.geml-chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }\n\n/* Diagnostics banner */\n.geml-diag {\n  max-width: 860px; margin: 0 auto 12px; padding: 10px 14px;\n  border-radius: 8px; font-size: 0.9em;\n}\n.geml-diag-error { background: #fff0ef; border: 1px solid #ffcecb; color: #82071e; }\n.geml-diag-warn { background: #fff8c5; border: 1px solid #f0e3a1; color: #6b5e16; }\n.geml-diag ul { margin: 6px 0 0; padding-left: 1.4em; }\n.geml-diag code { background: rgba(0,0,0,0.05); }\n\n.katex-display { overflow-x: auto; overflow-y: hidden; }\n\n/* Task-list items (- [ ] / - [x]). Native disabled checkboxes render an ugly\n   grey, so we draw our own with appearance:none \u2014 a clean empty box for open,\n   a solid green box with a white tick for done.\n   The tick is a centred text glyph, NOT a background image: raw.githubusercontent.com\n   serves `Content-Security-Policy: default-src \'none\'`, which strips data-URI\n   images \u2014 so an SVG-background tick vanishes in the browser extension. A "\u2713"\n   glyph needs no resource, survives the CSP, and flex-centres exactly. */\n.geml-doc li.geml-task { list-style: none; }\n.geml-doc li.geml-task > input[type="checkbox"] {\n  appearance: none; -webkit-appearance: none;\n  width: 1.1em; height: 1.1em; margin: 0 0.5em 0 0; vertical-align: -0.2em;\n  border: 1.5px solid #c8ccd0; border-radius: 4px; background: #fff;\n  position: relative; opacity: 1; cursor: default; box-sizing: border-box;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked {\n  background-color: #1f883d; border-color: #1f883d;\n}\n.geml-doc li.geml-task > input[type="checkbox"]:checked::after {\n  content: "\u2713";\n  position: absolute; top: 0; right: 0; bottom: 0; left: 0;\n  display: flex; align-items: center; justify-content: center;\n  color: #fff; font-size: 0.8em; line-height: 1; font-weight: 700;\n}\n\n/* geml-code-graph (GEP-0003): layered method flow. Pure CSS only \u2014 this file\n   is injected under strict page CSPs (default-src \'none\'), so no resources. */\n.geml-doc .code-graph, .code-graph { margin: 0 0 1.4em; }\n/* The graph is the widest artifact in the document: let it break out of the\n   860px reading column and take the viewport, centred, leaving the prose\n   around it untouched. .geml-doc is `margin: 0 auto`, so negative inline\n   margins land centred; a transform would instead become the containing block\n   for the fullscreen overlay below. */\n@media (min-width: 900px) { .geml-doc .code-graph { margin-inline: calc((100% - min(96vw, 1600px)) / 2); } }\n.cg-mount { border: 1px solid #e6e6e3; border-radius: 8px; padding: 10px 12px; background: #fff; color: #6e7781; font-size: .85em; }\n.cg-scroll { overflow: auto; max-height: 84vh; }\n.cg-svg { display: block; }\n/* Fullscreen. The button and the class come from the parser\'s codeGraphRuntime,\n   which this bundle imports, so these rules are what make it do anything: one\n   class covers both the native Fullscreen API and the fixed-overlay fallback.\n   :fullscreen is deliberately absent from the selectors \u2014 a browser that\n   doesn\'t know it would drop the whole rule. The stage carries its own flex\n   here because the non-fullscreen sheet doesn\'t style it, and the z-index has\n   to beat the host page, not merely our own stacking context. */\n.cg-mount.cg-full { position: fixed; inset: 0; z-index: 2147483000; margin: 0; border: 0; border-radius: 0; padding: 10px 14px; background: #fff; display: flex; flex-direction: column; }\n.cg-mount.cg-full > .cg-bar, .cg-mount.cg-full > .cg-legend, .cg-mount.cg-full > .cg-groups { flex: 0 0 auto; }\n.cg-mount.cg-full .cg-stage { display: flex; gap: 10px; align-items: flex-start; flex: 1 1 auto; min-height: 0; }\n.cg-mount.cg-full .cg-stage .cg-scroll { flex: 1 1 auto; min-width: 0; }\n.cg-mount.cg-full .cg-scroll { min-height: 0; max-height: none; height: 100%; }\n.cg-mount.cg-full .cg-src-body { max-height: none; }\n.cg-mount.cg-full .cg-frame { flex: 1 1 auto; height: auto; }\n.cg-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .82em; color: #6e7781; margin-bottom: 6px; }\n.cg-bar button { font: inherit; padding: 1px 8px; border: 1px solid #d0d7de; border-radius: 5px; background: transparent; cursor: pointer; }\n.cg-crumb .cg-seg { border: 0; border-radius: 0; padding: 0; background: none; color: #0969da; cursor: pointer; font: inherit; }\n.cg-crumb .cg-seg:hover { text-decoration: underline; }\n.cg-legend { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; font-size: .75em; color: #6e7781; margin-top: 6px; }\n.cg-upbtn circle { fill: #fff; stroke: #94a3b8; }\n.cg-upbtn text { font-size: 11px; fill: #57606a; }\n.cg-upbtn:hover circle { stroke: #2563eb; }\n.cg-upbtn:hover text { fill: #2563eb; }\n.cg-groups { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: .75em; color: #6e7781; }\n.cg-chip { display: inline-flex; align-items: center; gap: 4px; }\n.cg-chip i { width: 10px; height: 10px; border-radius: 2px; border: 1px solid #94a3b8; display: inline-block; }\n.cg-note { font-size: .8em; color: #9a6700; }\n.cg-frame { display: block; width: 100%; height: 84vh; border: 0; background: #fff; }\n.cg-flash { color: #b42318; }\n.cg-n rect { fill: #eef2f7; stroke: #94a3b8; }\n.cg-n text { font-size: 12px; fill: #1f2328; font-family: ui-monospace, Consolas, monospace; }\n.cg-n { cursor: pointer; }\n.cg-n.root rect { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; }\n.cg-n.leaf { opacity: .45; }\n.cg-n.test rect { stroke-dasharray: 3 2; }\n.cg-n.grp rect { stroke-width: 1.8; }\n.cg-e { fill: none; stroke: #94a3b8; stroke-width: .9; }\n.cg-e.cand { stroke-dasharray: 2 3; }\n.cg-e.back { stroke: #dc2626; stroke-dasharray: 5 3; }\n.cg-e.soft { opacity: .55; }\n/* hover: the caller cone lights up, the rest dims */\n.cg-svg.hl .cg-n { opacity: .22; }\n.cg-svg.hl .cg-e { opacity: .1; }\n.cg-svg.hl .cg-n.hl { opacity: 1; }\n.cg-svg.hl .cg-e.hl { opacity: 1; stroke-width: 1.6; }\n\n/* Transclusion (=== embed). Borrowed content is marked by a left rule; a\n   refused embed keeps its target link plus a visible note (S7 \u2014 never a\n   silent blank). Pure CSS only: this sheet is injected on pages that may run\n   under `default-src \'none\'`, so it must load zero resources. */\n.geml-transclusion { border-left: 3px solid #d8dee4; padding-left: 12px; margin: 12px 0; }\n.geml-transclusion-unexpanded { color: #57606a; }\n.geml-transclusion-note { color: #6e7781; font-size: 0.85em; margin-left: 6px; }\n.geml-transclusion-error { background: #fff0ef; border: 1px solid #ffcecb; border-left: 3px solid #82071e; color: #82071e; padding: 6px 10px; }\n\n/* Single-block focus (URL #id): a bar noting the narrowed view + the way back. */\n.geml-focus-banner {\n  margin: 0 0 1.2em; padding: 8px 12px;\n  background: #fff8e6; border: 1px solid #f0e0a8; border-radius: 6px;\n  color: #6e5c1f; font-size: 0.9em;\n}\n.geml-focus-banner a.geml-focus-full { color: #0969da; text-decoration: none; }\n.geml-focus-banner a.geml-focus-full:hover { text-decoration: underline; }\n\n/* GEP 0010 \u2014 the affordance for a translation model that is not downloaded yet.\n   Chrome will only fetch one under a user activation, so the click is not a\n   nicety: it is the gesture the API requires, and the moment the reader agrees\n   to the download. */\n.geml-translate-offer { margin: 0 0 .5rem; }\n.geml-translate-offer button {\n  font: inherit; font-size: .85em; padding: .2em .6em; cursor: pointer;\n  border: 1px solid currentColor; border-radius: .25em;\n  background: transparent; color: inherit; opacity: .75;\n}\n.geml-translate-offer button:hover:not(:disabled) { opacity: 1; }\n.geml-translate-offer button:disabled { cursor: progress; opacity: .55; }\n/* A refusal the reader can see: the page is showing its source, and silence\n   would be indistinguishable from a document that was always in that language. */\n.geml-translate-refused { font-size: .8em; opacity: .65; font-style: italic; }\n\n/* Freeze what the page is showing. Fixed rather than in the flow because the\n   viewer injects into someone else\'s document and owns no header to sit in. */\n.geml-export-btn {\n  position: fixed; right: 1rem; bottom: 1rem; z-index: 9;\n  font: inherit; font-size: .85em; padding: .4rem .75rem;\n  border: 1px solid currentColor; border-radius: 6px;\n  background: Canvas; color: inherit; cursor: pointer; opacity: .55;\n}\n.geml-export-btn:hover:not(:disabled) { opacity: 1; }\n.geml-export-btn:disabled { cursor: progress; opacity: .35; }\n\n/* The source/translation switch rides at the end of its section\'s heading:\n   small, quiet, and out of the reading line. Sized in em so it shrinks with the\n   heading it hangs off rather than being one fixed size on an h1 and an h4. */\n.geml-source-toggle {\n  font: inherit; font-size: .6em; font-weight: 400; vertical-align: middle;\n  margin-left: .6em; padding: .1em .45em;\n  border: 1px solid currentColor; border-radius: 4px;\n  background: transparent; color: inherit; cursor: pointer; opacity: .4;\n}\n.geml-source-toggle:hover { opacity: .85; }\n\n/* geml-form/v1\uFF08GEP-0008\uFF09\u7684\u63A7\u4EF6\u3002\u53EA\u753B\uFF0C\u4E0D\u6821\u9A8C \u2014\u2014 \u7EA6\u675F\u662F\u58F0\u660E\uFF0C\u5904\u7406\u5668\u624D\u6267\u884C\u3002 */\n.geml-form { display: flex; flex-direction: column; gap: 12px; }\n.geml-form-group { border: 1px solid currentColor; border-radius: 6px; padding: 12px; }\n.geml-form-field { display: flex; flex-direction: column; gap: 4px; }\n.geml-form-field[data-type="boolean"] { flex-direction: row; align-items: center; gap: 8px; }\n.geml-form-label { font-size: .9em; opacity: .85; }\n.geml-form-required { color: #f85149; margin-left: 2px; }\n.geml-form-control { font: inherit; color: inherit; background: transparent;\n  border: 1px solid currentColor; border-radius: 6px; padding: 5px 8px; max-width: 100%; }\n.geml-form-control:hover, .geml-form-control:focus { outline: none; border-color: currentColor; opacity: 1; }\nselect.geml-form-control { cursor: pointer; }\n.geml-form-desc { margin: 0; font-size: .85em; opacity: .7; }\n\n/* ---- \u9875\u9762\u5E03\u5C40\uFF08geml-style\uFF09\u3002\u53EA\u6709\u5BB9\u5668\u7684 flex \u4E0E\u51E0\u6761\u4E0D\u5E26\u4EFB\u4F55\u8272\u503C\u3001\u5C3A\u5BF8\u7684\u901A\u7528\u89C4\u5219\uFF1A\n   \u989C\u8272\u3001\u95F4\u8DDD\u3001\u5B57\u53F7\u5168\u90E8\u6765\u81EA\u6837\u5F0F\u8868\uFF08cssForPage \u751F\u6210\uFF09\u3002\u6CE8\u5165\u9875\u9762\u7684 CSS \u4E0D\u5F97\u52A0\u8F7D\u4EFB\u4F55\u8D44\u6E90\u3002 */\n.geml-page { margin: 0; }\n.geml-frame { display: flex; min-width: 0; min-height: 0; position: relative; }\n/* \u8F74\u7684\u9ED8\u8BA4\u653E\u8FDB\u4E00\u4E2A\u533F\u540D @layer\uFF1A\u672A\u5206\u5C42\u7684\u89C4\u5219\u4E00\u5F8B\u8D62\u8FC7\u5206\u5C42\u7684\uFF0C\u4E0E\u7279\u5F02\u6027\u65E0\u5173\u3002\n   cssForPage \u53D1\u51FA\u7684\u662F `.geml-f-x` / `.geml-b-x` \u5355\u7C7B\uFF080,1,0\uFF09\uFF0C\u800C\u8FD9\u91CC\u662F\u7C7B+\u5C5E\u6027\n   \uFF080,2,0\uFF09\u2014\u2014 \u4E0D\u5206\u5C42\u7684\u8BDD\uFF0C`item-align` \u5728\u6A2A\u6392\u5BB9\u5668\u4E0A\u3001`grow` \u5728\u6A2A\u6392\u91CC\u7684\u5757\u4E0A\u90FD\u4F1A\n   \u88AB\u8FD9\u4E24\u6761\u9759\u9ED8\u538B\u6B7B\uFF08\u5B9E\u6D4B\uFF1Aalign-items \u4ECD\u662F stretch\u3001flex-grow \u4ECD\u662F 0\uFF09\u3002\n   \u5BBF\u4E3B\u7684\u9ED8\u8BA4\u5FC5\u987B\u8BA9\u4F4D\u7ED9\u6837\u5F0F\u8868\u8BF4\u7684\u8BDD\uFF0C\u8FD9\u662F\u4E00\u6574\u7C7B\u95EE\u9898\uFF0C\u4E0D\u662F\u67D0\u4E2A\u8BCD\u7684\u95EE\u9898\u3002\n   `align-items: stretch` \u540C\u65F6\u88AB\u5220\u6389\uFF1Aflex \u5BB9\u5668\u4E0D\u5199\u5B83\u65F6\u8BA1\u7B97\u503C\u5C31\u662F `normal`\uFF0C\n   \u884C\u4E3A\u5B8C\u5168\u76F8\u540C\uFF0C\u5B83\u552F\u4E00\u7684\u4F5C\u7528\u662F\u538B\u4F4F `item-align`\u3002 */\n@layer {\n  .geml-frame[data-axis="column"] { flex-direction: column; }\n  .geml-frame[data-axis="row"] { flex-direction: row; }\n  .geml-frame[data-axis="row"] > .geml-placed { flex: 0 0 auto; }\n}\n.geml-placed { min-width: 0; box-sizing: border-box; }\n.geml-placed[role="button"], .geml-frame[role="button"] { cursor: pointer; }\n.geml-page button { color: inherit; font: inherit; }\n/* \u94FE\u63A5**\u4E0D\u5265**\uFF1AHTML \u7684\u9ED8\u8BA4\u662F\u84DD\u8272\u5E26\u4E0B\u5212\u7EBF\uFF0C\u53BB\u6389\u662F\u5916\u89C2\u51B3\u5B9A\uFF0C\u7531\u6837\u5F0F\u8868\u7528 `color` \u548C\n   `underline=no` \u8BF4\u3002\u5BBF\u4E3B\u5265\u6389\u7684\u90A3\u4E00\u7248\u8FDE\u5D4C\u8FDB\u6765\u7684\u6587\u7AE0\u91CC\u7684\u94FE\u63A5\u90FD\u4E00\u8D77\u5265\u4E86 \u2014\u2014 \u6B63\u6587\u91CC\u7684\u94FE\u63A5\n   \u548C\u6B63\u6587\u7684\u5B57\u4E00\u6A21\u4E00\u6837\uFF0C\u770B\u4E0D\u51FA\u662F\u94FE\u63A5\uFF0C\u800C\u6CA1\u6709\u4EBA\u8981\u6C42\u8FC7\u8FD9\u4E2A\u3002 */\n.geml-page img { vertical-align: middle; }\n.geml-page .text > p { margin: 0; }\n/* \u6761\u76EE\u672C\u8EAB\uFF1A\u6CBF\u8F74\u6392\u7684\u4E00\u6761\u5C31\u662F\u4E00\u884C\u3002`gap` \u7531\u6837\u5F0F\u8868\u7ED9\uFF08cssForPage \u540C\u65F6\u843D\u5230\u5BB9\u5668\u548C\u6761\u76EE\u4E0A\uFF09\uFF0C\n   \u8FD9\u91CC\u53EA\u6709\u300C\u6761\u76EE\u662F\u4EC0\u4E48\u5F62\u72B6\u300D\uFF0C\u6CA1\u6709\u4EFB\u4F55\u957F\u5EA6\u3002 */\n.geml-items > li { display: inline-flex; align-items: center; white-space: nowrap; }\n/* \u6811\u53EA\u6709\u4E00\u4E2A\u6807\u8BB0\uFF1A`summary` \u7684\u5C55\u5F00\u4E09\u89D2\u3002`li` \u81EA\u5DF1\u7684\u9879\u76EE\u7B26\u53F7\u8981\u53BB\u6389 \u2014\u2014 \u4E00\u884C\u4E24\u4E2A\u6807\u8BB0\n   \uFF08\u2022 \u548C \u25BE\uFF09\u662F\u4E24\u5957\u673A\u5236\u649E\u5728\u4E00\u8D77\uFF0C\u4E0D\u662F\u7248\u9762\u9009\u62E9\u3002\u7F29\u8FDB\u7528 em\uFF0C\u8DDF\u7740\u6837\u5F0F\u8868\u8BBE\u7684\u5B57\u53F7\u8D70\uFF0C\n   \u5BBF\u4E3B\u91CC\u56E0\u6B64\u6CA1\u6709\u9875\u9762\u5E38\u91CF\uFF1B\u771F\u9700\u8981\u6309\u9875\u5B9A\u7F29\u8FDB\u65F6\u5B83\u662F tree \u7684\u7EC4\u4EF6\u53C2\u6570\uFF08\xA712.3 \u70B9\u540D\u7684 `indent`\uFF09\uFF0C\n   \u4E0D\u662F\u5185\u542B\u8BCD\uFF0C\u7B49\u7B2C\u4E00\u4E2A\u771F\u5B9E\u9700\u6C42\u518D\u52A0\u3002\n   list-style \u662F\u7EE7\u627F\u5C5E\u6027\uFF0C\u6240\u4EE5 summary \u8981\u628A\u4E09\u89D2\u8981\u56DE\u6765\uFF0C\u5426\u5219\u8FDE\u5B83\u4E00\u8D77\u6CA1\u4E86\u3002 */\n.geml-tree, .geml-tree ul { list-style: none; margin: 0; padding-left: 0; }\n.geml-tree summary { cursor: pointer; list-style: revert; }\n.geml-segments { display: inline-flex; }\n.geml-segments button { border: 0; background: none; cursor: pointer; }\n.geml-segments button[aria-pressed="true"] { background: Canvas; font-weight: 500; }\n.geml-source { width: 100%; box-sizing: border-box; min-height: 60vh; font-family: ui-monospace, monospace; }\n/* `fade-out=<\u79D2>` \u7528\u7684\u52A8\u753B\u3002\u6DE1\u5B8C\u4E4B\u540E visibility: hidden\uFF0C\u4E8E\u662F\u5B83\u65E2\u770B\u4E0D\u89C1\u4E5F\u6321\u4E0D\u4F4F\u70B9\u51FB\u3002\n   \u65F6\u957F\u7531\u6837\u5F0F\u8868\u7ED9\uFF0C\u8FD9\u91CC\u53EA\u6709\u5F62\u72B6\u3002\u8BFB\u8005\u8981\u6C42\u51CF\u5C11\u52A8\u6001\u6548\u679C\u65F6\u76F4\u63A5\u8DF3\u5230\u7EC8\u70B9 \u2014\u2014 \u63D0\u793A\u4E00\u95EA\u800C\u8FC7\uFF0C\u4E0D\u662F\u5185\u5BB9\u3002 */\n@keyframes geml-fade { to { opacity: 0; visibility: hidden; } }\n@keyframes geml-fade-in { from { opacity: 0; } to { opacity: 1; } }\n@media (prefers-reduced-motion: reduce) {\n  .geml-page .geml-frame, .geml-page .geml-placed { animation-duration: 1ms !important; }\n}\n.geml-page .geml-form-field { display: contents; }\n.geml-page .geml-form-control { border: 0; padding: 0; outline: none; width: 100%; }\n\n/* geml-media\uFF1A\u65F6\u95F4\u7EBF\u3002frame \u7EC4\u4EF6\u53EA\u80FD\u7ED9\u533A\u5757\u6DFB\u4E2A\u5144\u5F1F\u8282\u70B9\uFF0C\u5305\u4E0D\u4F4F\u69FD\u4F4D\u91CC\u7684\u5757 \u2014\u2014\n   \u6240\u4EE5\u5B9A\u4F4D\u4E0A\u4E0B\u6587\u5FC5\u987B\u662F frame \u533A\u5757\u672C\u8EAB\uFF0C\u7531\u5B83\u7684 data-component \u8BA4\u4EBA\u3002\u7247\u6BB5\u7684\n   left/width \u662F\u7EC4\u4EF6\u6309\u65F6\u95F4\u7B97\u51FA\u6765\u7684\u767E\u5206\u6BD4\uFF0C\u8FD9\u91CC\u53EA\u8D1F\u8D23\u8BA9\u5B83\u4EEC\u6709\u5904\u53EF\u843D\u3002 */\n[data-component="timeline-track"],\n[data-component="overlay-track"] { position: relative; }\n.geml-clip { position: absolute; box-sizing: border-box; overflow: hidden; }\n.geml-track-ruler { position: absolute; inset: 0 0 auto 0; }\n.geml-tick { position: absolute; }\n\n/* geml-media/v1 \xB7 \u64AD\u653E\u5668\uFF08media-player.js\uFF09\u3002\u4E00\u884C\u5916\u90E8\u8D44\u6E90\u90FD\u6CA1\u6709 \u2014\u2014 viewer \u8DD1\u5728\n   default-src \'none\' \u7684\u9875\u9762\u4E0A\uFF0C\u6837\u5F0F\u8868\u91CC\u51FA\u73B0\u4EFB\u4F55 url() \u90FD\u4F1A\u88AB CSP \u6321\u4E0B\u3002 */\n.geml-player { display: flex; flex-direction: column; gap: 8px; }\n.geml-player-empty { opacity: .7; font-style: italic; }\n.geml-stage {\n  position: relative;\n  width: 100%;\n  aspect-ratio: 16 / 9;\n  background: #000;\n  overflow: hidden;\n  border-radius: 6px;\n}\n.geml-layer-video {\n  position: absolute;\n  inset: 0;\n  width: 100%;\n  height: 100%;\n  object-fit: contain;\n}\n/* \u58F0\u97F3\u8F68\u6CA1\u6709\u753B\u9762\uFF0C\u4F46\u8981\u7559\u5728 DOM \u91CC\u8BA9\u65F6\u949F\u63A8\u5B83 */\n.geml-layer-audio { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }\n.geml-caption {\n  position: absolute;\n  left: 0; right: 0; bottom: 6%;\n  padding: 0 8%;\n  text-align: center;\n  color: #fff;\n  text-shadow: 0 1px 3px rgba(0, 0, 0, .9);\n  line-height: 1.4;\n  pointer-events: none;\n}\n.geml-transport { display: flex; align-items: center; gap: 10px; }\n.geml-play {\n  width: 2.2em; height: 2.2em;\n  border: 1px solid currentColor;\n  border-radius: 50%;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  line-height: 1;\n  cursor: pointer;\n}\n.geml-seek { flex: 1; min-width: 0; }\n.geml-clock {\n  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;\n  opacity: .75;\n  min-width: 9ch;\n  text-align: right;\n}\n\n/* geml-media/v1 \xB7 \u6B4C\u5355\uFF08media-playlist.js\uFF09\u3002\u53EA\u51FA\u7ED3\u6784\uFF1A\u4E00\u4E2A\u5A92\u4F53\u5143\u7D20\u3001\u4E0A\u4E00\u9996/\u4E0B\u4E00\u9996\u3001\n   \u66F2\u76EE\u5217\u8868\uFF1B\u6B63\u5728\u653E\u7684\u90A3\u9996\u7531 aria-current \u6807\u51FA\u3002\u989C\u8272\u5B57\u53F7\u5F52\u6837\u5F0F\u8868\u3002 */\n.geml-playlist { display: flex; flex-direction: column; gap: 8px; }\n.geml-playlist-empty { opacity: .7; font-style: italic; }\n.geml-playlist-media { width: 100%; }\nvideo.geml-playlist-media { background: #000; border-radius: 6px; }\n.geml-playlist-transport { display: flex; gap: 8px; }\n.geml-playlist-transport button,\n.geml-playlist-item {\n  border: 0;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  cursor: pointer;\n}\n/* \u968F\u673A\u3001\u91CD\u590D\uFF1A\u6CA1\u6309\u4E0B\u662F\u534A\u900F\u660E\uFF1B\u5355\u66F2\u91CD\u590D\u5728\u6309\u94AE\u4E0A\u6807\u4E00\u4E2A 1 */\n.geml-shuffle, .geml-repeat { opacity: .45; }\n.geml-shuffle[aria-pressed="true"], .geml-repeat[aria-pressed="true"] { opacity: 1; }\n.geml-repeat[data-mode="one"]::after { content: "1"; font-size: .7em; vertical-align: super; }\n.geml-playlist-items { margin: 0; padding-left: 2em; }\n.geml-playlist-items > li { padding: 2px 0; }\n.geml-playlist-item { width: 100%; padding: 4px 6px; text-align: left; border-radius: 4px; }\n.geml-playlist-item:hover { background: rgba(127, 127, 127, .15); }\n.geml-playlist-items > li[aria-current="true"] { font-weight: 600; }\n.geml-playlist-items > li[aria-current="true"] .geml-playlist-item { background: rgba(127, 127, 127, .22); }\n';
 
   // playground-entry.js
   init_katex();
@@ -306714,8 +307554,8 @@ ${isHandDrawn ? "" : `
     };
   }
   __name(preprocessDiagram, "preprocessDiagram");
-  function toBase64(str4) {
-    const utf8Bytes = new TextEncoder().encode(str4);
+  function toBase64(str5) {
+    const utf8Bytes = new TextEncoder().encode(str5);
     const utf8Str = Array.from(utf8Bytes, (byte) => String.fromCodePoint(byte)).join("");
     return btoa(utf8Str);
   }

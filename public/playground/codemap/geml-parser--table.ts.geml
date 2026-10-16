@@ -194,8 +194,8 @@ from,                                          to,                kind, site
 geml-parser--coord.ts.geml#replaceField,       #whiteSpaceBounds, call, geml-parser/src/coord.ts:246
 #trimWhiteSpace,                               #whiteSpaceBounds, call, geml-parser/src/table.ts:86
 geml-parser--geml.ts.geml#slug,                #trimWhiteSpace,   call, geml-parser/src/geml.ts:916
-geml-parser--geml.ts.geml#foldFence,           #trimWhiteSpace,   call, geml-parser/src/geml.ts:3680
-geml-parser--geml.ts.geml#continuations,       #trimWhiteSpace,   call, geml-parser/src/geml.ts:3700
+geml-parser--geml.ts.geml#foldFence,           #trimWhiteSpace,   call, geml-parser/src/geml.ts:3684
+geml-parser--geml.ts.geml#continuations,       #trimWhiteSpace,   call, geml-parser/src/geml.ts:3704
 #splitPipes,                                   #trimWhiteSpace,   call, geml-parser/src/table.ts:93
 #splitPipes,                                   #trimWhiteSpace,   call, geml-parser/src/table.ts:100
 #splitPipes,                                   #trimWhiteSpace,   call, geml-parser/src/table.ts:103

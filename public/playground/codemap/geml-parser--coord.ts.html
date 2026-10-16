@@ -49,6 +49,15 @@ table.geml-table tfoot td { background:var(--code-bg); font-weight:600; border-t
 .table-figure details > summary { cursor:pointer; color:var(--muted); font-size:.86em; padding:4px 0; }
 .table-note { color:var(--muted); font-size:.82em; margin:6px 0 0; }
 .geml-chart { width:100%; height:auto; background:var(--bg); border:1px solid var(--bd); border-radius:8px; }
+figure.statechart { margin:1.4em 0; }
+figure.statechart svg.geml-statechart { background:var(--bg); border:1px solid var(--bd); border-radius:12px; }
+.statechart-tools { margin:6px 0 10px; text-align:right; font-size:.82em; }
+.statechart-tools a { color:var(--muted); }
+.statechart-states, .statechart-transitions { margin:4px 0; }
+.statechart-state > summary, .statechart-transition > summary { cursor:pointer; padding:4px 0; }
+.statechart-state small { color:var(--muted); }
+.statechart-state dl, .statechart-transition dl { margin:4px 0 4px 1em; font-size:.9em; }
+.statechart-state dt, .statechart-transition dt { float:left; clear:left; min-width:8em; color:var(--muted); }
 .c-title { font-size:15px; font-weight:600; fill:var(--fg); }
 .c-grid { stroke:#eaecef; } .c-axis { stroke:#aab1b8; } .c-tick { font-size:11px; fill:var(--muted); } .c-legend { font-size:12px; fill:var(--fg); }
 .media { max-width:100%; border-radius:8px; }
@@ -368,29 +377,29 @@ sup.fn a { font-size:.75em; }
 <tr><td>#editJson</td><td>#spot</td><td>call</td><td>geml-parser/src/coord.ts:481</td></tr>
 <tr><td>#editValue</td><td>#editJson</td><td>call</td><td>geml-parser/src/coord.ts:394</td></tr>
 <tr><td>#editValue</td><td>#editJson</td><td>call</td><td>geml-parser/src/coord.ts:411</td></tr>
-<tr><td>geml-parser--geml.ts.geml#blockFromDocument</td><td>#metaView</td><td>call</td><td>geml-parser/src/geml.ts:2911</td></tr>
-<tr><td>geml-parser--geml.ts.geml#validateCoordRef</td><td>#metaView</td><td>call</td><td>geml-parser/src/geml.ts:2977</td></tr>
-<tr><td>geml-parser--geml.ts.geml#proseRunTargets</td><td>#metaView</td><td>call</td><td>geml-parser/src/geml.ts:4009</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#reservedMeta</td><td>#metaView</td><td>call</td><td>geml-parser/src/verbs.ts:603</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#get</td><td>#metaText</td><td>call</td><td>geml-parser/src/verbs.ts:681</td></tr>
+<tr><td>geml-parser--geml.ts.geml#blockFromDocument</td><td>#metaView</td><td>call</td><td>geml-parser/src/geml.ts:2915</td></tr>
+<tr><td>geml-parser--geml.ts.geml#validateCoordRef</td><td>#metaView</td><td>call</td><td>geml-parser/src/geml.ts:2981</td></tr>
+<tr><td>geml-parser--geml.ts.geml#proseRunTargets</td><td>#metaView</td><td>call</td><td>geml-parser/src/geml.ts:4013</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#reservedMeta</td><td>#metaView</td><td>call</td><td>geml-parser/src/verbs.ts:604</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#get</td><td>#metaText</td><td>call</td><td>geml-parser/src/verbs.ts:682</td></tr>
 <tr><td>#metaText</td><td>#metaLiteral</td><td>call</td><td>geml-parser/src/coord.ts:562</td></tr>
 <tr><td>#planMetaWrite</td><td>#metaLiteral</td><td>call</td><td>geml-parser/src/coord.ts:590</td></tr>
 <tr><td>#planCoordWrite</td><td>#planMetaWrite</td><td>call</td><td>geml-parser/src/coord.ts:627</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#setMeta</td><td>#planMetaWrite</td><td>call</td><td>geml-parser/src/verbs.ts:1601</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#setMeta</td><td>#planMetaWrite</td><td>call</td><td>geml-parser/src/verbs.ts:1602</td></tr>
 <tr><td>#planCoordEdit</td><td>#planCoordWrite</td><td>call</td><td>geml-parser/src/coord.ts:640</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#setCoord</td><td>#planCoordWrite</td><td>call</td><td>geml-parser/src/verbs.ts:1639</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#editCoord</td><td>#planCoordEdit</td><td>call</td><td>geml-parser/src/verbs.ts:1698</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#setCoord</td><td>#planCoordWrite</td><td>call</td><td>geml-parser/src/verbs.ts:1640</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#editCoord</td><td>#planCoordEdit</td><td>call</td><td>geml-parser/src/verbs.ts:1699</td></tr>
 <tr><td>#planCoordEdit</td><td>#planMetaRemove</td><td>call</td><td>geml-parser/src/coord.ts:646</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#editCoord</td><td>#planMetaRemove</td><td>call</td><td>geml-parser/src/verbs.ts:1692</td></tr>
-<tr><td>geml-parser--geml.ts.geml#validateCoordRef</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/geml.ts:2994</td></tr>
-<tr><td>geml-parser--geml.ts.geml#embedCoordinate</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/geml.ts:3949</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#get</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/verbs.ts:684</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#get</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/verbs.ts:716</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#editCoord</td><td>#planMetaRemove</td><td>call</td><td>geml-parser/src/verbs.ts:1693</td></tr>
+<tr><td>geml-parser--geml.ts.geml#validateCoordRef</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/geml.ts:2998</td></tr>
+<tr><td>geml-parser--geml.ts.geml#embedCoordinate</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/geml.ts:3953</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#get</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/verbs.ts:685</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#get</td><td>#projectCoord</td><td>call</td><td>geml-parser/src/verbs.ts:717</td></tr>
 <tr><td>#inlineProjection</td><td>#notProjectable</td><td>call</td><td>geml-parser/src/coord.ts:760</td></tr>
 <tr><td>#projectForm</td><td>#formFields</td><td>call</td><td>geml-parser/src/coord.ts:740</td></tr>
 <tr><td>#projectCoord</td><td>#projectForm</td><td>call</td><td>geml-parser/src/coord.ts:685</td></tr>
-<tr><td>geml-parser--geml.ts.geml#validateCoordRef</td><td>#inlineProjection</td><td>call</td><td>geml-parser/src/geml.ts:3003</td></tr>
-<tr><td>geml-parser--geml.ts.geml#embedCoordinate</td><td>#rowTable</td><td>call</td><td>geml-parser/src/geml.ts:3952</td></tr>
+<tr><td>geml-parser--geml.ts.geml#validateCoordRef</td><td>#inlineProjection</td><td>call</td><td>geml-parser/src/geml.ts:3007</td></tr>
+<tr><td>geml-parser--geml.ts.geml#embedCoordinate</td><td>#rowTable</td><td>call</td><td>geml-parser/src/geml.ts:3956</td></tr>
 </tbody></table></div></figure>
 </main>
 <footer class="geml-footer">Rendered from <code>geml-parser--coord.ts.geml</code> by the GEML runtime. Tables are sortable and filterable; the chart is inline SVG drawn from its bound table.</footer>

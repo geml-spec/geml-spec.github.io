@@ -70,8 +70,8 @@ from,              to,                kind, confidence
 
 === table {#called-by format=csv}
 from,                                             to,                kind, site
-geml-parser--render.ts.geml#RenderCtx-transclude, #resolveTarget,    call, geml-parser/src/render.ts:454
-geml-parser--verbs.ts.geml#transform,             #resolveTarget,    call, geml-parser/src/verbs.ts:984
+geml-parser--render.ts.geml#RenderCtx-transclude, #resolveTarget,    call, geml-parser/src/render.ts:456
+geml-parser--verbs.ts.geml#transform,             #resolveTarget,    call, geml-parser/src/verbs.ts:985
 #maskTerms,                                       #ph,               call, geml-parser/src/translate.ts:96
 #mask,                                            #ph,               call, geml-parser/src/translate.ts:126
 #mask,                                            #ph,               call, geml-parser/src/translate.ts:134
@@ -88,7 +88,7 @@ geml-parser--verbs.ts.geml#transform,             #resolveTarget,    call, geml-
 #translateBlocks,                                 #translateItems,   call, geml-parser/src/translate.ts:282
 #translateBlocks,                                 #translateAttrs,   call, geml-parser/src/translate.ts:289
 #translateBlocks,                                 #translateTable,   call, geml-parser/src/translate.ts:302
-geml-parser--render.ts.geml#RenderCtx-transclude, #translateBlocks,  call, geml-parser/src/render.ts:456
+geml-parser--render.ts.geml#RenderCtx-transclude, #translateBlocks,  call, geml-parser/src/render.ts:458
 #translateItems,                                  #translateBlocks,  call, geml-parser/src/translate.ts:229
 ===
 

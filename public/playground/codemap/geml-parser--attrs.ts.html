@@ -49,6 +49,15 @@ table.geml-table tfoot td { background:var(--code-bg); font-weight:600; border-t
 .table-figure details > summary { cursor:pointer; color:var(--muted); font-size:.86em; padding:4px 0; }
 .table-note { color:var(--muted); font-size:.82em; margin:6px 0 0; }
 .geml-chart { width:100%; height:auto; background:var(--bg); border:1px solid var(--bd); border-radius:8px; }
+figure.statechart { margin:1.4em 0; }
+figure.statechart svg.geml-statechart { background:var(--bg); border:1px solid var(--bd); border-radius:12px; }
+.statechart-tools { margin:6px 0 10px; text-align:right; font-size:.82em; }
+.statechart-tools a { color:var(--muted); }
+.statechart-states, .statechart-transitions { margin:4px 0; }
+.statechart-state > summary, .statechart-transition > summary { cursor:pointer; padding:4px 0; }
+.statechart-state small { color:var(--muted); }
+.statechart-state dl, .statechart-transition dl { margin:4px 0 4px 1em; font-size:.9em; }
+.statechart-state dt, .statechart-transition dt { float:left; clear:left; min-width:8em; color:var(--muted); }
 .c-title { font-size:15px; font-weight:600; fill:var(--fg); }
 .c-grid { stroke:#eaecef; } .c-axis { stroke:#aab1b8; } .c-tick { font-size:11px; fill:var(--muted); } .c-legend { font-size:12px; fill:var(--fg); }
 .media { max-width:100%; border-radius:8px; }
@@ -155,30 +164,30 @@ sup.fn a { font-size:.75em; }
 <tr><td>geml-parser--selector.ts.geml#keyForm</td><td>#tokenize</td><td>call</td><td>geml-parser/src/selector.ts:229</td></tr>
 <tr><td>geml-parser--block-edit.ts.geml#rewriteBraces</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/block-edit.ts:52</td></tr>
 <tr><td>geml-parser--block-edit.ts.geml#normalizeBlockId</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/block-edit.ts:116</td></tr>
-<tr><td>geml-parser--cli.ts.geml#runGet</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/cli.ts:1353</td></tr>
+<tr><td>geml-parser--cli.ts.geml#runGet</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/cli.ts:1384</td></tr>
 <tr><td>geml-parser--geml.ts.geml#readFencedBlock</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:1560</td></tr>
 <tr><td>geml-parser--geml.ts.geml#scanBlocks</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:1936</td></tr>
 <tr><td>geml-parser--geml.ts.geml#scanBlocks</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:1951</td></tr>
-<tr><td>geml-parser--geml.ts.geml#idOfHeading</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3634</td></tr>
-<tr><td>geml-parser--geml.ts.geml#fenceClose</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3717</td></tr>
-<tr><td>geml-parser--geml.ts.geml#collectSpans</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3805</td></tr>
-<tr><td>geml-parser--geml.ts.geml#collectSpans</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3833</td></tr>
-<tr><td>geml-parser--geml.ts.geml#closeFenceLine</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:4230</td></tr>
+<tr><td>geml-parser--geml.ts.geml#idOfHeading</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3638</td></tr>
+<tr><td>geml-parser--geml.ts.geml#fenceClose</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3721</td></tr>
+<tr><td>geml-parser--geml.ts.geml#collectSpans</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3809</td></tr>
+<tr><td>geml-parser--geml.ts.geml#collectSpans</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:3837</td></tr>
+<tr><td>geml-parser--geml.ts.geml#closeFenceLine</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/geml.ts:4234</td></tr>
 <tr><td>geml-parser--history.ts.geml#tile</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/history.ts:199</td></tr>
 <tr><td>geml-parser--history.ts.geml#tile</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/history.ts:211</td></tr>
 <tr><td>geml-parser--inline.ts.geml#readAttrs</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/inline.ts:310</td></tr>
 <tr><td>geml-parser--inline.ts.geml#readAttrs</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/inline.ts:314</td></tr>
 <tr><td>geml-parser--selector.ts.geml#keyForm</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/selector.ts:252</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#embedSrcOf</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:247</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#selectUnits</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:488</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#get</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:658</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#resolveSetTarget</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1221</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#declaresId</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1309</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#set</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1393</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#editCoord</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1678</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#add</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1764</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#del</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1840</td></tr>
-<tr><td>geml-parser--verbs.ts.geml#bodyRange</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1993</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#embedSrcOf</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:248</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#selectUnits</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:489</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#get</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:659</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#resolveSetTarget</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1222</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#declaresId</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1310</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#set</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1394</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#editCoord</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1679</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#add</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1765</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#del</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1841</td></tr>
+<tr><td>geml-parser--verbs.ts.geml#bodyRange</td><td>#parseAttrs</td><td>call</td><td>geml-parser/src/verbs.ts:1994</td></tr>
 </tbody></table></div></figure>
 </main>
 <footer class="geml-footer">Rendered from <code>geml-parser--attrs.ts.geml</code> by the GEML runtime. Tables are sortable and filterable; the chart is inline SVG drawn from its bound table.</footer>

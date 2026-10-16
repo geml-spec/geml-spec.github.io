@@ -308,22 +308,22 @@ from,                                to,                   kind, site
 #checkedReconstruct,                 #reconstruct,         call, geml-parser/src/history.ts:830
 #save,                               #renderHistory,       call, geml-parser/src/history.ts:672
 #restore,                            #renderHistory,       call, geml-parser/src/history.ts:756
-geml-parser--cli.ts.geml#runHistory, #save,                call, geml-parser/src/cli.ts:1016
+geml-parser--cli.ts.geml#runHistory, #save,                call, geml-parser/src/cli.ts:1047
 geml-parser--mcp.ts.geml#snapshot,   #save,                call, geml-parser/src/mcp.ts:145
-geml-parser--cli.ts.geml#runHistory, #verify,              call, geml-parser/src/cli.ts:1083
-geml-parser--cli.ts.geml#runHistory, #restore,             call, geml-parser/src/cli.ts:1080
-geml-parser--cli.ts.geml#runHistory, #isCurrent,           call, geml-parser/src/cli.ts:1012
+geml-parser--cli.ts.geml#runHistory, #verify,              call, geml-parser/src/cli.ts:1114
+geml-parser--cli.ts.geml#runHistory, #restore,             call, geml-parser/src/cli.ts:1111
+geml-parser--cli.ts.geml#runHistory, #isCurrent,           call, geml-parser/src/cli.ts:1043
 geml-parser--mcp.ts.geml#snapshot,   #isCurrent,           call, geml-parser/src/mcp.ts:144
-geml-parser--cli.ts.geml#runHistory, #listRevisions,       call, geml-parser/src/cli.ts:1013
-geml-parser--cli.ts.geml#runHistory, #listRevisions,       call, geml-parser/src/cli.ts:1036
+geml-parser--cli.ts.geml#runHistory, #listRevisions,       call, geml-parser/src/cli.ts:1044
+geml-parser--cli.ts.geml#runHistory, #listRevisions,       call, geml-parser/src/cli.ts:1067
 #restore,                            #resolveRevision,     call, geml-parser/src/history.ts:734
 #resolveContent,                     #resolveRevision,     call, geml-parser/src/history.ts:821
-geml-parser--cli.ts.geml#runHistory, #resolveContent,      call, geml-parser/src/cli.ts:1049
-geml-parser--cli.ts.geml#runRename,  #resolveContent,      call, geml-parser/src/cli.ts:1496
-geml-parser--cli.ts.geml#runRevert,  #resolveContent,      call, geml-parser/src/cli.ts:1538
+geml-parser--cli.ts.geml#runHistory, #resolveContent,      call, geml-parser/src/cli.ts:1080
+geml-parser--cli.ts.geml#runRename,  #resolveContent,      call, geml-parser/src/cli.ts:1527
+geml-parser--cli.ts.geml#runRevert,  #resolveContent,      call, geml-parser/src/cli.ts:1569
 #resolveContent,                     #checkedReconstruct,  call, geml-parser/src/history.ts:822
 #firstChangedContent,                #checkedReconstruct,  call, geml-parser/src/history.ts:849
-geml-parser--cli.ts.geml#runRevert,  #firstChangedContent, call, geml-parser/src/cli.ts:1539
+geml-parser--cli.ts.geml#runRevert,  #firstChangedContent, call, geml-parser/src/cli.ts:1570
 ===
 
 === table {#unresolved format=csv hidden}

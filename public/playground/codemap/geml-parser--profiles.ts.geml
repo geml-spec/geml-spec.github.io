@@ -17,28 +17,28 @@ resolution-default = cpg
 === code {#ProfileIO-hashText .leaf name="ProfileIO.hashText" src=geml-parser/src/profiles.ts#L78-78 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/ProfileIO#hashText()."}
 ===
 
-=== code {#enableProfileRegistration src=geml-parser/src/profiles.ts#L329-332 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/enableProfileRegistration()."}
+=== code {#enableProfileRegistration src=geml-parser/src/profiles.ts#L351-354 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/enableProfileRegistration()."}
 ===
 
-=== code {#registerProfile src=geml-parser/src/profiles.ts#L340-360 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/registerProfile()."}
+=== code {#registerProfile src=geml-parser/src/profiles.ts#L362-382 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/registerProfile()."}
 ===
 
-=== code {#profileDef src=geml-parser/src/profiles.ts#L363-365 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/profileDef()."}
+=== code {#profileDef src=geml-parser/src/profiles.ts#L385-387 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/profileDef()."}
 ===
 
-=== code {#knownProfiles src=geml-parser/src/profiles.ts#L367-369 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/knownProfiles()."}
+=== code {#knownProfiles src=geml-parser/src/profiles.ts#L389-391 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/knownProfiles()."}
 ===
 
-=== code {#misnamespacedMetaKey src=geml-parser/src/profiles.ts#L418-426 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/misnamespacedMetaKey()."}
+=== code {#misnamespacedMetaKey src=geml-parser/src/profiles.ts#L440-448 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/misnamespacedMetaKey()."}
 ===
 
-=== code {#unrecognizedVocabularies src=geml-parser/src/profiles.ts#L428-432 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/unrecognizedVocabularies()."}
+=== code {#unrecognizedVocabularies src=geml-parser/src/profiles.ts#L450-454 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/unrecognizedVocabularies()."}
 ===
 
-=== code {#declaredVocabularies src=geml-parser/src/profiles.ts#L438-442 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/declaredVocabularies()."}
+=== code {#declaredVocabularies src=geml-parser/src/profiles.ts#L460-464 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/declaredVocabularies()."}
 ===
 
-=== code {#vocabularyFor src=geml-parser/src/profiles.ts#L444-467 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/vocabularyFor()."}
+=== code {#vocabularyFor src=geml-parser/src/profiles.ts#L466-489 anchor="scip-typescript npm @geml/geml 1.12.5 src/`profiles.ts`/vocabularyFor()."}
 ===
 
 === table {#calls format=csv}
@@ -50,40 +50,45 @@ from,                      to,          kind, confidence
 ===
 
 === table {#called-by format=csv}
-from,                                                 to,                        kind, site
-geml-parser--host-fs.ts.geml#profileIoFor,            #ProfileIO-readDoc,        call, geml-parser/src/host-fs.ts:301
-geml-parser--media-check.ts.geml#checkMedia,          #ProfileIO-readDoc,        call, geml-parser/src/media-check.ts:215
-geml-parser--media-check.ts.geml#promptTextOf,        #ProfileIO-readDoc,        call, geml-parser/src/media-check.ts:758
-geml-parser--media-verbs.ts.geml#loadProject,         #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:48
-geml-parser--media-verbs.ts.geml#exportTimeline,      #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:303
-geml-parser--media-verbs.ts.geml#buildPlan,           #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:489
-geml-parser--media-verbs.ts.geml#lay,                 #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:728
-geml-parser--media-verbs.ts.geml#importSubtitles,     #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:917
-geml-parser--cli.ts.geml#runMedia,                    #ProfileIO-hashFile,       call, geml-parser/src/cli.ts:691
-geml-parser--cli.ts.geml#runMedia,                    #ProfileIO-hashFile,       call, geml-parser/src/cli.ts:730
-geml-parser--cli.ts.geml#runMedia,                    #ProfileIO-hashFile,       call, geml-parser/src/cli.ts:856
-geml-parser--host-fs.ts.geml#profileIoFor,            #ProfileIO-hashFile,       call, geml-parser/src/host-fs.ts:309
-geml-parser--media-check.ts.geml#checkMedia,          #ProfileIO-hashFile,       call, geml-parser/src/media-check.ts:305
-geml-parser--media-verbs.ts.geml#importPlan,          #ProfileIO-hashFile,       call, geml-parser/src/media-verbs.ts:783
-geml-parser--cli.ts.geml#runMedia,                    #ProfileIO-hashText,       call, geml-parser/src/cli.ts:712
-geml-parser--cli.ts.geml#runMedia,                    #ProfileIO-hashText,       call, geml-parser/src/cli.ts:739
-geml-parser--host-fs.ts.geml#profileIoFor,            #ProfileIO-hashText,       call, geml-parser/src/host-fs.ts:306
-geml-parser--media-check.ts.geml#checkMedia,          #ProfileIO-hashText,       call, geml-parser/src/media-check.ts:600
-geml-parser--media-verbs.ts.geml#importPlan,          #ProfileIO-hashText,       call, geml-parser/src/media-verbs.ts:797
-#misnamespacedMetaKey,                                #profileDef,               call, geml-parser/src/profiles.ts:422
-#unrecognizedVocabularies,                            #profileDef,               call, geml-parser/src/profiles.ts:431
-#declaredVocabularies,                                #profileDef,               call, geml-parser/src/profiles.ts:441
-#vocabularyFor,                                       #profileDef,               call, geml-parser/src/profiles.ts:452
-geml-parser--geml.ts.geml#parse,                      #misnamespacedMetaKey,     call, geml-parser/src/geml.ts:3566
-geml-parser--geml.ts.geml#reportBorrowedVocabularies, #unrecognizedVocabularies, call, geml-parser/src/geml.ts:2324
-geml-parser--geml.ts.geml#parse,                      #unrecognizedVocabularies, call, geml-parser/src/geml.ts:3548
-geml-parser--cli.ts.geml#runCheck,                    #declaredVocabularies,     call, geml-parser/src/cli.ts:898
-geml-parser--geml.ts.geml#parse,                      #declaredVocabularies,     call, geml-parser/src/geml.ts:3564
-geml-parser--geml.ts.geml#vocabularyOf,               #vocabularyFor,            call, geml-parser/src/geml.ts:2831
-geml-parser--geml.ts.geml#parse,                      #vocabularyFor,            call, geml-parser/src/geml.ts:3556
-geml-parser--geml.ts.geml#blockSpans,                 #vocabularyFor,            call, geml-parser/src/geml.ts:3871
-geml-parser--geml.ts.geml#unitSpans,                  #vocabularyFor,            call, geml-parser/src/geml.ts:3894
-geml-parser--geml.ts.geml#addressedUnits,             #vocabularyFor,            call, geml-parser/src/geml.ts:4148
+from,                                                  to,                        kind, site
+geml-parser--cli.ts.geml#todoSeedProblem,              #ProfileIO-readDoc,        call, geml-parser/src/cli.ts:560
+geml-parser--cli.ts.geml#todoSeedProblem,              #ProfileIO-readDoc,        call, geml-parser/src/cli.ts:563
+geml-parser--host-fs.ts.geml#profileIoFor,             #ProfileIO-readDoc,        call, geml-parser/src/host-fs.ts:301
+geml-parser--media-check.ts.geml#checkMedia,           #ProfileIO-readDoc,        call, geml-parser/src/media-check.ts:233
+geml-parser--media-check.ts.geml#promptTextOf,         #ProfileIO-readDoc,        call, geml-parser/src/media-check.ts:778
+geml-parser--media-verbs.ts.geml#loadProject,          #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:48
+geml-parser--media-verbs.ts.geml#exportTimeline,       #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:307
+geml-parser--media-verbs.ts.geml#buildPlan,            #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:493
+geml-parser--media-verbs.ts.geml#lay,                  #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:732
+geml-parser--media-verbs.ts.geml#importSubtitles,      #ProfileIO-readDoc,        call, geml-parser/src/media-verbs.ts:921
+geml-parser--statechart-check.ts.geml#checkStatechart, #ProfileIO-readDoc,        call, geml-parser/src/statechart-check.ts:74
+geml-parser--statechart-check.ts.geml#checkStatechart, #ProfileIO-readDoc,        call, geml-parser/src/statechart-check.ts:77
+geml-parser--cli.ts.geml#runMedia,                     #ProfileIO-hashFile,       call, geml-parser/src/cli.ts:722
+geml-parser--cli.ts.geml#runMedia,                     #ProfileIO-hashFile,       call, geml-parser/src/cli.ts:761
+geml-parser--cli.ts.geml#runMedia,                     #ProfileIO-hashFile,       call, geml-parser/src/cli.ts:887
+geml-parser--host-fs.ts.geml#profileIoFor,             #ProfileIO-hashFile,       call, geml-parser/src/host-fs.ts:309
+geml-parser--media-check.ts.geml#checkMedia,           #ProfileIO-hashFile,       call, geml-parser/src/media-check.ts:323
+geml-parser--media-verbs.ts.geml#importPlan,           #ProfileIO-hashFile,       call, geml-parser/src/media-verbs.ts:787
+geml-parser--cli.ts.geml#runMedia,                     #ProfileIO-hashText,       call, geml-parser/src/cli.ts:743
+geml-parser--cli.ts.geml#runMedia,                     #ProfileIO-hashText,       call, geml-parser/src/cli.ts:770
+geml-parser--host-fs.ts.geml#profileIoFor,             #ProfileIO-hashText,       call, geml-parser/src/host-fs.ts:306
+geml-parser--media-check.ts.geml#checkMedia,           #ProfileIO-hashText,       call, geml-parser/src/media-check.ts:618
+geml-parser--media-verbs.ts.geml#importPlan,           #ProfileIO-hashText,       call, geml-parser/src/media-verbs.ts:801
+#misnamespacedMetaKey,                                 #profileDef,               call, geml-parser/src/profiles.ts:444
+#unrecognizedVocabularies,                             #profileDef,               call, geml-parser/src/profiles.ts:453
+#declaredVocabularies,                                 #profileDef,               call, geml-parser/src/profiles.ts:463
+#vocabularyFor,                                        #profileDef,               call, geml-parser/src/profiles.ts:474
+geml-parser--geml.ts.geml#parse,                       #misnamespacedMetaKey,     call, geml-parser/src/geml.ts:3570
+geml-parser--geml.ts.geml#reportBorrowedVocabularies,  #unrecognizedVocabularies, call, geml-parser/src/geml.ts:2324
+geml-parser--geml.ts.geml#parse,                       #unrecognizedVocabularies, call, geml-parser/src/geml.ts:3552
+geml-parser--cli.ts.geml#todoSeedProblem,              #declaredVocabularies,     call, geml-parser/src/cli.ts:558
+geml-parser--cli.ts.geml#runCheck,                     #declaredVocabularies,     call, geml-parser/src/cli.ts:929
+geml-parser--geml.ts.geml#parse,                       #declaredVocabularies,     call, geml-parser/src/geml.ts:3568
+geml-parser--geml.ts.geml#vocabularyOf,                #vocabularyFor,            call, geml-parser/src/geml.ts:2835
+geml-parser--geml.ts.geml#parse,                       #vocabularyFor,            call, geml-parser/src/geml.ts:3560
+geml-parser--geml.ts.geml#blockSpans,                  #vocabularyFor,            call, geml-parser/src/geml.ts:3875
+geml-parser--geml.ts.geml#unitSpans,                   #vocabularyFor,            call, geml-parser/src/geml.ts:3898
+geml-parser--geml.ts.geml#addressedUnits,              #vocabularyFor,            call, geml-parser/src/geml.ts:4152
 ===
 
 === table {#unresolved format=csv hidden}

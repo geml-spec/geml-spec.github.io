@@ -723,6 +723,13 @@
       "id": "attrEnds"
     }
   ],
+  "attrRows": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/attrRows.",
+      "doc": "geml-parser--statechart-render.ts.geml",
+      "id": "attrRows"
+    }
+  ],
   "attrStr": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`coord.ts`/attrStr.",
@@ -812,6 +819,13 @@
       "id": "blockFromDocument"
     }
   ],
+  "blockIn": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`media-check.ts`/blockIn().",
+      "doc": "geml-parser--media-check.ts.geml",
+      "id": "blockIn"
+    }
+  ],
   "blockInner": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`render.ts`/RenderCtx#blockInner().",
@@ -844,6 +858,11 @@
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`media-check.ts`/blocksOf().",
       "doc": "geml-parser--media-check.ts.geml",
+      "id": "blocksOf"
+    },
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-check.ts`/blocksOf().",
+      "doc": "geml-parser--statechart-check.ts.geml",
       "id": "blocksOf"
     }
   ],
@@ -922,6 +941,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`media-verbs.ts`/buildPlan().",
       "doc": "geml-parser--media-verbs.ts.geml",
       "id": "buildPlan"
+    }
+  ],
+  "buildStatechart": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/buildStatechart().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "buildStatechart"
     }
   ],
   "bytesOf": [
@@ -1064,6 +1090,13 @@
       "id": "checkReservedMetaId"
     }
   ],
+  "checkStatechart": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-check.ts`/checkStatechart().",
+      "doc": "geml-parser--statechart-check.ts.geml",
+      "id": "checkStatechart"
+    }
+  ],
   "checkedReconstruct": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`history.ts`/checkedReconstruct().",
@@ -1110,6 +1143,11 @@
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`geml.ts`/clip().",
       "doc": "geml-parser--geml.ts.geml",
+      "id": "clip"
+    },
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/clip.",
+      "doc": "geml-parser--statechart-svg.ts.geml",
       "id": "clip"
     },
     {
@@ -1584,6 +1622,11 @@
       "id": "dirOf"
     },
     {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-check.ts`/dirOf.",
+      "doc": "geml-parser--statechart-check.ts.geml",
+      "id": "dirOf"
+    },
+    {
       "anchor": "scip-typescript npm geml-viewer 1.3.7 src/`style-entry.js`/dirOf.",
       "doc": "chrome-geml-viewer--style-entry.js.geml",
       "id": "dirOf"
@@ -1707,6 +1750,20 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`attrs.ts`/duplicateNames().",
       "doc": "geml-parser--attrs.ts.geml",
       "id": "duplicateNames"
+    }
+  ],
+  "edge": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/edge.",
+      "doc": "geml-parser--statechart-render.ts.geml",
+      "id": "edge"
+    }
+  ],
+  "edgeLabel": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/edgeLabel().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "edgeLabel"
     }
   ],
   "editCoord": [
@@ -1838,12 +1895,22 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`render.ts`/esc().",
       "doc": "geml-parser--render.ts.geml",
       "id": "esc"
+    },
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/esc.",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "esc"
     }
   ],
   "escAttr": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`render.ts`/escAttr().",
       "doc": "geml-parser--render.ts.geml",
+      "id": "escAttr"
+    },
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/escAttr.",
+      "doc": "geml-parser--statechart-svg.ts.geml",
       "id": "escAttr"
     }
   ],
@@ -2217,6 +2284,13 @@
       "id": "firstTimeline"
     }
   ],
+  "fits": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/fits().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "fits"
+    }
+  ],
   "flag": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`cli.ts`/flag().",
@@ -2236,6 +2310,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`translate.ts`/flatten().",
       "doc": "geml-parser--translate.ts.geml",
       "id": "flatten"
+    }
+  ],
+  "flowOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/flowOf().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "flowOf"
     }
   ],
   "fmt": [
@@ -2446,6 +2527,13 @@
       "id": "groupView"
     }
   ],
+  "guardText": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/guardText().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "guardText"
+    }
+  ],
   "handleLine": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`mcp.ts`/handleLine().",
@@ -2500,6 +2588,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`history.ts`/hashMatchesRecorded().",
       "doc": "geml-parser--history.ts.geml",
       "id": "hashMatchesRecorded"
+    }
+  ],
+  "hashOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/hashOf.",
+      "doc": "geml-parser--statechart-render.ts.geml",
+      "id": "hashOf"
     }
   ],
   "hashText": [
@@ -2596,6 +2691,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`style-resolve.ts`/hitsFor().",
       "doc": "geml-parser--style-resolve.ts.geml",
       "id": "hitsFor"
+    }
+  ],
+  "holds": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/holds().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "holds"
     }
   ],
   "htmlAnchorsOf": [
@@ -2890,6 +2992,13 @@
       "id": "isNameChar"
     }
   ],
+  "isObject": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/isObject.",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "isObject"
+    }
+  ],
   "isPartSelector": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`style-selector.ts`/isPartSelector().",
@@ -2909,6 +3018,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`inline.ts`/isPunct.",
       "doc": "geml-parser--inline.ts.geml",
       "id": "isPunct"
+    }
+  ],
+  "isReference": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/isReference.",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "isReference"
     }
   ],
   "isRelativeUrl": [
@@ -2953,6 +3069,13 @@
       "id": "isSameOriginSrc"
     }
   ],
+  "isScalar": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/isScalar.",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "isScalar"
+    }
+  ],
   "isSpace": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`edn.ts`/isSpace.",
@@ -2985,6 +3108,11 @@
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`media-check.ts`/joinRel.",
       "doc": "geml-parser--media-check.ts.geml",
+      "id": "joinRel"
+    },
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-check.ts`/joinRel.",
+      "doc": "geml-parser--statechart-check.ts.geml",
       "id": "joinRel"
     }
   ],
@@ -3119,6 +3247,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`media-timeline.ts`/layoutDoc().",
       "doc": "geml-parser--media-timeline.ts.geml",
       "id": "layoutDoc"
+    }
+  ],
+  "layoutOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/layoutOf().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "layoutOf"
     }
   ],
   "layoutOne": [
@@ -3564,6 +3699,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`cli.ts`/mediaRootOf().",
       "doc": "geml-parser--cli.ts.geml",
       "id": "mediaRootOf"
+    }
+  ],
+  "mermaidOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/mermaidOf().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "mermaidOf"
     }
   ],
   "metaLine": [
@@ -4307,6 +4449,27 @@
       "id": "pieSvg"
     }
   ],
+  "pillsHeight": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsHeight.",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "pillsHeight"
+    }
+  ],
+  "pillsOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsOf().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "pillsOf"
+    }
+  ],
+  "pillsWidth": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsWidth.",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "pillsWidth"
+    }
+  ],
   "plainScalar": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`yaml.ts`/plainScalar().",
@@ -4538,6 +4701,20 @@
       "id": "quotedScalar"
     }
   ],
+  "r1": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/r1.",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "r1"
+    }
+  ],
+  "ranksOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/ranksOf().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "ranksOf"
+    }
+  ],
   "rawBlock": [
     {
       "anchor": "scip-typescript npm geml-viewer 1.3.7 src/`render.js`/rawBlock().",
@@ -4702,6 +4879,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`mcp-core.ts`/reads.",
       "doc": "geml-parser--mcp-core.ts.geml",
       "id": "reads"
+    }
+  ],
+  "readsOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/readsOf().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "readsOf"
     }
   ],
   "realInside": [
@@ -5522,6 +5706,13 @@
       "id": "safeCssValue"
     }
   ],
+  "same": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/same.",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "same"
+    }
+  ],
   "sameConds": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`style-resolve.ts`/sameConds.",
@@ -5597,6 +5788,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`render.ts`/scatterSvg().",
       "doc": "geml-parser--render.ts.geml",
       "id": "scatterSvg"
+    }
+  ],
+  "schemaProblems": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/schemaProblems().",
+      "doc": "geml-parser--statechart.ts.geml",
+      "id": "schemaProblems"
     }
   ],
   "schemeOf": [
@@ -5896,6 +6094,18 @@
       "id": "shortestAddress"
     }
   ],
+  "show": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/show.",
+      "doc": "geml-parser--statechart-render.ts.geml",
+      "id": "show"
+    },
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/show.",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "show"
+    }
+  ],
   "shownPath": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`host-fs.ts`/shownPath().",
@@ -6086,6 +6296,41 @@
       "id": "stateClass"
     }
   ],
+  "statechartDiagram": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/statechartDiagram.",
+      "doc": "geml-parser--statechart-render.ts.geml",
+      "id": "statechartDiagram"
+    }
+  ],
+  "statechartSvg": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/statechartSvg().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "statechartSvg"
+    }
+  ],
+  "statechartSvgDataUrl": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/statechartSvgDataUrl().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "statechartSvgDataUrl"
+    }
+  ],
+  "statechartsOf": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-check.ts`/statechartsOf().",
+      "doc": "geml-parser--statechart-check.ts.geml",
+      "id": "statechartsOf"
+    }
+  ],
+  "statesList": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/statesList().",
+      "doc": "geml-parser--statechart-render.ts.geml",
+      "id": "statesList"
+    }
+  ],
   "stepText": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`coord.ts`/stepText().",
@@ -6107,6 +6352,11 @@
     {
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`media-verbs.ts`/str.",
       "doc": "geml-parser--media-verbs.ts.geml",
+      "id": "str"
+    },
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/str.",
+      "doc": "geml-parser--statechart.ts.geml",
       "id": "str"
     },
     {
@@ -6234,6 +6484,13 @@
       "id": "textOf"
     }
   ],
+  "textWidth": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/textWidth().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "textWidth"
+    }
+  ],
   "tickStep": [
     {
       "anchor": "scip-typescript npm geml-viewer 1.3.7 src/`media.js`/tickStep().",
@@ -6316,6 +6573,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`media-verbs.ts`/todo().",
       "doc": "geml-parser--media-verbs.ts.geml",
       "id": "todo"
+    }
+  ],
+  "todoSeedProblem": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`cli.ts`/todoSeedProblem().",
+      "doc": "geml-parser--cli.ts.geml",
+      "id": "todoSeedProblem"
     }
   ],
   "tokenize": [
@@ -6407,6 +6671,13 @@
       "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`verbs.ts`/transform().",
       "doc": "geml-parser--verbs.ts.geml",
       "id": "transform"
+    }
+  ],
+  "transitionsList": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/transitionsList().",
+      "doc": "geml-parser--statechart-render.ts.geml",
+      "id": "transitionsList"
     }
   ],
   "translateAttrs": [
@@ -6512,11 +6783,11 @@
       "id": "typeIndex"
     }
   ],
-  "typeLiteral811:write": [
+  "typeLiteral834:write": [
     {
-      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`cli.ts`/resolveOutTarget().typeLiteral811:write().",
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`cli.ts`/resolveOutTarget().typeLiteral834:write().",
       "doc": "geml-parser--cli.ts.geml",
-      "id": "typeLiteral811-write"
+      "id": "typeLiteral834-write"
     }
   ],
   "typed": [
@@ -6874,6 +7145,13 @@
       "anchor": "scip-typescript npm geml-viewer 1.3.7 src/`transclude.js`/word.",
       "doc": "chrome-geml-viewer--transclude.js.geml",
       "id": "word"
+    }
+  ],
+  "wrapLabel": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/wrapLabel().",
+      "doc": "geml-parser--statechart-svg.ts.geml",
+      "id": "wrapLabel"
     }
   ],
   "write": [

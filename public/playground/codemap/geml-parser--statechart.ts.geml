@@ -1,0 +1,222 @@
+=== meta
+profile = "geml-codemap/v1"
+module = geml-parser/statechart.ts
+src = geml-parser/src/statechart.ts
+entry = #buildStatechart #edgeLabel #guardText #mermaidOf
+resolution-default = cpg
+===
+
+# geml-parser/statechart.ts
+
+=== code {#isObject src=geml-parser/src/statechart.ts#L102-102 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/isObject."}
+===
+
+=== code {#str .leaf src=geml-parser/src/statechart.ts#L103-103 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/str."}
+===
+
+=== code {#isReference src=geml-parser/src/statechart.ts#L105-105 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/isReference."}
+===
+
+=== code {#buildStatechart src=geml-parser/src/statechart.ts#L107-283 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/buildStatechart()."}
+===
+
+=== code {#isScalar src=geml-parser/src/statechart.ts#L288-288 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/isScalar."}
+===
+
+=== code {#fits src=geml-parser/src/statechart.ts#L289-295 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/fits()."}
+===
+
+=== code {#schemaProblems src=geml-parser/src/statechart.ts#L298-332 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/schemaProblems()."}
+===
+
+=== code {#readsOf src=geml-parser/src/statechart.ts#L335-349 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/readsOf()."}
+===
+
+=== code {#holds src=geml-parser/src/statechart.ts#L352-382 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/holds()."}
+===
+
+=== code {#same src=geml-parser/src/statechart.ts#L383-383 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/same."}
+===
+
+=== code {#edgeLabel src=geml-parser/src/statechart.ts#L387-393 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/edgeLabel()."}
+===
+
+=== code {#guardText src=geml-parser/src/statechart.ts#L396-421 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/guardText()."}
+===
+
+=== code {#mermaidOf src=geml-parser/src/statechart.ts#L426-442 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart.ts`/mermaidOf()."}
+===
+
+=== table {#calls format=csv}
+from,             to,              kind, confidence
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isObject,       call,
+#buildStatechart, #isReference,    call,
+#buildStatechart, #readsOf,        call,
+#buildStatechart, #readsOf,        call,
+#buildStatechart, #schemaProblems, call,
+#buildStatechart, #schemaProblems, call,
+#buildStatechart, #str,            call,
+#buildStatechart, #str,            call,
+#schemaProblems,  #fits,           call,
+#schemaProblems,  #fits,           call,
+#schemaProblems,  #isObject,       call,
+#schemaProblems,  #isObject,       call,
+#schemaProblems,  #isScalar,       call,
+#schemaProblems,  #isScalar,       call,
+#readsOf,         #isObject,       call,
+#readsOf,         #isObject,       call,
+#holds,           #fits,           call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #isObject,       call,
+#holds,           #same,           call,
+#holds,           #same,           call,
+#guardText,       #isObject,       call,
+#guardText,       #isObject,       call,
+#guardText,       #isObject,       call,
+#guardText,       #isObject,       call,
+#mermaidOf,       #edgeLabel,      call,
+===
+
+=== table {#called-by format=csv}
+from,                                                   to,               kind, site
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:117
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:121
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:128
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:133
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:155
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:157
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:163
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:167
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:176
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:186
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:192
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:206
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:213
+#buildStatechart,                                       #isObject,        call, geml-parser/src/statechart.ts:237
+#schemaProblems,                                        #isObject,        call, geml-parser/src/statechart.ts:300
+#schemaProblems,                                        #isObject,        call, geml-parser/src/statechart.ts:307
+#readsOf,                                               #isObject,        call, geml-parser/src/statechart.ts:339
+#readsOf,                                               #isObject,        call, geml-parser/src/statechart.ts:344
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:359
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:360
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:361
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:365
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:368
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:369
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:373
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:378
+#holds,                                                 #isObject,        call, geml-parser/src/statechart.ts:380
+#guardText,                                             #isObject,        call, geml-parser/src/statechart.ts:403
+#guardText,                                             #isObject,        call, geml-parser/src/statechart.ts:405
+#guardText,                                             #isObject,        call, geml-parser/src/statechart.ts:413
+#guardText,                                             #isObject,        call, geml-parser/src/statechart.ts:416
+#buildStatechart,                                       #str,             call, geml-parser/src/statechart.ts:117
+#buildStatechart,                                       #str,             call, geml-parser/src/statechart.ts:156
+#buildStatechart,                                       #isReference,     call, geml-parser/src/statechart.ts:210
+geml-parser--statechart-check.ts.geml#statechartsOf,    #buildStatechart, call, geml-parser/src/statechart-check.ts:65
+geml-parser--statechart-check.ts.geml#statechartsOf,    #buildStatechart, call, geml-parser/src/statechart-check.ts:68
+geml-parser--to-md.ts.geml#typedToMd,                   #buildStatechart, call, geml-parser/src/to-md.ts:295
+#schemaProblems,                                        #isScalar,        call, geml-parser/src/statechart.ts:317
+#schemaProblems,                                        #isScalar,        call, geml-parser/src/statechart.ts:321
+#schemaProblems,                                        #fits,            call, geml-parser/src/statechart.ts:318
+#schemaProblems,                                        #fits,            call, geml-parser/src/statechart.ts:322
+#holds,                                                 #fits,            call, geml-parser/src/statechart.ts:354
+#buildStatechart,                                       #schemaProblems,  call, geml-parser/src/statechart.ts:207
+#buildStatechart,                                       #schemaProblems,  call, geml-parser/src/statechart.ts:215
+#buildStatechart,                                       #readsOf,         call, geml-parser/src/statechart.ts:209
+#buildStatechart,                                       #readsOf,         call, geml-parser/src/statechart.ts:218
+#holds,                                                 #same,            call, geml-parser/src/statechart.ts:355
+#holds,                                                 #same,            call, geml-parser/src/statechart.ts:357
+geml-parser--statechart-render.ts.geml#edge,            #edgeLabel,       call, geml-parser/src/statechart-render.ts:27
+geml-parser--statechart-svg.ts.geml#pillsOf,            #edgeLabel,       call, geml-parser/src/statechart-svg.ts:159
+geml-parser--statechart-svg.ts.geml#flowOf,             #edgeLabel,       call, geml-parser/src/statechart-svg.ts:211
+#mermaidOf,                                             #edgeLabel,       call, geml-parser/src/statechart.ts:437
+geml-parser--statechart-render.ts.geml#transitionsList, #guardText,       call, geml-parser/src/statechart-render.ts:41
+geml-parser--statechart-svg.ts.geml#statechartSvg,      #guardText,       call, geml-parser/src/statechart-svg.ts:443
+geml-parser--to-md.ts.geml#typedToMd,                   #mermaidOf,       call, geml-parser/src/to-md.ts:296
+===
+
+=== table {#unresolved format=csv hidden}
+from,             to
+#isObject,        ArrayConstructor.isArray
+#isReference,     RegExp.test
+#isReference,     String.startsWith
+#buildStatechart, Array.every
+#buildStatechart, Array.filter
+#buildStatechart, Array.forEach
+#buildStatechart, Array.includes
+#buildStatechart, Array.map
+#buildStatechart, Array.push
+#buildStatechart, Array.shift
+#buildStatechart, Array.some
+#buildStatechart, ArrayConstructor.isArray
+#buildStatechart, JSON.parse
+#buildStatechart, JSON.stringify
+#buildStatechart, Map.get
+#buildStatechart, Map.set
+#buildStatechart, ObjectConstructor.entries
+#buildStatechart, RegExp.test
+#buildStatechart, Set.add
+#buildStatechart, Set.has
+#buildStatechart, String.trim
+#isScalar,        Array.includes
+#fits,            NumberConstructor.isInteger
+#schemaProblems,  Array.every
+#schemaProblems,  Array.forEach
+#schemaProblems,  Array.join
+#schemaProblems,  Array.push
+#schemaProblems,  ArrayConstructor.isArray
+#schemaProblems,  JSON.stringify
+#schemaProblems,  ObjectConstructor.entries
+#schemaProblems,  ObjectConstructor.keys
+#schemaProblems,  Set.has
+#readsOf,         Array.sort
+#readsOf,         ArrayConstructor.isArray
+#readsOf,         ObjectConstructor.keys
+#readsOf,         Set.add
+#holds,           Array.filter
+#holds,           Array.some
+#holds,           ArrayConstructor.isArray
+#holds,           ObjectConstructor.entries
+#holds,           ObjectConstructor.keys
+#holds,           Set.has
+#same,            JSON.stringify
+#edgeLabel,       Array.join
+#edgeLabel,       String.indexOf
+#edgeLabel,       String.slice
+#guardText,       Array.filter
+#guardText,       Array.join
+#guardText,       Array.map
+#guardText,       Array.push
+#guardText,       ArrayConstructor.isArray
+#guardText,       JSON.stringify
+#guardText,       ObjectConstructor.entries
+#mermaidOf,       Array.forEach
+#mermaidOf,       Array.join
+#mermaidOf,       Array.push
+#mermaidOf,       Map.get
+#mermaidOf,       Map.set
+#mermaidOf,       RegExp.test
+#mermaidOf,       String.replace
+#mermaidOf,       String.trim
+===

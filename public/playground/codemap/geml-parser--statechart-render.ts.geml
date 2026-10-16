@@ -1,0 +1,97 @@
+=== meta
+profile = "geml-codemap/v1"
+module = geml-parser/statechart-render.ts
+src = geml-parser/src/statechart-render.ts
+entry = #statechartDiagram
+resolution-default = cpg
+===
+
+# geml-parser/statechart-render.ts
+
+=== code {#show src=geml-parser/src/statechart-render.ts#L18-18 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/show."}
+===
+
+=== code {#hashOf src=geml-parser/src/statechart-render.ts#L20-24 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/hashOf."}
+===
+
+=== code {#attrRows src=geml-parser/src/statechart-render.ts#L25-26 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/attrRows."}
+===
+
+=== code {#edge src=geml-parser/src/statechart-render.ts#L27-27 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/edge."}
+===
+
+=== code {#statesList src=geml-parser/src/statechart-render.ts#L29-37 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/statesList()."}
+===
+
+=== code {#transitionsList src=geml-parser/src/statechart-render.ts#L39-45 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/transitionsList()."}
+===
+
+=== code {#statechartDiagram src=geml-parser/src/statechart-render.ts#L47-64 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-render.ts`/statechartDiagram."}
+===
+
+=== table {#calls format=csv}
+from,               to,                                                       kind, confidence
+#attrRows,          #show,                                                    call,
+#attrRows,          geml-parser--render.ts.geml#esc,                          call,
+#attrRows,          geml-parser--render.ts.geml#esc,                          call,
+#edge,              geml-parser--render.ts.geml#esc,                          call,
+#edge,              geml-parser--render.ts.geml#esc,                          call,
+#edge,              geml-parser--statechart.ts.geml#edgeLabel,                call,
+#statesList,        #attrRows,                                                call,
+#statesList,        #edge,                                                    call,
+#statesList,        #edge,                                                    call,
+#statesList,        geml-parser--render.ts.geml#esc,                          call,
+#statesList,        geml-parser--render.ts.geml#esc,                          call,
+#statesList,        geml-parser--render.ts.geml#esc,                          call,
+#transitionsList,   #attrRows,                                                call,
+#transitionsList,   #show,                                                    call,
+#transitionsList,   geml-parser--render.ts.geml#esc,                          call,
+#transitionsList,   geml-parser--render.ts.geml#esc,                          call,
+#transitionsList,   geml-parser--render.ts.geml#esc,                          call,
+#transitionsList,   geml-parser--statechart.ts.geml#guardText,                call,
+#statechartDiagram, #hashOf,                                                  call,
+#statechartDiagram, #statesList,                                              call,
+#statechartDiagram, #transitionsList,                                         call,
+#statechartDiagram, geml-parser--render.ts.geml#DiagramCtx-clsAttr,           call,
+#statechartDiagram, geml-parser--render.ts.geml#DiagramCtx-clsAttr,           call,
+#statechartDiagram, geml-parser--render.ts.geml#esc,                          call,
+#statechartDiagram, geml-parser--render.ts.geml#escAttr,                      call,
+#statechartDiagram, geml-parser--statechart-check.ts.geml#statechartsOf,      call,
+#statechartDiagram, geml-parser--statechart-svg.ts.geml#statechartSvg,        call,
+#statechartDiagram, geml-parser--statechart-svg.ts.geml#statechartSvgDataUrl, call,
+===
+
+=== table {#called-by format=csv}
+from,                                 to,                 kind, site
+#attrRows,                            #show,              call, geml-parser/src/statechart-render.ts:26
+#transitionsList,                     #show,              call, geml-parser/src/statechart-render.ts:42
+#statechartDiagram,                   #hashOf,            call, geml-parser/src/statechart-render.ts:58
+#statesList,                          #attrRows,          call, geml-parser/src/statechart-render.ts:35
+#transitionsList,                     #attrRows,          call, geml-parser/src/statechart-render.ts:43
+#statesList,                          #edge,              call, geml-parser/src/statechart-render.ts:32
+#statesList,                          #edge,              call, geml-parser/src/statechart-render.ts:33
+#statechartDiagram,                   #statesList,        call, geml-parser/src/statechart-render.ts:63
+#statechartDiagram,                   #transitionsList,   call, geml-parser/src/statechart-render.ts:63
+geml-parser--verbs.ts.geml#transform, #statechartDiagram, call, geml-parser/src/verbs.ts:947
+===
+
+=== table {#unresolved format=csv hidden}
+from,               to
+#show,              JSON.stringify
+#hashOf,            Math.imul
+#hashOf,            Number.toString
+#hashOf,            String.charCodeAt
+#attrRows,          Array.join
+#attrRows,          Array.map
+#attrRows,          ObjectConstructor.entries
+#attrRows,          ObjectConstructor.keys
+#statesList,        Array.filter
+#statesList,        Array.includes
+#statesList,        Array.join
+#statesList,        Array.map
+#transitionsList,   Array.join
+#transitionsList,   Array.map
+#statechartDiagram, Array.find
+#statechartDiagram, Array.join
+#statechartDiagram, Array.map
+===

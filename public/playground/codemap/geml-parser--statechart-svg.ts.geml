@@ -1,0 +1,405 @@
+=== meta
+profile = "geml-codemap/v1"
+module = geml-parser/statechart-svg.ts
+src = geml-parser/src/statechart-svg.ts
+entry = #statechartSvg #statechartSvgDataUrl
+resolution-default = cpg
+===
+
+# geml-parser/statechart-svg.ts
+
+=== code {#esc src=geml-parser/src/statechart-svg.ts#L47-47 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/esc."}
+===
+
+=== code {#escAttr src=geml-parser/src/statechart-svg.ts#L48-48 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/escAttr."}
+===
+
+=== code {#r1 src=geml-parser/src/statechart-svg.ts#L49-49 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/r1."}
+===
+
+=== code {#textWidth src=geml-parser/src/statechart-svg.ts#L53-57 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/textWidth()."}
+===
+
+=== code {#clip src=geml-parser/src/statechart-svg.ts#L59-59 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/clip."}
+===
+
+=== code {#wrapLabel src=geml-parser/src/statechart-svg.ts#L62-69 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/wrapLabel()."}
+===
+
+=== code {#ranksOf src=geml-parser/src/statechart-svg.ts#L118-150 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/ranksOf()."}
+===
+
+=== code {#show src=geml-parser/src/statechart-svg.ts#L152-152 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/show."}
+===
+
+=== code {#pillsOf src=geml-parser/src/statechart-svg.ts#L155-175 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsOf()."}
+===
+
+=== code {#flowOf src=geml-parser/src/statechart-svg.ts#L199-214 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/flowOf()."}
+===
+
+=== code {#pillsWidth src=geml-parser/src/statechart-svg.ts#L216-216 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsWidth."}
+===
+
+=== code {#pillsHeight src=geml-parser/src/statechart-svg.ts#L217-217 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/pillsHeight."}
+===
+
+=== code {#layoutOf src=geml-parser/src/statechart-svg.ts#L220-391 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/layoutOf()."}
+===
+
+=== code {#statechartSvg src=geml-parser/src/statechart-svg.ts#L394-487 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/statechartSvg()."}
+===
+
+=== code {#statechartSvgDataUrl src=geml-parser/src/statechart-svg.ts#L490-492 anchor="scip-typescript npm @geml/geml 1.12.5 src/`statechart-svg.ts`/statechartSvgDataUrl()."}
+===
+
+=== table {#calls format=csv}
+from,           to,                                        kind, confidence
+#escAttr,       #esc,                                      call,
+#wrapLabel,     #clip,                                     call,
+#pillsOf,       #textWidth,                                call,
+#pillsOf,       #wrapLabel,                                call,
+#pillsOf,       geml-parser--statechart.ts.geml#edgeLabel, call,
+#flowOf,        #pillsOf,                                  call,
+#flowOf,        #ranksOf,                                  call,
+#flowOf,        geml-parser--statechart.ts.geml#edgeLabel, call,
+#layoutOf,      #pillsHeight,                              call,
+#layoutOf,      #pillsHeight,                              call,
+#layoutOf,      #pillsHeight,                              call,
+#layoutOf,      #pillsHeight,                              call,
+#layoutOf,      #pillsHeight,                              call,
+#layoutOf,      #pillsHeight,                              call,
+#layoutOf,      #pillsHeight,                              call,
+#layoutOf,      #pillsOf,                                  call,
+#layoutOf,      #pillsWidth,                               call,
+#layoutOf,      #pillsWidth,                               call,
+#layoutOf,      #pillsWidth,                               call,
+#layoutOf,      #pillsWidth,                               call,
+#layoutOf,      #pillsWidth,                               call,
+#layoutOf,      #pillsWidth,                               call,
+#layoutOf,      #pillsWidth,                               call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #r1,                                       call,
+#layoutOf,      #ranksOf,                                  call,
+#layoutOf,      #textWidth,                                call,
+#layoutOf,      #textWidth,                                call,
+#statechartSvg, #esc,                                      call,
+#statechartSvg, #esc,                                      call,
+#statechartSvg, #esc,                                      call,
+#statechartSvg, #esc,                                      call,
+#statechartSvg, #esc,                                      call,
+#statechartSvg, #esc,                                      call,
+#statechartSvg, #esc,                                      call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #escAttr,                                  call,
+#statechartSvg, #layoutOf,                                 call,
+#statechartSvg, #pillsWidth,                               call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #r1,                                       call,
+#statechartSvg, #show,                                     call,
+#statechartSvg, geml-parser--statechart.ts.geml#guardText, call,
+===
+
+=== table {#called-by format=csv}
+from,                                                     to,                    kind, site
+#escAttr,                                                 #esc,                  call, geml-parser/src/statechart-svg.ts:48
+#statechartSvg,                                           #esc,                  call, geml-parser/src/statechart-svg.ts:432
+#statechartSvg,                                           #esc,                  call, geml-parser/src/statechart-svg.ts:451
+#statechartSvg,                                           #esc,                  call, geml-parser/src/statechart-svg.ts:461
+#statechartSvg,                                           #esc,                  call, geml-parser/src/statechart-svg.ts:461
+#statechartSvg,                                           #esc,                  call, geml-parser/src/statechart-svg.ts:477
+#statechartSvg,                                           #esc,                  call, geml-parser/src/statechart-svg.ts:481
+#statechartSvg,                                           #esc,                  call, geml-parser/src/statechart-svg.ts:482
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:429
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:439
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:440
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:451
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:451
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:451
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:453
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:477
+#statechartSvg,                                           #escAttr,              call, geml-parser/src/statechart-svg.ts:486
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:318
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:318
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:318
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:318
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:318
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:323
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:323
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:323
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:323
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:323
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:342
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:352
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:374
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#layoutOf,                                                #r1,                   call, geml-parser/src/statechart-svg.ts:380
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:431
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:439
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:439
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:439
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:439
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:439
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:440
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:440
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:440
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:440
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:440
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:460
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:460
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:460
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:460
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:461
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:461
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:461
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:475
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:475
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:475
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:475
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:478
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:478
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:478
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:478
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:479
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:479
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:479
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:479
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:480
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:480
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:480
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:480
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:481
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:481
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:482
+#statechartSvg,                                           #r1,                   call, geml-parser/src/statechart-svg.ts:482
+#pillsOf,                                                 #textWidth,            call, geml-parser/src/statechart-svg.ts:171
+#layoutOf,                                                #textWidth,            call, geml-parser/src/statechart-svg.ts:229
+#layoutOf,                                                #textWidth,            call, geml-parser/src/statechart-svg.ts:229
+#wrapLabel,                                               #clip,                 call, geml-parser/src/statechart-svg.ts:68
+#pillsOf,                                                 #wrapLabel,            call, geml-parser/src/statechart-svg.ts:162
+#flowOf,                                                  #ranksOf,              call, geml-parser/src/statechart-svg.ts:200
+#layoutOf,                                                #ranksOf,              call, geml-parser/src/statechart-svg.ts:223
+#statechartSvg,                                           #show,                 call, geml-parser/src/statechart-svg.ts:444
+#flowOf,                                                  #pillsOf,              call, geml-parser/src/statechart-svg.ts:211
+#layoutOf,                                                #pillsOf,              call, geml-parser/src/statechart-svg.ts:258
+#layoutOf,                                                #pillsWidth,           call, geml-parser/src/statechart-svg.ts:261
+#layoutOf,                                                #pillsWidth,           call, geml-parser/src/statechart-svg.ts:289
+#layoutOf,                                                #pillsWidth,           call, geml-parser/src/statechart-svg.ts:290
+#layoutOf,                                                #pillsWidth,           call, geml-parser/src/statechart-svg.ts:324
+#layoutOf,                                                #pillsWidth,           call, geml-parser/src/statechart-svg.ts:329
+#layoutOf,                                                #pillsWidth,           call, geml-parser/src/statechart-svg.ts:353
+#layoutOf,                                                #pillsWidth,           call, geml-parser/src/statechart-svg.ts:358
+#statechartSvg,                                           #pillsWidth,           call, geml-parser/src/statechart-svg.ts:456
+#layoutOf,                                                #pillsHeight,          call, geml-parser/src/statechart-svg.ts:261
+#layoutOf,                                                #pillsHeight,          call, geml-parser/src/statechart-svg.ts:263
+#layoutOf,                                                #pillsHeight,          call, geml-parser/src/statechart-svg.ts:289
+#layoutOf,                                                #pillsHeight,          call, geml-parser/src/statechart-svg.ts:320
+#layoutOf,                                                #pillsHeight,          call, geml-parser/src/statechart-svg.ts:325
+#layoutOf,                                                #pillsHeight,          call, geml-parser/src/statechart-svg.ts:329
+#layoutOf,                                                #pillsHeight,          call, geml-parser/src/statechart-svg.ts:345
+#statechartSvg,                                           #layoutOf,             call, geml-parser/src/statechart-svg.ts:395
+geml-parser--statechart-render.ts.geml#statechartDiagram, #statechartSvg,        call, geml-parser/src/statechart-render.ts:59
+geml-parser--statechart-render.ts.geml#statechartDiagram, #statechartSvgDataUrl, call, geml-parser/src/statechart-render.ts:62
+===
+
+=== table {#unresolved format=csv hidden}
+from,                  to
+#esc,                  String.replace
+#escAttr,              String.replace
+#r1,                   Math.round
+#textWidth,            RegExp.test
+#clip,                 String.slice
+#wrapLabel,            Math.max
+#wrapLabel,            String.lastIndexOf
+#wrapLabel,            String.replace
+#wrapLabel,            String.slice
+#ranksOf,              Array.filter
+#ranksOf,              Array.map
+#ranksOf,              Array.push
+#ranksOf,              Array.shift
+#ranksOf,              Map.get
+#ranksOf,              Map.has
+#ranksOf,              Map.set
+#ranksOf,              Math.max
+#ranksOf,              Set.add
+#ranksOf,              Set.has
+#show,                 JSON.stringify
+#pillsOf,              Array.map
+#pillsOf,              Array.push
+#pillsOf,              Math.ceil
+#pillsOf,              Math.max
+#pillsOf,              ObjectConstructor.entries
+#flowOf,               Array.filter
+#flowOf,               Array.join
+#flowOf,               Array.map
+#flowOf,               Array.push
+#flowOf,               Map.get
+#flowOf,               Map.has
+#pillsWidth,           Array.reduce
+#pillsWidth,           Math.max
+#pillsHeight,          Array.map
+#pillsHeight,          Math.max
+#layoutOf,             Array.fill
+#layoutOf,             Array.map
+#layoutOf,             Array.push
+#layoutOf,             Array.reduce
+#layoutOf,             Map.get
+#layoutOf,             Map.keys
+#layoutOf,             Map.set
+#layoutOf,             Map.values
+#layoutOf,             Math.abs
+#layoutOf,             Math.ceil
+#layoutOf,             Math.max
+#layoutOf,             Math.min
+#statechartSvg,        Array.filter
+#statechartSvg,        Array.join
+#statechartSvg,        Array.map
+#statechartSvg,        Array.push
+#statechartSvg,        Map.get
+#statechartSvg,        ObjectConstructor.entries
+#statechartSvg,        Set.has
+#statechartSvg,        String.replace
+#statechartSvgDataUrl, encodeURIComponent
+===
