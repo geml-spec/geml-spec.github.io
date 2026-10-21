@@ -972,10 +972,10 @@ geml-parser--code-graph.ts.geml#buildCodeGraph,        #nameKey,                
 #addressedUnits,                                       #nameKey,                    call, geml-parser/src/geml.ts:4167
 #findBlockSite,                                        #nameKey,                    call, geml-parser/src/geml.ts:4285
 #findBlockSite,                                        #nameKey,                    call, geml-parser/src/geml.ts:4288
-geml-parser--style-selector.ts.geml#runNamesOf,        #nameKey,                    call, geml-parser/src/style-selector.ts:316
-geml-parser--style-selector.ts.geml#runNamesOf,        #nameKey,                    call, geml-parser/src/style-selector.ts:323
-geml-parser--style-selector.ts.geml#matchSimple,       #nameKey,                    call, geml-parser/src/style-selector.ts:376
-geml-parser--style-selector.ts.geml#matchSimple,       #nameKey,                    call, geml-parser/src/style-selector.ts:376
+geml-parser--style-selector.ts.geml#runNamesOf,        #nameKey,                    call, geml-parser/src/style-selector.ts:318
+geml-parser--style-selector.ts.geml#runNamesOf,        #nameKey,                    call, geml-parser/src/style-selector.ts:325
+geml-parser--style-selector.ts.geml#matchSimple,       #nameKey,                    call, geml-parser/src/style-selector.ts:378
+geml-parser--style-selector.ts.geml#matchSimple,       #nameKey,                    call, geml-parser/src/style-selector.ts:378
 geml-parser--verbs.ts.geml#list,                       #nameKey,                    call, geml-parser/src/verbs.ts:399
 geml-parser--verbs.ts.geml#list,                       #nameKey,                    call, geml-parser/src/verbs.ts:422
 geml-parser--verbs.ts.geml#selectUnits,                #nameKey,                    call, geml-parser/src/verbs.ts:541
@@ -1234,7 +1234,7 @@ geml-parser--verbs.ts.geml#resurrectPosition,          #blockSpans,             
 geml-parser--verbs.ts.geml#resurrectPosition,          #blockSpans,                 call, geml-parser/src/verbs.ts:2434
 #detectTransclusionCycles,                             #selectEmbed,                call, geml-parser/src/geml.ts:2245
 geml-parser--render.ts.geml#RenderCtx-transclude,      #selectEmbed,                call, geml-parser/src/render.ts:437
-geml-parser--style-resolve.ts.geml#expandEmbeds,       #selectEmbed,                call, geml-parser/src/style-resolve.ts:596
+geml-parser--style-resolve.ts.geml#expandEmbeds,       #selectEmbed,                call, geml-parser/src/style-resolve.ts:597
 geml-parser--verbs.ts.geml#transform,                  #selectEmbed,                call, geml-parser/src/verbs.ts:1004
 geml-parser--verbs.ts.geml#transform,                  #selectEmbed,                call, geml-parser/src/verbs.ts:1034
 #selectEmbed,                                          #narrowEmbed,                call, geml-parser/src/geml.ts:3919
@@ -1246,7 +1246,7 @@ geml-parser--verbs.ts.geml#transform,                  #selectEmbed,            
 #gatherIds,                                            #proseRunTargets,            call, geml-parser/src/geml.ts:2814
 #parse,                                                #proseRunTargets,            call, geml-parser/src/geml.ts:3582
 #findEmbedTarget,                                      #proseRunTargets,            call, geml-parser/src/geml.ts:3973
-geml-parser--style-selector.ts.geml#runNamesOf,        #proseRunTargets,            call, geml-parser/src/style-selector.ts:322
+geml-parser--style-selector.ts.geml#runNamesOf,        #proseRunTargets,            call, geml-parser/src/style-selector.ts:324
 #proseRunTargets,                                      #collectRunTargets,          call, geml-parser/src/geml.ts:4014
 #addressedUnits,                                       #proseRuns,                  call, geml-parser/src/geml.ts:4160
 #collectRunTargets,                                    #runAddress,                 call, geml-parser/src/geml.ts:4030

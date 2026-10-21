@@ -292309,7 +292309,7 @@ ${isHandDrawn ? "" : `
 
   // ../../geml-parser/dist/attrs.js
   init_define_process_argv();
-  var NAME = /^[\p{L}\p{N}_-]+$/u;
+  var NAME = /^[\p{L}\p{M}\p{N}_-]+$/u;
   function oddNames(a2) {
     const odd = [];
     if (a2.id !== void 0 && !NAME.test(a2.id))
@@ -292442,7 +292442,7 @@ ${isHandDrawn ? "" : `
     }
     return -1;
   }
-  var META_REF_SRC = "\\{\\{\\s*([A-Za-z_][A-Za-z0-9_-]*)\\s*\\}\\}";
+  var META_REF_SRC = "\\{\\{\\s*([\\p{L}\\p{M}\\p{N}_-]+)\\s*\\}\\}";
   var SAFE_SCHEMES = /* @__PURE__ */ new Set(["http", "https", "mailto", "tel"]);
   function schemeOf(url) {
     const m3 = /^([a-z][a-z0-9+.-]*):/i.exec(url.replace(/[\x00-\x20]/g, ""));
@@ -294805,7 +294805,7 @@ ${isHandDrawn ? "" : `
 
   // ../../geml-parser/dist/from-md.js
   init_define_process_argv();
-  var META_REF_Y = new RegExp(META_REF_SRC, "y");
+  var META_REF_Y = new RegExp(META_REF_SRC, "yu");
 
   // ../../geml-parser/dist/render-html.js
   init_define_process_argv();
@@ -297330,7 +297330,7 @@ ${isHandDrawn ? "" : `
   function escText(s2) {
     return s2.replace(/[\\`*~$\[\]]/g, (c3) => "\\" + c3);
   }
-  var META_REF_G = new RegExp(META_REF_SRC, "g");
+  var META_REF_G = new RegExp(META_REF_SRC, "gu");
   function escMetaRef(s2) {
     return s2.replace(META_REF_G, (m3, _key, offset) => {
       let bs = 0;
@@ -297491,7 +297491,7 @@ ${isHandDrawn ? "" : `
     "statechart-unreachable": "warning",
     "statechart-dead-end": "warning"
   };
-  var NAME2 = /^[\p{L}\p{N}_-]+$/u;
+  var NAME2 = /^[\p{L}\p{M}\p{N}_-]+$/u;
   var isObject = (v3) => typeof v3 === "object" && v3 !== null && !Array.isArray(v3);
   var str2 = (v3) => v3 === void 0 ? void 0 : typeof v3 === "string" ? v3 : String(v3);
   var isReference = (s2) => s2.startsWith("#") || /^[^#\s]+\.geml#./.test(s2);
@@ -297531,7 +297531,7 @@ ${isHandDrawn ? "" : `
     } else {
       for (const [id38, s2] of Object.entries(rawStates)) {
         if (!NAME2.test(id38)) {
-          report("statechart-state", `state id ${JSON.stringify(id38)} is not a NAME (letters, digits, \`_\`, \`-\`)`);
+          report("statechart-state", `state id ${JSON.stringify(id38)} is not a NAME (letters, combining marks, digits, \`_\`, \`-\`)`);
           continue;
         }
         if (!isObject(s2)) {
@@ -298398,7 +298398,7 @@ ${isHandDrawn ? "" : `
       diags.push({
         severity: "warning",
         code: "name-not-a-name",
-        message: `${kind} \`${name}\` is not a NAME (\xA74: letters, digits, \`-\`, \`_\`)` + (kind === "flag" ? " \u2014 an attribute object is whitespace-separated, so a space in an id or class splits it into flags like this one" : ""),
+        message: `${kind} \`${name}\` is not a NAME (\xA74: letters, combining marks, digits, \`-\`, \`_\`)` + (kind === "flag" ? " \u2014 an attribute object is whitespace-separated, so a space in an id or class splits it into flags like this one" : ""),
         line: line2
       });
     }
@@ -298650,7 +298650,7 @@ ${isHandDrawn ? "" : `
   function nameKey(name) {
     return name.normalize("NFD");
   }
-  var META_REF = new RegExp(META_REF_SRC, "y");
+  var META_REF = new RegExp(META_REF_SRC, "yu");
   function interpolate(text4, line2, ctx) {
     if (!text4.includes("{{"))
       return text4;
@@ -302606,7 +302606,7 @@ ${isHandDrawn ? "" : `
     while (i4 < src.length) {
       const ch2 = src[i4];
       if (ch2 === "." || ch2 === "#") {
-        const m3 = /^[^.#[\]]+/.exec(src.slice(i4 + 1));
+        const m3 = /^[\p{L}\p{M}\p{N}_-]+/u.exec(src.slice(i4 + 1));
         if (!m3)
           return { error: `empty ${ch2 === "." ? "class" : "id"} in \`${src}\`` };
         if (ch2 === ".")
@@ -303033,7 +303033,7 @@ ${isHandDrawn ? "" : `
     return true;
   }
   var INTERACTIONS = /* @__PURE__ */ new Set(["select", "toggle"]);
-  var WHEN_TERM = /^\$([A-Za-z0-9_-]+)=([^=!<>|&]+)$/;
+  var WHEN_TERM = /^\$([\p{L}\p{M}\p{N}_-]+)=([^=!<>|&]+)$/u;
   var PSEUDO = ["hover", "focus", "invalid", "disabled", "checked"];
   var PSEUDO_SET = new Set(PSEUDO);
   var PSEUDO_LIST = PSEUDO.map((n2) => `\`@${n2}\``).join(", ");
@@ -303696,7 +303696,7 @@ ${isHandDrawn ? "" : `
     const refs = (v3) => {
       if (typeof v3 !== "string")
         return [];
-      return [...v3.matchAll(/\$([A-Za-z0-9_-]+)/g)].map((m3) => m3[1]);
+      return [...v3.matchAll(/\$([\p{L}\p{M}\p{N}_-]+)/gu)].map((m3) => m3[1]);
     };
     const checkRefs = (v3, whereId) => {
       for (const name of refs(v3)) {

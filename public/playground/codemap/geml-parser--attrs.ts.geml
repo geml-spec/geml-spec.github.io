@@ -8,22 +8,22 @@ resolution-default = cpg
 
 # geml-parser/attrs.ts
 
-=== code {#oddNames src=geml-parser/src/attrs.ts#L30-39 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/oddNames()."}
+=== code {#oddNames src=geml-parser/src/attrs.ts#L33-42 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/oddNames()."}
 ===
 
-=== code {#duplicateNames src=geml-parser/src/attrs.ts#L60-70 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/duplicateNames()."}
+=== code {#duplicateNames src=geml-parser/src/attrs.ts#L63-73 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/duplicateNames()."}
 ===
 
-=== code {#unescapeQuoted .leaf src=geml-parser/src/attrs.ts#L77-85 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/unescapeQuoted()."}
+=== code {#unescapeQuoted .leaf src=geml-parser/src/attrs.ts#L80-88 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/unescapeQuoted()."}
 ===
 
-=== code {#coerce src=geml-parser/src/attrs.ts#L87-97 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/coerce()."}
+=== code {#coerce src=geml-parser/src/attrs.ts#L90-100 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/coerce()."}
 ===
 
-=== code {#tokenize src=geml-parser/src/attrs.ts#L106-126 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/tokenize()."}
+=== code {#tokenize src=geml-parser/src/attrs.ts#L109-129 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/tokenize()."}
 ===
 
-=== code {#parseAttrs src=geml-parser/src/attrs.ts#L129-154 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/parseAttrs()."}
+=== code {#parseAttrs src=geml-parser/src/attrs.ts#L132-157 anchor="scip-typescript npm @geml/geml 1.12.6 src/`attrs.ts`/parseAttrs()."}
 ===
 
 === table {#calls format=csv}
@@ -37,12 +37,12 @@ from,        to,              kind, confidence
 from,                                             to,              kind, site
 geml-parser--geml.ts.geml#reportOddNames,         #oddNames,       call, geml-parser/src/geml.ts:535
 geml-parser--geml.ts.geml#reportDuplicateNames,   #duplicateNames, call, geml-parser/src/geml.ts:522
-#coerce,                                          #unescapeQuoted, call, geml-parser/src/attrs.ts:90
-#parseAttrs,                                      #coerce,         call, geml-parser/src/attrs.ts:147
+#coerce,                                          #unescapeQuoted, call, geml-parser/src/attrs.ts:93
+#parseAttrs,                                      #coerce,         call, geml-parser/src/attrs.ts:150
 geml-parser--geml.ts.geml#readFencedBlock,        #coerce,         call, geml-parser/src/geml.ts:1607
 geml-parser--geml.ts.geml#parseData,              #coerce,         call, geml-parser/src/geml.ts:2086
 geml-parser--table.ts.geml#parseTable,            #coerce,         call, geml-parser/src/table.ts:435
-#parseAttrs,                                      #tokenize,       call, geml-parser/src/attrs.ts:137
+#parseAttrs,                                      #tokenize,       call, geml-parser/src/attrs.ts:140
 geml-parser--selector.ts.geml#keyForm,            #tokenize,       call, geml-parser/src/selector.ts:229
 geml-parser--block-edit.ts.geml#rewriteBraces,    #parseAttrs,     call, geml-parser/src/block-edit.ts:52
 geml-parser--block-edit.ts.geml#normalizeBlockId, #parseAttrs,     call, geml-parser/src/block-edit.ts:116
@@ -55,10 +55,10 @@ geml-parser--geml.ts.geml#fenceClose,             #parseAttrs,     call, geml-pa
 geml-parser--geml.ts.geml#collectSpans,           #parseAttrs,     call, geml-parser/src/geml.ts:3809
 geml-parser--geml.ts.geml#collectSpans,           #parseAttrs,     call, geml-parser/src/geml.ts:3837
 geml-parser--geml.ts.geml#closeFenceLine,         #parseAttrs,     call, geml-parser/src/geml.ts:4234
-geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:199
-geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:211
-geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:310
-geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:314
+geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:200
+geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:212
+geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:312
+geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:316
 geml-parser--selector.ts.geml#keyForm,            #parseAttrs,     call, geml-parser/src/selector.ts:252
 geml-parser--verbs.ts.geml#embedSrcOf,            #parseAttrs,     call, geml-parser/src/verbs.ts:248
 geml-parser--verbs.ts.geml#selectUnits,           #parseAttrs,     call, geml-parser/src/verbs.ts:489
