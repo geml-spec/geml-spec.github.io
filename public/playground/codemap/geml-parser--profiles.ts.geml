@@ -17,28 +17,28 @@ resolution-default = cpg
 === code {#ProfileIO-hashText .leaf name="ProfileIO.hashText" src=geml-parser/src/profiles.ts#L78-78 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/ProfileIO#hashText()."}
 ===
 
-=== code {#enableProfileRegistration src=geml-parser/src/profiles.ts#L351-354 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/enableProfileRegistration()."}
+=== code {#enableProfileRegistration src=geml-parser/src/profiles.ts#L353-356 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/enableProfileRegistration()."}
 ===
 
-=== code {#registerProfile src=geml-parser/src/profiles.ts#L362-382 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/registerProfile()."}
+=== code {#registerProfile src=geml-parser/src/profiles.ts#L364-384 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/registerProfile()."}
 ===
 
-=== code {#profileDef src=geml-parser/src/profiles.ts#L385-387 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/profileDef()."}
+=== code {#profileDef src=geml-parser/src/profiles.ts#L387-389 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/profileDef()."}
 ===
 
-=== code {#knownProfiles src=geml-parser/src/profiles.ts#L389-391 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/knownProfiles()."}
+=== code {#knownProfiles src=geml-parser/src/profiles.ts#L391-393 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/knownProfiles()."}
 ===
 
-=== code {#misnamespacedMetaKey src=geml-parser/src/profiles.ts#L440-448 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/misnamespacedMetaKey()."}
+=== code {#misnamespacedMetaKey src=geml-parser/src/profiles.ts#L442-450 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/misnamespacedMetaKey()."}
 ===
 
-=== code {#unrecognizedVocabularies src=geml-parser/src/profiles.ts#L450-454 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/unrecognizedVocabularies()."}
+=== code {#unrecognizedVocabularies src=geml-parser/src/profiles.ts#L452-456 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/unrecognizedVocabularies()."}
 ===
 
-=== code {#declaredVocabularies src=geml-parser/src/profiles.ts#L460-464 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/declaredVocabularies()."}
+=== code {#declaredVocabularies src=geml-parser/src/profiles.ts#L462-466 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/declaredVocabularies()."}
 ===
 
-=== code {#vocabularyFor src=geml-parser/src/profiles.ts#L466-489 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/vocabularyFor()."}
+=== code {#vocabularyFor src=geml-parser/src/profiles.ts#L468-491 anchor="scip-typescript npm @geml/geml 1.13.0 src/`profiles.ts`/vocabularyFor()."}
 ===
 
 === table {#calls format=csv}
@@ -74,10 +74,10 @@ geml-parser--cli.ts.geml#runMedia,                     #ProfileIO-hashText,     
 geml-parser--host-fs.ts.geml#profileIoFor,             #ProfileIO-hashText,       call, geml-parser/src/host-fs.ts:306
 geml-parser--media-check.ts.geml#checkMedia,           #ProfileIO-hashText,       call, geml-parser/src/media-check.ts:618
 geml-parser--media-verbs.ts.geml#importPlan,           #ProfileIO-hashText,       call, geml-parser/src/media-verbs.ts:801
-#misnamespacedMetaKey,                                 #profileDef,               call, geml-parser/src/profiles.ts:444
-#unrecognizedVocabularies,                             #profileDef,               call, geml-parser/src/profiles.ts:453
-#declaredVocabularies,                                 #profileDef,               call, geml-parser/src/profiles.ts:463
-#vocabularyFor,                                        #profileDef,               call, geml-parser/src/profiles.ts:474
+#misnamespacedMetaKey,                                 #profileDef,               call, geml-parser/src/profiles.ts:446
+#unrecognizedVocabularies,                             #profileDef,               call, geml-parser/src/profiles.ts:455
+#declaredVocabularies,                                 #profileDef,               call, geml-parser/src/profiles.ts:465
+#vocabularyFor,                                        #profileDef,               call, geml-parser/src/profiles.ts:476
 geml-parser--geml.ts.geml#parse,                       #misnamespacedMetaKey,     call, geml-parser/src/geml.ts:3570
 geml-parser--geml.ts.geml#reportBorrowedVocabularies,  #unrecognizedVocabularies, call, geml-parser/src/geml.ts:2324
 geml-parser--geml.ts.geml#parse,                       #unrecognizedVocabularies, call, geml-parser/src/geml.ts:3552

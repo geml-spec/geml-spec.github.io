@@ -297235,7 +297235,9 @@ ${isHandDrawn ? "" : `
         "statechart-actions": "error",
         "statechart-vars": "error",
         "statechart-current": "error",
-        "statechart-unreachable": "warning"
+        "statechart-final": "error",
+        "statechart-unreachable": "warning",
+        "statechart-dead-end": "warning"
       }
     }
   };
