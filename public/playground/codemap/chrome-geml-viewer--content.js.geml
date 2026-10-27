@@ -9,40 +9,40 @@ resolution-default = cpg
 
 # chrome-geml-viewer/content.js
 
-=== code {#main .app-entry entry-via="main" src=integrations/chrome-geml-viewer/src/content.js#L26-235 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/main()."}
+=== code {#main .app-entry entry-via="main" src=integrations/chrome-geml-viewer/src/content.js#L26-235 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/main()."}
 ===
 
-=== code {#decodedOr src=integrations/chrome-geml-viewer/src/content.js#L240-242 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/decodedOr()."}
+=== code {#decodedOr src=integrations/chrome-geml-viewer/src/content.js#L240-242 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/decodedOr()."}
 ===
 
-=== code {#readText src=integrations/chrome-geml-viewer/src/content.js#L253-267 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/readText()."}
+=== code {#readText src=integrations/chrome-geml-viewer/src/content.js#L253-267 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/readText()."}
 ===
 
-=== code {#isSameOriginSrc src=integrations/chrome-geml-viewer/src/content.js#L269-278 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/isSameOriginSrc()."}
+=== code {#isSameOriginSrc src=integrations/chrome-geml-viewer/src/content.js#L269-278 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/isSameOriginSrc()."}
 ===
 
-=== code {#loadMermaid src=integrations/chrome-geml-viewer/src/content.js#L285-295 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/loadMermaid()."}
+=== code {#loadMermaid src=integrations/chrome-geml-viewer/src/content.js#L285-295 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/loadMermaid()."}
 ===
 
-=== code {#renderViaSandbox src=integrations/chrome-geml-viewer/src/content.js#L304-317 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/renderViaSandbox()."}
+=== code {#renderViaSandbox src=integrations/chrome-geml-viewer/src/content.js#L304-317 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/renderViaSandbox()."}
 ===
 
-=== code {#readSource src=integrations/chrome-geml-viewer/src/content.js#L320-334 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/readSource()."}
+=== code {#readSource src=integrations/chrome-geml-viewer/src/content.js#L320-334 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/readSource()."}
 ===
 
-=== code {#injectStyle src=integrations/chrome-geml-viewer/src/content.js#L339-348 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/injectStyle()."}
+=== code {#injectStyle src=integrations/chrome-geml-viewer/src/content.js#L339-348 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/injectStyle()."}
 ===
 
-=== code {#rewriteKatexFonts .leaf src=integrations/chrome-geml-viewer/src/content.js#L352-355 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/rewriteKatexFonts()."}
+=== code {#rewriteKatexFonts .leaf src=integrations/chrome-geml-viewer/src/content.js#L352-355 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/rewriteKatexFonts()."}
 ===
 
-=== code {#setTitleFromMeta src=integrations/chrome-geml-viewer/src/content.js#L357-360 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/setTitleFromMeta()."}
+=== code {#setTitleFromMeta src=integrations/chrome-geml-viewer/src/content.js#L357-360 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/setTitleFromMeta()."}
 ===
 
-=== code {#paintError src=integrations/chrome-geml-viewer/src/content.js#L362-374 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/paintError()."}
+=== code {#paintError src=integrations/chrome-geml-viewer/src/content.js#L362-374 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/paintError()."}
 ===
 
-=== code {#addExportButton src=integrations/chrome-geml-viewer/src/content.js#L386-404 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/addExportButton()."}
+=== code {#addExportButton src=integrations/chrome-geml-viewer/src/content.js#L386-404 anchor="scip-typescript npm geml-viewer 1.4.0 src/`content.js`/addExportButton()."}
 ===
 
 === table {#calls format=csv}
