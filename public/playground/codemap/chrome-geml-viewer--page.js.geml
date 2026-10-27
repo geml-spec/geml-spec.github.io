@@ -28,8 +28,8 @@ from,       to,                                                    kind, confide
 
 === table {#called-by format=csv}
 from,                                     to,         kind, site
-chrome-geml-viewer--content.js.geml#main, #loadPage,  call, integrations/chrome-geml-viewer/src/content.js:89
-chrome-geml-viewer--content.js.geml#main, #paintPage, call, integrations/chrome-geml-viewer/src/content.js:97
+chrome-geml-viewer--content.js.geml#main, #loadPage,  call, integrations/chrome-geml-viewer/src/content.js:98
+chrome-geml-viewer--content.js.geml#main, #paintPage, call, integrations/chrome-geml-viewer/src/content.js:106
 ===
 
 === table {#unresolved format=csv hidden}

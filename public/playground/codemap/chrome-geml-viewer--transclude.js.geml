@@ -138,7 +138,7 @@ from,                 to,                                                       
 
 === table {#called-by format=csv}
 from,                                     to,                   kind, site
-chrome-geml-viewer--content.js.geml#main, #expandTransclusions, call, integrations/chrome-geml-viewer/src/content.js:128
+chrome-geml-viewer--content.js.geml#main, #expandTransclusions, call, integrations/chrome-geml-viewer/src/content.js:137
 #expandTransclusions,                     #runBounded,          call, integrations/chrome-geml-viewer/src/transclude.js:81
 #expandOne,                               #unreserve,           call, integrations/chrome-geml-viewer/src/transclude.js:172
 #expandOne,                               #unreserve,           call, integrations/chrome-geml-viewer/src/transclude.js:178

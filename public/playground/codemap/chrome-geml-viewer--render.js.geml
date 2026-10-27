@@ -251,13 +251,13 @@ from,               to,                                            kind, confide
 
 === table {#called-by format=csv}
 from,                                                   to,                 kind, site
-chrome-geml-viewer--content.js.geml#main,               #renderDocument,    call, integrations/chrome-geml-viewer/src/content.js:119
+chrome-geml-viewer--content.js.geml#main,               #renderDocument,    call, integrations/chrome-geml-viewer/src/content.js:128
 chrome-geml-viewer--page.js.geml#paintPage,             #renderDocument,    call, integrations/chrome-geml-viewer/src/page.js:41
 chrome-geml-viewer--page.js.geml#paintPage,             #renderDocument,    call, integrations/chrome-geml-viewer/src/page.js:51
 #renderDocument,                                        #selectSection,     call, integrations/chrome-geml-viewer/src/render.js:28
 #selectSection,                                         #containsId,        call, integrations/chrome-geml-viewer/src/render.js:60
 #renderDocument,                                        #focusBanner,       call, integrations/chrome-geml-viewer/src/render.js:31
-chrome-geml-viewer--content.js.geml#main,               #viewerDiagnostics, call, integrations/chrome-geml-viewer/src/content.js:82
+chrome-geml-viewer--content.js.geml#main,               #viewerDiagnostics, call, integrations/chrome-geml-viewer/src/content.js:91
 #renderDocument,                                        #collectById,       call, integrations/chrome-geml-viewer/src/render.js:20
 chrome-geml-viewer--page.js.geml#paintPage,             #collectLabels,     call, integrations/chrome-geml-viewer/src/page.js:47
 #renderDocument,                                        #collectLabels,     call, integrations/chrome-geml-viewer/src/render.js:25

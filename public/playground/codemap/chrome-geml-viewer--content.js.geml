@@ -9,40 +9,40 @@ resolution-default = cpg
 
 # chrome-geml-viewer/content.js
 
-=== code {#main .app-entry entry-via="main" src=integrations/chrome-geml-viewer/src/content.js#L18-226 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/main()."}
+=== code {#main .app-entry entry-via="main" src=integrations/chrome-geml-viewer/src/content.js#L26-235 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/main()."}
 ===
 
-=== code {#decodedOr src=integrations/chrome-geml-viewer/src/content.js#L231-233 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/decodedOr()."}
+=== code {#decodedOr src=integrations/chrome-geml-viewer/src/content.js#L240-242 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/decodedOr()."}
 ===
 
-=== code {#readText src=integrations/chrome-geml-viewer/src/content.js#L244-258 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/readText()."}
+=== code {#readText src=integrations/chrome-geml-viewer/src/content.js#L253-267 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/readText()."}
 ===
 
-=== code {#isSameOriginSrc src=integrations/chrome-geml-viewer/src/content.js#L260-269 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/isSameOriginSrc()."}
+=== code {#isSameOriginSrc src=integrations/chrome-geml-viewer/src/content.js#L269-278 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/isSameOriginSrc()."}
 ===
 
-=== code {#loadMermaid src=integrations/chrome-geml-viewer/src/content.js#L276-286 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/loadMermaid()."}
+=== code {#loadMermaid src=integrations/chrome-geml-viewer/src/content.js#L285-295 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/loadMermaid()."}
 ===
 
-=== code {#renderViaSandbox src=integrations/chrome-geml-viewer/src/content.js#L295-308 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/renderViaSandbox()."}
+=== code {#renderViaSandbox src=integrations/chrome-geml-viewer/src/content.js#L304-317 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/renderViaSandbox()."}
 ===
 
-=== code {#readSource src=integrations/chrome-geml-viewer/src/content.js#L311-325 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/readSource()."}
+=== code {#readSource src=integrations/chrome-geml-viewer/src/content.js#L320-334 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/readSource()."}
 ===
 
-=== code {#injectStyle src=integrations/chrome-geml-viewer/src/content.js#L330-339 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/injectStyle()."}
+=== code {#injectStyle src=integrations/chrome-geml-viewer/src/content.js#L339-348 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/injectStyle()."}
 ===
 
-=== code {#rewriteKatexFonts .leaf src=integrations/chrome-geml-viewer/src/content.js#L343-346 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/rewriteKatexFonts()."}
+=== code {#rewriteKatexFonts .leaf src=integrations/chrome-geml-viewer/src/content.js#L352-355 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/rewriteKatexFonts()."}
 ===
 
-=== code {#setTitleFromMeta src=integrations/chrome-geml-viewer/src/content.js#L348-351 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/setTitleFromMeta()."}
+=== code {#setTitleFromMeta src=integrations/chrome-geml-viewer/src/content.js#L357-360 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/setTitleFromMeta()."}
 ===
 
-=== code {#paintError src=integrations/chrome-geml-viewer/src/content.js#L353-365 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/paintError()."}
+=== code {#paintError src=integrations/chrome-geml-viewer/src/content.js#L362-374 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/paintError()."}
 ===
 
-=== code {#addExportButton src=integrations/chrome-geml-viewer/src/content.js#L377-395 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/addExportButton()."}
+=== code {#addExportButton src=integrations/chrome-geml-viewer/src/content.js#L386-404 anchor="scip-typescript npm geml-viewer 1.3.8 src/`content.js`/addExportButton()."}
 ===
 
 === table {#calls format=csv}
@@ -82,25 +82,25 @@ from,             to,                                                         ki
 
 === table {#called-by format=csv}
 from,         to,                 kind, site
-#main,        #decodedOr,         call, integrations/chrome-geml-viewer/src/content.js:111
-#main,        #decodedOr,         call, integrations/chrome-geml-viewer/src/content.js:196
-#main,        #readText,          call, integrations/chrome-geml-viewer/src/content.js:91
-#main,        #readText,          call, integrations/chrome-geml-viewer/src/content.js:139
-#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:54
-#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:57
-#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:91
-#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:138
-#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:207
-#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:210
-#readText,    #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:248
-#main,        #loadMermaid,       call, integrations/chrome-geml-viewer/src/content.js:167
-#main,        #readSource,        call, integrations/chrome-geml-viewer/src/content.js:36
-#main,        #injectStyle,       call, integrations/chrome-geml-viewer/src/content.js:102
-#paintError,  #injectStyle,       call, integrations/chrome-geml-viewer/src/content.js:354
-#injectStyle, #rewriteKatexFonts, call, integrations/chrome-geml-viewer/src/content.js:332
-#main,        #setTitleFromMeta,  call, integrations/chrome-geml-viewer/src/content.js:103
-#main,        #paintError,        call, integrations/chrome-geml-viewer/src/content.js:76
-#main,        #addExportButton,   call, integrations/chrome-geml-viewer/src/content.js:156
+#main,        #decodedOr,         call, integrations/chrome-geml-viewer/src/content.js:120
+#main,        #decodedOr,         call, integrations/chrome-geml-viewer/src/content.js:205
+#main,        #readText,          call, integrations/chrome-geml-viewer/src/content.js:100
+#main,        #readText,          call, integrations/chrome-geml-viewer/src/content.js:148
+#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:63
+#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:66
+#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:100
+#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:147
+#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:216
+#main,        #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:219
+#readText,    #isSameOriginSrc,   call, integrations/chrome-geml-viewer/src/content.js:257
+#main,        #loadMermaid,       call, integrations/chrome-geml-viewer/src/content.js:176
+#main,        #readSource,        call, integrations/chrome-geml-viewer/src/content.js:45
+#main,        #injectStyle,       call, integrations/chrome-geml-viewer/src/content.js:111
+#paintError,  #injectStyle,       call, integrations/chrome-geml-viewer/src/content.js:363
+#injectStyle, #rewriteKatexFonts, call, integrations/chrome-geml-viewer/src/content.js:341
+#main,        #setTitleFromMeta,  call, integrations/chrome-geml-viewer/src/content.js:112
+#main,        #paintError,        call, integrations/chrome-geml-viewer/src/content.js:85
+#main,        #addExportButton,   call, integrations/chrome-geml-viewer/src/content.js:165
 ===
 
 === table {#unresolved format=csv hidden}
@@ -112,6 +112,7 @@ from,              to
 #main,             ParentNode.querySelector
 #main,             ParentNode.replaceChildren
 #main,             RegExp.test
+#main,             Set.has
 #main,             String.replace
 #main,             String.split
 #main,             String.trim

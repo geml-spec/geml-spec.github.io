@@ -22,7 +22,7 @@ from,      to,        kind, confidence
 === table {#called-by format=csv}
 from,                                                to,        kind, site
 #snapshot,                                           #topLevel, call, integrations/chrome-geml-viewer/src/snapshot.js:27
-chrome-geml-viewer--content.js.geml#addExportButton, #snapshot, call, integrations/chrome-geml-viewer/src/content.js:387
+chrome-geml-viewer--content.js.geml#addExportButton, #snapshot, call, integrations/chrome-geml-viewer/src/content.js:396
 ===
 
 === table {#unresolved format=csv hidden}

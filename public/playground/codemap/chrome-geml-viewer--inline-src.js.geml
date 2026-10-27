@@ -55,13 +55,13 @@ from,                                                 to,               kind, si
 #hasSrcTable,                                         #findSrc,         call, integrations/chrome-geml-viewer/src/inline-src.js:70
 #inlineSrcTables,                                     #findSrc,         call, integrations/chrome-geml-viewer/src/inline-src.js:126
 #inlineSrcTables,                                     #findFormat,      call, integrations/chrome-geml-viewer/src/inline-src.js:142
-chrome-geml-viewer--content.js.geml#main,             #hasSrcTable,     call, integrations/chrome-geml-viewer/src/content.js:42
+chrome-geml-viewer--content.js.geml#main,             #hasSrcTable,     call, integrations/chrome-geml-viewer/src/content.js:51
 chrome-geml-viewer--transclude.js.geml#fetchChildren, #hasSrcTable,     call, integrations/chrome-geml-viewer/src/transclude.js:689
-chrome-geml-viewer--content.js.geml#main,             #looksTabular,    call, integrations/chrome-geml-viewer/src/content.js:61
+chrome-geml-viewer--content.js.geml#main,             #looksTabular,    call, integrations/chrome-geml-viewer/src/content.js:70
 chrome-geml-viewer--transclude.js.geml#fetchChildren, #looksTabular,    call, integrations/chrome-geml-viewer/src/transclude.js:696
 #inlineSrcTables,                                     #parsesAsData,    call, integrations/chrome-geml-viewer/src/inline-src.js:147
 #inlineSrcTables,                                     #fenceFor,        call, integrations/chrome-geml-viewer/src/inline-src.js:163
-chrome-geml-viewer--content.js.geml#main,             #inlineSrcTables, call, integrations/chrome-geml-viewer/src/content.js:44
+chrome-geml-viewer--content.js.geml#main,             #inlineSrcTables, call, integrations/chrome-geml-viewer/src/content.js:53
 chrome-geml-viewer--transclude.js.geml#fetchChildren, #inlineSrcTables, call, integrations/chrome-geml-viewer/src/transclude.js:690
 ===
 
