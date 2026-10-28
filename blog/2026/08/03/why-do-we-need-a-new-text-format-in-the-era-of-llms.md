@@ -1,6 +1,6 @@
 ---
 title: "Why Do We Need a New Text Format in the Era of LLMs?"
-description: "We have Markdown, AsciiDoc, JSON and XML, so why a new format? Because people and AI agents now co-author the same document, and none was built for that."
+description: "We have Markdown, AsciiDoc, JSON and XML, so why a new format? Because text is now produced by models and read by people and models together, and none was built for that."
 date: 2026-08-03
 lang: en
 categories: [architecture, ai-agents]
@@ -8,7 +8,7 @@ tags: [geml, llm, doc-as-a-base, context-engineering]
 lang_links:
   - label: 中文
     url: /blog/2026/08/03/why-do-we-need-a-new-text-format-in-the-era-of-llms_cn
-excerpt: "Everyone asks this question: we already have Markdown, AsciiDoc, JSON, and XML. Why invent a new format? Because the reader has changed — humans and agents now co-author the same document, and the old formats were never built for that."
+excerpt: "Everyone asks this question: we already have Markdown, AsciiDoc, JSON, and XML. Why invent a new format? Because how text is produced and read has changed — models lead the writing, people and models read it together, and the old formats were never built for that."
 head:
   - - script
     - type: application/ld+json
@@ -31,11 +31,13 @@ For the past two decades, text formats have developed along a clear dichotomy:
 
 Under this division of labor, human engineers and computer programs operated in their respective domains without conflict.
 
-However, with the rapid rise of Large Language Models (LLMs) and autonomous AI Agents embedded directly into software workflows and knowledge management, an irreversible shift has occurred: **Documents are no longer authored solely by humans for human readers. They are co-authored, incrementally modified, and continuously maintained by humans and AI Agents together.**
+As AI works its way deep into engineering and writing, the way text is produced and consumed is changing at the root: production is moving from people alone to models in the lead, and consumption is becoming reading by people and models together. Because people still read it, readability for a human remains non-negotiable.
 
-The AI Agent has become the document's **second reader**—and its frequent **co-author**.
+Built on language, a large model lives in text. Among HTML, XML, JSON and Markdown, models settled on Markdown — but that looks more like a compromise made in an old world that had nothing better, not proof that Markdown is the final carrier.
 
-When humans and machines sit down at the same writing desk, our traditional document infrastructure begins to fracture.
+A foundation format that is truly model-friendly, and still serves people working alongside models, has to let a model understand, locate and edit text efficiently: finer-grained locating, clearer structure, more flexible content, a more consistent read/write interface, and room to extend into other modalities from the start.
+
+The harder constraint is that none of this may cost the human mind: the format has to carry a very low cognitive load and a smooth path to migrate.
 
 ---
 
@@ -128,6 +130,8 @@ The credibility of any rigorous specification rests on clearly stating what it d
 Addressing, projection, validation, and reversibility—each of these four capabilities is mature in its own domain: databases have primary keys, XML has XInclude, schemas provide validation, and Git tracks history.
 
 **What is unusual is not any single one of these capabilities, but packing all four into human-readable plain text.**
+
+Nor does moving to it have to happen at once: `list`, `get`, `set`, `add` and `delete` work on the Markdown you already have, with nothing converted first.
 
 Doc-as-a-Base is not about introducing a heavy runtime system. It is about establishing simple conventions that bring order to human-agent collaboration.
 
