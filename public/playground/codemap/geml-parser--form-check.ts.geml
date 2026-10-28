@@ -1,0 +1,70 @@
+=== meta
+profile = "geml-codemap/v1"
+module = geml-parser/form-check.ts
+src = geml-parser/src/form-check.ts
+resolution-default = cpg
+===
+
+# geml-parser/form-check.ts
+
+=== code {#asNumber src=geml-parser/src/form-check.ts#L20-23 anchor="scip-typescript npm @geml/geml 1.13.0 src/`form-check.ts`/asNumber."}
+===
+
+=== code {#isoDate src=geml-parser/src/form-check.ts#L26-33 anchor="scip-typescript npm @geml/geml 1.13.0 src/`form-check.ts`/isoDate."}
+===
+
+=== code {#isPattern .leaf .accessor src=geml-parser/src/form-check.ts#L36-39 anchor="scip-typescript npm @geml/geml 1.13.0 src/`form-check.ts`/isPattern."}
+===
+
+=== code {#unreadable src=geml-parser/src/form-check.ts#L45-64 anchor="scip-typescript npm @geml/geml 1.13.0 src/`form-check.ts`/unreadable()."}
+===
+
+=== code {#membersOf src=geml-parser/src/form-check.ts#L70-78 anchor="scip-typescript npm @geml/geml 1.13.0 src/`form-check.ts`/membersOf()."}
+===
+
+=== code {#checkForm src=geml-parser/src/form-check.ts#L80-143 anchor="scip-typescript npm @geml/geml 1.13.0 src/`form-check.ts`/checkForm()."}
+===
+
+=== table {#calls format=csv}
+from,        to,                                              kind, confidence
+#unreadable, #asNumber,                                       call,
+#unreadable, #asNumber,                                       call,
+#unreadable, #asNumber,                                       call,
+#unreadable, #isoDate,                                        call,
+#unreadable, #isPattern,                                      call,
+#checkForm,  #membersOf,                                      call,
+#checkForm,  #unreadable,                                     call,
+#checkForm,  geml-parser--geml.ts.geml#parse,                 call,
+#checkForm,  geml-parser--profiles.ts.geml#ProfileIO-readDoc, call,
+===
+
+=== table {#called-by format=csv}
+from,        to,          kind, site
+#unreadable, #asNumber,   call, geml-parser/src/form-check.ts:51
+#unreadable, #asNumber,   call, geml-parser/src/form-check.ts:55
+#unreadable, #asNumber,   call, geml-parser/src/form-check.ts:59
+#unreadable, #isoDate,    call, geml-parser/src/form-check.ts:52
+#unreadable, #isPattern,  call, geml-parser/src/form-check.ts:62
+#checkForm,  #unreadable, call, geml-parser/src/form-check.ts:133
+#checkForm,  #membersOf,  call, geml-parser/src/form-check.ts:94
+===
+
+=== table {#unresolved format=csv hidden}
+from,        to
+#asNumber,   NumberConstructor.isFinite
+#asNumber,   RegExp.test
+#isoDate,    RegExp.exec
+#unreadable, Array.push
+#unreadable, NumberConstructor.isInteger
+#unreadable, ObjectConstructor.hasOwn
+#membersOf,  Array.push
+#checkForm,  Array.find
+#checkForm,  Array.push
+#checkForm,  Array.some
+#checkForm,  ReadonlySet.has
+#checkForm,  Set.add
+#checkForm,  Set.has
+#checkForm,  String.slice
+#checkForm,  String.startsWith
+#checkForm,  String.trim
+===

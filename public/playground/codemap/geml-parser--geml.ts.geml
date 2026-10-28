@@ -876,7 +876,7 @@ geml-parser--verbs.ts.geml#bodyRange,                  #labeledClose,           
 #fenceClose,                                           #isCloseFence,               call, geml-parser/src/geml.ts:3724
 #closeFenceLine,                                       #isCloseFence,               call, geml-parser/src/geml.ts:4236
 geml-parser--verbs.ts.geml#bodyRange,                  #isCloseFence,               call, geml-parser/src/verbs.ts:1996
-geml-parser--cli.ts.geml#runHistory,                   #isMarkdownPath,             call, geml-parser/src/cli.ts:1105
+geml-parser--cli.ts.geml#runHistory,                   #isMarkdownPath,             call, geml-parser/src/cli.ts:1107
 geml-parser--host-fs.ts.geml#docOptsFor,               #isMarkdownPath,             call, geml-parser/src/host-fs.ts:113
 geml-parser--mcp.ts.geml#markdownOpts,                 #isMarkdownPath,             call, geml-parser/src/mcp.ts:202
 geml-parser--verbs.ts.geml#walkOf,                     #isMarkdownPath,             call, geml-parser/src/verbs.ts:142
@@ -1117,8 +1117,8 @@ geml-parser--verbs.ts.geml#transform,                  #relDirPath,             
 geml-parser--verbs.ts.geml#transform,                  #vocabularyOf,               call, geml-parser/src/verbs.ts:1003
 geml-parser--verbs.ts.geml#transform,                  #vocabularyOf,               call, geml-parser/src/verbs.ts:1011
 geml-parser--verbs.ts.geml#transform,                  #vocabularyOf,               call, geml-parser/src/verbs.ts:1033
-geml-parser--cli.ts.geml#todoSeedProblem,              #metaOf,                     call, geml-parser/src/cli.ts:558
-geml-parser--cli.ts.geml#runCheck,                     #metaOf,                     call, geml-parser/src/cli.ts:929
+geml-parser--cli.ts.geml#todoSeedProblem,              #metaOf,                     call, geml-parser/src/cli.ts:560
+geml-parser--cli.ts.geml#runCheck,                     #metaOf,                     call, geml-parser/src/cli.ts:931
 #reportBorrowedVocabularies,                           #collectMeta,                call, geml-parser/src/geml.ts:2324
 #vocabularyOf,                                         #collectMeta,                call, geml-parser/src/geml.ts:2835
 #metaOf,                                               #collectMeta,                call, geml-parser/src/geml.ts:2845
@@ -1146,10 +1146,11 @@ geml-parser--cli.ts.geml#runCheck,                     #metaOf,                 
 #resolveCharts,                                        #recordsToTable,             call, geml-parser/src/geml.ts:3487
 #resolveCharts,                                        #recordsToTable,             call, geml-parser/src/geml.ts:3518
 #parse,                                                #resolveCharts,              call, geml-parser/src/geml.ts:3589
-geml-parser--cli.ts.geml#runStyle,                     #parse,                      call, geml-parser/src/cli.ts:1690
-geml-parser--cli.ts.geml#runStyle,                     #parse,                      call, geml-parser/src/cli.ts:1694
+geml-parser--cli.ts.geml#runStyle,                     #parse,                      call, geml-parser/src/cli.ts:1692
 geml-parser--cli.ts.geml#runStyle,                     #parse,                      call, geml-parser/src/cli.ts:1696
-geml-parser--cli.ts.geml#runStyle,                     #parse,                      call, geml-parser/src/cli.ts:1696
+geml-parser--cli.ts.geml#runStyle,                     #parse,                      call, geml-parser/src/cli.ts:1698
+geml-parser--cli.ts.geml#runStyle,                     #parse,                      call, geml-parser/src/cli.ts:1698
+geml-parser--form-check.ts.geml#checkForm,             #parse,                      call, geml-parser/src/form-check.ts:141
 #detectTransclusionCycles,                             #parse,                      call, geml-parser/src/geml.ts:2231
 #docReads,                                             #parse,                      call, geml-parser/src/geml.ts:2374
 #remoteRelation,                                       #parse,                      call, geml-parser/src/geml.ts:2633
@@ -1321,7 +1322,7 @@ geml-parser--verbs.ts.geml#rewriteBody,                #closeFenceLine,         
 #sliceUnit,                                            #narrowToBody,               call, geml-parser/src/geml.ts:4273
 #sliceUnit,                                            #narrowToIntro,              call, geml-parser/src/geml.ts:4274
 geml-parser--verbs.ts.geml#setIntro,                   #narrowToIntro,              call, geml-parser/src/verbs.ts:1491
-geml-parser--cli.ts.geml#runHistory,                   #sliceUnit,                  call, geml-parser/src/cli.ts:1105
+geml-parser--cli.ts.geml#runHistory,                   #sliceUnit,                  call, geml-parser/src/cli.ts:1107
 geml-parser--verbs.ts.geml#embedSrcOf,                 #sliceUnit,                  call, geml-parser/src/verbs.ts:246
 geml-parser--verbs.ts.geml#get,                        #sliceUnit,                  call, geml-parser/src/verbs.ts:752
 geml-parser--verbs.ts.geml#get,                        #sliceUnit,                  call, geml-parser/src/verbs.ts:766
@@ -1333,9 +1334,9 @@ geml-parser--verbs.ts.geml#reservedMeta,               #findBlockSite,          
 geml-parser--verbs.ts.geml#unitNode,                   #findBlockSite,              call, geml-parser/src/verbs.ts:615
 geml-parser--verbs.ts.geml#unitNode,                   #sectionEndIndex,            call, geml-parser/src/verbs.ts:619
 geml-parser--verbs.ts.geml#contentShape,               #sectionEndIndex,            call, geml-parser/src/verbs.ts:2011
-geml-parser--cli.ts.geml#runHistory,                   #historyPathFor,             call, geml-parser/src/cli.ts:1023
-geml-parser--cli.ts.geml#runRename,                    #historyPathFor,             call, geml-parser/src/cli.ts:1525
-geml-parser--cli.ts.geml#runRevert,                    #historyPathFor,             call, geml-parser/src/cli.ts:1563
+geml-parser--cli.ts.geml#runHistory,                   #historyPathFor,             call, geml-parser/src/cli.ts:1025
+geml-parser--cli.ts.geml#runRename,                    #historyPathFor,             call, geml-parser/src/cli.ts:1527
+geml-parser--cli.ts.geml#runRevert,                    #historyPathFor,             call, geml-parser/src/cli.ts:1565
 #isCliInvocation,                                      #realOf,                     call, geml-parser/src/geml.ts:4374
 #isCliInvocation,                                      #realOf,                     call, geml-parser/src/geml.ts:4374
 ===
