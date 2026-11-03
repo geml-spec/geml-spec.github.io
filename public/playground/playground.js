@@ -196,6 +196,43 @@
       symbols[mode][replace2] = symbols[mode][name];
     }
   }
+  function handleStrict(params) {
+    var strict = params.strict, errorCode = params.errorCode, errorMsg = params.errorMsg, token2 = params.token, report = params.report;
+    var behavior = strict;
+    if (typeof strict === "function") {
+      if (report) {
+        behavior = strict(errorCode, errorMsg, token2);
+      } else {
+        try {
+          behavior = strict(errorCode, errorMsg, token2);
+        } catch (error3) {
+          behavior = "error";
+        }
+      }
+    }
+    switch (behavior) {
+      case true:
+      case "error":
+        if (report) {
+          throw new ParseError("LaTeX-incompatible input and strict mode is set to 'error': " + (errorMsg + " [" + errorCode + "]"), token2);
+        } else {
+          return true;
+        }
+      case false:
+      case "ignore":
+        if (!report) {
+          return false;
+        }
+        break;
+      case "warn":
+      default:
+        typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to 'warn': " + (errorMsg + " [" + errorCode + "]"));
+        if (!report) {
+          return false;
+        }
+        break;
+    }
+  }
   function defineFunction(data6) {
     var type3 = data6.type, names = data6.names, htmlBuilder3 = data6.htmlBuilder, mathmlBuilder3 = data6.mathmlBuilder;
     for (var i4 = 0; i4 < names.length; ++i4) {
@@ -673,7 +710,12 @@
           if (singleRow || colSeparationType) {
             throw new ParseError("Too many tab characters: &", parser36.nextToken);
           } else {
-            parser36.settings.reportNonstrict("textEnv", "Too few columns specified in the {array} column argument.");
+            handleStrict({
+              strict: parser36.settings.strict,
+              errorCode: "textEnv",
+              errorMsg: "Too few columns specified in the {array} column argument.",
+              report: true
+            });
           }
         }
         parser36.consume();
@@ -952,54 +994,6 @@
             if (schema2) {
               applySetting(this, prop, options2, schema2);
             }
-          }
-        }
-        /**
-         * Report nonstrict (non-LaTeX-compatible) input.
-         * Can safely not be called if `this.strict` is false in JavaScript.
-         */
-        reportNonstrict(errorCode, errorMsg, token2) {
-          var strict = this.strict;
-          if (typeof strict === "function") {
-            strict = strict(errorCode, errorMsg, token2);
-          }
-          if (!strict || strict === "ignore") {
-            return;
-          } else if (strict === true || strict === "error") {
-            throw new ParseError("LaTeX-incompatible input and strict mode is set to 'error': " + (errorMsg + " [" + errorCode + "]"), token2);
-          } else if (strict === "warn") {
-            typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to 'warn': " + (errorMsg + " [" + errorCode + "]"));
-          } else {
-            typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to " + ("unrecognized '" + strict + "': " + errorMsg + " [" + errorCode + "]"));
-          }
-        }
-        /**
-         * Check whether to apply strict (LaTeX-adhering) behavior for unusual
-         * input (like `\\`).  Unlike `nonstrict`, will not throw an error;
-         * instead, "error" translates to a return value of `true`, while "ignore"
-         * translates to a return value of `false`.  May still print a warning:
-         * "warn" prints a warning and returns `false`.
-         * This is for the second category of `errorCode`s listed in the README.
-         */
-        useStrictBehavior(errorCode, errorMsg, token2) {
-          var strict = this.strict;
-          if (typeof strict === "function") {
-            try {
-              strict = strict(errorCode, errorMsg, token2);
-            } catch (error3) {
-              strict = "error";
-            }
-          }
-          if (!strict || strict === "ignore") {
-            return false;
-          } else if (strict === true || strict === "error") {
-            return true;
-          } else if (strict === "warn") {
-            typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to 'warn': " + (errorMsg + " [" + errorCode + "]"));
-            return false;
-          } else {
-            typeof console !== "undefined" && console.warn("LaTeX-incompatible input and strict mode is set to " + ("unrecognized '" + strict + "': " + errorMsg + " [" + errorCode + "]"));
-            return false;
           }
         }
         /**
@@ -4897,18 +4891,21 @@
           }
           symbolNode = new SymbolNode(value2, metrics.height, metrics.depth, italic2, metrics.skew, metrics.width, classes3);
         } else {
-          typeof console !== "undefined" && console.warn("No character metrics " + ("for '" + value2 + "' in style '" + fontName + "' and mode '" + mode + "'"));
+          handleStrict({
+            strict: options2.strict,
+            errorCode: "symbolNotInFont",
+            errorMsg: "No character metrics for '" + value2 + "' in style '" + fontName + "' and mode '" + mode + "'",
+            report: true
+          });
           symbolNode = new SymbolNode(value2, 0, 0, 0, 0, 0, classes3);
         }
-        if (options2) {
-          symbolNode.maxFontSize = options2.sizeMultiplier;
-          if (options2.style.isTight()) {
-            symbolNode.classes.push("mtight");
-          }
-          var color2 = options2.getColor();
-          if (color2) {
-            symbolNode.style.color = color2;
-          }
+        symbolNode.maxFontSize = options2.sizeMultiplier;
+        if (options2.style.isTight()) {
+          symbolNode.classes.push("mtight");
+        }
+        var color2 = options2.getColor();
+        if (color2) {
+          symbolNode.style.color = color2;
         }
         return symbolNode;
       };
@@ -5921,6 +5918,7 @@
           this.maxSize = void 0;
           this.minRuleThickness = void 0;
           this._fontMetrics = void 0;
+          this.strict = void 0;
           this.style = data6.style;
           this.color = data6.color;
           this.size = data6.size || _Options.BASESIZE;
@@ -5933,6 +5931,7 @@
           this.sizeMultiplier = sizeMultipliers[this.size - 1];
           this.maxSize = data6.maxSize;
           this.minRuleThickness = data6.minRuleThickness;
+          this.strict = data6.strict;
           this._fontMetrics = void 0;
         }
         /**
@@ -5951,7 +5950,8 @@
             fontWeight: this.fontWeight,
             fontShape: this.fontShape,
             maxSize: this.maxSize,
-            minRuleThickness: this.minRuleThickness
+            minRuleThickness: this.minRuleThickness,
+            strict: this.strict
           };
           Object.assign(data6, extension4);
           return new _Options(data6);
@@ -6127,13 +6127,12 @@
         }
       };
       Options.BASESIZE = 6;
-      optionsFromSettings = function optionsFromSettings2(settings) {
-        return new Options({
-          style: settings.displayMode ? Style$1.DISPLAY : Style$1.TEXT,
-          maxSize: settings.maxSize,
-          minRuleThickness: settings.minRuleThickness
-        });
-      };
+      optionsFromSettings = (settings) => new Options({
+        style: settings.displayMode ? Style$1.DISPLAY : Style$1.TEXT,
+        maxSize: settings.maxSize,
+        minRuleThickness: settings.minRuleThickness,
+        strict: settings.strict
+      });
       displayWrap = function displayWrap2(node2, settings) {
         if (settings.displayMode) {
           var classes3 = ["katex-display"];
@@ -6162,7 +6161,7 @@
         }
         return displayWrap(katexNode, settings);
       };
-      buildHTMLTree = function buildHTMLTree2(tree2, expression, settings) {
+      buildHTMLTree = function buildHTMLTree2(tree2, settings) {
         var options2 = optionsFromSettings(settings);
         var htmlNode = buildHTML(tree2, options2);
         var katexNode = makeSpan(["katex"], [htmlNode]);
@@ -6570,7 +6569,12 @@
           var base = args[0];
           var mode = context.parser.mode;
           if (mode === "math") {
-            context.parser.settings.reportNonstrict("mathVsTextAccents", "LaTeX's accent " + context.funcName + " works only in text mode");
+            handleStrict({
+              strict: context.parser.settings.strict,
+              errorCode: "mathVsTextAccents",
+              errorMsg: "LaTeX's accent " + context.funcName + " works only in text mode",
+              report: true
+            });
             mode = "text";
           }
           return {
@@ -7029,10 +7033,15 @@
         numArgs: 0,
         numOptionalArgs: 0,
         allowedInText: true,
-        handler(_ref2, args, optArgs) {
+        handler(_ref2) {
           var parser36 = _ref2.parser;
           var size4 = parser36.gullet.future().text === "[" ? parser36.parseSizeGroup(true) : null;
-          var newLine = !parser36.settings.displayMode || !parser36.settings.useStrictBehavior("newLineInDisplayMode", "In LaTeX, \\\\ or \\newline does nothing in display mode");
+          var newLine = !parser36.settings.displayMode || !handleStrict({
+            strict: parser36.settings.strict,
+            errorCode: "newLineInDisplayMode",
+            errorMsg: "In LaTeX, \\\\ or \\newline does nothing in display mode",
+            report: false
+          });
           return {
             type: "cr",
             mode: parser36.mode,
@@ -7275,14 +7284,14 @@
         }
         return span;
       };
-      makeGlyphSpan = function makeGlyphSpan2(symbol, font, mode) {
+      makeGlyphSpan = function makeGlyphSpan2(symbol, font, mode, options2) {
         var sizeClass;
         if (font === "Size1-Regular") {
           sizeClass = "delim-size1";
         } else {
           sizeClass = "delim-size4";
         }
-        var corner = makeSpan(["delimsizinginner", sizeClass], [makeSpan([], [makeSymbol(symbol, font, mode)])]);
+        var corner = makeSpan(["delimsizinginner", sizeClass], [makeSpan([], [makeSymbol(symbol, font, mode, options2)])]);
         return {
           type: "elem",
           elem: corner
@@ -7477,7 +7486,7 @@
             elem: wrapper
           });
         } else {
-          stack.push(makeGlyphSpan(bottom2, font, mode));
+          stack.push(makeGlyphSpan(bottom2, font, mode, options2));
           stack.push(lap);
           if (middle === null) {
             var innerHeight = realHeightTotal - topHeightTotal - bottomHeightTotal + 2 * lapInEms;
@@ -7486,12 +7495,12 @@
             var _innerHeight = (realHeightTotal - topHeightTotal - bottomHeightTotal - middleHeightTotal) / 2 + 2 * lapInEms;
             stack.push(makeInner(repeat, _innerHeight, options2));
             stack.push(lap);
-            stack.push(makeGlyphSpan(middle, font, mode));
+            stack.push(makeGlyphSpan(middle, font, mode, options2));
             stack.push(lap);
             stack.push(makeInner(repeat, _innerHeight, options2));
           }
           stack.push(lap);
-          stack.push(makeGlyphSpan(top2, font, mode));
+          stack.push(makeGlyphSpan(top2, font, mode, options2));
         }
         var newOptions = options2.havingBaseStyle(Style$1.TEXT);
         var inner2 = makeVList({
@@ -8217,7 +8226,12 @@
         handler(_ref5, args) {
           var parser36 = _ref5.parser, funcName = _ref5.funcName;
           if (parser36.mode === "math") {
-            parser36.settings.reportNonstrict("mathVsSout", "LaTeX's \\sout works only in text mode");
+            handleStrict({
+              strict: parser36.settings.strict,
+              errorCode: "mathVsSout",
+              errorMsg: "LaTeX's \\sout works only in text mode",
+              report: true
+            });
           }
           var body = args[0];
           return {
@@ -9715,7 +9729,12 @@
           var value2 = assertNodeType(args[0], "raw").string;
           var body = args[1];
           if (parser36.settings.strict) {
-            parser36.settings.reportNonstrict("htmlExtension", "HTML extension is disabled on strict mode");
+            handleStrict({
+              strict: parser36.settings.strict,
+              errorCode: "htmlExtension",
+              errorMsg: "HTML extension is disabled on strict mode",
+              report: true
+            });
           }
           var trustContext;
           var attributes = {};
@@ -9978,14 +9997,29 @@
             var muUnit = size4.value.unit === "mu";
             if (mathFunction) {
               if (!muUnit) {
-                parser36.settings.reportNonstrict("mathVsTextUnits", "LaTeX's " + funcName + " supports only mu units, " + ("not " + size4.value.unit + " units"));
+                handleStrict({
+                  strict: parser36.settings.strict,
+                  errorCode: "mathVsTextUnits",
+                  errorMsg: "LaTeX's " + funcName + " supports only mu units, " + ("not " + size4.value.unit + " units"),
+                  report: true
+                });
               }
               if (parser36.mode !== "math") {
-                parser36.settings.reportNonstrict("mathVsTextUnits", "LaTeX's " + funcName + " works only in math mode");
+                handleStrict({
+                  strict: parser36.settings.strict,
+                  errorCode: "mathVsTextUnits",
+                  errorMsg: "LaTeX's " + funcName + " works only in math mode",
+                  report: true
+                });
               }
             } else {
               if (muUnit) {
-                parser36.settings.reportNonstrict("mathVsTextUnits", "LaTeX's " + funcName + " doesn't support mu units");
+                handleStrict({
+                  strict: parser36.settings.strict,
+                  errorCode: "mathVsTextUnits",
+                  errorMsg: "LaTeX's " + funcName + " doesn't support mu units",
+                  report: true
+                });
               }
             }
           }
@@ -11554,7 +11588,12 @@
             var nlIndex = input.indexOf("\n", this.tokenRegex.lastIndex);
             if (nlIndex === -1) {
               this.tokenRegex.lastIndex = input.length;
-              this.settings.reportNonstrict("commentAtEnd", "% comment has no terminating newline; LaTeX would fail because of commenting the end of math mode (e.g. $)");
+              handleStrict({
+                strict: this.settings.strict,
+                errorCode: "commentAtEnd",
+                errorMsg: "% comment has no terminating newline; LaTeX would fail because of commenting the end of math mode (e.g. $)",
+                report: true
+              });
             } else {
               this.tokenRegex.lastIndex = nlIndex + 1;
             }
@@ -13672,7 +13711,11 @@
               } : null;
             }
             case "raw": {
+              this.gullet.consumeSpaces();
+              var percentCatcode = this.gullet.lexer.catcodes["%"];
+              this.gullet.lexer.setCatcode("%", 12);
               var token2 = this.parseStringGroup(optional2);
+              this.gullet.lexer.setCatcode("%", percentCatcode);
               return token2 != null ? {
                 type: "raw",
                 mode: "text",
@@ -13808,11 +13851,13 @@
          * and setting the catcode of % as an active character (as in \hyperref).
          */
         parseUrlGroup(optional2) {
+          var percentCatcode = this.gullet.lexer.catcodes["%"];
+          var tildeCatcode = this.gullet.lexer.catcodes["~"];
           this.gullet.lexer.setCatcode("%", 13);
           this.gullet.lexer.setCatcode("~", 12);
           var res = this.parseStringGroup(optional2);
-          this.gullet.lexer.setCatcode("%", 14);
-          this.gullet.lexer.setCatcode("~", 13);
+          this.gullet.lexer.setCatcode("%", percentCatcode);
+          this.gullet.lexer.setCatcode("~", tildeCatcode);
           if (res == null) {
             return null;
           }
@@ -13969,7 +14014,13 @@
           }
           if (Object.prototype.hasOwnProperty.call(unicodeSymbols, text4[0]) && !symbols[this.mode][text4[0]]) {
             if (this.settings.strict && this.mode === "math") {
-              this.settings.reportNonstrict("unicodeTextInMathMode", 'Accented Unicode text character "' + text4[0] + '" used in math mode', nucleus);
+              handleStrict({
+                strict: this.settings.strict,
+                errorCode: "unicodeTextInMathMode",
+                errorMsg: 'Accented Unicode text character "' + text4[0] + '" used in math mode',
+                report: true,
+                token: nucleus
+              });
             }
             text4 = unicodeSymbols[text4[0]] + text4.slice(1);
           }
@@ -13985,7 +14036,13 @@
           var symbol;
           if (symbols[this.mode][text4]) {
             if (this.settings.strict && this.mode === "math" && extraLatin.includes(text4)) {
-              this.settings.reportNonstrict("unicodeTextInMathMode", 'Latin-1/Unicode text character "' + text4[0] + '" used in math mode', nucleus);
+              handleStrict({
+                strict: this.settings.strict,
+                errorCode: "unicodeTextInMathMode",
+                errorMsg: 'Latin-1/Unicode text character "' + text4[0] + '" used in math mode',
+                report: true,
+                token: nucleus
+              });
             }
             var group2 = symbols[this.mode][text4].group;
             var loc = SourceLocation.range(nucleus);
@@ -14010,9 +14067,21 @@
           } else if (text4.charCodeAt(0) >= 128) {
             if (this.settings.strict) {
               if (!supportedCodepoint(text4.charCodeAt(0))) {
-                this.settings.reportNonstrict("unknownSymbol", 'Unrecognized Unicode character "' + text4[0] + '"' + (" (" + text4.charCodeAt(0) + ")"), nucleus);
+                handleStrict({
+                  strict: this.settings.strict,
+                  errorCode: "unknownSymbol",
+                  errorMsg: 'Unrecognized Unicode character "' + text4[0] + '"' + (" (" + text4.charCodeAt(0) + ")"),
+                  report: true,
+                  token: nucleus
+                });
               } else if (this.mode === "math") {
-                this.settings.reportNonstrict("unicodeTextInMathMode", 'Unicode text character "' + text4[0] + '" used in math mode', nucleus);
+                handleStrict({
+                  strict: this.settings.strict,
+                  errorCode: "unicodeTextInMathMode",
+                  errorMsg: 'Unicode text character "' + text4[0] + '" used in math mode',
+                  report: true,
+                  token: nucleus
+                });
               }
             }
             symbol = {
@@ -14115,12 +14184,12 @@
         var settings = new Settings(options2);
         try {
           var tree2 = parseTree(expression, settings);
-          return buildHTMLTree(tree2, expression, settings);
+          return buildHTMLTree(tree2, settings);
         } catch (error3) {
           return renderError(error3, expression, settings);
         }
       };
-      version = "0.18.10";
+      version = "0.19.1";
       __domTree = {
         Span,
         Anchor,
@@ -17519,7 +17588,7 @@
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-VPRB5NB3.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-DSNLSHJZ.mjs
   function setupDompurifyHooks() {
     const TEMPORARY_ATTRIBUTE = "data-temp-href-target";
     purify_default.addHook("beforeSanitizeAttributes", (node2) => {
@@ -17541,8 +17610,8 @@
     return [...cssStyleSheet.cssRules].map((rule) => rule.cssText).join("\n");
   }
   var directiveRegex, whitespace, stripAnyComments, isLineBreak, lastLineBreakInWhitespaceRun, matchFrontMatter, UnknownDiagramError, detectors, detectType, registerLazyLoadedDiagrams, addDetector, getDiagramLoader, assignWithDepth, assignWithDepth_default, oldAttributeBackgroundColorOdd, oldAttributeBackgroundColorEven, mkBorder, isPlainObject, applyOverride, Theme, getThemeVariables, Theme2, getThemeVariables2, Theme3, getThemeVariables3, Theme4, getThemeVariables4, Theme5, getThemeVariables5, Theme6, getThemeVariables6, Theme7, getThemeVariables7, Theme8, getThemeVariables8, Theme9, getThemeVariables9, Theme10, getThemeVariables10, Theme11, getThemeVariables11, themes_default, config_schema_default, config, keyify, configKeys, defaultConfig_default, DIAGRAM_CONFIG_KEY_ALIASES, getDiagramConfigKey, DICTIONARY_CONFIG_PATTERNS, sanitizeDictionaryConfig, sanitizeDirective, sanitizeCss, defaultConfig, APPEARANCE_KEYS, LOOKS, isUsableAppearance, readAppearance, evaluate, siteConfig, configFromInitialize, siteConfigDelta, directives, currentConfig, diagramConfigKey, resolveAppearance, updateCurrentConfig, setDiagramConfigScope, setSiteConfig, saveConfigFromInitialize, updateSiteConfig, getSiteConfig, setConfig, getConfig, sanitize, addDirective, reset, ConfigWarning, issuedWarnings, issueWarning, checkConfig, getUserDefinedConfig, getEffectiveHtmlLabels, lineBreakRegex, lineBreakTestRegex, getRows, setupDompurifyHooksIfNotSetup, removeScript, sanitizeMore, sanitizeText, sanitizeTextOrArray, hasBreaks, splitBreaks, placeholderToBreak, breakToPlaceholder, getUrl, getMax, getMin, parseGenericTypes, countOccurrence, shouldCombineSets, processSet, isMathMLSupported, katexRegex, hasKatex, calculateMathMLDimensions, renderKatexUnsanitized, renderKatexSanitized, common_default, d3Attrs, calculateSvgSizeAttrs, configureSvgSize, setupGraphViewbox, themes, getStyles, addStylesForDiagram, styles_default, commonDb_exports, accTitle, diagramTitle, accDescription, sanitizeText2, clear, setAccTitle, getAccTitle, setAccDescription, getAccDescription, setDiagramTitle, getDiagramTitle, log2, setLogLevel2, getConfig2, setConfig2, defaultConfig2, sanitizeText3, setupGraphViewbox2, getCommonDb, diagrams, registerDiagram, getDiagram, DiagramNotFoundError;
-  var init_chunk_VPRB5NB3 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-VPRB5NB3.mjs"() {
+  var init_chunk_DSNLSHJZ = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-DSNLSHJZ.mjs"() {
       init_define_process_argv();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
@@ -21873,6 +21942,7 @@
         },
         "mindmap": {
           "useMaxWidth": true,
+          "colorBy": "branch",
           "padding": 10,
           "maxNodeWidth": 200,
           "layoutAlgorithm": "cose-bilkent"
@@ -30914,12 +30984,12 @@
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-Z6ETV63D.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-OYAV6JZA.mjs
   var selectSvgElement;
-  var init_chunk_Z6ETV63D = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-Z6ETV63D.mjs"() {
+  var init_chunk_OYAV6JZA = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-OYAV6JZA.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_Y2CYZVJY();
       init_src32();
       selectSvgElement = /* @__PURE__ */ __name((id38) => {
@@ -34129,12 +34199,12 @@
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-4EA7E6EY.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-UHW7PFBP.mjs
   var solidStateFill, normalizeStyleList, compileStyles, styles2Map, isLabelStyle, styles2String, userNodeOverrides, getStrokeDashArray;
-  var init_chunk_4EA7E6EY = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-4EA7E6EY.mjs"() {
+  var init_chunk_UHW7PFBP = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-UHW7PFBP.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_Y2CYZVJY();
       solidStateFill = /* @__PURE__ */ __name((color2) => {
         const { handDrawnSeed } = getConfig2();
@@ -34641,12 +34711,12 @@
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-HJ2JQQFS.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-YZO67HFG.mjs
   var unknownIcon, iconsStore, loaderStore, registerIconPacks, getRegisteredIconData, isIconAvailable, getIconSVG;
-  var init_chunk_HJ2JQQFS = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-HJ2JQQFS.mjs"() {
+  var init_chunk_YZO67HFG = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-YZO67HFG.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_lib();
@@ -35549,7 +35619,7 @@
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-3YJQHVM4.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-7S6XSTFO.mjs
   function interpolateToCurve(interpolate2, defaultCurve) {
     if (!interpolate2) {
       return defaultCurve;
@@ -35669,10 +35739,10 @@
     return sanitizedD.includes(roundedX.toString()) || sanitizedD.includes(roundedY.toString());
   }
   var import_sanitize_url, ZERO_WIDTH_SPACE, d3CurveTypes, directiveWithoutOpen, detectInit, detectDirective, removeDirectives, isSubstringInArray, runFunc, roundNumber, calculatePoint, calcCardinalityPosition, cnt, generateId, random, getTextObj, drawSimpleText, wrapLabel2, breakString, calculateTextDimensions, InitIDGenerator, decoder, entityDecode, insertTitle, parseFontSize, utils_default2, encodeEntities, decodeEntities, getEdgeId;
-  var init_chunk_3YJQHVM4 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-3YJQHVM4.mjs"() {
+  var init_chunk_7S6XSTFO = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-7S6XSTFO.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       import_sanitize_url = __toESM(require_dist(), 1);
@@ -37303,7 +37373,7 @@ Please report this to https://github.com/markedjs/marked.`, e3) {
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-E2ZNV5FY.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-AQDTSKZB.mjs
   function preprocessMarkdown(markdown, { markdownAutoWrap }) {
     const withoutBR = markdown.replace(/<br\/>/g, "\n");
     const withoutMultipleNewlines = withoutBR.replace(/\n{2,}/g, "\n");
@@ -37621,12 +37691,12 @@ Please report this to https://github.com/markedjs/marked.`, e3) {
     return text4.replace(/(fa[bklrs]?):fa-([\w-]+)/g, () => replacements.shift() ?? "");
   }
   var hasPerformance, now2, MEASURE_PREFIX, DEVTOOLS_TRACK, DEVTOOLS_TRACK_GROUP, PHASE_COLORS, Profiler, profiler3, fastdom_default, exports2, initialize, mutate, measure, clear2, fastdom_promised_default, fastdom, fastdom_default2, maxSafeSizeForWidth, createText;
-  var init_chunk_E2ZNV5FY = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-E2ZNV5FY.mjs"() {
+  var init_chunk_AQDTSKZB = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-AQDTSKZB.mjs"() {
       init_define_process_argv();
-      init_chunk_HJ2JQQFS();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_YZO67HFG();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_marked_esm();
@@ -39203,7 +39273,7 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-XC4XBNZT.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-HAGFOTED.mjs
   async function configureLabelImages(container2) {
     const images = container2.getElementsByTagName("img");
     if (!images || images.length === 0) {
@@ -39831,11 +39901,13 @@ ${lines.join("\n")}`);
   async function circle(parent4, node2, options2) {
     const { labelStyles, nodeStyles } = styles2String(node2);
     node2.labelStyle = labelStyles;
-    const { shapeSvg, bbox, halfPadding } = await labelHelper(parent4, node2, getNodeClasses(node2));
+    const { shapeSvg, bbox, halfPadding } = await labelHelper(parent4, node2, getNodeClasses(node2), {
+      ignoreMinWidth: true
+    });
     const labelPadding = 16;
     const padding = options2?.padding ?? halfPadding;
     const labelRadius = Math.sqrt(bbox.width ** 2 + bbox.height ** 2) / 2;
-    const radius2 = node2.look === "neo" ? labelRadius + labelPadding * 2 : labelRadius + padding;
+    const radius2 = node2.look === "neo" ? labelRadius + labelPadding : labelRadius + padding;
     let circleElem;
     const { cssStyles } = node2;
     if (node2.look === "handDrawn") {
@@ -40558,7 +40630,9 @@ ${lines.join("\n")}`);
     node2.labelStyle = labelStyles;
     const padding = node2.padding ?? 0;
     const labelPadding = node2.look === "neo" ? 16 : padding;
-    const { shapeSvg, bbox } = await labelHelper(parent4, node2, getNodeClasses(node2));
+    const { shapeSvg, bbox } = await labelHelper(parent4, node2, getNodeClasses(node2), {
+      ignoreMinWidth: true
+    });
     const labelRadius = Math.sqrt(bbox.width ** 2 + bbox.height ** 2) / 2;
     const innerRadius = (node2?.width ? node2?.width / 2 : labelRadius) + (labelPadding ?? 0);
     const outerRadius = innerRadius + gap;
@@ -44279,15 +44353,15 @@ ${lines.join("\n")}`);
     return shape in shapes;
   }
   var ELEMENT_NODE, TEXT_NODE, SECTION_GAP, MIN_WRAP_WIDTH, c4LabelHelper, withMinWidth, labelHelper, insertLabel, updateNodeBounds, getNodeClasses, intersectRect, intersect_rect_default, intersect_node_default, intersect_ellipse_default, intersect_circle_default, intersect_line_default, intersect_polygon_default, intersect_default, createRoundedRectPathD, createLabel, createLabel_default, INDICATOR_ROW_HEIGHT, SEPARATOR_GAP, MIN_WIDTH, RADIUS, DIRECTION_ORDER, POINT_KEY, expandAndDeduplicateDirections, getDirectionKey, arrowPointFactories, getArrowPoints, NOTCH_SIZE, createCylinderPathD, createOuterCylinderPathD, createInnerCylinderPathD, MIN_HEIGHT, MIN_WIDTH2, MIN_HEIGHT2, MIN_WIDTH3, createHexagonPathD, createCylinderPathD2, createOuterCylinderPathD2, createInnerCylinderPathD2, MIN_HEIGHT3, MIN_WIDTH4, ACTOR_FIGURE_WIDTH, ACTOR_FIGURE_HEIGHT, ACTOR_LABEL_GAP, STEREOTYPE_LABEL_GAP, DEFAULT_ACTOR_PADDING, variantClass, BUSINESS_MARKER_ANGLE, BUSINESS_MARKER_OFFSET_RATIO, businessMarkerPathForCircle, businessMarkerPath, positionLabel, appendActorPath, appendActorCircle, appendBusinessActorMarker, STICK_FIGURE_PATH, AWESOME_SILHOUETTE_PATH, HOLLOW_BODY_PATH, ICON_FRAME_SIZE, ICON_SIZE, ICON_CENTER_Y, drawIconActor, positionLabel2, CELL_PADDING_X, CELL_PADDING_Y, DEFAULT_BORDER_WIDTH, positionLabel3, numericStrokeWidth, createDecisionBoxPathD, FRAME_WIDTH, arcPointCount, stadiumDimensions, FRAME_WIDTH2, TAG_RATIO, createCylinderPathD3, createOuterCylinderPathD3, createInnerCylinderPathD3, MIN_HEIGHT4, MIN_WIDTH5, MIN_HEIGHT5, MIN_WIDTH6, rectOffset, COLOR_THEMES2, REDUX_THEMES, colorFromPriority, shapesDefs, generateShapeMap, shapes;
-  var init_chunk_XC4XBNZT = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-XC4XBNZT.mjs"() {
+  var init_chunk_HAGFOTED = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-HAGFOTED.mjs"() {
       init_define_process_argv();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -44439,7 +44513,7 @@ ${lines.join("\n")}`);
           toJSON: /* @__PURE__ */ __name(() => ({}), "toJSON")
         };
       }, "withMinWidth");
-      labelHelper = /* @__PURE__ */ __name(async (parent4, node2, _classes) => {
+      labelHelper = /* @__PURE__ */ __name(async (parent4, node2, _classes, { ignoreMinWidth = false } = {}) => {
         if (node2.stereotype !== void 0) {
           return c4LabelHelper(parent4, node2, _classes);
         }
@@ -44460,7 +44534,7 @@ ${lines.join("\n")}`);
         }
         const addBackground = !!node2.icon || !!node2.img;
         const isMarkdown = node2.labelType === "markdown";
-        const minLabelWidth = label && !node2.width ? node2.minWidth ?? 0 : 0;
+        const minLabelWidth = label && !node2.width && !ignoreMinWidth ? node2.minWidth ?? 0 : 0;
         const text22 = await createText(
           labelEl,
           sanitizeText(decodeEntities(label), getConfig2()),
@@ -45725,7 +45799,7 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-DBDB3WZW.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-ZAUX2LTX.mjs
   async function insertNode(elem, node2, renderOptions) {
     let newEl;
     let el2;
@@ -45764,11 +45838,11 @@ ${lines.join("\n")}`);
     return newEl;
   }
   var getSubGraphTitleMargins, nodeElems, setNodeElem, clear3, positionNode;
-  var init_chunk_DBDB3WZW = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-DBDB3WZW.mjs"() {
+  var init_chunk_ZAUX2LTX = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-ZAUX2LTX.mjs"() {
       init_define_process_argv();
-      init_chunk_XC4XBNZT();
-      init_chunk_3YJQHVM4();
+      init_chunk_HAGFOTED();
+      init_chunk_7S6XSTFO();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       getSubGraphTitleMargins = /* @__PURE__ */ __name(({
@@ -45814,17 +45888,17 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-NTY3LDVX.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-HNE4Q36P.mjs
   var swimlane, rect, noteGroup, roundedWithTitle, kanbanSection, divider, createContainerGroup, flowGroup, getUsecaseSystemBoundaryGeometry, usecaseSystemBoundary, squareRect2, shapes2, UNTITLED_CLUSTER_SHAPES, clusterPaintsTitle, clusterElems, insertCluster, clear4;
-  var init_chunk_NTY3LDVX = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-NTY3LDVX.mjs"() {
+  var init_chunk_HNE4Q36P = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-HNE4Q36P.mjs"() {
       init_define_process_argv();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
       init_chunk_J5ZVWO5B();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -45837,7 +45911,7 @@ ${lines.join("\n")}`);
         const { clusterBkg, clusterBorder, borderColorArray } = themeVariables;
         const laneStroke = clusterBorder;
         const { labelStyles, nodeStyles, borderStyles, backgroundStyles } = styles2String(node2);
-        const shapeSvg = parent4.insert("g").attr("class", "cluster swimlane " + (node2.cssClasses || "")).attr("id", node2.id).attr("data-id", node2.id).attr("data-et", "cluster").attr("data-look", node2.look);
+        const shapeSvg = parent4.insert("g").attr("class", "cluster swimlane " + (node2.cssClasses || "")).attr("id", node2.domId ?? node2.id).attr("data-id", node2.id).attr("data-et", "cluster").attr("data-look", node2.look);
         stampColorSlot(shapeSvg, node2.colorIndex, theme, borderColorArray);
         const useHtmlLabels = evaluate(siteConfig2.flowchart.htmlLabels);
         const isLR = node2.direction === "LR";
@@ -46495,7 +46569,7 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-2BW5OAIV.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-WQQL4CDK.mjs
   function calculateDeltaAndAngle(point1, point22) {
     if (point1 === void 0 || point22 === void 0) {
       return { angle: 0, deltaX: 0, deltaY: 0 };
@@ -46618,15 +46692,15 @@ ${lines.join("\n")}`);
     return newPoints;
   }
   var computeLabelTransform, markerOffsets, markerOffsets2, pointTransformer, getLineFunctionsWithOffset, addEdgeMarkers, arrowTypesMap, arrowTypesWithMarginSupport, addEdgeMarker, resolveEdgeCurveType, edgeLabels, terminalLabels, clear5, hasEdgeLabel, getLabelStyles, insertEdgeLabel, resolveEdgeLabelPosition, positionEdgeLabel, orthogonalizeToLabelClippedPoints, outsideNode, intersection, cutPathAtIntersect, findAdjacentPoint, fixCorners, generateDashArray, insertEdge, insertMarkers, extension, composition, aggregation, dependency, lollipop, point6, circle2, cross, barb, barbNeo, only_one, zero_or_one, one_or_more, zero_or_more, only_one_neo, zero_or_one_neo, one_or_more_neo, zero_or_more_neo, requirement_arrow, requirement_arrow_neo, requirement_contains, requirement_contains_neo, hierarchy2, markers, markers_default;
-  var init_chunk_2BW5OAIV = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-2BW5OAIV.mjs"() {
+  var init_chunk_WQQL4CDK = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-WQQL4CDK.mjs"() {
       init_define_process_argv();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -47310,13 +47384,14 @@ ${lines.join("\n")}`);
         const dashArray = `0 ${oValueS} ${middlePattern} ${oValueE}`;
         return dashArray;
       }, "generateDashArray");
-      insertEdge = /* @__PURE__ */ __name(function(elem, edge, clusterDb2, diagramType, startNode, endNode, diagramId3, skipIntersect = false) {
+      insertEdge = /* @__PURE__ */ __name(function(elem, edge, clusterDb2, diagramType, startNode, endNode, diagramId3, skipIntersect = false, layoutAlgorithm = void 0) {
         if (!diagramId3) {
           throw new Error(
             `insertEdge: missing diagramId for edge "${edge.id}" \u2014 edge IDs require a diagram prefix for uniqueness`
           );
         }
-        const { handDrawnSeed, layout: layout7 } = getConfig2();
+        const { handDrawnSeed, layout: configuredLayout } = getConfig2();
+        const layout7 = layoutAlgorithm ?? configuredLayout;
         let points = edge.points;
         let pointsHasChanged = false;
         const tail = startNode;
@@ -47329,7 +47404,7 @@ ${lines.join("\n")}`);
           edgeClassStyles.push(edge.cssCompiledStyles[key]);
         }
         if (layout7 === "swimlane") {
-          if (head.intersect && tail.intersect && Array.isArray(points) && points.length >= 2) {
+          if (!skipIntersect && head.intersect && tail.intersect && Array.isArray(points) && points.length >= 2) {
             if (points.length === 2) {
               points = [tail.intersect(points[0]), head.intersect(points[1])];
             } else {
@@ -47721,7 +47796,7 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-HTAEGDNF.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-4EMNKR2T.mjs
   function buildSegmentList(points) {
     const segments2 = [];
     for (let i4 = 0; i4 < points.length - 1; i4++) {
@@ -48094,10 +48169,10 @@ ${lines.join("\n")}`);
     }
   }
   var ROUNDED_CORNER_RADIUS, CORNER_EPSILON, CORNER_JUMP_CLEARANCE, MIN_USEFUL_RADIUS_RATIO, ENDPOINT_EPSILON;
-  var init_chunk_HTAEGDNF = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-HTAEGDNF.mjs"() {
+  var init_chunk_4EMNKR2T = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-4EMNKR2T.mjs"() {
       init_define_process_argv();
-      init_chunk_2BW5OAIV();
+      init_chunk_WQQL4CDK();
       init_chunk_Y2CYZVJY();
       ROUNDED_CORNER_RADIUS = 5;
       CORNER_EPSILON = 1e-5;
@@ -53762,7 +53837,7 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-FVRAUYC3.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-ZCHMQSOR.mjs
   function createLayoutElementGroups(element3, { edgePathsClass = "edges edgePaths" } = {}) {
     const rootGroups = element3.insert("g").attr("class", "root");
     const clusters = rootGroups.insert("g").attr("class", "clusters");
@@ -53968,7 +54043,8 @@ ${lines.join("\n")}`);
       getRenderedNode(edge.start, edge, nodeById, context, options2),
       getRenderedNode(edge.end, edge, nodeById, context, options2),
       data4Layout.diagramId,
-      shouldSkipIntersect(edge, options2)
+      shouldSkipIntersect(edge, options2),
+      data4Layout.layoutAlgorithm
     );
     if (hasEdgeLabel(edge)) {
       if (!edgeLabels.has(edge.id)) {
@@ -54018,15 +54094,15 @@ ${lines.join("\n")}`);
     return utils_default2.calcTerminalLabelPosition(arrowType ? 10 : 0, TERMINAL_LABEL_SIDES[key], path4);
   }
   var clusterDb, descendants, parents, clear42, isDescendant, edgeInCluster, copy2, extractDescendants, findCommonEdges, findNonClusterChild, getAnchorId, adjustClustersAndEdges, extractor, sorter, sortNodesByHierarchy, isNodeInExtractableCluster, findSafeAnchorNode, TERMINAL_LABEL_SIDES;
-  var init_chunk_FVRAUYC3 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-FVRAUYC3.mjs"() {
+  var init_chunk_ZCHMQSOR = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-ZCHMQSOR.mjs"() {
       init_define_process_argv();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_graphlib();
@@ -146671,9 +146747,9 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/elk-IJKZMXRS.mjs
-  var elk_IJKZMXRS_exports = {};
-  __export(elk_IJKZMXRS_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/elk-QONTBCTQ.mjs
+  var elk_QONTBCTQ_exports = {};
+  __export(elk_QONTBCTQ_exports, {
     render: () => render3
   });
   function childOnPath(id38, ancestorId, { parentById }) {
@@ -147658,8 +147734,38 @@ ${lines.join("\n")}`);
     }
     return best?.point ?? null;
   }
+  function segmentHitsBox(a2, b3, box) {
+    let t03 = 0;
+    let t13 = 1;
+    const dx = b3.x - a2.x;
+    const dy = b3.y - a2.y;
+    for (const [p3, q3] of [
+      [-dx, a2.x - box.x1],
+      [dx, box.x2 - a2.x],
+      [-dy, a2.y - box.y1],
+      [dy, box.y2 - a2.y]
+    ]) {
+      if (p3 === 0) {
+        if (q3 < 0) {
+          return false;
+        }
+      } else if (p3 < 0) {
+        t03 = Math.max(t03, q3 / p3);
+      } else {
+        t13 = Math.min(t13, q3 / p3);
+      }
+    }
+    return t03 < t13;
+  }
   function straightenEdgeTerminals(edges3) {
     const routes = edges3.map((edge) => edge.points ?? []);
+    const labels = edges3.map(
+      (edge) => edge.x == null || edge.y == null || !edge.label || !edge.width || !edge.height ? void 0 : { centre: { x: edge.x, y: edge.y }, size: { width: edge.width, height: edge.height } }
+    );
+    const covers = /* @__PURE__ */ __name((route, label) => {
+      const box = label && labelBox(label.centre, label.size);
+      return !!box && route.some((p3, i4) => i4 < route.length - 1 && segmentHitsBox(p3, route[i4 + 1], box));
+    }, "covers");
     const changed = [];
     for (const [index, edge] of edges3.entries()) {
       const original = routes[index];
@@ -147670,20 +147776,28 @@ ${lines.join("\n")}`);
       if (candidate === original) {
         continue;
       }
+      const label = labels[index];
+      const moved = label && projectLabelOntoStraightenedRun(label.centre, runs);
+      const candidateLabel = label && moved ? { centre: moved, size: label.size } : label;
       let before = 0;
       let after = 0;
+      let coveredBefore = 0;
+      let coveredAfter = 0;
       for (const [other, route] of routes.entries()) {
         if (other === index || route.length < 2) {
           continue;
         }
         before += crossingCount(original, route);
         after += crossingCount(candidate, route);
+        coveredBefore += Number(covers(route, label)) + Number(covers(original, labels[other]));
+        coveredAfter += Number(covers(route, candidateLabel)) + Number(covers(candidate, labels[other]));
       }
-      if (after > before) {
+      if (after > before || coveredAfter > coveredBefore) {
         continue;
       }
       edge.points = candidate;
       routes[index] = candidate;
+      labels[index] = candidateLabel;
       changed.push({ edge, runs });
     }
     return changed;
@@ -147868,29 +147982,6 @@ ${lines.join("\n")}`);
       a2.x = a2.x - sign2 * deficit / 2;
       b3.x = b3.x + sign2 * deficit / 2;
     }
-  }
-  function segmentHitsBox(a2, b3, box) {
-    let t03 = 0;
-    let t13 = 1;
-    const dx = b3.x - a2.x;
-    const dy = b3.y - a2.y;
-    for (const [p3, q3] of [
-      [-dx, a2.x - box.x1],
-      [dx, box.x2 - a2.x],
-      [-dy, a2.y - box.y1],
-      [dy, box.y2 - a2.y]
-    ]) {
-      if (p3 === 0) {
-        if (q3 < 0) {
-          return false;
-        }
-      } else if (p3 < 0) {
-        t03 = Math.max(t03, q3 / p3);
-      } else {
-        t13 = Math.min(t13, q3 / p3);
-      }
-    }
-    return t03 < t13;
   }
   function terminalLabelObstacles(edges3, nodes5) {
     const placed = nodes5.filter((node2) => node2.x !== void 0 && node2.y !== void 0);
@@ -148495,22 +148586,22 @@ ${lines.join("\n")}`);
     log3.debug("UIO cutter2: final points", points);
     return points;
   }
-  var import_elk_bundled, findCommonAncestor, ROOT, JUMP_RADIUS, PLACEMENT_OPTIONS, EDGE_ROUTING_OPTIONS, ROOT_EXPERIMENT_OVERRIDES, SUBGRAPH_EXPERIMENT_OVERRIDES, EPS, PUSH_OUT, onBorder, intersection2, outsideNode2, ensureTrulyOutside, makeInsidePoint, tryNodeIntersect, fallbackIntersection, OUTLINE_RAY_STEPS, DEPARTURE_AXIS_EPS, insideOutline, outlineAttachPoint, computeNodeIntersection, replaceEndpoint, MIN_END_MARKER_SEGMENT_LENGTH, markerPathOffset, ARROW_MAP, PORTS_SURROUNDING_MARGIN, PORTS_SURROUNDING, SUBGRAPH_PADDING, DEFAULT_SUBGRAPH_SPACING_BASE_VALUE, DEFAULT_SUBGRAPH_NODE_SPACING, CONTAINER_PADDING, RECTPACKING_CONTAINER_PADDING, RECTPACKING_OPTIONS, CONTAINER_ALGORITHM_OVERRIDES, CONTAINER_ALGORITHMS, render3, ELK_PRESETS, TERMINAL_LABEL_MARKER_CLEARANCE, TERMINAL_JOG_MAX, TERMINAL_RUN_MAX, JOG_EPS, OPPOSITE_LABEL_MIN_GAP, boxesOverlap, labelBox, TERMINAL_LABEL_FRAME_CLEARANCE;
-  var init_elk_IJKZMXRS = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/elk-IJKZMXRS.mjs"() {
+  var import_elk_bundled, findCommonAncestor, ROOT, JUMP_RADIUS, PLACEMENT_OPTIONS, EDGE_ROUTING_OPTIONS, ROOT_EXPERIMENT_OVERRIDES, SUBGRAPH_EXPERIMENT_OVERRIDES, EPS, PUSH_OUT, onBorder, intersection2, outsideNode2, ensureTrulyOutside, makeInsidePoint, tryNodeIntersect, fallbackIntersection, OUTLINE_RAY_STEPS, DEPARTURE_AXIS_EPS, insideOutline, outlineAttachPoint, computeNodeIntersection, replaceEndpoint, MIN_END_MARKER_SEGMENT_LENGTH, markerPathOffset, ARROW_MAP, PORTS_SURROUNDING_MARGIN, PORTS_SURROUNDING, SUBGRAPH_PADDING, DEFAULT_SUBGRAPH_SPACING_BASE_VALUE, DEFAULT_SUBGRAPH_NODE_SPACING, CONTAINER_PADDING, RECTPACKING_CONTAINER_PADDING, RECTPACKING_OPTIONS, CONTAINER_ALGORITHM_OVERRIDES, CONTAINER_ALGORITHMS, render3, ELK_PRESETS, TERMINAL_LABEL_MARKER_CLEARANCE, TERMINAL_JOG_MAX, TERMINAL_RUN_MAX, JOG_EPS, labelBox, OPPOSITE_LABEL_MIN_GAP, boxesOverlap, TERMINAL_LABEL_FRAME_CLEARANCE;
+  var init_elk_QONTBCTQ = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/elk-QONTBCTQ.mjs"() {
       init_define_process_argv();
-      init_chunk_HTAEGDNF();
-      init_chunk_FVRAUYC3();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_4EMNKR2T();
+      init_chunk_ZCHMQSOR();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -149068,18 +149159,18 @@ ${lines.join("\n")}`);
       __name(paramOnSegment, "paramOnSegment");
       __name(pointAtParam, "pointAtParam");
       __name(projectLabelOntoStraightenedRun, "projectLabelOntoStraightenedRun");
-      __name(straightenEdgeTerminals, "straightenEdgeTerminals");
-      __name(applyElkEdgeLayout, "applyElkEdgeLayout");
-      OPPOSITE_LABEL_MIN_GAP = 4;
-      __name(separateOppositeEdgeLabels, "separateOppositeEdgeLabels");
       __name(segmentHitsBox, "segmentHitsBox");
-      boxesOverlap = /* @__PURE__ */ __name((a2, b3) => a2.x1 < b3.x2 && b3.x1 < a2.x2 && a2.y1 < b3.y2 && b3.y1 < a2.y2, "boxesOverlap");
       labelBox = /* @__PURE__ */ __name((center4, size4) => ({
         x1: center4.x - size4.width / 2,
         y1: center4.y - size4.height / 2,
         x2: center4.x + size4.width / 2,
         y2: center4.y + size4.height / 2
       }), "labelBox");
+      __name(straightenEdgeTerminals, "straightenEdgeTerminals");
+      __name(applyElkEdgeLayout, "applyElkEdgeLayout");
+      OPPOSITE_LABEL_MIN_GAP = 4;
+      __name(separateOppositeEdgeLabels, "separateOppositeEdgeLabels");
+      boxesOverlap = /* @__PURE__ */ __name((a2, b3) => a2.x1 < b3.x2 && b3.x1 < a2.x2 && a2.y1 < b3.y2 && b3.y1 < a2.y2, "boxesOverlap");
       __name(terminalLabelObstacles, "terminalLabelObstacles");
       __name(placedTerminalLabels, "placedTerminalLabels");
       TERMINAL_LABEL_FRAME_CLEARANCE = 2;
@@ -151438,9 +151529,9 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/dagre-W4DXFKR2.mjs
-  var dagre_W4DXFKR2_exports = {};
-  __export(dagre_W4DXFKR2_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/dagre-NK4GIZVX.mjs
+  var dagre_NK4GIZVX_exports = {};
+  __export(dagre_NK4GIZVX_exports, {
     applyDagreLayoutResult: () => applyDagreLayoutResult,
     getEdgesToRender: () => getEdgesToRender,
     measureDagreLayout: () => measureDagreLayout,
@@ -151449,20 +151540,20 @@ ${lines.join("\n")}`);
     runDagreLayoutCore: () => runDagreLayoutCore
   });
   var clamp, getDefaultSelfLoopSide, shouldMergeSelfLoopSegments, DAGRE_NODE_LAYOUT_PROPERTIES, getSelfLoopSide, getSelfLoopPoints, getSelfLoopLabelPosition, getEdgesToRender, measureDagreGraph, runDagreGraphLayout, normalizeDagreNode, applyDagreNodeLayout, normalizeDagreEdge, applyDagreLayoutResult, paintDagreLayoutCore, renderDagreSubgraph, prepareLayoutForDagre, measureDagreLayout, runDagreLayoutCore, getDagrePaintNodes, getDagreEdgeNode, render4;
-  var init_dagre_W4DXFKR2 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/dagre-W4DXFKR2.mjs"() {
+  var init_dagre_NK4GIZVX = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/dagre-NK4GIZVX.mjs"() {
       init_define_process_argv();
-      init_chunk_FVRAUYC3();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_ZCHMQSOR();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_dagre();
@@ -152121,9 +152212,9 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/swimlanes-N4OXWK64.mjs
-  var swimlanes_N4OXWK64_exports = {};
-  __export(swimlanes_N4OXWK64_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/swimlanes-B3ENRKFQ.mjs
+  var swimlanes_B3ENRKFQ_exports = {};
+  __export(swimlanes_B3ENRKFQ_exports, {
     render: () => render5
   });
   function applySwimlaneLineJumps(data4Layout, { measure: measure2 }) {
@@ -154219,7 +154310,7 @@ ${lines.join("\n")}`);
       }
     }
   }
-  function liftTopLaneTitleBandsAboveRails(edges3, nodeByIdMap) {
+  function liftTopLaneTitleBandsAboveRails(edges3, nodeByIdMap, layoutDirection) {
     const CLEARANCE = 4;
     const validTitleRect = /* @__PURE__ */ __name((node2) => {
       const rect2 = node2.groupTitleRect;
@@ -154232,8 +154323,9 @@ ${lines.join("\n")}`);
       if (!node2.isGroup || node2.parentId) {
         return void 0;
       }
-      const rawDirection = node2.direction;
-      const direction2 = typeof rawDirection === "string" ? rawDirection.toUpperCase() : "";
+      const direction2 = upperCaseDirection(
+        node2.direction ?? layoutDirection
+      );
       if (direction2 === "LR" || direction2 === "RL" || direction2 === "BT") {
         return void 0;
       }
@@ -154255,7 +154347,7 @@ ${lines.join("\n")}`);
         return false;
       }
       const y6 = segment.a.y;
-      if (y6 <= rect2.top + EPS_LOCAL || y6 >= rect2.bottom - EPS_LOCAL) {
+      if (y6 < rect2.top - EPS_LOCAL || y6 > rect2.bottom + EPS_LOCAL) {
         return false;
       }
       return overlapLength(segment.a.x, segment.b.x, rect2.left, rect2.right) >= MIN_SHARED;
@@ -154297,7 +154389,7 @@ ${lines.join("\n")}`);
       };
     }
   }
-  function shiftLeftLaneTitleBandsLeftOfRails(edges3, nodeByIdMap) {
+  function shiftLeftLaneTitleBandsLeftOfRails(edges3, nodeByIdMap, layoutDirection) {
     const CLEARANCE = 4;
     const validTitleRect = /* @__PURE__ */ __name((node2) => {
       const rect2 = node2.groupTitleRect;
@@ -154310,8 +154402,10 @@ ${lines.join("\n")}`);
       if (!node2.isGroup || node2.parentId) {
         return void 0;
       }
-      const rawDirection = node2.direction;
-      if (rawDirection !== "LR") {
+      const direction2 = upperCaseDirection(
+        node2.direction ?? layoutDirection
+      );
+      if (direction2 !== "LR") {
         return void 0;
       }
       const rect2 = validTitleRect(node2);
@@ -154332,7 +154426,7 @@ ${lines.join("\n")}`);
         return false;
       }
       const x6 = segment.a.x;
-      if (x6 <= rect2.left + EPS_LOCAL || x6 >= rect2.right - EPS_LOCAL) {
+      if (x6 < rect2.left - EPS_LOCAL || x6 > rect2.right + EPS_LOCAL) {
         return false;
       }
       return overlapLength(segment.a.y, segment.b.y, rect2.top, rect2.bottom) >= MIN_SHARED;
@@ -154342,7 +154436,7 @@ ${lines.join("\n")}`);
         return false;
       }
       const y6 = segment.a.y;
-      if (y6 <= rect2.top + EPS_LOCAL || y6 >= rect2.bottom - EPS_LOCAL) {
+      if (y6 < rect2.top - EPS_LOCAL || y6 > rect2.bottom + EPS_LOCAL) {
         return false;
       }
       return overlapLength(segment.a.x, segment.b.x, rect2.left, rect2.right) >= MIN_SHARED;
@@ -156734,6 +156828,7 @@ ${lines.join("\n")}`);
     swapDestinationTerminalTailsToReduceCrossings(edges3, nodeByIdMap);
     const finalizeRenderedEdges = /* @__PURE__ */ __name(() => {
       resolveRenderedOrthogonalCrossings(edges3, nodeByIdMap);
+      separateSharedRenderedTerminalLanes(edges3, nodeByIdMap);
       reassignCrossingExternalRailChannels(edges3, nodeByIdMap);
       shortcutRedundantOrthogonalJogs(edges3, nodeByIdMap);
       anchorLabelsToPolyline(edges3, nodeByIdMap);
@@ -156745,10 +156840,10 @@ ${lines.join("\n")}`);
     finalizeRenderedEdges();
     nudgeSharedInteriorSubpaths(edges3, nodeByIdMap);
     finalizeRenderedEdges();
-    liftTopLaneTitleBandsAboveRails(edges3, nodeByIdMap);
-    shiftLeftLaneTitleBandsLeftOfRails(edges3, nodeByIdMap);
-    liftTopLaneTitleBandsAboveRails(edges3, nodeByIdMap);
-    shiftLeftLaneTitleBandsLeftOfRails(edges3, nodeByIdMap);
+    liftTopLaneTitleBandsAboveRails(edges3, nodeByIdMap, direction2);
+    shiftLeftLaneTitleBandsLeftOfRails(edges3, nodeByIdMap, direction2);
+    liftTopLaneTitleBandsAboveRails(edges3, nodeByIdMap, direction2);
+    shiftLeftLaneTitleBandsLeftOfRails(edges3, nodeByIdMap, direction2);
   }
   function normalizeGraph(g2) {
     const nodeById = new Map(g2.nodeById);
@@ -156798,8 +156893,13 @@ ${lines.join("\n")}`);
     }
     return indeg;
   }
-  function sortedZeroInDegreeNodes(indeg) {
-    return [...indeg.entries()].filter(([, degree]) => degree === 0).map(([id38]) => id38).sort((a2, b3) => a2.localeCompare(b3));
+  function sortedZeroInDegreeNodes(g2, indeg) {
+    const sorted = [...indeg.entries()].filter(([, degree]) => degree === 0).map(([id38]) => id38).sort((a2, b3) => a2.localeCompare(b3));
+    const linked = new Set(g2.edges.flatMap((e3) => [e3.src, e3.dst]));
+    const isUnconnected = /* @__PURE__ */ __name((id38) => !linked.has(id38) && !g2.nodeById.get(id38)?.isGroup, "isUnconnected");
+    const unconnected = [...indeg.keys()].filter((id38) => indeg.get(id38) === 0 && isUnconnected(id38));
+    let next3 = 0;
+    return sorted.map((id38) => isUnconnected(id38) ? unconnected[next3++] : id38);
   }
   function buildPredecessorSuccessorMaps(g2, includeEdge = () => true) {
     const preds = /* @__PURE__ */ new Map();
@@ -156836,7 +156936,7 @@ ${lines.join("\n")}`);
   }
   function topoSortIfAcyclic(g2) {
     const indeg = buildInDegreeMap(g2);
-    const queue = sortedZeroInDegreeNodes(indeg);
+    const queue = sortedZeroInDegreeNodes(g2, indeg);
     const order2 = [];
     const adj = buildSortedSuccessorMap(g2);
     while (queue.length) {
@@ -157808,7 +157908,7 @@ ${lines.join("\n")}`);
   function topoSortByGenerationIfAcyclic(g2) {
     const indeg = buildInDegreeMap(g2);
     const adj = buildSortedSuccessorMap(g2);
-    let frontier = sortedZeroInDegreeNodes(indeg);
+    let frontier = sortedZeroInDegreeNodes(g2, indeg);
     const order2 = [];
     while (frontier.length > 0) {
       const nextFrontier = [];
@@ -159939,22 +160039,22 @@ ${lines.join("\n")}`);
     data4Layout.nodes = transformedData.nodes;
     data4Layout.edges = transformedData.edges;
   }
-  var DEFAULT_SWIMLANE_ID, TOP_LANE_TITLE_BAND_HEIGHT, MIN_TOP_LANE_HORIZONTAL_PADDING, EDGE_LABEL_LOG_PREFIX, EPS2, EPS22, INSIDE_EPS, CORNER_CLEARANCE, EPS3, MIN_PORT_SPACING, PORT_SHIFT, TRY_DELTAS, EPS_LOCAL, MIN_SHARED, segmentsFor, orthogonallyAligned, EPS4, MIN_SHARED2, EPS5, MARKER_CLEARANCE_LENGTH, MARKER_CLEARANCE_HALF_WIDTH, EPS6, MIN_PORT_SPACING2, PORT_SHIFT2, LABEL_CLEARANCE_BUFFER, PRECISION, LAYERING, COORDINATES, AUTOMATIC_LANE_ORDERING_RESTARTS, EPS7, NODE_PADDING, HORIZONTAL_PIPE_MARGIN, VERTICAL_PIPE_MARGIN, ROUTING_MARGIN, ANCHOR_OFFSET, TRACK_SPACING, render5;
-  var init_swimlanes_N4OXWK64 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/swimlanes-N4OXWK64.mjs"() {
+  var DEFAULT_SWIMLANE_ID, TOP_LANE_TITLE_BAND_HEIGHT, MIN_TOP_LANE_HORIZONTAL_PADDING, EDGE_LABEL_LOG_PREFIX, EPS2, EPS22, INSIDE_EPS, CORNER_CLEARANCE, EPS3, MIN_PORT_SPACING, PORT_SHIFT, TRY_DELTAS, EPS_LOCAL, MIN_SHARED, upperCaseDirection, segmentsFor, orthogonallyAligned, EPS4, MIN_SHARED2, EPS5, MARKER_CLEARANCE_LENGTH, MARKER_CLEARANCE_HALF_WIDTH, EPS6, MIN_PORT_SPACING2, PORT_SHIFT2, LABEL_CLEARANCE_BUFFER, PRECISION, LAYERING, COORDINATES, AUTOMATIC_LANE_ORDERING_RESTARTS, EPS7, NODE_PADDING, HORIZONTAL_PIPE_MARGIN, VERTICAL_PIPE_MARGIN, ROUTING_MARGIN, ANCHOR_OFFSET, TRACK_SPACING, render5;
+  var init_swimlanes_B3ENRKFQ = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/swimlanes-B3ENRKFQ.mjs"() {
       init_define_process_argv();
-      init_chunk_HTAEGDNF();
-      init_chunk_FVRAUYC3();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_4EMNKR2T();
+      init_chunk_ZCHMQSOR();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       __name(applySwimlaneLineJumps, "applySwimlaneLineJumps");
@@ -160049,6 +160149,7 @@ ${lines.join("\n")}`);
       __name(collapseShortTerminalStub, "collapseShortTerminalStub");
       EPS_LOCAL = 1e-3;
       MIN_SHARED = 8;
+      upperCaseDirection = /* @__PURE__ */ __name((raw) => typeof raw === "string" ? raw.toUpperCase() : "", "upperCaseDirection");
       segmentsFor = orthogonalSegmentsForPoints;
       orthogonallyAligned = /* @__PURE__ */ __name((a2, b3) => sameX(a2, b3, EPS_LOCAL) || sameY(a2, b3, EPS_LOCAL), "orthogonallyAligned");
       __name(separateSharedRenderedTerminalLanes, "separateSharedRenderedTerminalLanes");
@@ -195384,18 +195485,18 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-SVEVUXB4.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-EJLWFMJV.mjs
   var internalHelpers, ELK_ALGORITHMS, layoutAlgorithms, registerLayoutLoaders, elkLayoutLoaders, registerDefaultLayoutLoaders, render7, LAST_RESORT_LAYOUT, getRegisteredLayoutAlgorithm;
-  var init_chunk_SVEVUXB4 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-SVEVUXB4.mjs"() {
+  var init_chunk_EJLWFMJV = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-EJLWFMJV.mjs"() {
       init_define_process_argv();
       init_chunk_DUW6YSOI();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       internalHelpers = {
@@ -195426,7 +195527,7 @@ ${lines.join("\n")}`);
         }
       }, "registerLayoutLoaders");
       elkLayoutLoaders = /* @__PURE__ */ __name(() => {
-        const loader38 = /* @__PURE__ */ __name(async () => await Promise.resolve().then(() => (init_elk_IJKZMXRS(), elk_IJKZMXRS_exports)), "loader");
+        const loader38 = /* @__PURE__ */ __name(async () => await Promise.resolve().then(() => (init_elk_QONTBCTQ(), elk_QONTBCTQ_exports)), "loader");
         return [
           { name: "elk", loader: loader38, algorithm: "elk.layered" },
           ...ELK_ALGORITHMS.map((algorithm) => ({ name: algorithm, loader: loader38, algorithm }))
@@ -195436,11 +195537,11 @@ ${lines.join("\n")}`);
         registerLayoutLoaders([
           {
             name: "dagre",
-            loader: /* @__PURE__ */ __name(async () => await Promise.resolve().then(() => (init_dagre_W4DXFKR2(), dagre_W4DXFKR2_exports)), "loader")
+            loader: /* @__PURE__ */ __name(async () => await Promise.resolve().then(() => (init_dagre_NK4GIZVX(), dagre_NK4GIZVX_exports)), "loader")
           },
           {
             name: "swimlane",
-            loader: /* @__PURE__ */ __name(async () => await Promise.resolve().then(() => (init_swimlanes_N4OXWK64(), swimlanes_N4OXWK64_exports)), "loader")
+            loader: /* @__PURE__ */ __name(async () => await Promise.resolve().then(() => (init_swimlanes_B3ENRKFQ(), swimlanes_B3ENRKFQ_exports)), "loader")
           },
           // elkjs is ~1.6 MB of source, so it is excluded from the tiny build along
           // with the other large features. `getRegisteredLayoutAlgorithm` then falls
@@ -195490,12 +195591,12 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-7TKQ45FW.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-55XCU76K.mjs
   var import_sanitize_url2, drawRect2, drawBackgroundRect, drawText, drawImage, drawEmbeddedImage, getNoteRect, getTextObj2, createTooltip;
-  var init_chunk_7TKQ45FW = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-7TKQ45FW.mjs"() {
+  var init_chunk_55XCU76K = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-55XCU76K.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_Y2CYZVJY();
       import_sanitize_url2 = __toESM(require_dist(), 1);
       init_src32();
@@ -195607,9 +195708,9 @@ ${lines.join("\n")}`);
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/c4Diagram-CRA5TL53.mjs
-  var c4Diagram_CRA5TL53_exports = {};
-  __export(c4Diagram_CRA5TL53_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/c4Diagram-XDPPPE54.mjs
+  var c4Diagram_XDPPPE54_exports = {};
+  __export(c4Diagram_XDPPPE54_exports, {
     diagram: () => diagram
   });
   function calcC4ShapeTextWH(textType, c4Shape, c4ShapeTextWrap, textConf, textLimitWidth) {
@@ -195741,17 +195842,17 @@ ${lines.join("\n")}`);
     }
   }
   var parser, c4Diagram_default, getRequiredConfig, TEXT_FIELDS, assignAttributes, createGlobalBoundary, c4ShapeArray, boundaryParseStack, currentBoundaryParse, parentBoundaryParse, boundaries, rels, title, wrapEnabled, c4ShapeInRow, c4BoundaryInRow, c4Type, getC4Type, setC4Type, addRel, addPersonOrSystem, addContainer, addComponent, addPersonOrSystemBoundary, addContainerBoundary, addDeploymentNode, popBoundaryParseStack, updateElStyle, updateRelStyle, updateLayoutConfig, getC4ShapeInRow, getC4BoundaryInRow, getCurrentBoundaryParse, getParentBoundaryParse, getC4ShapeArray, getC4Shape, getC4ShapeKeys, getBoundaries, getBoundarys, getRels, getTitle, setWrap, autoWrap, clear6, LINETYPE, ARROWTYPE, PLACEMENT, setTitle, c4Db_default, drawRect22, drawRels, drawBoundary, insertDatabaseIcon, insertComputerIcon, insertClockIcon, insertArrowHead, insertArrowEnd, insertArrowFilledHead, insertArrowCrossHead, _drawTextCandidateFunc, svgDraw_default, getDiagramRoot, QUEUE_SHAPES, DB_SHAPES, SHAPE_KEYWORDS, keywordShape, resolveNodeShape, STEREOTYPE_NAMES, stereotypeLabel, isExternal, stereotypeText, C4_ELEMENT_TYPES, C4_ELEMENT_TYPE_SET, isC4ElementType, elementCssStyles, buildC4Node, globalBoundaryMaxX, globalBoundaryMaxY, c4ShapeInRow2, c4BoundaryInRow2, conf, Bounds, setConf, boundaryFont, messageFont, drawBoundary2, drawC4ShapeArray, Point2, getIntersectPoint, getIntersectPoints, drawRels2, draw, c4Renderer_default, elementFontStyles, getStyles2, styles_default2, diagram;
-  var init_c4Diagram_CRA5TL53 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/c4Diagram-CRA5TL53.mjs"() {
+  var init_c4Diagram_XDPPPE54 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/c4Diagram-XDPPPE54.mjs"() {
       init_define_process_argv();
-      init_chunk_7TKQ45FW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_55XCU76K();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -198124,12 +198225,12 @@ ${elementFontStyles()}
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-KQW6MTUR.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-VQ5W62QI.mjs
   var setupViewPortForSVG, calculateDimensionsWithPadding, createViewBox;
-  var init_chunk_KQW6MTUR = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-KQW6MTUR.mjs"() {
+  var init_chunk_VQ5W62QI = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-VQ5W62QI.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       setupViewPortForSVG = /* @__PURE__ */ __name((svg2, padding, cssDiagram, useMaxWidth) => {
@@ -198155,21 +198256,21 @@ ${elementFontStyles()}
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-EU5HNXII.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-NQOKRVIF.mjs
   var MERMAID_DOM_ID_PREFIX, FlowDB, getClasses, draw2, flowRenderer_v3_unified_default, parser2, flow_default, newParser, flowParser_default, genColor, fade, getStyles3, styles_default3, createFlowDiagram, diagram2;
-  var init_chunk_EU5HNXII = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-EU5HNXII.mjs"() {
+  var init_chunk_NQOKRVIF = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-NQOKRVIF.mjs"() {
       init_define_process_argv();
       init_chunk_5VM5RSS4();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
+      init_chunk_VQ5W62QI();
       init_chunk_LNGE3PJU();
-      init_chunk_SVEVUXB4();
-      init_chunk_7TKQ45FW();
-      init_chunk_XC4XBNZT();
+      init_chunk_EJLWFMJV();
+      init_chunk_55XCU76K();
+      init_chunk_HAGFOTED();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -200801,41 +200902,41 @@ ${hasBkgColors ? `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-OXPTDLAJ.mjs
-  var flowDiagram_OXPTDLAJ_exports = {};
-  __export(flowDiagram_OXPTDLAJ_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-IUGLLWBU.mjs
+  var flowDiagram_IUGLLWBU_exports = {};
+  __export(flowDiagram_IUGLLWBU_exports, {
     createFlowDiagram: () => createFlowDiagram,
     diagram: () => diagram2
   });
-  var init_flowDiagram_OXPTDLAJ = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-OXPTDLAJ.mjs"() {
+  var init_flowDiagram_IUGLLWBU = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/flowDiagram-IUGLLWBU.mjs"() {
       init_define_process_argv();
-      init_chunk_EU5HNXII();
+      init_chunk_NQOKRVIF();
       init_chunk_5VM5RSS4();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
+      init_chunk_VQ5W62QI();
       init_chunk_LNGE3PJU();
-      init_chunk_SVEVUXB4();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_7TKQ45FW();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_55XCU76K();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-2UJZ2QOL.mjs
-  var diagram_2UJZ2QOL_exports = {};
-  __export(diagram_2UJZ2QOL_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-TYUNFSNR.mjs
+  var diagram_TYUNFSNR_exports = {};
+  __export(diagram_TYUNFSNR_exports, {
     diagram: () => diagram3
   });
   function resolveShapeAlias(shape) {
@@ -200962,26 +201063,26 @@ ${hasBkgColors ? `
     return out.join("\n");
   }
   var AgentflowWarning, PARSER_EMITTED_DIAGNOSTICS, RESERVED_DIAGNOSTICS, SHAPE_ALIASES, REMOVED_SHAPES, ALLOWED_SHAPES, DEFAULT_SHAPE, KIND_SLOT, KIND_COUNT, kindClass, KINDS, containerSlotCount, containerSlot, MERMAID_DOM_ID_PREFIX2, SEMANTIC_METADATA_SKIP_KEYS, SUBROUTINE_ALIASES, SUBGRAPH_TYPE_TO_SHAPE, AgentFlowDB, getClasses2, draw3, renderer_default, parser3, agentflow_default, newParser2, agentflowParser_default, genColor2, fade2, getStyles4, styles_default4, diagram3;
-  var init_diagram_2UJZ2QOL = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-2UJZ2QOL.mjs"() {
+  var init_diagram_TYUNFSNR = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-TYUNFSNR.mjs"() {
       init_define_process_argv();
       init_chunk_5VM5RSS4();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
+      init_chunk_VQ5W62QI();
       init_chunk_LNGE3PJU();
-      init_chunk_SVEVUXB4();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_7TKQ45FW();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_55XCU76K();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -204621,33 +204722,33 @@ You have to call mermaid.initialize.`
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/swimlanesDiagram-K3J5GTZL.mjs
-  var swimlanesDiagram_K3J5GTZL_exports = {};
-  __export(swimlanesDiagram_K3J5GTZL_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/swimlanesDiagram-AYQRV4AK.mjs
+  var swimlanesDiagram_AYQRV4AK_exports = {};
+  __export(swimlanesDiagram_AYQRV4AK_exports, {
     diagram: () => diagram4
   });
   var getStyles5, styles_default22, diagram4;
-  var init_swimlanesDiagram_K3J5GTZL = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/swimlanesDiagram-K3J5GTZL.mjs"() {
+  var init_swimlanesDiagram_AYQRV4AK = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/swimlanesDiagram-AYQRV4AK.mjs"() {
       init_define_process_argv();
-      init_chunk_EU5HNXII();
+      init_chunk_NQOKRVIF();
       init_chunk_5VM5RSS4();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
+      init_chunk_VQ5W62QI();
       init_chunk_LNGE3PJU();
-      init_chunk_SVEVUXB4();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_7TKQ45FW();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_55XCU76K();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       getStyles5 = /* @__PURE__ */ __name((options2) => `${styles_default3(options2)}
@@ -204663,29 +204764,29 @@ You have to call mermaid.initialize.`
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/erDiagram-O2IAPWRE.mjs
-  var erDiagram_O2IAPWRE_exports = {};
-  __export(erDiagram_O2IAPWRE_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/erDiagram-KYQIGQAA.mjs
+  var erDiagram_KYQIGQAA_exports = {};
+  __export(erDiagram_KYQIGQAA_exports, {
     diagram: () => diagram5
   });
   var parser4, erDiagram_default, ErDB, erRenderer_unified_exports, draw4, fade3, genColor3, getStyles6, styles_default5, diagram5;
-  var init_erDiagram_O2IAPWRE = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/erDiagram-O2IAPWRE.mjs"() {
+  var init_erDiagram_KYQIGQAA = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/erDiagram-KYQIGQAA.mjs"() {
       init_define_process_argv();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
-      init_chunk_SVEVUXB4();
+      init_chunk_VQ5W62QI();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -235841,9 +235942,9 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/gitGraphDiagram-XJZIOB7I.mjs
-  var gitGraphDiagram_XJZIOB7I_exports = {};
-  __export(gitGraphDiagram_XJZIOB7I_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/gitGraphDiagram-PDYL7XHY.mjs
+  var gitGraphDiagram_PDYL7XHY_exports = {};
+  __export(gitGraphDiagram_PDYL7XHY_exports, {
     diagram: () => diagram6
   });
   function getID() {
@@ -235908,13 +236009,13 @@ ${content}`;
     prettyPrintCommitHistory(commitArr);
   }
   var commitType, DEFAULT_GITGRAPH_CONFIG, getConfig3, state2, setDirection, setOptions6, getOptions, commit, branch, merge5, cherryPick, checkout, prettyPrint, clear22, getBranchesAsObjArray, getBranches, getCommits, getCommitsArray, getCurrentBranch, getDirection, getHead, db, populate15, parseStatement, parseCommit, parseBranch, parseMerge, parseCheckout, parseCherryPicking, parser5, LAYOUT_OFFSET, COMMIT_STEP, PX, PY, THEME_COLOR_LIMIT, REDUX_GEOMETRY_THEMES, REDUX_BRANCH_LABEL_PADDING_Y, COLOR_THEMES3, DARK_THEMES, calcColorIndex, branchPos, commitPos, defaultPos, allCommitsDict, lanes, maxPos, dir, clear32, drawText2, findClosestParent, findClosestParentBT, setParallelBTPos, findClosestParentPos, calculateCommitPosition, setCommitPosition, setRootPosition, drawCommitBullet, drawCommitLabel, drawCommitTags, getCommitClassType, calculatePosition, getCommitPosition, drawCommits, shouldRerouteArrow, findLane, drawArrow, drawArrows, drawBranches, setBranchPosition, draw5, gitGraphRenderer_default, GIT_NAMED_COLOR_COUNT, REDUX_GEOMETRY_THEMES2, COLOR_THEMES22, NEO_THEMES, DARK_THEMES2, NEO_COLOR_GEN_THEMES, genGitGraphGradient, genColor4, normalTheme, getStyles7, styles_default6, diagram6;
-  var init_gitGraphDiagram_XJZIOB7I = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/gitGraphDiagram-XJZIOB7I.mjs"() {
+  var init_gitGraphDiagram_PDYL7XHY = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/gitGraphDiagram-PDYL7XHY.mjs"() {
       init_define_process_argv();
       init_chunk_2Q5K7J3B();
       init_chunk_JWPE2WC7();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -238101,9 +238202,9 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/ganttDiagram-R7TSEDQI.mjs
-  var ganttDiagram_R7TSEDQI_exports = {};
-  __export(ganttDiagram_R7TSEDQI_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/ganttDiagram-R7GPNTJY.mjs
+  var ganttDiagram_R7GPNTJY_exports = {};
+  __export(ganttDiagram_R7GPNTJY_exports, {
     diagram: () => diagram7
   });
   function getTaskTags(data6, task, tags2) {
@@ -238122,11 +238223,11 @@ ${content}`;
     }
   }
   var import_sanitize_url3, import_dayjs2, import_isoWeek, import_customParseFormat, import_advancedFormat, import_dayjs3, import_duration8, parser6, gantt_default, WEEKEND_START_DAY, dateFormat, axisFormat, tickInterval, todayMarker, includes, excludes, links, sections, tasks, currentSection, displayMode, tags, funs, diagramId, inclusiveEndDates, topAxis, weekday, weekend, lastOrder, clear23, setDiagramId, setAxisFormat, getAxisFormat, setTickInterval, getTickInterval, setTodayMarker, getTodayMarker, setDateFormat, enableInclusiveEndDates, endDatesAreInclusive, enableTopAxis, topAxisEnabled, setDisplayMode, getDisplayMode, getDateFormat, mergeTokens, setIncludes, getIncludes, setExcludes, getExcludes, getLinks, addSection, getSections, getTasks, isInvalidDate, setWeekday, getWeekday, setWeekend, checkTaskDates, fixTaskDates, warnAboutUnknownTaskIds, getStartDate, parseDuration, getEndDate, taskCnt, parseId, compileData, parseData2, lastTask, lastTaskID, rawTasks, taskDb, addTask, findTaskById, addTaskOrg, compileTasks, setLink, setClass, setClickFun, pushFun, setClickEvent, bindFunctions, ganttDb_default, setConf2, mapWeekdayToTimeFunction, getMaxIntersections, w3, MAX_TICK_COUNT, draw6, ganttRenderer_default, getStyles8, styles_default7, diagram7;
-  var init_ganttDiagram_R7TSEDQI = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/ganttDiagram-R7TSEDQI.mjs"() {
+  var init_ganttDiagram_R7GPNTJY = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/ganttDiagram-R7GPNTJY.mjs"() {
       init_define_process_argv();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       import_sanitize_url3 = __toESM(require_dist(), 1);
@@ -240414,17 +240515,17 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/infoDiagram-5W2HQ5XZ.mjs
-  var infoDiagram_5W2HQ5XZ_exports = {};
-  __export(infoDiagram_5W2HQ5XZ_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/infoDiagram-MVDRKAX5.mjs
+  var infoDiagram_MVDRKAX5_exports = {};
+  __export(infoDiagram_MVDRKAX5_exports, {
     diagram: () => diagram8
   });
   var parser7, DEFAULT_INFO_DB, getVersion, db2, draw7, renderer3, diagram8;
-  var init_infoDiagram_5W2HQ5XZ = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/infoDiagram-5W2HQ5XZ.mjs"() {
+  var init_infoDiagram_MVDRKAX5 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/infoDiagram-MVDRKAX5.mjs"() {
       init_define_process_argv();
-      init_chunk_Z6ETV63D();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -240435,7 +240536,7 @@ ${content}`;
         }, "parse")
       };
       DEFAULT_INFO_DB = {
-        version: "12.1.0" + (true ? "" : "-tiny")
+        version: "12.2.0" + (true ? "" : "-tiny")
       };
       getVersion = /* @__PURE__ */ __name(() => DEFAULT_INFO_DB.version, "getVersion");
       db2 = {
@@ -240457,19 +240558,19 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/pieDiagram-CAPJLFHJ.mjs
-  var pieDiagram_CAPJLFHJ_exports = {};
-  __export(pieDiagram_CAPJLFHJ_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/pieDiagram-GNMPY74T.mjs
+  var pieDiagram_GNMPY74T_exports = {};
+  __export(pieDiagram_GNMPY74T_exports, {
     diagram: () => diagram9
   });
   var DEFAULT_PIE_CONFIG, DEFAULT_PIE_DB, sections2, showData, config2, getConfig22, clear24, addSection2, getSections2, setShowData, getShowData, db3, populateDb, parser8, getStyles9, pieStyles_default, createPieArcs, draw8, renderer4, diagram9;
-  var init_pieDiagram_CAPJLFHJ = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/pieDiagram-CAPJLFHJ.mjs"() {
+  var init_pieDiagram_GNMPY74T = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/pieDiagram-GNMPY74T.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -240732,9 +240833,9 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/quadrantDiagram-GDMTTRAM.mjs
-  var quadrantDiagram_GDMTTRAM_exports = {};
-  __export(quadrantDiagram_GDMTTRAM_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/quadrantDiagram-D57K4MC3.mjs
+  var quadrantDiagram_D57K4MC3_exports = {};
+  __export(quadrantDiagram_D57K4MC3_exports, {
     diagram: () => diagram10
   });
   function validateHexCode(value2) {
@@ -240851,10 +240952,10 @@ ${content}`;
     return quadrantBuilder.build();
   }
   var parser9, quadrant_default, defaultThemeVariables, QuadrantBuilder, InvalidStyleError, quadrantBuilder, clear25, quadrantDb_default, draw9, quadrantRenderer_default, diagram10;
-  var init_quadrantDiagram_GDMTTRAM = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/quadrantDiagram-GDMTTRAM.mjs"() {
+  var init_quadrantDiagram_D57K4MC3 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/quadrantDiagram-D57K4MC3.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -242133,9 +242234,9 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/xychartDiagram-TAQBALBS.mjs
-  var xychartDiagram_TAQBALBS_exports = {};
-  __export(xychartDiagram_TAQBALBS_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/xychartDiagram-4URNHDU4.mjs
+  var xychartDiagram_4URNHDU4_exports = {};
+  __export(xychartDiagram_4URNHDU4_exports, {
     diagram: () => diagram11
   });
   function isBarPlot(data6) {
@@ -242339,14 +242440,14 @@ ${content}`;
     return xyChartData;
   }
   var parser10, xychart_default, TextDimensionCalculatorWithFont, BAR_WIDTH_TO_TICK_WIDTH_RATIO, MAX_OUTER_PADDING_PERCENT_FOR_WRT_LABEL, BaseAxis, BandAxis, LinearAxis, ChartTitle, LEGEND_MARKER_TO_FONT_RATIO, LEGEND_ITEM_SPACING_TO_FONT_RATIO, LEGEND_MARKER_SPACING_TO_FONT_RATIO, ChartLegend, LinePlot, BarPlot, BasePlot, Orchestrator, XYChartBuilder, plotIndex, tmpSVGGroup, xyChartConfig, xyChartThemeConfig, xyChartData, plotColorPalette, hasSetXAxis, hasSetYAxis, clear26, xychartDb_default, draw10, xychartRenderer_default, diagram11;
-  var init_xychartDiagram_TAQBALBS = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/xychartDiagram-TAQBALBS.mjs"() {
+  var init_xychartDiagram_4URNHDU4 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/xychartDiagram-4URNHDU4.mjs"() {
       init_define_process_argv();
-      init_chunk_Z6ETV63D();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -244301,29 +244402,29 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/requirementDiagram-X7JNWC4A.mjs
-  var requirementDiagram_X7JNWC4A_exports = {};
-  __export(requirementDiagram_X7JNWC4A_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/requirementDiagram-EQYSW5RA.mjs
+  var requirementDiagram_EQYSW5RA_exports = {};
+  __export(requirementDiagram_EQYSW5RA_exports, {
     diagram: () => diagram12
   });
   var parser11, requirementDiagram_default, RequirementDB, genColor5, getStyles10, styles_default8, requirementRenderer_exports, draw11, diagram12;
-  var init_requirementDiagram_X7JNWC4A = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/requirementDiagram-X7JNWC4A.mjs"() {
+  var init_requirementDiagram_EQYSW5RA = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/requirementDiagram-EQYSW5RA.mjs"() {
       init_define_process_argv();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
-      init_chunk_SVEVUXB4();
+      init_chunk_VQ5W62QI();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       parser11 = (function() {
@@ -245598,9 +245699,9 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/sequenceDiagram-ZO4K6R2Y.mjs
-  var sequenceDiagram_ZO4K6R2Y_exports = {};
-  __export(sequenceDiagram_ZO4K6R2Y_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/sequenceDiagram-BLEHNHQU.mjs
+  var sequenceDiagram_BLEHNHQU_exports = {};
+  __export(sequenceDiagram_BLEHNHQU_exports, {
     diagram: () => diagram13
   });
   async function boundMessage(_diagram, msgModel) {
@@ -245857,14 +245958,14 @@ ${content}`;
     return common_default.getMax(maxHeight, conf2.height);
   }
   var import_sanitize_url4, parser12, sequenceDiagram_default, LINETYPE2, ARROWTYPE2, PLACEMENT2, PARTICIPANT_TYPE, SequenceDB, getStyles11, styles_default9, GLYPH_BAND_HEIGHT, GLYPH_LABEL_GAP, LABEL_LIFELINE_GAP, actorLabelHeight, actorStackHeight, headerBands, footerBands, ACTOR_TYPE_WIDTH, ACTOR_GLYPH_TOP, ACTOR_GLYPH_BOTTOM, ACTOR_GLYPH_HEIGHT, neoBands, TOP_ACTOR_CLASS, BOTTOM_ACTOR_CLASS, ACTOR_BOX_CLASS, ACTOR_MAN_FIGURE_CLASS, COLOR_THEMES4, paletteColor, drawRect23, drawPopup, popupMenuToggle, drawKatex, drawText3, drawLabel, actorCnt, fixLifeLineHeights, drawActorTypeParticipant, drawActorTypeCollections, drawActorTypeQueue, drawActorTypeControl, drawActorTypeEntity, drawActorTypeDatabase, drawActorTypeBoundary, drawActorTypeActor, drawActor, drawBox, anchorElement, drawActivation, drawLoop, drawBackgroundRect2, insertDatabaseIcon2, insertComputerIcon2, insertClockIcon2, insertArrowHead2, insertArrowFilledHead2, insertSequenceNumber, insertArrowCrossHead2, dropShadowId, insertDropShadow, getTextObj22, getNoteRect2, _drawTextCandidateFunc2, _drawMenuItemTextCandidateFunc, insertSolidTopArrowHead, insertSolidBottomArrowHead, insertStickTopArrowHead, insertStickBottomArrowHead, svgDraw_default2, conf2, bounds2, drawNote, drawCentralConnection, messageFont2, noteFont, actorFont, drawMessage, addActorRenderingData, drawActors, drawActorsPopup, setConf3, actorActivations, activationBounds, draw12, getRequiredPopupWidth, buildNoteModel, CENTRAL_CONNECTION_BASE_OFFSET, CENTRAL_CONNECTION_BIDIRECTIONAL_OFFSET, hasCentralConnection, calculateCentralConnectionOffset, isReverseArrowType, isBidirectionalArrowType, buildMessageModel, calculateLoopBounds, sequenceRenderer_default, diagram13;
-  var init_sequenceDiagram_ZO4K6R2Y = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/sequenceDiagram-ZO4K6R2Y.mjs"() {
+  var init_sequenceDiagram_BLEHNHQU = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/sequenceDiagram-BLEHNHQU.mjs"() {
       init_define_process_argv();
       init_chunk_2Q5K7J3B();
       init_chunk_LNGE3PJU();
-      init_chunk_7TKQ45FW();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_55XCU76K();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -250350,31 +250451,31 @@ ${content}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/classDiagram-v2-K4WV4PDN.mjs
-  var classDiagram_v2_K4WV4PDN_exports = {};
-  __export(classDiagram_v2_K4WV4PDN_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/classDiagram-v2-4MYWR3UA.mjs
+  var classDiagram_v2_4MYWR3UA_exports = {};
+  __export(classDiagram_v2_4MYWR3UA_exports, {
     diagram: () => diagram14
   });
   var parser13, classDiagram_default, visibilityValues, ClassMember, MERMAID_DOM_ID_PREFIX3, classCounter, sanitizeText22, ClassDB, genColor6, getStyles12, styles_default10, getDir, getClasses3, draw13, classRenderer_v3_unified_default, diagram14;
-  var init_classDiagram_v2_K4WV4PDN = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/classDiagram-v2-K4WV4PDN.mjs"() {
+  var init_classDiagram_v2_4MYWR3UA = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/classDiagram-v2-4MYWR3UA.mjs"() {
       init_define_process_argv();
       init_chunk_5VM5RSS4();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
-      init_chunk_SVEVUXB4();
+      init_chunk_VQ5W62QI();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_7TKQ45FW();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_55XCU76K();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -252524,9 +252625,9 @@ g.classGroup line {
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/stateDiagram-v2-TBUQTH76.mjs
-  var stateDiagram_v2_TBUQTH76_exports = {};
-  __export(stateDiagram_v2_TBUQTH76_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/stateDiagram-v2-A6IESKWZ.mjs
+  var stateDiagram_v2_A6IESKWZ_exports = {};
+  __export(stateDiagram_v2_A6IESKWZ_exports, {
     diagram: () => diagram15
   });
   function stateDomId(itemId = "", counter = 0, type3 = "", typeSpacer = DOMID_TYPE_SPACER) {
@@ -252562,24 +252663,24 @@ g.classGroup line {
     return dbInfoItem?.styles ?? [];
   }
   var parser14, stateDiagram_default, DEFAULT_DIAGRAM_DIRECTION, DEFAULT_NESTED_DOC_DIR, STMT_DIRECTION, STMT_STATE, STMT_ROOT, STMT_RELATION, STMT_CLASSDEF, STMT_STYLEDEF, STMT_APPLYCLASS, DEFAULT_STATE_TYPE, DIVIDER_TYPE, G_EDGE_STYLE, G_EDGE_ARROWHEADSTYLE, G_EDGE_LABELPOS, G_EDGE_LABELTYPE, G_EDGE_THICKNESS, SHAPE_STATE, SHAPE_STATE_WITH_DESC, SHAPE_START, SHAPE_END, SHAPE_DIVIDER, SHAPE_GROUP, SHAPE_NOTE, SHAPE_NOTEGROUP, CSS_DIAGRAM, CSS_STATE, CSS_DIAGRAM_STATE, CSS_EDGE, CSS_NOTE, CSS_NOTE_EDGE, CSS_EDGE_NOTE_EDGE, CSS_DIAGRAM_NOTE, CSS_CLUSTER, CSS_DIAGRAM_CLUSTER, CSS_CLUSTER_ALT, CSS_DIAGRAM_CLUSTER_ALT, PARENT2, NOTE, DOMID_STATE, DOMID_TYPE_SPACER, NOTE_ID, PARENT_ID, nodeDb, graphItemCount, nextColorIndex, containerColorIndex, colorSlotFor, setupDoc, getDir2, dataFetcher, reset3, getDir22, getClasses4, draw14, stateRenderer_v3_unified_default, CONSTANTS, newClassesList, newDoc, clone6, StateDB, genColor7, getStyles13, styles_default11, diagram15;
-  var init_stateDiagram_v2_TBUQTH76 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/stateDiagram-v2-TBUQTH76.mjs"() {
+  var init_stateDiagram_v2_A6IESKWZ = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/stateDiagram-v2-A6IESKWZ.mjs"() {
       init_define_process_argv();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
-      init_chunk_SVEVUXB4();
+      init_chunk_VQ5W62QI();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_7TKQ45FW();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_55XCU76K();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -254737,9 +254838,9 @@ g.stateGroup line {
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/journeyDiagram-COXZFDF6.mjs
-  var journeyDiagram_COXZFDF6_exports = {};
-  __export(journeyDiagram_COXZFDF6_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/journeyDiagram-BOSHW7O7.mjs
+  var journeyDiagram_BOSHW7O7_exports = {};
+  __export(journeyDiagram_BOSHW7O7_exports, {
     diagram: () => diagram16
   });
   function drawActorLegend(diagram210) {
@@ -254817,12 +254918,12 @@ g.stateGroup line {
     });
   }
   var parser15, journey_default, currentSection2, sections3, tasks2, rawTasks2, clear27, addSection3, getSections3, getTasks2, updateActors, addTask2, addTaskOrg2, compileTasks2, getActors, journeyDb_default, getStyles14, styles_default12, drawRect24, drawFace, drawCircle, drawText22, drawLabel2, drawSection, taskCount, drawTask, drawBackgroundRect22, _drawTextCandidateFunc3, initGraphics, svgDraw_default3, setConf4, actors, maxWidth, conf3, leftMargin, draw15, bounds3, fills, textColours, drawTasks, journeyRenderer_default, diagram16;
-  var init_journeyDiagram_COXZFDF6 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/journeyDiagram-COXZFDF6.mjs"() {
+  var init_journeyDiagram_BOSHW7O7 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/journeyDiagram-BOSHW7O7.mjs"() {
       init_define_process_argv();
       init_chunk_5VM5RSS4();
-      init_chunk_7TKQ45FW();
-      init_chunk_VPRB5NB3();
+      init_chunk_55XCU76K();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -256026,9 +256127,9 @@ g.stateGroup line {
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/timeline-definition-YOQAKGHF.mjs
-  var timeline_definition_YOQAKGHF_exports = {};
-  __export(timeline_definition_YOQAKGHF_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/timeline-definition-JXYKGLGB.mjs
+  var timeline_definition_JXYKGLGB_exports = {};
+  __export(timeline_definition_JXYKGLGB_exports, {
     diagram: () => diagram17
   });
   function wrap2(text4, width3) {
@@ -256052,13 +256153,13 @@ g.stateGroup line {
     });
   }
   var parser16, timeline_default, timelineDb_exports, currentSection3, currentTaskId, direction, sections4, tasks3, rawTasks3, getCommonDb2, clear28, setDirection2, getDirection2, addSection4, getSections4, getTasks3, addTask3, addEvent, addTaskOrg3, compileTasks3, timelineDb_default, nodeCount, drawRect3, drawFace2, drawCircle2, drawText4, drawLabel3, drawSection2, taskCount2, drawTask2, drawBackgroundRect3, getTextObj3, getNoteRect3, _drawTextCandidateFunc4, initGraphics2, drawNode, getVirtualNodeHeight, defaultBkg, svgDraw_default4, draw16, drawTasks2, drawEvents, timelineRenderer_default, NODE_WIDTH, NODE_PADDING2, NODE_TOTAL_WIDTH, EVENT_WIDTH, EVENT_TOTAL_WIDTH, EVENT_SPACING, EVENT_VERTICAL_GAP, SECTION_TASK_GAP, TASK_AXIS_GAP, TASK_VERTICAL_GAP, EVENT_AXIS_GAP, draw22, drawTasks22, drawEvents2, timelineRendererVertical_default, genReduxSections, genSections, getStyles15, styles_default13, rendererSelector, diagram17;
-  var init_timeline_definition_YOQAKGHF = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/timeline-definition-YOQAKGHF.mjs"() {
+  var init_timeline_definition_JXYKGLGB = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/timeline-definition-JXYKGLGB.mjs"() {
       init_define_process_argv();
-      init_chunk_Z6ETV63D();
+      init_chunk_OYAV6JZA();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -257736,29 +257837,29 @@ g.stateGroup line {
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/mindmap-definition-LZFPQGKD.mjs
-  var mindmap_definition_LZFPQGKD_exports = {};
-  __export(mindmap_definition_LZFPQGKD_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/mindmap-definition-6OY57UG3.mjs
+  var mindmap_definition_6OY57UG3_exports = {};
+  __export(mindmap_definition_6OY57UG3_exports, {
     diagram: () => diagram18
   });
   var parser17, mindmap_default, MAX_SECTIONS, nodeType, MindmapDB, draw17, mindmapRenderer_default, genSections2, genGradient, getStyles16, styles_default14, diagram18;
-  var init_mindmap_definition_LZFPQGKD = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/mindmap-definition-LZFPQGKD.mjs"() {
+  var init_mindmap_definition_6OY57UG3 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/mindmap-definition-6OY57UG3.mjs"() {
       init_define_process_argv();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
-      init_chunk_SVEVUXB4();
+      init_chunk_VQ5W62QI();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_dist2();
@@ -258583,20 +258684,22 @@ g.stateGroup line {
           }
         }
         /**
-         * Assign section numbers to nodes based on their position relative to root
+         * Assign color sections by top-level branch (default) or structural depth.
          * @param node - The mindmap node to process
          * @param sectionNumber - The section number to assign (undefined for root)
+         * @param depth - Distance from the root, independent of indentation width
+         * @param colorByDepth - Whether to assign sections by depth instead of top-level branch
          */
-        assignSections(node2, sectionNumber) {
+        assignSections(node2, sectionNumber, depth = 0, colorByDepth = false) {
           if (node2.level === 0) {
             node2.section = void 0;
           } else {
-            node2.section = sectionNumber;
+            node2.section = colorByDepth ? (depth - 1) % (MAX_SECTIONS - 1) : sectionNumber;
           }
           if (node2.children) {
             for (const [index, child] of node2.children.entries()) {
               const childSectionNumber = node2.level === 0 ? index % (MAX_SECTIONS - 1) : sectionNumber;
-              this.assignSections(child, childSectionNumber);
+              this.assignSections(child, childSectionNumber, depth + 1, colorByDepth);
             }
           }
         }
@@ -258652,6 +258755,9 @@ g.stateGroup line {
             padding: node2.padding,
             cssClasses: classes3,
             cssStyles: [],
+            // Mindmap styles don't set text-anchor: middle, so SVG-text labels must be
+            // offset by half their width to be centred (issue #8387)
+            centerLabel: true,
             look: conf4.look,
             icon: node2.icon,
             x: node2.x,
@@ -258725,7 +258831,7 @@ g.stateGroup line {
             };
           }
           log.debug("getData: mindmapRoot", mindmapRoot, config3);
-          this.assignSections(mindmapRoot);
+          this.assignSections(mindmapRoot, void 0, 0, config3.mindmap?.colorBy === "depth");
           const processedNodes = [];
           const processedEdges = [];
           this.flattenNodes(mindmapRoot, processedNodes);
@@ -258832,6 +258938,7 @@ g.stateGroup line {
         }
         for (let i4 = 0; i4 < options2.THEME_COLOR_LIMIT; i4++) {
           const sw = "" + (look === "neo" ? Math.max(10 - (i4 - 1) * 2, 2) : 17 - 3 * i4);
+          const neoLabel = theme === "redux" || theme === "redux-dark" ? options2.nodeBorder : options2["cScaleLabel" + (theme === "neutral" ? 1 : i4)];
           sections6 += `
     .section-${i4 - 1} rect, .section-${i4 - 1} path, .section-${i4 - 1} circle, .section-${i4 - 1} polygon, .section-${i4 - 1} path  {
       fill: ${options2["cScale" + i4]};
@@ -258871,8 +258978,9 @@ g.stateGroup line {
     [data-look="neo"].section-edge-${i4 - 1}{
       stroke: ${theme?.includes("redux") || theme === "neo-dark" ? options2.nodeBorder : options2["cScale" + i4]};
     }
-    [data-look="neo"].mindmap-node.section-${i4 - 1} text {
-     fill: ${theme === "redux" || theme === "redux-dark" ? options2.nodeBorder : options2["cScaleLabel" + (theme === "neutral" ? 1 : i4)]};
+    [data-look="neo"].mindmap-node.section-${i4 - 1} text, [data-look="neo"].mindmap-node.section-${i4 - 1} span {
+     fill: ${neoLabel};
+     color: ${neoLabel};
     }
     `;
         }
@@ -258895,6 +259003,7 @@ g.stateGroup line {
       getStyles16 = /* @__PURE__ */ __name((options2) => {
         const { theme } = options2;
         const svgId = options2.svgId;
+        const neoRootLabel = theme?.includes("redux") ? options2.nodeBorder : options2["cScaleLabel" + (theme === "neutral" ? 1 : 0)];
         const scopedDropShadow = options2.dropShadow ? options2.dropShadow.replace("url(#drop-shadow)", `url(${svgId}-drop-shadow)`) : "none";
         return `
   .edge {
@@ -258932,8 +259041,9 @@ g.stateGroup line {
   [data-look="neo"].mindmap-node.section-root rect, [data-look="neo"].mindmap-node.section-root path, [data-look="neo"].mindmap-node.section-root circle, [data-look="neo"].mindmap-node.section-root polygon  {
     fill: ${theme?.includes("redux") ? options2.mainBkg : options2.git0};
   }
-  [data-look="neo"].mindmap-node.section-root .text-inner-tspan {
-    fill:  ${theme?.includes("redux") ? options2.nodeBorder : options2["cScaleLabel" + (theme === "neutral" ? 1 : 0)]};
+  [data-look="neo"].mindmap-node.section-root .text-inner-tspan, [data-look="neo"].mindmap-node.section-root span {
+    fill: ${neoRootLabel};
+    color: ${neoRootLabel};
   }
   ${options2.useGradient && svgId && options2.mainBkg ? genGradient(options2.THEME_COLOR_LIMIT, svgId, options2.mainBkg) : ""}
 `;
@@ -258950,27 +259060,27 @@ g.stateGroup line {
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/kanban-definition-P3RFRI5V.mjs
-  var kanban_definition_P3RFRI5V_exports = {};
-  __export(kanban_definition_P3RFRI5V_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/kanban-definition-FNSA4HC5.mjs
+  var kanban_definition_FNSA4HC5_exports = {};
+  __export(kanban_definition_FNSA4HC5_exports, {
     diagram: () => diagram19
   });
   var parser18, kanban_default, nodes3, sections5, cnt2, elements, clear7, getSection, getSections5, getData, addNode, nodeType2, getType, setElementForId, decorateNode, type2Str, getLogger, getElementById2, db4, kanbanDb_default, draw18, kanbanRenderer_default, genSections3, getStyles17, styles_default15, diagram19;
-  var init_kanban_definition_P3RFRI5V = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/kanban-definition-P3RFRI5V.mjs"() {
+  var init_kanban_definition_FNSA4HC5 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/kanban-definition-FNSA4HC5.mjs"() {
       init_define_process_argv();
-      init_chunk_Z6ETV63D();
+      init_chunk_OYAV6JZA();
       init_chunk_5VM5RSS4();
       init_chunk_LNGE3PJU();
-      init_chunk_NTY3LDVX();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_HNE4Q36P();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_dist();
@@ -260722,16 +260832,16 @@ g.stateGroup line {
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/sankeyDiagram-UM26HJRW.mjs
-  var sankeyDiagram_UM26HJRW_exports = {};
-  __export(sankeyDiagram_UM26HJRW_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/sankeyDiagram-SY24JHO5.mjs
+  var sankeyDiagram_SY24JHO5_exports = {};
+  __export(sankeyDiagram_SY24JHO5_exports, {
     diagram: () => diagram20
   });
   var parser19, sankey_default, links2, nodes4, nodesMap, clear29, SankeyLink, addLink, SankeyNode, findOrCreateNode, getNodes, getLinks2, getGraph, sankeyDB_default, Uid, alignmentsMap, findCentralNodeLayer, draw19, sankeyRenderer_default, prepareTextForParsing, getStyles18, styles_default16, originalParse, diagram20;
-  var init_sankeyDiagram_UM26HJRW = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/sankeyDiagram-UM26HJRW.mjs"() {
+  var init_sankeyDiagram_SY24JHO5 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/sankeyDiagram-SY24JHO5.mjs"() {
       init_define_process_argv();
-      init_chunk_VPRB5NB3();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -261496,19 +261606,19 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-UMYRVEAY.mjs
-  var diagram_UMYRVEAY_exports = {};
-  __export(diagram_UMYRVEAY_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-I5XIIV2D.mjs
+  var diagram_I5XIIV2D_exports = {};
+  __export(diagram_I5XIIV2D_exports, {
     diagram: () => diagram21
   });
   var DEFAULT_PACKET_CONFIG, PacketDB, maxPacketSize, populate16, getNextFittingBlock, parser20, draw20, drawWord, renderer5, defaultPacketStyleOptions, styles2, diagram21;
-  var init_diagram_UMYRVEAY = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-UMYRVEAY.mjs"() {
+  var init_diagram_I5XIIV2D = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-I5XIIV2D.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -261734,9 +261844,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-YEKJPTXX.mjs
-  var diagram_YEKJPTXX_exports = {};
-  __export(diagram_YEKJPTXX_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-RJA3I4VV.mjs
+  var diagram_RJA3I4VV_exports = {};
+  __export(diagram_RJA3I4VV_exports, {
     diagram: () => diagram22
   });
   function drawCurves(g2, axes2, curves, minValue, maxValue, graticule, config3) {
@@ -261798,13 +261908,13 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     });
   }
   var defaultOptions, MAX_TICKS2, defaultRadarData, data4, DEFAULT_RADAR_CONFIG, getConfig23, getAxes, getCurves, getOptions2, setAxes, setCurves, computeCurveEntries, setOptions7, clear210, db5, populate17, parser21, draw21, drawFrame, drawGraticule, drawAxes2, renderer6, genIndexStyles, buildRadarStyleOptions, styles3, diagram22;
-  var init_diagram_YEKJPTXX = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-YEKJPTXX.mjs"() {
+  var init_diagram_RJA3I4VV = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-RJA3I4VV.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -262058,9 +262168,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/blockDiagram-E7TT5TSB.mjs
-  var blockDiagram_E7TT5TSB_exports = {};
-  __export(blockDiagram_E7TT5TSB_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/blockDiagram-RJAE7QA3.mjs
+  var blockDiagram_RJAE7QA3_exports = {};
+  __export(blockDiagram_RJAE7QA3_exports, {
     diagram: () => diagram23
   });
   function typeStr2Type(typeStr) {
@@ -262629,20 +262739,20 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   }
   var parser22, block_default, blockDatabase, edgeList, edgeCount, COLOR_KEYWORD, FILL_KEYWORD, BG_FILL, STYLECLASS_SEP, classes2, diagramId2, sanitizeText4, addStyleClass, addStyle2Node, setCssClass, nextColorIndex2, populateBlockDatabase, blocks, rootBlock, clear211, cnt3, generateId2, setHierarchy, getColumns, getBlocksFlat, getBlocks, getEdges, getBlock, setBlock, setDiagramId2, getDiagramId, getLogger2, getClasses5, db6, blockDB_default, genColor8, fade4, getStyles19, styles_default17, getMaxChildSize, getClasses22, draw23, blockRenderer_default, diagram23;
-  var init_blockDiagram_E7TT5TSB = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/blockDiagram-E7TT5TSB.mjs"() {
+  var init_blockDiagram_RJAE7QA3 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/blockDiagram-RJAE7QA3.mjs"() {
       init_define_process_argv();
       init_chunk_5VM5RSS4();
       init_chunk_DUW6YSOI();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_compat();
@@ -264158,9 +264268,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-PFPMY2P6.mjs
-  var diagram_PFPMY2P6_exports = {};
-  __export(diagram_PFPMY2P6_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-ODIL2UCW.mjs
+  var diagram_ODIL2UCW_exports = {};
+  __export(diagram_ODIL2UCW_exports, {
     diagram: () => diagram24
   });
   function isBoxDrawingFormat(lines) {
@@ -264327,15 +264437,15 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     return `${treeViewIcons.prefix}:${node2.nodeType === "directory" ? "folder" : "file"}`;
   }
   var ALL_BOX_CHARS, BRANCH_CHAR, DASH_CHAR, DECORATION_ONLY, METADATA_LINE, COMMENT_LINE, INDENT_UNIT, state3, clear212, getRoot, getCount, defaultConfig4, getConfig24, addNode2, db7, db_default, populate18, parser23, treeViewIcons, ICON_SIZE2, ICON_GAP, DESC_GAP, resolveNodeIcons, positionLabel4, positionLine, drawTree, draw24, renderer7, renderer_default2, defaultTreeViewDiagramStyles, styles4, styles_default18, diagram24;
-  var init_diagram_PFPMY2P6 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-PFPMY2P6.mjs"() {
+  var init_diagram_ODIL2UCW = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-ODIL2UCW.mjs"() {
       init_define_process_argv();
       init_chunk_2Q5K7J3B();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_HJ2JQQFS();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_YZO67HFG();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -272334,9 +272444,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/architectureDiagram-47P4ROYG.mjs
-  var architectureDiagram_47P4ROYG_exports = {};
-  __export(architectureDiagram_47P4ROYG_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/architectureDiagram-ZHVYKT53.mjs
+  var architectureDiagram_ZHVYKT53_exports = {};
+  __export(architectureDiagram_ZHVYKT53_exports, {
     diagram: () => diagram25
   });
   function withSeededRandom(seed, fn3) {
@@ -272783,15 +272893,15 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     });
   }
   var import_cytoscape_fcose, ArchitectureDirectionName, ArchitectureDirectionArrow, ArchitectureDirectionArrowShift, getOppositeArchitectureDirection, isArchitectureDirection, isArchitectureDirectionX, isArchitectureDirectionY, isArchitectureDirectionXY, isArchitecturePairXY, isValidArchitectureDirectionPair, getArchitectureDirectionPair, shiftPositionByArchitectureDirectionPair, getArchitectureDirectionXYFactors, getArchitectureDirectionAlignment, isArchitectureService, isArchitectureJunction, architectureGroupAlignmentKey, edgeData, nodeData, DEFAULT_ARCHITECTURE_CONFIG, ArchitectureDB, populateDb2, parser24, getStyles20, architectureStyles_default, wrapIcon, architectureIcons, drawEdges, drawGroups, drawServices, drawJunctions, draw25, renderer8, diagram25;
-  var init_architectureDiagram_47P4ROYG = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/architectureDiagram-47P4ROYG.mjs"() {
+  var init_architectureDiagram_ZHVYKT53 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/architectureDiagram-ZHVYKT53.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -273611,9 +273721,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-ZIFT7M5P.mjs
-  var diagram_ZIFT7M5P_exports = {};
-  __export(diagram_ZIFT7M5P_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-PFBEJUXE.mjs
+  var diagram_PFBEJUXE_exports = {};
+  __export(diagram_PFBEJUXE_exports, {
     diagram: () => diagram26
   });
   function reset4() {
@@ -274109,12 +274219,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     };
   }
   var PositionFrameKind, FramePositionedKind, PositionRelationKind, RelationPositionedKind, setOptions8, getOptions3, clear213, DEFAULT_EVENTMODELING_CONFIG, getConfig32, store, diagramProps, initial, deciders, evolvers, db8, parser25, DEFAULT_CONFIG, DEFAULT_EVENTMODELING_CONFIG2, draw26, renderer_default3, getStyles21, styles_default19, diagram26;
-  var init_diagram_ZIFT7M5P = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-ZIFT7M5P.mjs"() {
+  var init_diagram_PFBEJUXE = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-PFBEJUXE.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -274283,18 +274393,18 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/ishikawaDiagram-K3B6WC7H.mjs
-  var ishikawaDiagram_K3B6WC7H_exports = {};
-  __export(ishikawaDiagram_K3B6WC7H_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/ishikawaDiagram-HPEHV2GE.mjs
+  var ishikawaDiagram_HPEHV2GE_exports = {};
+  __export(ishikawaDiagram_HPEHV2GE_exports, {
     diagram: () => diagram27
   });
   var parser26, ishikawa_default, IshikawaDB, FONT_SIZE_DEFAULT, SPINE_BASE_LENGTH, BONE_STUB, BONE_BASE, BONE_PER_CHILD, ANGLE, COS_A, SIN_A, applyPaddedViewBox, draw27, sideStats, drawHead, flattenTree, drawCauseLabel, drawArrowMarker, drawBranch, splitLines2, wrapText, drawMultilineText, lerp, drawLine, renderer9, getStyles22, ishikawaStyles_default, diagram27;
-  var init_ishikawaDiagram_K3B6WC7H = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/ishikawaDiagram-K3B6WC7H.mjs"() {
+  var init_ishikawaDiagram_HPEHV2GE = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/ishikawaDiagram-HPEHV2GE.mjs"() {
       init_define_process_argv();
-      init_chunk_Z6ETV63D();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_rough_esm();
@@ -276729,9 +276839,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/vennDiagram-BLWOH2XV.mjs
-  var vennDiagram_BLWOH2XV_exports = {};
-  __export(vennDiagram_BLWOH2XV_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/vennDiagram-Q3Y3IDCW.mjs
+  var vennDiagram_Q3Y3IDCW_exports = {};
+  __export(vennDiagram_Q3Y3IDCW_exports, {
     diagram: () => diagram28
   });
   function getConfig25() {
@@ -276844,12 +276954,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     return synthetic.length > 0 ? [...subsets2, ...synthetic] : subsets2;
   }
   var parser27, venn_default, subsets, textNodes, styleEntries, knownSets, currentSets, indentMode, addSubsetData, getSubsetData, normalizeText, normalizeStyleValue, addTextData, addStyleData, getStyleData, normalizeIdentifierList, validateUnionIdentifiers, getTextData, getCurrentSets, getIndentMode, setIndentMode, DEFAULT_VENN_CONFIG, customClear, db9, getStyles23, styles_default20, draw28, renderer10, diagram28;
-  var init_vennDiagram_BLWOH2XV = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/vennDiagram-BLWOH2XV.mjs"() {
+  var init_vennDiagram_Q3Y3IDCW = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/vennDiagram-Q3Y3IDCW.mjs"() {
       init_define_process_argv();
-      init_chunk_Z6ETV63D();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_src32();
@@ -277842,9 +277952,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-OVF4WLC6.mjs
-  var diagram_OVF4WLC6_exports = {};
-  __export(diagram_OVF4WLC6_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/diagram-CBK3MWTC.mjs
+  var diagram_CBK3MWTC_exports = {};
+  __export(diagram_CBK3MWTC_exports, {
     diagram: () => diagram29
   });
   function buildHierarchy(items) {
@@ -277885,15 +277995,15 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     return root4;
   }
   var TreeMapDB, populate19, getItemName, parser28, DEFAULT_INNER_PADDING, SECTION_INNER_PADDING, SECTION_HEADER_HEIGHT, draw29, getClasses6, renderer11, defaultTreemapStyleOptions, getStyles24, styles_default21, diagram29;
-  var init_diagram_OVF4WLC6 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-OVF4WLC6.mjs"() {
+  var init_diagram_CBK3MWTC = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/diagram-CBK3MWTC.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_KQW6MTUR();
-      init_chunk_4EA7E6EY();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_VQ5W62QI();
+      init_chunk_UHW7PFBP();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -285492,9 +285602,9 @@ Make sure that all grammar rule definitions are done before 'performSelfAnalysis
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/usecaseDiagram-VIAY4XPW.mjs
-  var usecaseDiagram_VIAY4XPW_exports = {};
-  __export(usecaseDiagram_VIAY4XPW_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/usecaseDiagram-WPOLBNNX.mjs
+  var usecaseDiagram_WPOLBNNX_exports = {};
+  __export(usecaseDiagram_WPOLBNNX_exports, {
     diagram: () => diagram30
   });
   function runChevrotainParse(config3, input) {
@@ -285551,23 +285661,23 @@ Make sure that all grammar rule definitions are done before 'performSelfAnalysis
     };
   }
   var isKnownLocation, ARROW_TYPE, DEFAULT_DIRECTION, DEFAULT_USECASE_CONFIG, createModel, assertCompleteModel, state4, getConfig33, getAST, commit2, clear214, getActors2, getActor, getUseCases, getUseCase, getSystemBoundaries, getSystemBoundary, getRelationships, getNotes, getNote, getJsonNodes, getJsonNode, getClassDefs, getClassDef, getDirection3, getCompiledStyles, escapeJsonPointerPart, displayJsonScalar, flattenJsonRows, actorShape, useCaseShape, associationMarkers, relationshipVisuals, animationClasses, classNames, getData2, db10, matchMarkdownString, matchComment, isIndentedLineStart, matchAccessibilityLine, matchAccDescrBlock, matchJsonObject, matchStereotypeText, LabelText, Word, NumberLiteral2, Identifier, WhiteSpace, MarkdownString, UnclosedMarkdownString, Comment, NewLine, AccDescrBlock, accTitleLinePattern, accDescrLinePattern, AccTitleLine, AccDescrLine, JsonDeclarationStart, JsonObjectLiteral, UnclosedJsonObjectLiteral, keyword, Usecase, Actor, SystemBoundary, End, Direction2, Td, Tb, Bt, Lr, Rl, Note2, For, Json, ClassDef, Class, Style3, Include, Extend, True, False, Generalization, DependencyArrow, StereotypeStart, StereotypeEnd, StereotypeText, UnclosedStereotypeText, ClassSeparator, ForwardSolid, BackwardSolid, ForwardCircle, BackwardCircle, ForwardCross, BackwardCross, MarkerlessSolid, MetadataStart, At, LeftBrace, RightBrace, LeftBracket, RightBracket, LeftParen, RightParen, Comma, Colon, HashColor, PlainString, CssIdentifier, CssEscapedComma, Dash, Dot, Percent, CssPunctuation, LabelPunctuation, LabelSymbol, defaultModeTokens, usecaseLexerModes, usecaseTokens, usecaseLexer, isLabelToken, forbiddenPlantUmlStatements, UsecaseParser, usecaseParser, UsecaseJsonError, locationAtOffset, locationFromErrorMessage, JsonWalkError, PropertyOrderCollector, actorNode, useCaseNode, noteNode, jsonNode, relationshipEdge, noteEdge, buildUsecaseGraphAST, locationText, labelSuffix, generatedFrom, pushUnique, UsecaseModelBuilder, BaseVisitor, UsecaseVisitor, usecaseVisitor, parser29, USECASE_MARKERS, ACTOR_SHAPES, usecaseDomId, usecaseNodeDomId, getAccessibleLabel, getUsecaseNodeAccessibleName, getUsecaseBoundaryAccessibleName, getUsecaseEdgeAccessibleName, escapePlainLabel, escapeMarkdownMarkers, prepareUsecaseLayoutData, annotateUsecaseElements, applyUsecaseFonts, draw30, renderer12, roleColors, genColor9, getStyles25, styles_default23, diagram30;
-  var init_usecaseDiagram_VIAY4XPW = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/usecaseDiagram-VIAY4XPW.mjs"() {
+  var init_usecaseDiagram_WPOLBNNX = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/usecaseDiagram-WPOLBNNX.mjs"() {
       init_define_process_argv();
       init_chunk_XXDRQBXY();
-      init_chunk_KQW6MTUR();
-      init_chunk_SVEVUXB4();
+      init_chunk_VQ5W62QI();
+      init_chunk_EJLWFMJV();
       init_chunk_DUW6YSOI();
-      init_chunk_NTY3LDVX();
-      init_chunk_2BW5OAIV();
-      init_chunk_DBDB3WZW();
-      init_chunk_XC4XBNZT();
-      init_chunk_4EA7E6EY();
-      init_chunk_E2ZNV5FY();
-      init_chunk_HJ2JQQFS();
+      init_chunk_HNE4Q36P();
+      init_chunk_WQQL4CDK();
+      init_chunk_ZAUX2LTX();
+      init_chunk_HAGFOTED();
+      init_chunk_UHW7PFBP();
+      init_chunk_AQDTSKZB();
+      init_chunk_YZO67HFG();
       init_chunk_J5ZVWO5B();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_api5();
@@ -289430,9 +289540,9 @@ ${isHandDrawn ? "" : `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/wardleyDiagram-YMQ3BMBF.mjs
-  var wardleyDiagram_YMQ3BMBF_exports = {};
-  __export(wardleyDiagram_YMQ3BMBF_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/wardleyDiagram-IVAIDKWA.mjs
+  var wardleyDiagram_IVAIDKWA_exports = {};
+  __export(wardleyDiagram_IVAIDKWA_exports, {
     diagram: () => diagram31
   });
   function getConfig34() {
@@ -289520,13 +289630,13 @@ ${isHandDrawn ? "" : `
     clear();
   }
   var toPercent, toCoordinates, getFlowFromPort, extractFlowFromArrow, populateDb3, parser30, WardleyBuilder, builder, wardleyDb_default, DEFAULT_STAGES, getTheme, getConfigValues, draw31, wardleyRenderer_default, styles5, diagram31;
-  var init_wardleyDiagram_YMQ3BMBF = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/wardleyDiagram-YMQ3BMBF.mjs"() {
+  var init_wardleyDiagram_IVAIDKWA = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/wardleyDiagram-IVAIDKWA.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -290418,9 +290528,9 @@ ${isHandDrawn ? "" : `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/cynefinDiagram-3GCD6N5R.mjs
-  var cynefinDiagram_3GCD6N5R_exports = {};
-  __export(cynefinDiagram_3GCD6N5R_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/cynefinDiagram-WF24UDRP.mjs
+  var cynefinDiagram_WF24UDRP_exports = {};
+  __export(cynefinDiagram_WF24UDRP_exports, {
     diagram: () => diagram32
   });
   function seededRandom(seed) {
@@ -290518,13 +290628,13 @@ ${isHandDrawn ? "" : `
     ].join(" ");
   }
   var createDefaultData, data5, getDomains, getTransitions, setDomains, setTransitions, getConfig26, clear216, db11, populate20, parser31, DOMAIN_META, getDomainLayouts, getCynefinDomainColors, MAX_CONFUSION_ITEMS, draw32, renderer13, getCynefinTheme, styles6, styles_default24, diagram32;
-  var init_cynefinDiagram_3GCD6N5R = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/cynefinDiagram-3GCD6N5R.mjs"() {
+  var init_cynefinDiagram_WF24UDRP = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/cynefinDiagram-WF24UDRP.mjs"() {
       init_define_process_argv();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_3YJQHVM4();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_7S6XSTFO();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -290884,13 +290994,13 @@ ${isHandDrawn ? "" : `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-AW2ZBBNX.mjs
+  // node_modules/mermaid/dist/chunks/mermaid.core/chunk-2E7WHVMD.mjs
   var diagramTitle2, accTitle2, accDescription2, rules, ruleMap, sanitizeText23, sanitizeAstNode, clear217, setTitle2, getTitle2, addRule, getRules, getRule2, setAccTitle2, getAccTitle2, setAccDescription2, getAccDescription2, setDiagramTitle2, getDiagramTitle2, db12, DEFAULT_RAILROAD_CONFIG, COLOR_VALUE_PATTERN, FONT_FAMILY_PATTERN, RAILROAD_STYLE_OPTION_KEYS, isRailroadStyleOptions, extractRailroadOverrides, extractThemeOverrides, sanitizeColorValue, sanitizeFontFamilyValue, sanitizeNumberValue, parseThemeFontSize, buildThemeDefaults, buildRailroadStyleOptions, getStyles26, PathBuilder, RailroadRenderer, configureRailroadSvgSize, draw33, renderer14;
-  var init_chunk_AW2ZBBNX = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-AW2ZBBNX.mjs"() {
+  var init_chunk_2E7WHVMD = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/chunk-2E7WHVMD.mjs"() {
       init_define_process_argv();
-      init_chunk_Z6ETV63D();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       diagramTitle2 = "";
@@ -291750,20 +291860,20 @@ ${isHandDrawn ? "" : `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/railroadDiagram-SM67HX2B.mjs
-  var railroadDiagram_SM67HX2B_exports = {};
-  __export(railroadDiagram_SM67HX2B_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/railroadDiagram-Y72NRBL7.mjs
+  var railroadDiagram_Y72NRBL7_exports = {};
+  __export(railroadDiagram_Y72NRBL7_exports, {
     default: () => railroadDiagram_default,
     diagram: () => diagram33
   });
   var langiumParser, transformExpression, transformRule, populateDb4, parser32, diagram33, railroadDiagram_default;
-  var init_railroadDiagram_SM67HX2B = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/railroadDiagram-SM67HX2B.mjs"() {
+  var init_railroadDiagram_Y72NRBL7 = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/railroadDiagram-Y72NRBL7.mjs"() {
       init_define_process_argv();
-      init_chunk_AW2ZBBNX();
+      init_chunk_2E7WHVMD();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -291856,19 +291966,19 @@ ${isHandDrawn ? "" : `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/ebnfDiagram-VR2GEFS7.mjs
-  var ebnfDiagram_VR2GEFS7_exports = {};
-  __export(ebnfDiagram_VR2GEFS7_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/ebnfDiagram-V4P3TTPT.mjs
+  var ebnfDiagram_V4P3TTPT_exports = {};
+  __export(ebnfDiagram_V4P3TTPT_exports, {
     diagram: () => diagram34
   });
   var langiumParser2, transformChoice, transformSequence, transformPrimary, transformPostfix, transformTerm, transformRule2, populateDb5, parser33, diagram34;
-  var init_ebnfDiagram_VR2GEFS7 = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/ebnfDiagram-VR2GEFS7.mjs"() {
+  var init_ebnfDiagram_V4P3TTPT = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/ebnfDiagram-V4P3TTPT.mjs"() {
       init_define_process_argv();
-      init_chunk_AW2ZBBNX();
+      init_chunk_2E7WHVMD();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -292006,19 +292116,19 @@ ${isHandDrawn ? "" : `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/abnfDiagram-YUKMZFIV.mjs
-  var abnfDiagram_YUKMZFIV_exports = {};
-  __export(abnfDiagram_YUKMZFIV_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/abnfDiagram-WEYOIA3C.mjs
+  var abnfDiagram_WEYOIA3C_exports = {};
+  __export(abnfDiagram_WEYOIA3C_exports, {
     diagram: () => diagram35
   });
   var langiumParser3, transformAlternation, transformConcatenation, parseRepeat, transformElement, transformPrimary2, transformRule3, populateDb6, parser34, diagram35;
-  var init_abnfDiagram_YUKMZFIV = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/abnfDiagram-YUKMZFIV.mjs"() {
+  var init_abnfDiagram_WEYOIA3C = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/abnfDiagram-WEYOIA3C.mjs"() {
       init_define_process_argv();
-      init_chunk_AW2ZBBNX();
+      init_chunk_2E7WHVMD();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -292136,19 +292246,19 @@ ${isHandDrawn ? "" : `
     }
   });
 
-  // node_modules/mermaid/dist/chunks/mermaid.core/pegDiagram-BGZESJAR.mjs
-  var pegDiagram_BGZESJAR_exports = {};
-  __export(pegDiagram_BGZESJAR_exports, {
+  // node_modules/mermaid/dist/chunks/mermaid.core/pegDiagram-ECIUJNBX.mjs
+  var pegDiagram_ECIUJNBX_exports = {};
+  __export(pegDiagram_ECIUJNBX_exports, {
     diagram: () => diagram36
   });
   var langiumParser4, transformOrderedChoice, transformSequence2, transformPrefix, nodeToLabel, transformSuffix, transformPrimary3, transformRule4, populateDb7, parser35, diagram36;
-  var init_pegDiagram_BGZESJAR = __esm({
-    "node_modules/mermaid/dist/chunks/mermaid.core/pegDiagram-BGZESJAR.mjs"() {
+  var init_pegDiagram_ECIUJNBX = __esm({
+    "node_modules/mermaid/dist/chunks/mermaid.core/pegDiagram-ECIUJNBX.mjs"() {
       init_define_process_argv();
-      init_chunk_AW2ZBBNX();
+      init_chunk_2E7WHVMD();
       init_chunk_JWPE2WC7();
-      init_chunk_Z6ETV63D();
-      init_chunk_VPRB5NB3();
+      init_chunk_OYAV6JZA();
+      init_chunk_DSNLSHJZ();
       init_chunk_X3CZISLH();
       init_chunk_Y2CYZVJY();
       init_mermaid_parser_core();
@@ -306274,24 +306384,24 @@ ${isHandDrawn ? "" : `
   init_katex();
 
   // node_modules/katex/dist/katex.css
-  var katex_default = '/* stylelint-disable font-family-no-missing-generic-family-keyword */\n@font-face {\n  font-family: "KaTeX_AMS";\n  src: url(fonts/KaTeX_AMS-Regular.woff2) format("woff2"), url(fonts/KaTeX_AMS-Regular.woff) format("woff"), url(fonts/KaTeX_AMS-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Caligraphic";\n  src: url(fonts/KaTeX_Caligraphic-Bold.woff2) format("woff2"), url(fonts/KaTeX_Caligraphic-Bold.woff) format("woff"), url(fonts/KaTeX_Caligraphic-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Caligraphic";\n  src: url(fonts/KaTeX_Caligraphic-Regular.woff2) format("woff2"), url(fonts/KaTeX_Caligraphic-Regular.woff) format("woff"), url(fonts/KaTeX_Caligraphic-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Fraktur";\n  src: url(fonts/KaTeX_Fraktur-Bold.woff2) format("woff2"), url(fonts/KaTeX_Fraktur-Bold.woff) format("woff"), url(fonts/KaTeX_Fraktur-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Fraktur";\n  src: url(fonts/KaTeX_Fraktur-Regular.woff2) format("woff2"), url(fonts/KaTeX_Fraktur-Regular.woff) format("woff"), url(fonts/KaTeX_Fraktur-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-Bold.woff2) format("woff2"), url(fonts/KaTeX_Main-Bold.woff) format("woff"), url(fonts/KaTeX_Main-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-BoldItalic.woff2) format("woff2"), url(fonts/KaTeX_Main-BoldItalic.woff) format("woff"), url(fonts/KaTeX_Main-BoldItalic.ttf) format("truetype");\n  font-weight: bold;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-Italic.woff2) format("woff2"), url(fonts/KaTeX_Main-Italic.woff) format("woff"), url(fonts/KaTeX_Main-Italic.ttf) format("truetype");\n  font-weight: normal;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-Regular.woff2) format("woff2"), url(fonts/KaTeX_Main-Regular.woff) format("woff"), url(fonts/KaTeX_Main-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Math";\n  src: url(fonts/KaTeX_Math-BoldItalic.woff2) format("woff2"), url(fonts/KaTeX_Math-BoldItalic.woff) format("woff"), url(fonts/KaTeX_Math-BoldItalic.ttf) format("truetype");\n  font-weight: bold;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Math";\n  src: url(fonts/KaTeX_Math-Italic.woff2) format("woff2"), url(fonts/KaTeX_Math-Italic.woff) format("woff"), url(fonts/KaTeX_Math-Italic.ttf) format("truetype");\n  font-weight: normal;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_SansSerif";\n  src: url(fonts/KaTeX_SansSerif-Bold.woff2) format("woff2"), url(fonts/KaTeX_SansSerif-Bold.woff) format("woff"), url(fonts/KaTeX_SansSerif-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_SansSerif";\n  src: url(fonts/KaTeX_SansSerif-Italic.woff2) format("woff2"), url(fonts/KaTeX_SansSerif-Italic.woff) format("woff"), url(fonts/KaTeX_SansSerif-Italic.ttf) format("truetype");\n  font-weight: normal;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_SansSerif";\n  src: url(fonts/KaTeX_SansSerif-Regular.woff2) format("woff2"), url(fonts/KaTeX_SansSerif-Regular.woff) format("woff"), url(fonts/KaTeX_SansSerif-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Script";\n  src: url(fonts/KaTeX_Script-Regular.woff2) format("woff2"), url(fonts/KaTeX_Script-Regular.woff) format("woff"), url(fonts/KaTeX_Script-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size1";\n  src: url(fonts/KaTeX_Size1-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size1-Regular.woff) format("woff"), url(fonts/KaTeX_Size1-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size2";\n  src: url(fonts/KaTeX_Size2-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size2-Regular.woff) format("woff"), url(fonts/KaTeX_Size2-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size3";\n  src: url(fonts/KaTeX_Size3-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size3-Regular.woff) format("woff"), url(fonts/KaTeX_Size3-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size4";\n  src: url(fonts/KaTeX_Size4-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size4-Regular.woff) format("woff"), url(fonts/KaTeX_Size4-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Typewriter";\n  src: url(fonts/KaTeX_Typewriter-Regular.woff2) format("woff2"), url(fonts/KaTeX_Typewriter-Regular.woff) format("woff"), url(fonts/KaTeX_Typewriter-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n/* stylelint-disable font-family-no-missing-generic-family-keyword */\n.katex {\n  font: normal 1.21em KaTeX_Main, math, Times New Roman, serif;\n  line-height: 1.2;\n  position: relative;\n  text-indent: 0;\n  text-rendering: auto;\n}\n.katex * {\n  -ms-high-contrast-adjust: none !important;\n}\n.katex * {\n  border-color: currentColor;\n}\n.katex .katex-version::after {\n  content: "0.18.10";\n}\n.katex .katex-mathml {\n  /* Accessibility hack to only show to screen readers\n   Found at: http://a11yproject.com/posts/how-to-hide-content/ */\n  position: absolute;\n  -webkit-clip-path: inset(50%);\n          clip-path: inset(50%);\n  padding: 0;\n  border: 0;\n  height: 1px;\n  width: 1px;\n  overflow: hidden;\n}\n.katex .katex-html {\n  /* \\newline is an empty block at top level, between .katex-base elements */\n}\n.katex .katex-html > .katex-newline {\n  display: block;\n}\n.katex .katex-base {\n  position: relative;\n  display: inline-block;\n  white-space: nowrap;\n  width: -webkit-min-content;\n  width: -moz-min-content;\n  width: min-content;\n}\n.katex .katex-strut {\n  display: inline-block;\n}\n.katex .textbf {\n  font-weight: bold;\n}\n.katex .textit {\n  font-style: italic;\n}\n.katex .textrm {\n  font-family: KaTeX_Main;\n}\n.katex .textsf {\n  font-family: KaTeX_SansSerif;\n}\n.katex .texttt {\n  font-family: KaTeX_Typewriter;\n}\n.katex .mathnormal {\n  font-family: KaTeX_Math;\n  font-style: italic;\n}\n.katex .mathit {\n  font-family: KaTeX_Main;\n  font-style: italic;\n}\n.katex .mathrm {\n  font-style: normal;\n}\n.katex .mathbf {\n  font-family: KaTeX_Main;\n  font-weight: bold;\n}\n.katex .boldsymbol {\n  font-family: KaTeX_Math;\n  font-weight: bold;\n  font-style: italic;\n}\n.katex .amsrm {\n  font-family: KaTeX_AMS;\n}\n.katex .mathbb,\n.katex .textbb {\n  font-family: KaTeX_AMS;\n}\n.katex .mathcal {\n  font-family: KaTeX_Caligraphic;\n}\n.katex .mathfrak,\n.katex .textfrak {\n  font-family: KaTeX_Fraktur;\n}\n.katex .mathboldfrak,\n.katex .textboldfrak {\n  font-family: KaTeX_Fraktur;\n  font-weight: bold;\n}\n.katex .mathtt {\n  font-family: KaTeX_Typewriter;\n}\n.katex .mathscr,\n.katex .textscr {\n  font-family: KaTeX_Script;\n}\n.katex .mathsf,\n.katex .textsf {\n  font-family: KaTeX_SansSerif;\n}\n.katex .mathboldsf,\n.katex .textboldsf {\n  font-family: KaTeX_SansSerif;\n  font-weight: bold;\n}\n.katex .mathsfit,\n.katex .mathitsf,\n.katex .textitsf {\n  font-family: KaTeX_SansSerif;\n  font-style: italic;\n}\n.katex .mainrm {\n  font-family: KaTeX_Main;\n  font-style: normal;\n}\n.katex .vlist-t {\n  display: inline-table;\n  table-layout: fixed;\n  border-collapse: collapse;\n}\n.katex .vlist-r {\n  display: table-row;\n}\n.katex .vlist {\n  display: table-cell;\n  vertical-align: bottom;\n  position: relative;\n}\n.katex .vlist > span {\n  display: block;\n  height: 0;\n  position: relative;\n}\n.katex .vlist > span > span {\n  display: inline-block;\n}\n.katex .vlist > span > .pstrut {\n  overflow: hidden;\n  width: 0;\n}\n.katex .vlist-t2 {\n  margin-right: -2px;\n}\n.katex .vlist-s {\n  display: table-cell;\n  vertical-align: bottom;\n  font-size: 1px;\n  width: 2px;\n  min-width: 2px;\n}\n.katex .katex-vbox {\n  display: inline-flex;\n  flex-direction: column;\n  align-items: baseline;\n}\n.katex .katex-thinbox {\n  display: inline-flex;\n  flex-direction: row;\n  width: 0;\n  max-width: 0;\n}\n.katex .msupsub {\n  text-align: left;\n}\n.katex .mfrac > span > span {\n  text-align: center;\n}\n.katex .mfrac .frac-line {\n  display: inline-block;\n  width: 100%;\n  border-bottom-style: solid;\n}\n.katex .mfrac .frac-line,\n.katex .katex-overline .overline-line,\n.katex .katex-underline .underline-line,\n.katex .katex-hline,\n.katex .katex-hdashline,\n.katex .katex-rule {\n  min-height: 1px;\n}\n.katex .mspace {\n  display: inline-block;\n}\n.katex .katex-smash {\n  display: inline;\n  line-height: 0;\n}\n.katex .llap,\n.katex .rlap,\n.katex .clap {\n  width: 0;\n  position: relative;\n}\n.katex .llap > .katex-inner,\n.katex .rlap > .katex-inner,\n.katex .clap > .katex-inner {\n  position: absolute;\n}\n.katex .llap > .katex-fix,\n.katex .rlap > .katex-fix,\n.katex .clap > .katex-fix {\n  display: inline-block;\n}\n.katex .llap > .katex-inner {\n  right: 0;\n}\n.katex .rlap > .katex-inner,\n.katex .clap > .katex-inner {\n  left: 0;\n}\n.katex .clap > .katex-inner > span {\n  margin-left: -50%;\n  margin-right: 50%;\n}\n.katex .katex-rule {\n  display: inline-block;\n  border: solid 0;\n  position: relative;\n}\n.katex .katex-overline .overline-line,\n.katex .katex-underline .underline-line,\n.katex .katex-hline {\n  display: inline-block;\n  width: 100%;\n  border-bottom-style: solid;\n}\n.katex .katex-hdashline {\n  display: inline-block;\n  width: 100%;\n  border-bottom-style: dashed;\n}\n.katex .sqrt > .katex-root {\n  /* These values are taken from the definition of `\\r@@t`,\n   `\\mkern 5mu` and `\\mkern -10mu`. */\n  /* stylelint-disable-next-line declaration-property-value-no-unknown */\n  margin-left: 0.2777777778em;\n  /* stylelint-disable-next-line declaration-property-value-no-unknown */\n  margin-right: -0.5555555556em;\n}\n.katex .katex-sizing.reset-size1.size1,\n.katex .fontsize-ensurer.reset-size1.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size1.size2,\n.katex .fontsize-ensurer.reset-size1.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size1.size3,\n.katex .fontsize-ensurer.reset-size1.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4em;\n}\n.katex .katex-sizing.reset-size1.size4,\n.katex .fontsize-ensurer.reset-size1.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1.6em;\n}\n.katex .katex-sizing.reset-size1.size5,\n.katex .fontsize-ensurer.reset-size1.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.8em;\n}\n.katex .katex-sizing.reset-size1.size6,\n.katex .fontsize-ensurer.reset-size1.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 2em;\n}\n.katex .katex-sizing.reset-size1.size7,\n.katex .fontsize-ensurer.reset-size1.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 2.4em;\n}\n.katex .katex-sizing.reset-size1.size8,\n.katex .fontsize-ensurer.reset-size1.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 2.88em;\n}\n.katex .katex-sizing.reset-size1.size9,\n.katex .fontsize-ensurer.reset-size1.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 3.456em;\n}\n.katex .katex-sizing.reset-size1.size10,\n.katex .fontsize-ensurer.reset-size1.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 4.148em;\n}\n.katex .katex-sizing.reset-size1.size11,\n.katex .fontsize-ensurer.reset-size1.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 4.976em;\n}\n.katex .katex-sizing.reset-size2.size1,\n.katex .fontsize-ensurer.reset-size2.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size2.size2,\n.katex .fontsize-ensurer.reset-size2.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size2.size3,\n.katex .fontsize-ensurer.reset-size2.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1666666667em;\n}\n.katex .katex-sizing.reset-size2.size4,\n.katex .fontsize-ensurer.reset-size2.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1.3333333333em;\n}\n.katex .katex-sizing.reset-size2.size5,\n.katex .fontsize-ensurer.reset-size2.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.5em;\n}\n.katex .katex-sizing.reset-size2.size6,\n.katex .fontsize-ensurer.reset-size2.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.6666666667em;\n}\n.katex .katex-sizing.reset-size2.size7,\n.katex .fontsize-ensurer.reset-size2.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 2em;\n}\n.katex .katex-sizing.reset-size2.size8,\n.katex .fontsize-ensurer.reset-size2.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 2.4em;\n}\n.katex .katex-sizing.reset-size2.size9,\n.katex .fontsize-ensurer.reset-size2.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 2.88em;\n}\n.katex .katex-sizing.reset-size2.size10,\n.katex .fontsize-ensurer.reset-size2.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 3.4566666667em;\n}\n.katex .katex-sizing.reset-size2.size11,\n.katex .fontsize-ensurer.reset-size2.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 4.1466666667em;\n}\n.katex .katex-sizing.reset-size3.size1,\n.katex .fontsize-ensurer.reset-size3.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.7142857143em;\n}\n.katex .katex-sizing.reset-size3.size2,\n.katex .fontsize-ensurer.reset-size3.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8571428571em;\n}\n.katex .katex-sizing.reset-size3.size3,\n.katex .fontsize-ensurer.reset-size3.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size3.size4,\n.katex .fontsize-ensurer.reset-size3.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1428571429em;\n}\n.katex .katex-sizing.reset-size3.size5,\n.katex .fontsize-ensurer.reset-size3.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2857142857em;\n}\n.katex .katex-sizing.reset-size3.size6,\n.katex .fontsize-ensurer.reset-size3.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4285714286em;\n}\n.katex .katex-sizing.reset-size3.size7,\n.katex .fontsize-ensurer.reset-size3.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.7142857143em;\n}\n.katex .katex-sizing.reset-size3.size8,\n.katex .fontsize-ensurer.reset-size3.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 2.0571428571em;\n}\n.katex .katex-sizing.reset-size3.size9,\n.katex .fontsize-ensurer.reset-size3.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 2.4685714286em;\n}\n.katex .katex-sizing.reset-size3.size10,\n.katex .fontsize-ensurer.reset-size3.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.9628571429em;\n}\n.katex .katex-sizing.reset-size3.size11,\n.katex .fontsize-ensurer.reset-size3.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 3.5542857143em;\n}\n.katex .katex-sizing.reset-size4.size1,\n.katex .fontsize-ensurer.reset-size4.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.625em;\n}\n.katex .katex-sizing.reset-size4.size2,\n.katex .fontsize-ensurer.reset-size4.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.75em;\n}\n.katex .katex-sizing.reset-size4.size3,\n.katex .fontsize-ensurer.reset-size4.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.875em;\n}\n.katex .katex-sizing.reset-size4.size4,\n.katex .fontsize-ensurer.reset-size4.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size4.size5,\n.katex .fontsize-ensurer.reset-size4.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.125em;\n}\n.katex .katex-sizing.reset-size4.size6,\n.katex .fontsize-ensurer.reset-size4.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.25em;\n}\n.katex .katex-sizing.reset-size4.size7,\n.katex .fontsize-ensurer.reset-size4.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.5em;\n}\n.katex .katex-sizing.reset-size4.size8,\n.katex .fontsize-ensurer.reset-size4.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.8em;\n}\n.katex .katex-sizing.reset-size4.size9,\n.katex .fontsize-ensurer.reset-size4.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 2.16em;\n}\n.katex .katex-sizing.reset-size4.size10,\n.katex .fontsize-ensurer.reset-size4.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.5925em;\n}\n.katex .katex-sizing.reset-size4.size11,\n.katex .fontsize-ensurer.reset-size4.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 3.11em;\n}\n.katex .katex-sizing.reset-size5.size1,\n.katex .fontsize-ensurer.reset-size5.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5555555556em;\n}\n.katex .katex-sizing.reset-size5.size2,\n.katex .fontsize-ensurer.reset-size5.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6666666667em;\n}\n.katex .katex-sizing.reset-size5.size3,\n.katex .fontsize-ensurer.reset-size5.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.7777777778em;\n}\n.katex .katex-sizing.reset-size5.size4,\n.katex .fontsize-ensurer.reset-size5.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8888888889em;\n}\n.katex .katex-sizing.reset-size5.size5,\n.katex .fontsize-ensurer.reset-size5.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size5.size6,\n.katex .fontsize-ensurer.reset-size5.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1111111111em;\n}\n.katex .katex-sizing.reset-size5.size7,\n.katex .fontsize-ensurer.reset-size5.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.3333333333em;\n}\n.katex .katex-sizing.reset-size5.size8,\n.katex .fontsize-ensurer.reset-size5.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.6em;\n}\n.katex .katex-sizing.reset-size5.size9,\n.katex .fontsize-ensurer.reset-size5.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.92em;\n}\n.katex .katex-sizing.reset-size5.size10,\n.katex .fontsize-ensurer.reset-size5.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.3044444444em;\n}\n.katex .katex-sizing.reset-size5.size11,\n.katex .fontsize-ensurer.reset-size5.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 2.7644444444em;\n}\n.katex .katex-sizing.reset-size6.size1,\n.katex .fontsize-ensurer.reset-size6.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5em;\n}\n.katex .katex-sizing.reset-size6.size2,\n.katex .fontsize-ensurer.reset-size6.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6em;\n}\n.katex .katex-sizing.reset-size6.size3,\n.katex .fontsize-ensurer.reset-size6.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.7em;\n}\n.katex .katex-sizing.reset-size6.size4,\n.katex .fontsize-ensurer.reset-size6.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8em;\n}\n.katex .katex-sizing.reset-size6.size5,\n.katex .fontsize-ensurer.reset-size6.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.9em;\n}\n.katex .katex-sizing.reset-size6.size6,\n.katex .fontsize-ensurer.reset-size6.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size6.size7,\n.katex .fontsize-ensurer.reset-size6.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size6.size8,\n.katex .fontsize-ensurer.reset-size6.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.44em;\n}\n.katex .katex-sizing.reset-size6.size9,\n.katex .fontsize-ensurer.reset-size6.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.728em;\n}\n.katex .katex-sizing.reset-size6.size10,\n.katex .fontsize-ensurer.reset-size6.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.074em;\n}\n.katex .katex-sizing.reset-size6.size11,\n.katex .fontsize-ensurer.reset-size6.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 2.488em;\n}\n.katex .katex-sizing.reset-size7.size1,\n.katex .fontsize-ensurer.reset-size7.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4166666667em;\n}\n.katex .katex-sizing.reset-size7.size2,\n.katex .fontsize-ensurer.reset-size7.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5em;\n}\n.katex .katex-sizing.reset-size7.size3,\n.katex .fontsize-ensurer.reset-size7.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5833333333em;\n}\n.katex .katex-sizing.reset-size7.size4,\n.katex .fontsize-ensurer.reset-size7.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6666666667em;\n}\n.katex .katex-sizing.reset-size7.size5,\n.katex .fontsize-ensurer.reset-size7.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.75em;\n}\n.katex .katex-sizing.reset-size7.size6,\n.katex .fontsize-ensurer.reset-size7.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size7.size7,\n.katex .fontsize-ensurer.reset-size7.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size7.size8,\n.katex .fontsize-ensurer.reset-size7.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size7.size9,\n.katex .fontsize-ensurer.reset-size7.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.44em;\n}\n.katex .katex-sizing.reset-size7.size10,\n.katex .fontsize-ensurer.reset-size7.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1.7283333333em;\n}\n.katex .katex-sizing.reset-size7.size11,\n.katex .fontsize-ensurer.reset-size7.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 2.0733333333em;\n}\n.katex .katex-sizing.reset-size8.size1,\n.katex .fontsize-ensurer.reset-size8.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3472222222em;\n}\n.katex .katex-sizing.reset-size8.size2,\n.katex .fontsize-ensurer.reset-size8.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4166666667em;\n}\n.katex .katex-sizing.reset-size8.size3,\n.katex .fontsize-ensurer.reset-size8.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4861111111em;\n}\n.katex .katex-sizing.reset-size8.size4,\n.katex .fontsize-ensurer.reset-size8.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5555555556em;\n}\n.katex .katex-sizing.reset-size8.size5,\n.katex .fontsize-ensurer.reset-size8.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.625em;\n}\n.katex .katex-sizing.reset-size8.size6,\n.katex .fontsize-ensurer.reset-size8.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6944444444em;\n}\n.katex .katex-sizing.reset-size8.size7,\n.katex .fontsize-ensurer.reset-size8.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size8.size8,\n.katex .fontsize-ensurer.reset-size8.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size8.size9,\n.katex .fontsize-ensurer.reset-size8.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size8.size10,\n.katex .fontsize-ensurer.reset-size8.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4402777778em;\n}\n.katex .katex-sizing.reset-size8.size11,\n.katex .fontsize-ensurer.reset-size8.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1.7277777778em;\n}\n.katex .katex-sizing.reset-size9.size1,\n.katex .fontsize-ensurer.reset-size9.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2893518519em;\n}\n.katex .katex-sizing.reset-size9.size2,\n.katex .fontsize-ensurer.reset-size9.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3472222222em;\n}\n.katex .katex-sizing.reset-size9.size3,\n.katex .fontsize-ensurer.reset-size9.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4050925926em;\n}\n.katex .katex-sizing.reset-size9.size4,\n.katex .fontsize-ensurer.reset-size9.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.462962963em;\n}\n.katex .katex-sizing.reset-size9.size5,\n.katex .fontsize-ensurer.reset-size9.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5208333333em;\n}\n.katex .katex-sizing.reset-size9.size6,\n.katex .fontsize-ensurer.reset-size9.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5787037037em;\n}\n.katex .katex-sizing.reset-size9.size7,\n.katex .fontsize-ensurer.reset-size9.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6944444444em;\n}\n.katex .katex-sizing.reset-size9.size8,\n.katex .fontsize-ensurer.reset-size9.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size9.size9,\n.katex .fontsize-ensurer.reset-size9.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size9.size10,\n.katex .fontsize-ensurer.reset-size9.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2002314815em;\n}\n.katex .katex-sizing.reset-size9.size11,\n.katex .fontsize-ensurer.reset-size9.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4398148148em;\n}\n.katex .katex-sizing.reset-size10.size1,\n.katex .fontsize-ensurer.reset-size10.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2410800386em;\n}\n.katex .katex-sizing.reset-size10.size2,\n.katex .fontsize-ensurer.reset-size10.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2892960463em;\n}\n.katex .katex-sizing.reset-size10.size3,\n.katex .fontsize-ensurer.reset-size10.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.337512054em;\n}\n.katex .katex-sizing.reset-size10.size4,\n.katex .fontsize-ensurer.reset-size10.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3857280617em;\n}\n.katex .katex-sizing.reset-size10.size5,\n.katex .fontsize-ensurer.reset-size10.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4339440694em;\n}\n.katex .katex-sizing.reset-size10.size6,\n.katex .fontsize-ensurer.reset-size10.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4821600771em;\n}\n.katex .katex-sizing.reset-size10.size7,\n.katex .fontsize-ensurer.reset-size10.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5785920926em;\n}\n.katex .katex-sizing.reset-size10.size8,\n.katex .fontsize-ensurer.reset-size10.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6943105111em;\n}\n.katex .katex-sizing.reset-size10.size9,\n.katex .fontsize-ensurer.reset-size10.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8331726133em;\n}\n.katex .katex-sizing.reset-size10.size10,\n.katex .fontsize-ensurer.reset-size10.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size10.size11,\n.katex .fontsize-ensurer.reset-size10.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1996142719em;\n}\n.katex .katex-sizing.reset-size11.size1,\n.katex .fontsize-ensurer.reset-size11.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2009646302em;\n}\n.katex .katex-sizing.reset-size11.size2,\n.katex .fontsize-ensurer.reset-size11.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2411575563em;\n}\n.katex .katex-sizing.reset-size11.size3,\n.katex .fontsize-ensurer.reset-size11.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2813504823em;\n}\n.katex .katex-sizing.reset-size11.size4,\n.katex .fontsize-ensurer.reset-size11.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3215434084em;\n}\n.katex .katex-sizing.reset-size11.size5,\n.katex .fontsize-ensurer.reset-size11.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3617363344em;\n}\n.katex .katex-sizing.reset-size11.size6,\n.katex .fontsize-ensurer.reset-size11.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4019292605em;\n}\n.katex .katex-sizing.reset-size11.size7,\n.katex .fontsize-ensurer.reset-size11.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4823151125em;\n}\n.katex .katex-sizing.reset-size11.size8,\n.katex .fontsize-ensurer.reset-size11.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 0.578778135em;\n}\n.katex .katex-sizing.reset-size11.size9,\n.katex .fontsize-ensurer.reset-size11.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6945337621em;\n}\n.katex .katex-sizing.reset-size11.size10,\n.katex .fontsize-ensurer.reset-size11.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8336012862em;\n}\n.katex .katex-sizing.reset-size11.size11,\n.katex .fontsize-ensurer.reset-size11.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .delimsizing.size1 {\n  font-family: KaTeX_Size1;\n}\n.katex .delimsizing.size2 {\n  font-family: KaTeX_Size2;\n}\n.katex .delimsizing.size3 {\n  font-family: KaTeX_Size3;\n}\n.katex .delimsizing.size4 {\n  font-family: KaTeX_Size4;\n}\n.katex .delimsizing.mult .delim-size1 > span {\n  font-family: KaTeX_Size1;\n}\n.katex .delimsizing.mult .delim-size4 > span {\n  font-family: KaTeX_Size4;\n}\n.katex .nulldelimiter {\n  display: inline-block;\n  width: 0.12em;\n}\n.katex .delimcenter {\n  position: relative;\n}\n.katex .op-symbol {\n  position: relative;\n}\n.katex .op-symbol.small-op {\n  font-family: KaTeX_Size1;\n}\n.katex .op-symbol.large-op {\n  font-family: KaTeX_Size2;\n}\n.katex .op-limits > .vlist-t {\n  text-align: center;\n}\n.katex .katex-accent > .vlist-t {\n  text-align: center;\n}\n.katex .katex-accent .accent-body {\n  position: relative;\n}\n.katex .katex-accent .accent-body:not(.accent-full) {\n  width: 0;\n}\n.katex .katex-overlay {\n  display: block;\n}\n.katex .mtable .vertical-separator {\n  display: inline-block;\n  min-width: 1px;\n}\n.katex .mtable .arraycolsep {\n  display: inline-block;\n}\n.katex .mtable .col-align-c > .vlist-t {\n  text-align: center;\n}\n.katex .mtable .col-align-l > .vlist-t {\n  text-align: left;\n}\n.katex .mtable .col-align-r > .vlist-t {\n  text-align: right;\n}\n.katex .svg-align {\n  text-align: left;\n}\n.katex svg {\n  display: block;\n  position: absolute;\n  width: 100%;\n  height: inherit;\n  fill: currentColor;\n  stroke: currentColor;\n}\n.katex svg path {\n  stroke: none;\n}\n.katex svg {\n  fill-rule: nonzero;\n  fill-opacity: 1;\n  stroke-width: 1;\n  stroke-linecap: butt;\n  stroke-linejoin: miter;\n  stroke-miterlimit: 4;\n  stroke-dasharray: none;\n  stroke-dashoffset: 0;\n  stroke-opacity: 1;\n}\n.katex img {\n  border-style: none;\n  min-width: 0;\n  min-height: 0;\n  max-width: none;\n  max-height: none;\n}\n.katex .katex-stretchy {\n  width: 100%;\n  display: block;\n  position: relative;\n  overflow: hidden;\n}\n.katex .katex-stretchy::before, .katex .katex-stretchy::after {\n  content: "";\n}\n.katex .hide-tail {\n  width: 100%;\n  position: relative;\n  overflow: hidden;\n}\n.katex .halfarrow-left {\n  position: absolute;\n  left: 0;\n  width: 50.2%;\n  overflow: hidden;\n}\n.katex .halfarrow-right {\n  position: absolute;\n  right: 0;\n  width: 50.2%;\n  overflow: hidden;\n}\n.katex .brace-left {\n  position: absolute;\n  left: 0;\n  width: 25.1%;\n  overflow: hidden;\n}\n.katex .brace-center {\n  position: absolute;\n  left: 25%;\n  width: 50%;\n  overflow: hidden;\n}\n.katex .brace-right {\n  position: absolute;\n  right: 0;\n  width: 25.1%;\n  overflow: hidden;\n}\n.katex .x-arrow-pad {\n  padding: 0 0.5em;\n}\n.katex .cd-arrow-pad {\n  padding: 0 0.55556em 0 0.27778em;\n}\n.katex .x-arrow,\n.katex .mover,\n.katex .munder {\n  text-align: center;\n}\n.katex .boxpad {\n  padding: 0 0.3em;\n}\n.katex .fbox,\n.katex .fcolorbox {\n  box-sizing: border-box;\n  border: 0.04em solid;\n}\n.katex .cancel-pad {\n  padding: 0 0.2em;\n}\n.katex .cancel-lap {\n  margin-left: -0.2em;\n  margin-right: -0.2em;\n}\n.katex .katex-sout {\n  border-bottom-style: solid;\n  border-bottom-width: 0.08em;\n}\n.katex .angl {\n  box-sizing: border-box;\n  border-top: 0.049em solid;\n  border-right: 0.049em solid;\n  margin-right: 0.03889em;\n}\n.katex .anglpad {\n  padding: 0 0.03889em;\n}\n.katex .reflectbox {\n  display: inline-block;\n  transform: scaleX(-1);\n}\n.katex .eqn-num::before {\n  counter-increment: katexEqnNo;\n  content: "(" counter(katexEqnNo) ")";\n}\n.katex .mml-eqn-num::before {\n  counter-increment: mmlEqnNo;\n  content: "(" counter(mmlEqnNo) ")";\n}\n.katex .mtr-glue {\n  width: 50%;\n}\n.katex .cd-vert-arrow {\n  display: inline-block;\n  position: relative;\n}\n.katex .cd-label-left {\n  display: inline-block;\n  position: absolute;\n  right: calc(50% + 0.3em);\n  text-align: left;\n}\n.katex .cd-label-right {\n  display: inline-block;\n  position: absolute;\n  left: calc(50% + 0.3em);\n  text-align: right;\n}\n\n.katex-display {\n  display: block;\n  margin: 1em 0;\n  text-align: center;\n}\n.katex-display > .katex {\n  display: block;\n  text-align: center;\n  white-space: nowrap;\n}\n.katex-display > .katex > .katex-html {\n  display: block;\n  position: relative;\n}\n.katex-display > .katex > .katex-html > .katex-tag {\n  position: absolute;\n  right: 0;\n}\n\n.katex-display.leqno > .katex > .katex-html > .katex-tag {\n  left: 0;\n  right: auto;\n}\n\n.katex-display.fleqn > .katex {\n  text-align: left;\n  padding-left: 2em;\n}\n\nbody {\n  counter-reset: katexEqnNo mmlEqnNo;\n}\n';
+  var katex_default = '/* stylelint-disable font-family-no-missing-generic-family-keyword */\n@font-face {\n  font-family: "KaTeX_AMS";\n  src: url(fonts/KaTeX_AMS-Regular.woff2) format("woff2"), url(fonts/KaTeX_AMS-Regular.woff) format("woff"), url(fonts/KaTeX_AMS-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Caligraphic";\n  src: url(fonts/KaTeX_Caligraphic-Bold.woff2) format("woff2"), url(fonts/KaTeX_Caligraphic-Bold.woff) format("woff"), url(fonts/KaTeX_Caligraphic-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Caligraphic";\n  src: url(fonts/KaTeX_Caligraphic-Regular.woff2) format("woff2"), url(fonts/KaTeX_Caligraphic-Regular.woff) format("woff"), url(fonts/KaTeX_Caligraphic-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Fraktur";\n  src: url(fonts/KaTeX_Fraktur-Bold.woff2) format("woff2"), url(fonts/KaTeX_Fraktur-Bold.woff) format("woff"), url(fonts/KaTeX_Fraktur-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Fraktur";\n  src: url(fonts/KaTeX_Fraktur-Regular.woff2) format("woff2"), url(fonts/KaTeX_Fraktur-Regular.woff) format("woff"), url(fonts/KaTeX_Fraktur-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-Bold.woff2) format("woff2"), url(fonts/KaTeX_Main-Bold.woff) format("woff"), url(fonts/KaTeX_Main-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-BoldItalic.woff2) format("woff2"), url(fonts/KaTeX_Main-BoldItalic.woff) format("woff"), url(fonts/KaTeX_Main-BoldItalic.ttf) format("truetype");\n  font-weight: bold;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-Italic.woff2) format("woff2"), url(fonts/KaTeX_Main-Italic.woff) format("woff"), url(fonts/KaTeX_Main-Italic.ttf) format("truetype");\n  font-weight: normal;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Main";\n  src: url(fonts/KaTeX_Main-Regular.woff2) format("woff2"), url(fonts/KaTeX_Main-Regular.woff) format("woff"), url(fonts/KaTeX_Main-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Math";\n  src: url(fonts/KaTeX_Math-BoldItalic.woff2) format("woff2"), url(fonts/KaTeX_Math-BoldItalic.woff) format("woff"), url(fonts/KaTeX_Math-BoldItalic.ttf) format("truetype");\n  font-weight: bold;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Math";\n  src: url(fonts/KaTeX_Math-Italic.woff2) format("woff2"), url(fonts/KaTeX_Math-Italic.woff) format("woff"), url(fonts/KaTeX_Math-Italic.ttf) format("truetype");\n  font-weight: normal;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_SansSerif";\n  src: url(fonts/KaTeX_SansSerif-Bold.woff2) format("woff2"), url(fonts/KaTeX_SansSerif-Bold.woff) format("woff"), url(fonts/KaTeX_SansSerif-Bold.ttf) format("truetype");\n  font-weight: bold;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_SansSerif";\n  src: url(fonts/KaTeX_SansSerif-Italic.woff2) format("woff2"), url(fonts/KaTeX_SansSerif-Italic.woff) format("woff"), url(fonts/KaTeX_SansSerif-Italic.ttf) format("truetype");\n  font-weight: normal;\n  font-style: italic;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_SansSerif";\n  src: url(fonts/KaTeX_SansSerif-Regular.woff2) format("woff2"), url(fonts/KaTeX_SansSerif-Regular.woff) format("woff"), url(fonts/KaTeX_SansSerif-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Script";\n  src: url(fonts/KaTeX_Script-Regular.woff2) format("woff2"), url(fonts/KaTeX_Script-Regular.woff) format("woff"), url(fonts/KaTeX_Script-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size1";\n  src: url(fonts/KaTeX_Size1-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size1-Regular.woff) format("woff"), url(fonts/KaTeX_Size1-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size2";\n  src: url(fonts/KaTeX_Size2-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size2-Regular.woff) format("woff"), url(fonts/KaTeX_Size2-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size3";\n  src: url(fonts/KaTeX_Size3-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size3-Regular.woff) format("woff"), url(fonts/KaTeX_Size3-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Size4";\n  src: url(fonts/KaTeX_Size4-Regular.woff2) format("woff2"), url(fonts/KaTeX_Size4-Regular.woff) format("woff"), url(fonts/KaTeX_Size4-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n@font-face {\n  font-family: "KaTeX_Typewriter";\n  src: url(fonts/KaTeX_Typewriter-Regular.woff2) format("woff2"), url(fonts/KaTeX_Typewriter-Regular.woff) format("woff"), url(fonts/KaTeX_Typewriter-Regular.ttf) format("truetype");\n  font-weight: normal;\n  font-style: normal;\n  font-display: block;\n}\n/* stylelint-disable font-family-no-missing-generic-family-keyword */\n.katex {\n  font: normal 1.21em KaTeX_Main, math, Times New Roman, serif;\n  line-height: 1.2;\n  position: relative;\n  text-indent: 0;\n  text-rendering: auto;\n}\n.katex * {\n  -ms-high-contrast-adjust: none !important;\n}\n.katex * {\n  border-color: currentColor;\n}\n.katex .katex-version::after {\n  content: "0.19.1";\n}\n.katex .katex-mathml {\n  /* Accessibility hack to only show to screen readers\n   Found at: http://a11yproject.com/posts/how-to-hide-content/ */\n  position: absolute;\n  -webkit-clip-path: inset(50%);\n          clip-path: inset(50%);\n  padding: 0;\n  border: 0;\n  height: 1px;\n  width: 1px;\n  overflow: hidden;\n}\n.katex .katex-html {\n  /* \\newline is an empty block at top level, between .katex-base elements */\n}\n.katex .katex-html > .katex-newline {\n  display: block;\n}\n.katex .katex-base {\n  position: relative;\n  display: inline-block;\n  white-space: nowrap;\n  width: -webkit-min-content;\n  width: -moz-min-content;\n  width: min-content;\n}\n.katex .katex-strut {\n  display: inline-block;\n}\n.katex .textbf {\n  font-weight: bold;\n}\n.katex .textit {\n  font-style: italic;\n}\n.katex .textrm {\n  font-family: KaTeX_Main;\n}\n.katex .textsf {\n  font-family: KaTeX_SansSerif;\n}\n.katex .texttt {\n  font-family: KaTeX_Typewriter;\n}\n.katex .mathnormal {\n  font-family: KaTeX_Math;\n  font-style: italic;\n}\n.katex .mathit {\n  font-family: KaTeX_Main;\n  font-style: italic;\n}\n.katex .mathrm {\n  font-style: normal;\n}\n.katex .mathbf {\n  font-family: KaTeX_Main;\n  font-weight: bold;\n}\n.katex .boldsymbol {\n  font-family: KaTeX_Math;\n  font-weight: bold;\n  font-style: italic;\n}\n.katex .amsrm {\n  font-family: KaTeX_AMS;\n}\n.katex .mathbb,\n.katex .textbb {\n  font-family: KaTeX_AMS;\n}\n.katex .mathcal {\n  font-family: KaTeX_Caligraphic;\n}\n.katex .mathfrak,\n.katex .textfrak {\n  font-family: KaTeX_Fraktur;\n}\n.katex .mathboldfrak,\n.katex .textboldfrak {\n  font-family: KaTeX_Fraktur;\n  font-weight: bold;\n}\n.katex .mathtt {\n  font-family: KaTeX_Typewriter;\n}\n.katex .mathscr,\n.katex .textscr {\n  font-family: KaTeX_Script;\n}\n.katex .mathsf,\n.katex .textsf {\n  font-family: KaTeX_SansSerif;\n}\n.katex .mathboldsf,\n.katex .textboldsf {\n  font-family: KaTeX_SansSerif;\n  font-weight: bold;\n}\n.katex .mathsfit,\n.katex .mathitsf,\n.katex .textitsf {\n  font-family: KaTeX_SansSerif;\n  font-style: italic;\n}\n.katex .mainrm {\n  font-family: KaTeX_Main;\n  font-style: normal;\n}\n.katex .vlist-t {\n  display: inline-table;\n  table-layout: fixed;\n  border-collapse: collapse;\n}\n.katex .vlist-r {\n  display: table-row;\n}\n.katex .vlist {\n  display: table-cell;\n  vertical-align: bottom;\n  position: relative;\n}\n.katex .vlist > span {\n  display: block;\n  height: 0;\n  position: relative;\n}\n.katex .vlist > span > span {\n  display: inline-block;\n}\n.katex .vlist > span > .pstrut {\n  overflow: hidden;\n  width: 0;\n}\n.katex .vlist-t2 {\n  margin-right: -2px;\n}\n.katex .vlist-s {\n  display: table-cell;\n  vertical-align: bottom;\n  font-size: 1px;\n  width: 2px;\n  min-width: 2px;\n}\n.katex .katex-vbox {\n  display: inline-flex;\n  flex-direction: column;\n  align-items: baseline;\n}\n.katex .katex-thinbox {\n  display: inline-flex;\n  flex-direction: row;\n  width: 0;\n  max-width: 0;\n}\n.katex .msupsub {\n  text-align: left;\n}\n.katex .mfrac > span > span {\n  text-align: center;\n}\n.katex .mfrac .frac-line {\n  display: inline-block;\n  width: 100%;\n  border-bottom-style: solid;\n}\n.katex .mfrac .frac-line,\n.katex .katex-overline .overline-line,\n.katex .katex-underline .underline-line,\n.katex .katex-hline,\n.katex .katex-hdashline,\n.katex .katex-rule {\n  min-height: 1px;\n}\n.katex .mspace {\n  display: inline-block;\n}\n.katex .katex-smash {\n  display: inline;\n  line-height: 0;\n}\n.katex .llap,\n.katex .rlap,\n.katex .clap {\n  width: 0;\n  position: relative;\n}\n.katex .llap > .katex-inner,\n.katex .rlap > .katex-inner,\n.katex .clap > .katex-inner {\n  position: absolute;\n}\n.katex .llap > .katex-fix,\n.katex .rlap > .katex-fix,\n.katex .clap > .katex-fix {\n  display: inline-block;\n}\n.katex .llap > .katex-inner {\n  right: 0;\n}\n.katex .rlap > .katex-inner,\n.katex .clap > .katex-inner {\n  left: 0;\n}\n.katex .clap > .katex-inner > span {\n  margin-left: -50%;\n  margin-right: 50%;\n}\n.katex .katex-rule {\n  display: inline-block;\n  border: solid 0;\n  position: relative;\n}\n.katex .katex-overline .overline-line,\n.katex .katex-underline .underline-line,\n.katex .katex-hline {\n  display: inline-block;\n  width: 100%;\n  border-bottom-style: solid;\n}\n.katex .katex-hdashline {\n  display: inline-block;\n  width: 100%;\n  border-bottom-style: dashed;\n}\n.katex .sqrt > .katex-root {\n  /* These values are taken from the definition of `\\r@@t`,\n   `\\mkern 5mu` and `\\mkern -10mu`. */\n  /* stylelint-disable-next-line declaration-property-value-no-unknown */\n  margin-left: 0.2777777778em;\n  /* stylelint-disable-next-line declaration-property-value-no-unknown */\n  margin-right: -0.5555555556em;\n}\n.katex .katex-sizing.reset-size1.size1,\n.katex .fontsize-ensurer.reset-size1.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size1.size2,\n.katex .fontsize-ensurer.reset-size1.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size1.size3,\n.katex .fontsize-ensurer.reset-size1.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4em;\n}\n.katex .katex-sizing.reset-size1.size4,\n.katex .fontsize-ensurer.reset-size1.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1.6em;\n}\n.katex .katex-sizing.reset-size1.size5,\n.katex .fontsize-ensurer.reset-size1.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.8em;\n}\n.katex .katex-sizing.reset-size1.size6,\n.katex .fontsize-ensurer.reset-size1.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 2em;\n}\n.katex .katex-sizing.reset-size1.size7,\n.katex .fontsize-ensurer.reset-size1.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 2.4em;\n}\n.katex .katex-sizing.reset-size1.size8,\n.katex .fontsize-ensurer.reset-size1.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 2.88em;\n}\n.katex .katex-sizing.reset-size1.size9,\n.katex .fontsize-ensurer.reset-size1.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 3.456em;\n}\n.katex .katex-sizing.reset-size1.size10,\n.katex .fontsize-ensurer.reset-size1.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 4.148em;\n}\n.katex .katex-sizing.reset-size1.size11,\n.katex .fontsize-ensurer.reset-size1.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 4.976em;\n}\n.katex .katex-sizing.reset-size2.size1,\n.katex .fontsize-ensurer.reset-size2.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size2.size2,\n.katex .fontsize-ensurer.reset-size2.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size2.size3,\n.katex .fontsize-ensurer.reset-size2.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1666666667em;\n}\n.katex .katex-sizing.reset-size2.size4,\n.katex .fontsize-ensurer.reset-size2.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1.3333333333em;\n}\n.katex .katex-sizing.reset-size2.size5,\n.katex .fontsize-ensurer.reset-size2.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.5em;\n}\n.katex .katex-sizing.reset-size2.size6,\n.katex .fontsize-ensurer.reset-size2.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.6666666667em;\n}\n.katex .katex-sizing.reset-size2.size7,\n.katex .fontsize-ensurer.reset-size2.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 2em;\n}\n.katex .katex-sizing.reset-size2.size8,\n.katex .fontsize-ensurer.reset-size2.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 2.4em;\n}\n.katex .katex-sizing.reset-size2.size9,\n.katex .fontsize-ensurer.reset-size2.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 2.88em;\n}\n.katex .katex-sizing.reset-size2.size10,\n.katex .fontsize-ensurer.reset-size2.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 3.4566666667em;\n}\n.katex .katex-sizing.reset-size2.size11,\n.katex .fontsize-ensurer.reset-size2.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 4.1466666667em;\n}\n.katex .katex-sizing.reset-size3.size1,\n.katex .fontsize-ensurer.reset-size3.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.7142857143em;\n}\n.katex .katex-sizing.reset-size3.size2,\n.katex .fontsize-ensurer.reset-size3.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8571428571em;\n}\n.katex .katex-sizing.reset-size3.size3,\n.katex .fontsize-ensurer.reset-size3.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size3.size4,\n.katex .fontsize-ensurer.reset-size3.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1428571429em;\n}\n.katex .katex-sizing.reset-size3.size5,\n.katex .fontsize-ensurer.reset-size3.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2857142857em;\n}\n.katex .katex-sizing.reset-size3.size6,\n.katex .fontsize-ensurer.reset-size3.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4285714286em;\n}\n.katex .katex-sizing.reset-size3.size7,\n.katex .fontsize-ensurer.reset-size3.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.7142857143em;\n}\n.katex .katex-sizing.reset-size3.size8,\n.katex .fontsize-ensurer.reset-size3.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 2.0571428571em;\n}\n.katex .katex-sizing.reset-size3.size9,\n.katex .fontsize-ensurer.reset-size3.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 2.4685714286em;\n}\n.katex .katex-sizing.reset-size3.size10,\n.katex .fontsize-ensurer.reset-size3.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.9628571429em;\n}\n.katex .katex-sizing.reset-size3.size11,\n.katex .fontsize-ensurer.reset-size3.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 3.5542857143em;\n}\n.katex .katex-sizing.reset-size4.size1,\n.katex .fontsize-ensurer.reset-size4.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.625em;\n}\n.katex .katex-sizing.reset-size4.size2,\n.katex .fontsize-ensurer.reset-size4.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.75em;\n}\n.katex .katex-sizing.reset-size4.size3,\n.katex .fontsize-ensurer.reset-size4.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.875em;\n}\n.katex .katex-sizing.reset-size4.size4,\n.katex .fontsize-ensurer.reset-size4.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size4.size5,\n.katex .fontsize-ensurer.reset-size4.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1.125em;\n}\n.katex .katex-sizing.reset-size4.size6,\n.katex .fontsize-ensurer.reset-size4.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.25em;\n}\n.katex .katex-sizing.reset-size4.size7,\n.katex .fontsize-ensurer.reset-size4.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.5em;\n}\n.katex .katex-sizing.reset-size4.size8,\n.katex .fontsize-ensurer.reset-size4.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.8em;\n}\n.katex .katex-sizing.reset-size4.size9,\n.katex .fontsize-ensurer.reset-size4.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 2.16em;\n}\n.katex .katex-sizing.reset-size4.size10,\n.katex .fontsize-ensurer.reset-size4.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.5925em;\n}\n.katex .katex-sizing.reset-size4.size11,\n.katex .fontsize-ensurer.reset-size4.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 3.11em;\n}\n.katex .katex-sizing.reset-size5.size1,\n.katex .fontsize-ensurer.reset-size5.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5555555556em;\n}\n.katex .katex-sizing.reset-size5.size2,\n.katex .fontsize-ensurer.reset-size5.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6666666667em;\n}\n.katex .katex-sizing.reset-size5.size3,\n.katex .fontsize-ensurer.reset-size5.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.7777777778em;\n}\n.katex .katex-sizing.reset-size5.size4,\n.katex .fontsize-ensurer.reset-size5.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8888888889em;\n}\n.katex .katex-sizing.reset-size5.size5,\n.katex .fontsize-ensurer.reset-size5.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size5.size6,\n.katex .fontsize-ensurer.reset-size5.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1111111111em;\n}\n.katex .katex-sizing.reset-size5.size7,\n.katex .fontsize-ensurer.reset-size5.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.3333333333em;\n}\n.katex .katex-sizing.reset-size5.size8,\n.katex .fontsize-ensurer.reset-size5.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.6em;\n}\n.katex .katex-sizing.reset-size5.size9,\n.katex .fontsize-ensurer.reset-size5.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.92em;\n}\n.katex .katex-sizing.reset-size5.size10,\n.katex .fontsize-ensurer.reset-size5.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.3044444444em;\n}\n.katex .katex-sizing.reset-size5.size11,\n.katex .fontsize-ensurer.reset-size5.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 2.7644444444em;\n}\n.katex .katex-sizing.reset-size6.size1,\n.katex .fontsize-ensurer.reset-size6.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5em;\n}\n.katex .katex-sizing.reset-size6.size2,\n.katex .fontsize-ensurer.reset-size6.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6em;\n}\n.katex .katex-sizing.reset-size6.size3,\n.katex .fontsize-ensurer.reset-size6.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.7em;\n}\n.katex .katex-sizing.reset-size6.size4,\n.katex .fontsize-ensurer.reset-size6.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8em;\n}\n.katex .katex-sizing.reset-size6.size5,\n.katex .fontsize-ensurer.reset-size6.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.9em;\n}\n.katex .katex-sizing.reset-size6.size6,\n.katex .fontsize-ensurer.reset-size6.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size6.size7,\n.katex .fontsize-ensurer.reset-size6.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size6.size8,\n.katex .fontsize-ensurer.reset-size6.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.44em;\n}\n.katex .katex-sizing.reset-size6.size9,\n.katex .fontsize-ensurer.reset-size6.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.728em;\n}\n.katex .katex-sizing.reset-size6.size10,\n.katex .fontsize-ensurer.reset-size6.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 2.074em;\n}\n.katex .katex-sizing.reset-size6.size11,\n.katex .fontsize-ensurer.reset-size6.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 2.488em;\n}\n.katex .katex-sizing.reset-size7.size1,\n.katex .fontsize-ensurer.reset-size7.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4166666667em;\n}\n.katex .katex-sizing.reset-size7.size2,\n.katex .fontsize-ensurer.reset-size7.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5em;\n}\n.katex .katex-sizing.reset-size7.size3,\n.katex .fontsize-ensurer.reset-size7.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5833333333em;\n}\n.katex .katex-sizing.reset-size7.size4,\n.katex .fontsize-ensurer.reset-size7.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6666666667em;\n}\n.katex .katex-sizing.reset-size7.size5,\n.katex .fontsize-ensurer.reset-size7.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.75em;\n}\n.katex .katex-sizing.reset-size7.size6,\n.katex .fontsize-ensurer.reset-size7.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size7.size7,\n.katex .fontsize-ensurer.reset-size7.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size7.size8,\n.katex .fontsize-ensurer.reset-size7.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size7.size9,\n.katex .fontsize-ensurer.reset-size7.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.44em;\n}\n.katex .katex-sizing.reset-size7.size10,\n.katex .fontsize-ensurer.reset-size7.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1.7283333333em;\n}\n.katex .katex-sizing.reset-size7.size11,\n.katex .fontsize-ensurer.reset-size7.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 2.0733333333em;\n}\n.katex .katex-sizing.reset-size8.size1,\n.katex .fontsize-ensurer.reset-size8.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3472222222em;\n}\n.katex .katex-sizing.reset-size8.size2,\n.katex .fontsize-ensurer.reset-size8.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4166666667em;\n}\n.katex .katex-sizing.reset-size8.size3,\n.katex .fontsize-ensurer.reset-size8.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4861111111em;\n}\n.katex .katex-sizing.reset-size8.size4,\n.katex .fontsize-ensurer.reset-size8.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5555555556em;\n}\n.katex .katex-sizing.reset-size8.size5,\n.katex .fontsize-ensurer.reset-size8.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.625em;\n}\n.katex .katex-sizing.reset-size8.size6,\n.katex .fontsize-ensurer.reset-size8.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6944444444em;\n}\n.katex .katex-sizing.reset-size8.size7,\n.katex .fontsize-ensurer.reset-size8.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size8.size8,\n.katex .fontsize-ensurer.reset-size8.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size8.size9,\n.katex .fontsize-ensurer.reset-size8.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2em;\n}\n.katex .katex-sizing.reset-size8.size10,\n.katex .fontsize-ensurer.reset-size8.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4402777778em;\n}\n.katex .katex-sizing.reset-size8.size11,\n.katex .fontsize-ensurer.reset-size8.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1.7277777778em;\n}\n.katex .katex-sizing.reset-size9.size1,\n.katex .fontsize-ensurer.reset-size9.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2893518519em;\n}\n.katex .katex-sizing.reset-size9.size2,\n.katex .fontsize-ensurer.reset-size9.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3472222222em;\n}\n.katex .katex-sizing.reset-size9.size3,\n.katex .fontsize-ensurer.reset-size9.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4050925926em;\n}\n.katex .katex-sizing.reset-size9.size4,\n.katex .fontsize-ensurer.reset-size9.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.462962963em;\n}\n.katex .katex-sizing.reset-size9.size5,\n.katex .fontsize-ensurer.reset-size9.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5208333333em;\n}\n.katex .katex-sizing.reset-size9.size6,\n.katex .fontsize-ensurer.reset-size9.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5787037037em;\n}\n.katex .katex-sizing.reset-size9.size7,\n.katex .fontsize-ensurer.reset-size9.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6944444444em;\n}\n.katex .katex-sizing.reset-size9.size8,\n.katex .fontsize-ensurer.reset-size9.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8333333333em;\n}\n.katex .katex-sizing.reset-size9.size9,\n.katex .fontsize-ensurer.reset-size9.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size9.size10,\n.katex .fontsize-ensurer.reset-size9.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1.2002314815em;\n}\n.katex .katex-sizing.reset-size9.size11,\n.katex .fontsize-ensurer.reset-size9.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1.4398148148em;\n}\n.katex .katex-sizing.reset-size10.size1,\n.katex .fontsize-ensurer.reset-size10.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2410800386em;\n}\n.katex .katex-sizing.reset-size10.size2,\n.katex .fontsize-ensurer.reset-size10.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2892960463em;\n}\n.katex .katex-sizing.reset-size10.size3,\n.katex .fontsize-ensurer.reset-size10.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.337512054em;\n}\n.katex .katex-sizing.reset-size10.size4,\n.katex .fontsize-ensurer.reset-size10.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3857280617em;\n}\n.katex .katex-sizing.reset-size10.size5,\n.katex .fontsize-ensurer.reset-size10.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4339440694em;\n}\n.katex .katex-sizing.reset-size10.size6,\n.katex .fontsize-ensurer.reset-size10.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4821600771em;\n}\n.katex .katex-sizing.reset-size10.size7,\n.katex .fontsize-ensurer.reset-size10.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.5785920926em;\n}\n.katex .katex-sizing.reset-size10.size8,\n.katex .fontsize-ensurer.reset-size10.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6943105111em;\n}\n.katex .katex-sizing.reset-size10.size9,\n.katex .fontsize-ensurer.reset-size10.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8331726133em;\n}\n.katex .katex-sizing.reset-size10.size10,\n.katex .fontsize-ensurer.reset-size10.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .katex-sizing.reset-size10.size11,\n.katex .fontsize-ensurer.reset-size10.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1.1996142719em;\n}\n.katex .katex-sizing.reset-size11.size1,\n.katex .fontsize-ensurer.reset-size11.size1 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2009646302em;\n}\n.katex .katex-sizing.reset-size11.size2,\n.katex .fontsize-ensurer.reset-size11.size2 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2411575563em;\n}\n.katex .katex-sizing.reset-size11.size3,\n.katex .fontsize-ensurer.reset-size11.size3 {\n  /* stylelint-disable-next-line */\n  font-size: 0.2813504823em;\n}\n.katex .katex-sizing.reset-size11.size4,\n.katex .fontsize-ensurer.reset-size11.size4 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3215434084em;\n}\n.katex .katex-sizing.reset-size11.size5,\n.katex .fontsize-ensurer.reset-size11.size5 {\n  /* stylelint-disable-next-line */\n  font-size: 0.3617363344em;\n}\n.katex .katex-sizing.reset-size11.size6,\n.katex .fontsize-ensurer.reset-size11.size6 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4019292605em;\n}\n.katex .katex-sizing.reset-size11.size7,\n.katex .fontsize-ensurer.reset-size11.size7 {\n  /* stylelint-disable-next-line */\n  font-size: 0.4823151125em;\n}\n.katex .katex-sizing.reset-size11.size8,\n.katex .fontsize-ensurer.reset-size11.size8 {\n  /* stylelint-disable-next-line */\n  font-size: 0.578778135em;\n}\n.katex .katex-sizing.reset-size11.size9,\n.katex .fontsize-ensurer.reset-size11.size9 {\n  /* stylelint-disable-next-line */\n  font-size: 0.6945337621em;\n}\n.katex .katex-sizing.reset-size11.size10,\n.katex .fontsize-ensurer.reset-size11.size10 {\n  /* stylelint-disable-next-line */\n  font-size: 0.8336012862em;\n}\n.katex .katex-sizing.reset-size11.size11,\n.katex .fontsize-ensurer.reset-size11.size11 {\n  /* stylelint-disable-next-line */\n  font-size: 1em;\n}\n.katex .delimsizing.size1 {\n  font-family: KaTeX_Size1;\n}\n.katex .delimsizing.size2 {\n  font-family: KaTeX_Size2;\n}\n.katex .delimsizing.size3 {\n  font-family: KaTeX_Size3;\n}\n.katex .delimsizing.size4 {\n  font-family: KaTeX_Size4;\n}\n.katex .delimsizing.mult .delim-size1 > span {\n  font-family: KaTeX_Size1;\n}\n.katex .delimsizing.mult .delim-size4 > span {\n  font-family: KaTeX_Size4;\n}\n.katex .nulldelimiter {\n  display: inline-block;\n  width: 0.12em;\n}\n.katex .delimcenter {\n  position: relative;\n}\n.katex .op-symbol {\n  position: relative;\n}\n.katex .op-symbol.small-op {\n  font-family: KaTeX_Size1;\n}\n.katex .op-symbol.large-op {\n  font-family: KaTeX_Size2;\n}\n.katex .op-limits > .vlist-t {\n  text-align: center;\n}\n.katex .katex-accent > .vlist-t {\n  text-align: center;\n}\n.katex .katex-accent .accent-body {\n  position: relative;\n}\n.katex .katex-accent .accent-body:not(.accent-full) {\n  width: 0;\n}\n.katex .katex-overlay {\n  display: block;\n}\n.katex .mtable .vertical-separator {\n  display: inline-block;\n  min-width: 1px;\n}\n.katex .mtable .arraycolsep {\n  display: inline-block;\n}\n.katex .mtable .col-align-c > .vlist-t {\n  text-align: center;\n}\n.katex .mtable .col-align-l > .vlist-t {\n  text-align: left;\n}\n.katex .mtable .col-align-r > .vlist-t {\n  text-align: right;\n}\n.katex .svg-align {\n  text-align: left;\n}\n.katex svg {\n  display: block;\n  position: absolute;\n  width: 100%;\n  height: inherit;\n  fill: currentColor;\n  stroke: currentColor;\n}\n.katex svg path {\n  stroke: none;\n}\n.katex svg {\n  fill-rule: nonzero;\n  fill-opacity: 1;\n  stroke-width: 1;\n  stroke-linecap: butt;\n  stroke-linejoin: miter;\n  stroke-miterlimit: 4;\n  stroke-dasharray: none;\n  stroke-dashoffset: 0;\n  stroke-opacity: 1;\n}\n.katex img {\n  border-style: none;\n  min-width: 0;\n  min-height: 0;\n  max-width: none;\n  max-height: none;\n}\n.katex .katex-stretchy {\n  width: 100%;\n  display: block;\n  position: relative;\n  overflow: hidden;\n}\n.katex .katex-stretchy::before, .katex .katex-stretchy::after {\n  content: "";\n}\n.katex .hide-tail {\n  width: 100%;\n  position: relative;\n  overflow: hidden;\n}\n.katex .halfarrow-left {\n  position: absolute;\n  left: 0;\n  width: 50.2%;\n  overflow: hidden;\n}\n.katex .halfarrow-right {\n  position: absolute;\n  right: 0;\n  width: 50.2%;\n  overflow: hidden;\n}\n.katex .brace-left {\n  position: absolute;\n  left: 0;\n  width: 25.1%;\n  overflow: hidden;\n}\n.katex .brace-center {\n  position: absolute;\n  left: 25%;\n  width: 50%;\n  overflow: hidden;\n}\n.katex .brace-right {\n  position: absolute;\n  right: 0;\n  width: 25.1%;\n  overflow: hidden;\n}\n.katex .x-arrow-pad {\n  padding: 0 0.5em;\n}\n.katex .cd-arrow-pad {\n  padding: 0 0.55556em 0 0.27778em;\n}\n.katex .x-arrow,\n.katex .mover,\n.katex .munder {\n  text-align: center;\n}\n.katex .boxpad {\n  padding: 0 0.3em;\n}\n.katex .fbox,\n.katex .fcolorbox {\n  box-sizing: border-box;\n  border: 0.04em solid;\n}\n.katex .cancel-pad {\n  padding: 0 0.2em;\n}\n.katex .cancel-lap {\n  margin-left: -0.2em;\n  margin-right: -0.2em;\n}\n.katex .katex-sout {\n  border-bottom-style: solid;\n  border-bottom-width: 0.08em;\n}\n.katex .angl {\n  box-sizing: border-box;\n  border-top: 0.049em solid;\n  border-right: 0.049em solid;\n  margin-right: 0.03889em;\n}\n.katex .anglpad {\n  padding: 0 0.03889em;\n}\n.katex .reflectbox {\n  display: inline-block;\n  transform: scaleX(-1);\n}\n.katex .eqn-num::before {\n  counter-increment: katexEqnNo;\n  content: "(" counter(katexEqnNo) ")";\n}\n.katex .mml-eqn-num::before {\n  counter-increment: mmlEqnNo;\n  content: "(" counter(mmlEqnNo) ")";\n}\n.katex .mtr-glue {\n  width: 50%;\n}\n.katex .cd-vert-arrow {\n  display: inline-block;\n  position: relative;\n}\n.katex .cd-label-left {\n  display: inline-block;\n  position: absolute;\n  right: calc(50% + 0.3em);\n  text-align: left;\n}\n.katex .cd-label-right {\n  display: inline-block;\n  position: absolute;\n  left: calc(50% + 0.3em);\n  text-align: right;\n}\n\n.katex-display {\n  display: block;\n  margin: 1em 0;\n  text-align: center;\n}\n.katex-display > .katex {\n  display: block;\n  text-align: center;\n  white-space: nowrap;\n}\n.katex-display > .katex > .katex-html {\n  display: block;\n  position: relative;\n}\n.katex-display > .katex > .katex-html > .katex-tag {\n  position: absolute;\n  right: 0;\n}\n\n.katex-display.leqno > .katex > .katex-html > .katex-tag {\n  left: 0;\n  right: auto;\n}\n\n.katex-display.fleqn > .katex {\n  text-align: left;\n  padding-left: 2em;\n}\n\nbody {\n  counter-reset: katexEqnNo mmlEqnNo;\n}\n';
 
   // node_modules/mermaid/dist/mermaid.core.mjs
   init_define_process_argv();
-  init_chunk_Z6ETV63D();
+  init_chunk_OYAV6JZA();
   init_chunk_LNGE3PJU();
-  init_chunk_SVEVUXB4();
+  init_chunk_EJLWFMJV();
   init_chunk_DUW6YSOI();
-  init_chunk_NTY3LDVX();
-  init_chunk_2BW5OAIV();
-  init_chunk_DBDB3WZW();
-  init_chunk_XC4XBNZT();
-  init_chunk_4EA7E6EY();
-  init_chunk_E2ZNV5FY();
-  init_chunk_HJ2JQQFS();
+  init_chunk_HNE4Q36P();
+  init_chunk_WQQL4CDK();
+  init_chunk_ZAUX2LTX();
+  init_chunk_HAGFOTED();
+  init_chunk_UHW7PFBP();
+  init_chunk_AQDTSKZB();
+  init_chunk_YZO67HFG();
   init_chunk_J5ZVWO5B();
-  init_chunk_3YJQHVM4();
-  init_chunk_VPRB5NB3();
+  init_chunk_7S6XSTFO();
+  init_chunk_DSNLSHJZ();
   init_chunk_X3CZISLH();
   init_chunk_Y2CYZVJY();
   init_esm();
@@ -306687,7 +306797,7 @@ ${isHandDrawn ? "" : `
     return /^\s*C4Context|C4Container|C4Component|C4Dynamic|C4Deployment/.test(txt);
   }, "detector");
   var loader2 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_c4Diagram_CRA5TL53(), c4Diagram_CRA5TL53_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_c4Diagram_XDPPPE54(), c4Diagram_XDPPPE54_exports));
     return { id: id3, diagram: diagram210 };
   }, "loader");
   var plugin = {
@@ -306699,7 +306809,7 @@ ${isHandDrawn ? "" : `
   var id22 = "flowchart-v2";
   var detector2 = /* @__PURE__ */ __name((txt) => /^\s*(graph|flowchart)/.test(txt), "detector");
   var loader22 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_flowDiagram_OXPTDLAJ(), flowDiagram_OXPTDLAJ_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_flowDiagram_IUGLLWBU(), flowDiagram_IUGLLWBU_exports));
     return { id: id22, diagram: diagram210 };
   }, "loader");
   var plugin2 = {
@@ -306713,7 +306823,7 @@ ${isHandDrawn ? "" : `
     return /^\s*agentflow-beta\b/.test(txt);
   }, "detector");
   var loader3 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_2UJZ2QOL(), diagram_2UJZ2QOL_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_TYUNFSNR(), diagram_TYUNFSNR_exports));
     return { id: id32, diagram: diagram210 };
   }, "loader");
   var plugin3 = {
@@ -306727,7 +306837,7 @@ ${isHandDrawn ? "" : `
     return /^\s*swimlane-beta\b/.test(txt);
   }, "detector");
   var loader4 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_swimlanesDiagram_K3J5GTZL(), swimlanesDiagram_K3J5GTZL_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_swimlanesDiagram_AYQRV4AK(), swimlanesDiagram_AYQRV4AK_exports));
     return { id: id4, diagram: diagram210 };
   }, "loader");
   var plugin4 = {
@@ -306741,7 +306851,7 @@ ${isHandDrawn ? "" : `
     return /^\s*erDiagram/.test(txt);
   }, "detector");
   var loader5 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_erDiagram_O2IAPWRE(), erDiagram_O2IAPWRE_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_erDiagram_KYQIGQAA(), erDiagram_KYQIGQAA_exports));
     return { id: id5, diagram: diagram210 };
   }, "loader");
   var plugin5 = {
@@ -306755,7 +306865,7 @@ ${isHandDrawn ? "" : `
     return /^\s*gitGraph/.test(txt);
   }, "detector");
   var loader6 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_gitGraphDiagram_XJZIOB7I(), gitGraphDiagram_XJZIOB7I_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_gitGraphDiagram_PDYL7XHY(), gitGraphDiagram_PDYL7XHY_exports));
     return { id: id6, diagram: diagram210 };
   }, "loader");
   var plugin6 = {
@@ -306769,7 +306879,7 @@ ${isHandDrawn ? "" : `
     return /^\s*gantt/.test(txt);
   }, "detector");
   var loader7 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_ganttDiagram_R7TSEDQI(), ganttDiagram_R7TSEDQI_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_ganttDiagram_R7GPNTJY(), ganttDiagram_R7GPNTJY_exports));
     return { id: id7, diagram: diagram210 };
   }, "loader");
   var plugin7 = {
@@ -306783,7 +306893,7 @@ ${isHandDrawn ? "" : `
     return /^\s*info/.test(txt);
   }, "detector");
   var loader8 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_infoDiagram_5W2HQ5XZ(), infoDiagram_5W2HQ5XZ_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_infoDiagram_MVDRKAX5(), infoDiagram_MVDRKAX5_exports));
     return { id: id8, diagram: diagram210 };
   }, "loader");
   var info = {
@@ -306796,7 +306906,7 @@ ${isHandDrawn ? "" : `
     return /^\s*pie/.test(txt);
   }, "detector");
   var loader9 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_pieDiagram_CAPJLFHJ(), pieDiagram_CAPJLFHJ_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_pieDiagram_GNMPY74T(), pieDiagram_GNMPY74T_exports));
     return { id: id9, diagram: diagram210 };
   }, "loader");
   var pie = {
@@ -306809,7 +306919,7 @@ ${isHandDrawn ? "" : `
     return /^\s*quadrantChart/.test(txt);
   }, "detector");
   var loader10 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_quadrantDiagram_GDMTTRAM(), quadrantDiagram_GDMTTRAM_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_quadrantDiagram_D57K4MC3(), quadrantDiagram_D57K4MC3_exports));
     return { id: id10, diagram: diagram210 };
   }, "loader");
   var plugin8 = {
@@ -306823,7 +306933,7 @@ ${isHandDrawn ? "" : `
     return /^\s*xychart(-beta)?/.test(txt);
   }, "detector");
   var loader11 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_xychartDiagram_TAQBALBS(), xychartDiagram_TAQBALBS_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_xychartDiagram_4URNHDU4(), xychartDiagram_4URNHDU4_exports));
     return { id: id11, diagram: diagram210 };
   }, "loader");
   var plugin9 = {
@@ -306837,7 +306947,7 @@ ${isHandDrawn ? "" : `
     return /^\s*requirement(Diagram)?/.test(txt);
   }, "detector");
   var loader12 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_requirementDiagram_X7JNWC4A(), requirementDiagram_X7JNWC4A_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_requirementDiagram_EQYSW5RA(), requirementDiagram_EQYSW5RA_exports));
     return { id: id12, diagram: diagram210 };
   }, "loader");
   var plugin10 = {
@@ -306851,7 +306961,7 @@ ${isHandDrawn ? "" : `
     return /^\s*sequenceDiagram/.test(txt);
   }, "detector");
   var loader13 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_sequenceDiagram_ZO4K6R2Y(), sequenceDiagram_ZO4K6R2Y_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_sequenceDiagram_BLEHNHQU(), sequenceDiagram_BLEHNHQU_exports));
     return { id: id13, diagram: diagram210 };
   }, "loader");
   var plugin11 = {
@@ -306863,7 +306973,7 @@ ${isHandDrawn ? "" : `
   var id14 = "classDiagram";
   var detector14 = /* @__PURE__ */ __name((txt) => /^\s*classDiagram/.test(txt), "detector");
   var loader14 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_classDiagram_v2_K4WV4PDN(), classDiagram_v2_K4WV4PDN_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_classDiagram_v2_4MYWR3UA(), classDiagram_v2_4MYWR3UA_exports));
     return { id: id14, diagram: diagram210 };
   }, "loader");
   var plugin12 = {
@@ -306875,7 +306985,7 @@ ${isHandDrawn ? "" : `
   var id15 = "stateDiagram";
   var detector15 = /* @__PURE__ */ __name((txt) => /^\s*stateDiagram/.test(txt), "detector");
   var loader15 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_stateDiagram_v2_TBUQTH76(), stateDiagram_v2_TBUQTH76_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_stateDiagram_v2_A6IESKWZ(), stateDiagram_v2_A6IESKWZ_exports));
     return { id: id15, diagram: diagram210 };
   }, "loader");
   var plugin13 = {
@@ -306889,7 +306999,7 @@ ${isHandDrawn ? "" : `
     return /^\s*journey/.test(txt);
   }, "detector");
   var loader16 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_journeyDiagram_COXZFDF6(), journeyDiagram_COXZFDF6_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_journeyDiagram_BOSHW7O7(), journeyDiagram_BOSHW7O7_exports));
     return { id: id16, diagram: diagram210 };
   }, "loader");
   var plugin14 = {
@@ -307004,7 +307114,7 @@ ${isHandDrawn ? "" : `
     return false;
   }, "detector");
   var loader17 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_flowDiagram_OXPTDLAJ(), flowDiagram_OXPTDLAJ_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_flowDiagram_IUGLLWBU(), flowDiagram_IUGLLWBU_exports));
     return { id: id17, diagram: diagram210 };
   }, "loader");
   var plugin15 = {
@@ -307018,7 +307128,7 @@ ${isHandDrawn ? "" : `
     return /^\s*timeline/.test(txt);
   }, "detector");
   var loader18 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_timeline_definition_YOQAKGHF(), timeline_definition_YOQAKGHF_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_timeline_definition_JXYKGLGB(), timeline_definition_JXYKGLGB_exports));
     return { id: id18, diagram: diagram210 };
   }, "loader");
   var plugin16 = {
@@ -307032,7 +307142,7 @@ ${isHandDrawn ? "" : `
     return /^\s*mindmap/.test(txt);
   }, "detector");
   var loader19 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_mindmap_definition_LZFPQGKD(), mindmap_definition_LZFPQGKD_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_mindmap_definition_6OY57UG3(), mindmap_definition_6OY57UG3_exports));
     return { id: id19, diagram: diagram210 };
   }, "loader");
   var plugin17 = {
@@ -307046,7 +307156,7 @@ ${isHandDrawn ? "" : `
     return /^\s*kanban/.test(txt);
   }, "detector");
   var loader20 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_kanban_definition_P3RFRI5V(), kanban_definition_P3RFRI5V_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_kanban_definition_FNSA4HC5(), kanban_definition_FNSA4HC5_exports));
     return { id: id20, diagram: diagram210 };
   }, "loader");
   var plugin18 = {
@@ -307060,7 +307170,7 @@ ${isHandDrawn ? "" : `
     return /^\s*sankey(-beta)?/.test(txt);
   }, "detector");
   var loader21 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_sankeyDiagram_UM26HJRW(), sankeyDiagram_UM26HJRW_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_sankeyDiagram_SY24JHO5(), sankeyDiagram_SY24JHO5_exports));
     return { id: id21, diagram: diagram210 };
   }, "loader");
   var plugin19 = {
@@ -307074,7 +307184,7 @@ ${isHandDrawn ? "" : `
     return /^\s*packet(-beta)?/.test(txt);
   }, "detector");
   var loader222 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_UMYRVEAY(), diagram_UMYRVEAY_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_I5XIIV2D(), diagram_I5XIIV2D_exports));
     return { id: id222, diagram: diagram210 };
   }, "loader");
   var packet = {
@@ -307087,7 +307197,7 @@ ${isHandDrawn ? "" : `
     return /^\s*radar-beta/.test(txt);
   }, "detector");
   var loader23 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_YEKJPTXX(), diagram_YEKJPTXX_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_RJA3I4VV(), diagram_RJA3I4VV_exports));
     return { id: id23, diagram: diagram210 };
   }, "loader");
   var radar = {
@@ -307100,7 +307210,7 @@ ${isHandDrawn ? "" : `
     return /^\s*block(-beta)?/.test(txt);
   }, "detector");
   var loader24 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_blockDiagram_E7TT5TSB(), blockDiagram_E7TT5TSB_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_blockDiagram_RJAE7QA3(), blockDiagram_RJAE7QA3_exports));
     return { id: id24, diagram: diagram210 };
   }, "loader");
   var plugin20 = {
@@ -307114,7 +307224,7 @@ ${isHandDrawn ? "" : `
     return /^\s*treeView-beta/.test(txt);
   }, "detector");
   var loader25 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_PFPMY2P6(), diagram_PFPMY2P6_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_ODIL2UCW(), diagram_ODIL2UCW_exports));
     return { id: id25, diagram: diagram210 };
   }, "loader");
   var plugin21 = {
@@ -307128,7 +307238,7 @@ ${isHandDrawn ? "" : `
     return /^\s*architecture/.test(txt);
   }, "detector");
   var loader26 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_architectureDiagram_47P4ROYG(), architectureDiagram_47P4ROYG_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_architectureDiagram_ZHVYKT53(), architectureDiagram_ZHVYKT53_exports));
     return { id: id26, diagram: diagram210 };
   }, "loader");
   var architecture = {
@@ -307142,7 +307252,7 @@ ${isHandDrawn ? "" : `
     return /^\s*eventmodeling/.test(txt);
   }, "detector");
   var loader27 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_ZIFT7M5P(), diagram_ZIFT7M5P_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_PFBEJUXE(), diagram_PFBEJUXE_exports));
     return { id: id27, diagram: diagram210 };
   }, "loader");
   var plugin22 = {
@@ -307156,7 +307266,7 @@ ${isHandDrawn ? "" : `
     return /^\s*ishikawa(-beta)?\b/i.test(txt);
   }, "detector");
   var loader28 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_ishikawaDiagram_K3B6WC7H(), ishikawaDiagram_K3B6WC7H_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_ishikawaDiagram_HPEHV2GE(), ishikawaDiagram_HPEHV2GE_exports));
     return { id: id28, diagram: diagram210 };
   }, "loader");
   var ishikawa = {
@@ -307169,7 +307279,7 @@ ${isHandDrawn ? "" : `
     return /^\s*venn-beta/.test(txt);
   }, "detector");
   var loader29 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_vennDiagram_BLWOH2XV(), vennDiagram_BLWOH2XV_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_vennDiagram_Q3Y3IDCW(), vennDiagram_Q3Y3IDCW_exports));
     return { id: id29, diagram: diagram210 };
   }, "loader");
   var plugin23 = {
@@ -307183,7 +307293,7 @@ ${isHandDrawn ? "" : `
     return /^\s*treemap/.test(txt);
   }, "detector");
   var loader30 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_OVF4WLC6(), diagram_OVF4WLC6_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_diagram_CBK3MWTC(), diagram_CBK3MWTC_exports));
     return { id: id30, diagram: diagram210 };
   }, "loader");
   var treemap = {
@@ -307196,7 +307306,7 @@ ${isHandDrawn ? "" : `
     return /^\s*usecase-beta(?:\s|$)/.test(txt);
   }, "detector");
   var loader31 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_usecaseDiagram_VIAY4XPW(), usecaseDiagram_VIAY4XPW_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_usecaseDiagram_WPOLBNNX(), usecaseDiagram_WPOLBNNX_exports));
     return { id: id31, diagram: diagram210 };
   }, "loader");
   var usecase = {
@@ -307209,7 +307319,7 @@ ${isHandDrawn ? "" : `
     return /^\s*wardley-beta/i.test(text4);
   }, "detector");
   var loader32 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_wardleyDiagram_YMQ3BMBF(), wardleyDiagram_YMQ3BMBF_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_wardleyDiagram_IVAIDKWA(), wardleyDiagram_IVAIDKWA_exports));
     return { id: id322, diagram: diagram210 };
   }, "loader");
   var plugin24 = {
@@ -307223,7 +307333,7 @@ ${isHandDrawn ? "" : `
     return /^\s*cynefin-beta(?:[\s:]|$)/.test(txt);
   }, "detector");
   var loader33 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_cynefinDiagram_3GCD6N5R(), cynefinDiagram_3GCD6N5R_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_cynefinDiagram_WF24UDRP(), cynefinDiagram_WF24UDRP_exports));
     return { id: id33, diagram: diagram210 };
   }, "loader");
   var cynefin = {
@@ -307236,7 +307346,7 @@ ${isHandDrawn ? "" : `
     return /^\s*railroad-beta/i.test(txt);
   }, "detector");
   var loader34 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_railroadDiagram_SM67HX2B(), railroadDiagram_SM67HX2B_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_railroadDiagram_Y72NRBL7(), railroadDiagram_Y72NRBL7_exports));
     return { id: id34, diagram: diagram210 };
   }, "loader");
   var railroad = {
@@ -307249,7 +307359,7 @@ ${isHandDrawn ? "" : `
     return /^\s*railroad-ebnf-beta/i.test(txt);
   }, "detector");
   var loader35 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_ebnfDiagram_VR2GEFS7(), ebnfDiagram_VR2GEFS7_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_ebnfDiagram_V4P3TTPT(), ebnfDiagram_V4P3TTPT_exports));
     return { id: id35, diagram: diagram210 };
   }, "loader");
   var railroadEbnf = {
@@ -307262,7 +307372,7 @@ ${isHandDrawn ? "" : `
     return /^\s*railroad-abnf-beta/i.test(txt);
   }, "detector");
   var loader36 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_abnfDiagram_YUKMZFIV(), abnfDiagram_YUKMZFIV_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_abnfDiagram_WEYOIA3C(), abnfDiagram_WEYOIA3C_exports));
     return { id: id36, diagram: diagram210 };
   }, "loader");
   var railroadAbnf = {
@@ -307275,7 +307385,7 @@ ${isHandDrawn ? "" : `
     return /^\s*railroad-peg-beta/i.test(txt);
   }, "detector");
   var loader37 = /* @__PURE__ */ __name(async () => {
-    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_pegDiagram_BGZESJAR(), pegDiagram_BGZESJAR_exports));
+    const { diagram: diagram210 } = await Promise.resolve().then(() => (init_pegDiagram_ECIUJNBX(), pegDiagram_ECIUJNBX_exports));
     return { id: id37, diagram: diagram210 };
   }, "loader");
   var railroadPeg = {
@@ -307863,15 +307973,15 @@ ${isHandDrawn ? "" : `
     svg2.insertBefore(style1, firstChild);
     try {
       if (false) {
-        await profiler.span("draw", () => diag.renderer.draw(text4, id38, "12.1.0", diag));
+        await profiler.span("draw", () => diag.renderer.draw(text4, id38, "12.2.0", diag));
       } else {
-        await diag.renderer.draw(text4, id38, "12.1.0", diag);
+        await diag.renderer.draw(text4, id38, "12.2.0", diag);
       }
     } catch (e3) {
       if (config3.suppressErrorRendering) {
         removeTempElements();
       } else {
-        errorRenderer_default.draw(text4, id38, "12.1.0");
+        errorRenderer_default.draw(text4, id38, "12.2.0");
       }
       throw e3;
     }
