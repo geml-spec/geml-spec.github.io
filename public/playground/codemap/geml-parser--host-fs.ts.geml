@@ -8,54 +8,59 @@ resolution-default = cpg
 
 # geml-parser/host-fs.ts
 
-=== code {#resolverFor src=geml-parser/src/host-fs.ts#L37-76 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/resolverFor()."}
+=== code {#resolverFor src=geml-parser/src/host-fs.ts#L37-45 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/resolverFor()."}
 ===
 
-=== code {#existsFor src=geml-parser/src/host-fs.ts#L83-108 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/existsFor()."}
+=== code {#targetFor src=geml-parser/src/host-fs.ts#L50-88 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/targetFor()."}
 ===
 
-=== code {#docOptsFor src=geml-parser/src/host-fs.ts#L112-118 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/docOptsFor()."}
+=== code {#existsFor src=geml-parser/src/host-fs.ts#L95-120 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/existsFor()."}
 ===
 
-=== code {#noteFinderFor src=geml-parser/src/host-fs.ts#L130-143 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/noteFinderFor()."}
+=== code {#docOptsFor src=geml-parser/src/host-fs.ts#L124-130 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/docOptsFor()."}
 ===
 
-=== code {#notesUnder src=geml-parser/src/host-fs.ts#L151-173 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/notesUnder()."}
+=== code {#noteFinderFor src=geml-parser/src/host-fs.ts#L142-155 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/noteFinderFor()."}
 ===
 
-=== code {#obsidianVaultAbove src=geml-parser/src/host-fs.ts#L178-185 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/obsidianVaultAbove()."}
+=== code {#notesUnder src=geml-parser/src/host-fs.ts#L163-185 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/notesUnder()."}
 ===
 
-=== code {#realInside src=geml-parser/src/host-fs.ts#L192-199 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/realInside()."}
+=== code {#obsidianVaultAbove src=geml-parser/src/host-fs.ts#L190-197 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/obsidianVaultAbove()."}
 ===
 
-=== code {#confinedFile src=geml-parser/src/host-fs.ts#L202-204 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/confinedFile()."}
+=== code {#realInside src=geml-parser/src/host-fs.ts#L204-211 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/realInside()."}
 ===
 
-=== code {#readConfined src=geml-parser/src/host-fs.ts#L211-224 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/readConfined()."}
+=== code {#confinedFile src=geml-parser/src/host-fs.ts#L214-216 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/confinedFile()."}
 ===
 
-=== code {#shownPath src=geml-parser/src/host-fs.ts#L230-233 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/shownPath()."}
+=== code {#readConfined src=geml-parser/src/host-fs.ts#L223-236 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/readConfined()."}
 ===
 
-=== code {#isDocumentPath src=geml-parser/src/host-fs.ts#L244-247 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/isDocumentPath."}
+=== code {#shownPath src=geml-parser/src/host-fs.ts#L242-245 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/shownPath()."}
 ===
 
-=== code {#gemlFilesUnder src=geml-parser/src/host-fs.ts#L266-274 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/gemlFilesUnder()."}
+=== code {#isDocumentPath src=geml-parser/src/host-fs.ts#L256-259 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/isDocumentPath."}
 ===
 
-=== code {#historyError src=geml-parser/src/host-fs.ts#L279-287 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/historyError()."}
+=== code {#gemlFilesUnder src=geml-parser/src/host-fs.ts#L278-286 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/gemlFilesUnder()."}
 ===
 
-=== code {#profileIoFor src=geml-parser/src/host-fs.ts#L294-315 anchor="scip-typescript npm @geml/geml 1.13.0 src/`host-fs.ts`/profileIoFor()."}
+=== code {#historyError src=geml-parser/src/host-fs.ts#L291-299 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/historyError()."}
+===
+
+=== code {#profileIoFor src=geml-parser/src/host-fs.ts#L306-327 anchor="scip-typescript npm @geml/geml 1.13.1 src/`host-fs.ts`/profileIoFor()."}
 ===
 
 === table {#calls format=csv}
 from,            to,                                               kind, confidence
+#resolverFor,    #targetFor,                                       call,
 #existsFor,      #resolverFor,                                     call,
 #docOptsFor,     #existsFor,                                       call,
 #docOptsFor,     #noteFinderFor,                                   call,
 #docOptsFor,     #resolverFor,                                     call,
+#docOptsFor,     #targetFor,                                       call,
 #docOptsFor,     geml-parser--geml.ts.geml#isMarkdownPath,         call,
 #noteFinderFor,  #existsFor,                                       call,
 #noteFinderFor,  #notesUnder,                                      call,
@@ -73,41 +78,43 @@ from,            to,                                               kind, confide
 
 === table {#called-by format=csv}
 from,                                   to,                  kind, site
-geml-parser--cli.ts.geml#runStyle,      #resolverFor,        call, geml-parser/src/cli.ts:1687
-#existsFor,                             #resolverFor,        call, geml-parser/src/host-fs.ts:84
-#docOptsFor,                            #resolverFor,        call, geml-parser/src/host-fs.ts:115
-#docOptsFor,                            #existsFor,          call, geml-parser/src/host-fs.ts:115
-#noteFinderFor,                         #existsFor,          call, geml-parser/src/host-fs.ts:131
-geml-parser--cli.ts.geml#docOpts,       #docOptsFor,         call, geml-parser/src/cli.ts:391
-geml-parser--mcp.ts.geml#ctxFor,        #docOptsFor,         call, geml-parser/src/mcp.ts:187
-geml-parser--mcp.ts.geml#markdownOpts,  #docOptsFor,         call, geml-parser/src/mcp.ts:202
-#docOptsFor,                            #noteFinderFor,      call, geml-parser/src/host-fs.ts:116
-#noteFinderFor,                         #notesUnder,         call, geml-parser/src/host-fs.ts:139
-geml-parser--cli.ts.geml#runCheck,      #obsidianVaultAbove, call, geml-parser/src/cli.ts:956
-#confinedFile,                          #realInside,         call, geml-parser/src/host-fs.ts:203
-#readConfined,                          #realInside,         call, geml-parser/src/host-fs.ts:221
-#profileIoFor,                          #realInside,         call, geml-parser/src/host-fs.ts:298
-geml-parser--cli.ts.geml#confineInputs, #confinedFile,       call, geml-parser/src/cli.ts:534
-#gemlFilesUnder,                        #isDocumentPath,     call, geml-parser/src/host-fs.ts:269
-geml-parser--cli.ts.geml#runMedia,      #gemlFilesUnder,     call, geml-parser/src/cli.ts:617
-geml-parser--cli.ts.geml#runFind,       #gemlFilesUnder,     call, geml-parser/src/cli.ts:1336
-geml-parser--cli.ts.geml#runHistory,    #historyError,       call, geml-parser/src/cli.ts:1125
-geml-parser--cli.ts.geml#runRevert,     #historyError,       call, geml-parser/src/cli.ts:1576
-geml-parser--cli.ts.geml#runMedia,      #profileIoFor,       call, geml-parser/src/cli.ts:611
-geml-parser--cli.ts.geml#runMedia,      #profileIoFor,       call, geml-parser/src/cli.ts:808
-geml-parser--cli.ts.geml#runCheck,      #profileIoFor,       call, geml-parser/src/cli.ts:930
+geml-parser--cli.ts.geml#runStyle,      #resolverFor,        call, geml-parser/src/cli.ts:1703
+#existsFor,                             #resolverFor,        call, geml-parser/src/host-fs.ts:96
+#docOptsFor,                            #resolverFor,        call, geml-parser/src/host-fs.ts:127
+#resolverFor,                           #targetFor,          call, geml-parser/src/host-fs.ts:38
+#docOptsFor,                            #targetFor,          call, geml-parser/src/host-fs.ts:127
+#docOptsFor,                            #existsFor,          call, geml-parser/src/host-fs.ts:127
+#noteFinderFor,                         #existsFor,          call, geml-parser/src/host-fs.ts:143
+geml-parser--cli.ts.geml#docOpts,       #docOptsFor,         call, geml-parser/src/cli.ts:400
+geml-parser--mcp.ts.geml#ctxFor,        #docOptsFor,         call, geml-parser/src/mcp.ts:190
+geml-parser--mcp.ts.geml#markdownOpts,  #docOptsFor,         call, geml-parser/src/mcp.ts:211
+#docOptsFor,                            #noteFinderFor,      call, geml-parser/src/host-fs.ts:128
+#noteFinderFor,                         #notesUnder,         call, geml-parser/src/host-fs.ts:151
+geml-parser--cli.ts.geml#runCheck,      #obsidianVaultAbove, call, geml-parser/src/cli.ts:966
+#confinedFile,                          #realInside,         call, geml-parser/src/host-fs.ts:215
+#readConfined,                          #realInside,         call, geml-parser/src/host-fs.ts:233
+#profileIoFor,                          #realInside,         call, geml-parser/src/host-fs.ts:310
+geml-parser--cli.ts.geml#confineInputs, #confinedFile,       call, geml-parser/src/cli.ts:544
+#gemlFilesUnder,                        #isDocumentPath,     call, geml-parser/src/host-fs.ts:281
+geml-parser--cli.ts.geml#runMedia,      #gemlFilesUnder,     call, geml-parser/src/cli.ts:627
+geml-parser--cli.ts.geml#runFind,       #gemlFilesUnder,     call, geml-parser/src/cli.ts:1346
+geml-parser--cli.ts.geml#runHistory,    #historyError,       call, geml-parser/src/cli.ts:1135
+geml-parser--cli.ts.geml#runRevert,     #historyError,       call, geml-parser/src/cli.ts:1592
+geml-parser--cli.ts.geml#runMedia,      #profileIoFor,       call, geml-parser/src/cli.ts:621
+geml-parser--cli.ts.geml#runMedia,      #profileIoFor,       call, geml-parser/src/cli.ts:818
+geml-parser--cli.ts.geml#runCheck,      #profileIoFor,       call, geml-parser/src/cli.ts:940
 ===
 
 === table {#unresolved format=csv hidden}
 from,                to
-#resolverFor,        String.startsWith
-#resolverFor,        dirname
-#resolverFor,        existsSync
-#resolverFor,        isAbsolute
 #resolverFor,        readFileSync
-#resolverFor,        realpathSync
-#resolverFor,        relative
-#resolverFor,        resolve
+#targetFor,          String.startsWith
+#targetFor,          dirname
+#targetFor,          existsSync
+#targetFor,          isAbsolute
+#targetFor,          realpathSync
+#targetFor,          relative
+#targetFor,          resolve
 #existsFor,          String.startsWith
 #existsFor,          dirname
 #existsFor,          existsSync

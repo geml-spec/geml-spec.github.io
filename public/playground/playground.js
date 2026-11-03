@@ -298258,7 +298258,25 @@ ${isHandDrawn ? "" : `
   function labeledClose(id38) {
     return new RegExp(`^={3,}[ \\t]*#${reLit(id38)}[ \\t]*$`);
   }
-  function parseDataBody(fmt4, body, openLineNo) {
+  var BUILTIN_DATA_EXT = /\.(json|jsonl|yaml|yml)$/i;
+  function readerForPath(readers, path4) {
+    const ext = /\.[^./\\]+$/.exec(path4)?.[0]?.toLowerCase();
+    return ext === void 0 ? void 0 : readers?.find((r2) => r2.extensions.some((e3) => e3.toLowerCase() === ext));
+  }
+  function sourceFormat(path4, formatAttr, readers) {
+    const builtin = BUILTIN_DATA_EXT.test(path4);
+    const claimed = builtin ? void 0 : readerForPath(readers, path4);
+    if (!builtin && claimed === void 0)
+      return null;
+    const fmt4 = typeof formatAttr === "string" ? formatAttr : claimed !== void 0 ? claimed.format : /\.jsonl$/i.test(path4) ? "jsonl" : /\.(yaml|yml)$/i.test(path4) ? "yaml" : "json";
+    const reader = readers?.find((r2) => r2.format === fmt4);
+    return reader === void 0 ? { fmt: fmt4 } : { fmt: fmt4, reader };
+  }
+  function stepsText(at3) {
+    return at3.map((s2) => typeof s2 === "number" ? `[${s2}]` : `[${JSON.stringify(s2)}]`).join("");
+  }
+  var NO_ENGINE = /* @__PURE__ */ new WeakSet();
+  function parseDataBody(fmt4, body, openLineNo, readers, path4 = "") {
     const diags = [];
     const outside = (why, line2) => {
       diags.push({ severity: "error", code: "data-parse", message: `data: ${why}, which the value domain excludes (I-JSON)`, line: line2 });
@@ -298350,10 +298368,30 @@ ${isHandDrawn ? "" : `
         outside(fault, openLineNo);
       } else
         diags.push({ severity: "error", code: "data-parse", message: `data: body is not EDN this processor reads (${r2.error})`, line: openLineNo + 1 + r2.line });
+    } else if (readers?.some((r2) => r2.format === fmt4)) {
+      const reader = readers.find((r3) => r3.format === fmt4);
+      let r2;
+      try {
+        r2 = reader.read(body.join("\n"), { path: path4 });
+      } catch (e3) {
+        diags.push({ severity: "error", code: "data-parse", message: `data: not \`${fmt4}\` its reader reads (${e3 instanceof Error ? e3.message : String(e3)})`, line: openLineNo });
+        return { diags };
+      }
+      const fault = valueFault(r2?.value);
+      if (fault) {
+        outside(fault, openLineNo);
+        return { diags };
+      }
+      for (const d3 of r2.diagnostics ?? []) {
+        diags.push({ severity: d3.severity === "warning" ? "warning" : "error", code: `${fmt4}/${d3.code}`, message: `${fmt4}: ${stepsText(d3.at ?? [])}: ${d3.message}`, line: openLineNo });
+      }
+      return { value: r2.value, diags };
     } else if (fmt4 === "toml") {
       diags.push({ severity: "warning", code: "data-format-no-engine", message: `data: no \`${fmt4}\` engine in this processor; body kept raw, not verified`, line: openLineNo });
+      return { diags, noEngine: true };
     } else {
       diags.push({ severity: "warning", code: "unknown-data-format", message: `unknown data format \`${fmt4}\`; body kept raw`, line: openLineNo });
+      return { diags, noEngine: true };
     }
     return { diags };
   }
@@ -299062,11 +299100,16 @@ ${isHandDrawn ? "" : `
     if (srcAttr !== void 0 && srcAttr !== "" && !hasBody) {
       (ctx.dataSources ??= []).push({ block: block2, line: openLineNo, target: srcAttr });
     } else {
-      const parsed = parseDataBody(fmt4, body, openLineNo);
+      const parsed = parseDataBody(fmt4, body, openLineNo, ctx.readers);
       for (const d3 of parsed.diags)
         diags.push(d3);
       if (parsed.value !== void 0)
         block2.value = parsed.value;
+      if (parsed.noEngine) {
+        NO_ENGINE.add(block2);
+        if (block2.id !== void 0)
+          (ctx.dataSrcPending ??= /* @__PURE__ */ new Set()).add(block2.id);
+      }
     }
     const schema2 = attrs.attrs["schema"];
     if (schema2 !== void 0) {
@@ -300066,6 +300109,8 @@ ${isHandDrawn ? "" : `
       return block2.table === void 0;
     if (block2.type !== "data")
       return false;
+    if (NO_ENGINE.has(block2))
+      return true;
     const src = block2.attrs["src"];
     const scheme = typeof src === "string" ? schemeOf(src.trim()) : null;
     return scheme === "http" || scheme === "https";
@@ -300652,12 +300697,15 @@ ${isHandDrawn ? "" : `
       if (route === null)
         continue;
       const { path: path4 } = route;
-      if (!/\.(json|jsonl|yaml|yml)$/i.test(path4)) {
-        ctx.diags.push({ severity: "error", code: "bad-data-source", message: `data source \`${path4}\` is not a \`.json\`/\`.jsonl\`/\`.yaml\` data file`, line: line2 });
+      const format3 = sourceFormat(path4, block2.attrs["format"], opts.readers);
+      if (format3 === null) {
+        const ext = /\.[^./\\]+$/.exec(path4)?.[0];
+        ctx.diags.push({ severity: "warning", code: "data-format-no-engine", message: `data source \`${path4}\`: no reader in this run claims ${ext === void 0 ? "a file with no extension" : `\`${ext}\``}, so the block has no value tree; coordinates into it defer`, line: line2 });
+        NO_ENGINE.add(block2);
+        defer();
         continue;
       }
-      const fmtAttr = block2.attrs["format"];
-      const fmt4 = typeof fmtAttr === "string" ? fmtAttr : /\.jsonl$/i.test(path4) ? "jsonl" : /\.(yaml|yml)$/i.test(path4) ? "yaml" : "json";
+      const { fmt: fmt4 } = format3;
       if (!opts.resolveDoc) {
         ctx.diags.push({ severity: "warning", code: "unchecked-cross-document-reference", message: `data source \`${target}\` not checked (no document resolver)`, line: line2 });
         defer();
@@ -300671,7 +300719,7 @@ ${isHandDrawn ? "" : `
       const lines = sliceSourceRange(text4, route, target, "data", line2, ctx);
       if (lines === null)
         continue;
-      const parsed = parseDataBody(fmt4, lines, line2);
+      const parsed = parseDataBody(fmt4, lines, line2, opts.readers, path4);
       for (const d3 of parsed.diags)
         ctx.diags.push({ ...d3, line: line2 });
       if (parsed.value !== void 0) {
@@ -300679,6 +300727,10 @@ ${isHandDrawn ? "" : `
         if (block2.id !== void 0 && !ctx.dataValues?.has(nameKey(block2.id))) {
           (ctx.dataValues ??= /* @__PURE__ */ new Map()).set(nameKey(block2.id), parsed.value);
         }
+      }
+      if (parsed.noEngine) {
+        NO_ENGINE.add(block2);
+        defer();
       }
     }
   }
@@ -300839,7 +300891,7 @@ ${isHandDrawn ? "" : `
         });
       }
     }
-    const ctx = { diags, ids: /* @__PURE__ */ new Map(), refs: [], meta: meta3, vocab: opts.vocab ?? vocabularyFor(meta3), resolveDoc: opts.resolveDoc, markdown: opts.markdown === true };
+    const ctx = { diags, ids: /* @__PURE__ */ new Map(), refs: [], meta: meta3, vocab: opts.vocab ?? vocabularyFor(meta3), resolveDoc: opts.resolveDoc, readers: opts.readers, markdown: opts.markdown === true };
     if (opts.vocab === void 0) {
       const declaredNames = declaredVocabularies(meta3);
       for (const [k3] of meta3) {

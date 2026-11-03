@@ -1,0 +1,32 @@
+=== meta
+profile = "geml-codemap/v1"
+module = geml-parser/readers-node.ts
+src = geml-parser/src/readers-node.ts
+resolution-default = cpg
+===
+
+# geml-parser/readers-node.ts
+
+=== code {#loadReaders src=geml-parser/src/readers-node.ts#L15-31 anchor="scip-typescript npm @geml/geml 1.13.1 src/`readers-node.ts`/loadReaders()."}
+===
+
+=== code {#liftReaderFlags src=geml-parser/src/readers-node.ts#L38-55 anchor="scip-typescript npm @geml/geml 1.13.1 src/`readers-node.ts`/liftReaderFlags()."}
+===
+
+=== table {#calls format=csv}
+from,         to,                                       kind, confidence
+#loadReaders, geml-parser--geml.ts.geml#readerProblems, call,
+===
+
+=== table {#unresolved format=csv hidden}
+from,             to
+#loadReaders,     Array.join
+#loadReaders,     Array.push
+#loadReaders,     ArrayConstructor.isArray
+#loadReaders,     pathToFileURL
+#loadReaders,     resolve
+#liftReaderFlags, Array.push
+#liftReaderFlags, ReadonlyArray.slice
+#liftReaderFlags, String.slice
+#liftReaderFlags, String.startsWith
+===
