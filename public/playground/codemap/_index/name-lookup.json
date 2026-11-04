@@ -936,6 +936,13 @@
       "id": "borrowedDocs"
     }
   ],
+  "borrowedFiles": [
+    {
+      "anchor": "scip-typescript npm @geml/geml 1.13.1 src/`geml.ts`/borrowedFiles().",
+      "doc": "geml-parser--geml.ts.geml",
+      "id": "borrowedFiles"
+    }
+  ],
   "boxValueOk": [
     {
       "anchor": "scip-typescript npm @geml/geml 1.13.1 src/`style-resolve.ts`/boxValueOk().",

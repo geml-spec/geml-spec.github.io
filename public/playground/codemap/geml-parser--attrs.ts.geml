@@ -50,11 +50,11 @@ geml-parser--cli.ts.geml#runGet,                  #parseAttrs,     call, geml-pa
 geml-parser--geml.ts.geml#readFencedBlock,        #parseAttrs,     call, geml-parser/src/geml.ts:1686
 geml-parser--geml.ts.geml#scanBlocks,             #parseAttrs,     call, geml-parser/src/geml.ts:2062
 geml-parser--geml.ts.geml#scanBlocks,             #parseAttrs,     call, geml-parser/src/geml.ts:2077
-geml-parser--geml.ts.geml#idOfHeading,            #parseAttrs,     call, geml-parser/src/geml.ts:3772
-geml-parser--geml.ts.geml#fenceClose,             #parseAttrs,     call, geml-parser/src/geml.ts:3855
-geml-parser--geml.ts.geml#collectSpans,           #parseAttrs,     call, geml-parser/src/geml.ts:3943
-geml-parser--geml.ts.geml#collectSpans,           #parseAttrs,     call, geml-parser/src/geml.ts:3971
-geml-parser--geml.ts.geml#closeFenceLine,         #parseAttrs,     call, geml-parser/src/geml.ts:4368
+geml-parser--geml.ts.geml#idOfHeading,            #parseAttrs,     call, geml-parser/src/geml.ts:3793
+geml-parser--geml.ts.geml#fenceClose,             #parseAttrs,     call, geml-parser/src/geml.ts:3876
+geml-parser--geml.ts.geml#collectSpans,           #parseAttrs,     call, geml-parser/src/geml.ts:3964
+geml-parser--geml.ts.geml#collectSpans,           #parseAttrs,     call, geml-parser/src/geml.ts:3992
+geml-parser--geml.ts.geml#closeFenceLine,         #parseAttrs,     call, geml-parser/src/geml.ts:4389
 geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:200
 geml-parser--history.ts.geml#tile,                #parseAttrs,     call, geml-parser/src/history.ts:212
 geml-parser--inline.ts.geml#readAttrs,            #parseAttrs,     call, geml-parser/src/inline.ts:312

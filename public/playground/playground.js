@@ -300143,6 +300143,8 @@ ${isHandDrawn ? "" : `
       };
       if (opts.docExists)
         nested.docExists = (d3) => opts.docExists(rebase2(d3));
+      if (opts.sourcePath)
+        nested.sourcePath = (d3) => opts.sourcePath(rebase2(d3));
       document2 = parse(source, nested);
       cache4.set(canonical, document2);
     }
@@ -300354,11 +300356,11 @@ ${isHandDrawn ? "" : `
     walk2(lines, 0, 0);
     return meta3;
   }
-  function blockFromDocument(source, id38, scanned) {
-    let hit = scanned?.get(source);
+  function blockFromDocument(doc, source, id38, opts, scanned) {
+    let hit = scanned?.get(doc);
     if (hit === void 0) {
-      hit = scanForCoordinates(source);
-      scanned?.set(source, hit);
+      hit = scanForCoordinates(source, borrowedFiles(doc, opts));
+      scanned?.set(doc, hit);
     }
     const { blocks: blocks2, ctx } = hit;
     if (nameKey(id38) === nameKey("meta") && !ctx.ids.has(nameKey("meta"))) {
@@ -300381,14 +300383,23 @@ ${isHandDrawn ? "" : `
     };
     return find4(blocks2) ?? null;
   }
-  function scanForCoordinates(source) {
-    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: vocabularyOf(source) };
+  function scanForCoordinates(source, files = {}) {
+    const ctx = { diags: [], ids: /* @__PURE__ */ new Map(), refs: [], meta: /* @__PURE__ */ new Map(), vocab: vocabularyOf(source), readers: files.readers };
     const blocks2 = scanBlocks(normalizeSource(source).split("\n"), 0, ctx);
-    const inner2 = {};
-    resolveTableSources(ctx, inner2);
-    resolveViewSources(ctx, inner2);
-    resolveDataSources(ctx, inner2);
+    resolveTableSources(ctx, files);
+    resolveViewSources(ctx, {});
+    resolveDataSources(ctx, files);
     return { blocks: blocks2, ctx };
+  }
+  function borrowedFiles(doc, opts) {
+    const dir2 = relDirPath(doc);
+    const rebase2 = (d3) => relJoinPath(dir2, d3);
+    const files = { readers: opts.readers };
+    if (opts.resolveDoc)
+      files.resolveDoc = (d3) => opts.resolveDoc(rebase2(d3));
+    if (opts.sourcePath)
+      files.sourcePath = (d3) => opts.sourcePath(rebase2(d3));
+    return files;
   }
   function validateCoordRef(ref, children2, ctx, opts, docs) {
     const anchor2 = ref.anchor;
@@ -300415,7 +300426,7 @@ ${isHandDrawn ? "" : `
       const text4 = docs.text(ref.doc);
       if (text4 === null)
         return err("unresolvable-document", `cannot resolve document \`${ref.doc}\``);
-      block2 = blockFromDocument(text4, base, docs.scanned);
+      block2 = blockFromDocument(ref.doc, text4, base, opts, docs.scanned);
       if (!block2)
         return err("unresolved-cross-document-reference", `unresolved reference \`${ref.doc}#${base}\``);
     } else if (nameKey(base) === nameKey("meta") && !ctx.ids.has(nameKey("meta"))) {

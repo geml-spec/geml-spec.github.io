@@ -79,17 +79,17 @@ geml-parser--media-verbs.ts.geml#importPlan,           #ProfileIO-hashText,     
 #unrecognizedVocabularies,                             #profileDef,               call, geml-parser/src/profiles.ts:463
 #declaredVocabularies,                                 #profileDef,               call, geml-parser/src/profiles.ts:473
 #vocabularyFor,                                        #profileDef,               call, geml-parser/src/profiles.ts:484
-geml-parser--geml.ts.geml#parse,                       #misnamespacedMetaKey,     call, geml-parser/src/geml.ts:3704
+geml-parser--geml.ts.geml#parse,                       #misnamespacedMetaKey,     call, geml-parser/src/geml.ts:3725
 geml-parser--geml.ts.geml#reportBorrowedVocabularies,  #unrecognizedVocabularies, call, geml-parser/src/geml.ts:2450
-geml-parser--geml.ts.geml#parse,                       #unrecognizedVocabularies, call, geml-parser/src/geml.ts:3686
+geml-parser--geml.ts.geml#parse,                       #unrecognizedVocabularies, call, geml-parser/src/geml.ts:3707
 geml-parser--cli.ts.geml#todoSeedProblem,              #declaredVocabularies,     call, geml-parser/src/cli.ts:570
 geml-parser--cli.ts.geml#runCheck,                     #declaredVocabularies,     call, geml-parser/src/cli.ts:941
-geml-parser--geml.ts.geml#parse,                       #declaredVocabularies,     call, geml-parser/src/geml.ts:3702
-geml-parser--geml.ts.geml#vocabularyOf,                #vocabularyFor,            call, geml-parser/src/geml.ts:2962
-geml-parser--geml.ts.geml#parse,                       #vocabularyFor,            call, geml-parser/src/geml.ts:3694
-geml-parser--geml.ts.geml#blockSpans,                  #vocabularyFor,            call, geml-parser/src/geml.ts:4009
-geml-parser--geml.ts.geml#unitSpans,                   #vocabularyFor,            call, geml-parser/src/geml.ts:4032
-geml-parser--geml.ts.geml#addressedUnits,              #vocabularyFor,            call, geml-parser/src/geml.ts:4286
+geml-parser--geml.ts.geml#parse,                       #declaredVocabularies,     call, geml-parser/src/geml.ts:3723
+geml-parser--geml.ts.geml#vocabularyOf,                #vocabularyFor,            call, geml-parser/src/geml.ts:2963
+geml-parser--geml.ts.geml#parse,                       #vocabularyFor,            call, geml-parser/src/geml.ts:3715
+geml-parser--geml.ts.geml#blockSpans,                  #vocabularyFor,            call, geml-parser/src/geml.ts:4030
+geml-parser--geml.ts.geml#unitSpans,                   #vocabularyFor,            call, geml-parser/src/geml.ts:4053
+geml-parser--geml.ts.geml#addressedUnits,              #vocabularyFor,            call, geml-parser/src/geml.ts:4307
 ===
 
 === table {#unresolved format=csv hidden}
