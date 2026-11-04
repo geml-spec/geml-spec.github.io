@@ -300719,7 +300719,7 @@ ${isHandDrawn ? "" : `
       const lines = sliceSourceRange(text4, route, target, "data", line2, ctx);
       if (lines === null)
         continue;
-      const parsed = parseDataBody(fmt4, lines, line2, opts.readers, path4);
+      const parsed = parseDataBody(fmt4, lines, line2, opts.readers, opts.sourcePath?.(path4) ?? path4);
       for (const d3 of parsed.diags)
         ctx.diags.push({ ...d3, line: line2 });
       if (parsed.value !== void 0) {

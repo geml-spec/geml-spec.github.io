@@ -43,7 +43,7 @@ geml-parser--geml.ts.geml#parseDataBody,   #iJsonFault,     call, geml-parser/sr
 #inexactNumber,                            #decimalOf,      call, geml-parser/src/ijson.ts:117
 #inexactNumber,                            #decimalOf,      call, geml-parser/src/ijson.ts:118
 geml-parser--geml.ts.geml#parseDataBody,   #inexactNumber,  call, geml-parser/src/geml.ts:196
-geml-parser--geml.ts.geml#readFencedBlock, #inexactNumber,  call, geml-parser/src/geml.ts:1730
+geml-parser--geml.ts.geml#readFencedBlock, #inexactNumber,  call, geml-parser/src/geml.ts:1735
 geml-parser--geml.ts.geml#parseDataBody,   #numberLiterals, call, geml-parser/src/geml.ts:217
 geml-parser--geml.ts.geml#parseDataBody,   #numberLiterals, call, geml-parser/src/geml.ts:236
 geml-parser--geml.ts.geml#parseDataBody,   #valueFault,     call, geml-parser/src/geml.ts:247
